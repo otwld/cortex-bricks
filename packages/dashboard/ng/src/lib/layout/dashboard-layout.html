@@ -1,0 +1,14 @@
+<div class="layout-container" [ngClass]="containerClass()">
+  <dashboard-sidebar />
+  <div class="layout-content-wrapper">
+    <dashboard-topbar />
+    <div class="layout-content">
+      <router-outlet />
+    </div>
+  </div>
+  <dashboard-profile-sidebar />
+  @defer {
+  <app-configurator />
+  }
+  <div class="layout-mask"></div>
+</div>

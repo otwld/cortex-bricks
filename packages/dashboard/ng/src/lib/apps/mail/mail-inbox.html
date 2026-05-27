@@ -1,0 +1,256 @@
+        <div class="flex h-full relative card p-0!">
+            <!-- Desktop Sidebar -->
+            <div class="hidden lg:flex w-[244px] bg-surface-0 dark:bg-surface-900 border-r border-surface-200 dark:border-surface-700 flex-col">
+                <div class="px-4 py-5 border-b border-surface-200 dark:border-surface-700 h-[4.28rem]">
+                    <h2 class="text-lg font-medium text-surface-950 dark:text-surface-0">Mails</h2>
+                </div>
+
+                <div class="p-4 flex flex-col gap-6">
+                    <div class="flex flex-col gap-4">
+                        <div class="text-sm font-medium text-surface-500 dark:text-surface-400 uppercase">Menu</div>
+                        <div class="flex flex-col gap-1">
+                            @for (item of menuItemsWithCounts(); track item.label) {
+                                <div
+                                    [ngClass]="[
+                                        'flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors',
+                                        selectedMenuItem() === item.label ? 'bg-primary text-surface-0 dark:text-surface-900 shadow-sm' : 'text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700'
+                                    ]"
+                                    role="button"
+                                    tabindex="0"
+                                    (click)="selectMenuItem(item.label)"
+                                    (keydown.enter)="selectMenuItem(item.label)"
+                                    (keydown.space)="selectMenuItem(item.label)"
+                                >
+                                    <i [class]="item.icon" class="text-xs"></i>
+                                    <span class="flex-1 text-base font-medium">{{ item.label }}</span>
+                                    @if (item.count && item.count > 0) {
+                                        <div
+                                            [ngClass]="[
+                                                'px-2 py-1 rounded-sm text-sm font-semibold text-xs',
+                                                selectedMenuItem() === item.label ? 'bg-white text-primary-600' : 'bg-surface-200 dark:bg-surface-600 text-surface-900 dark:text-surface-100'
+                                            ]"
+                                        >
+                                            {{ item.count }}
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="h-px bg-surface-200 dark:bg-surface-700"></div>
+
+                    <div class="flex flex-col gap-4">
+                        <div class="text-sm font-medium text-surface-500 dark:text-surface-400 uppercase">Categories</div>
+                        <div class="flex flex-col gap-1">
+                            @for (item of categoryItemsWithCounts(); track item.label) {
+                                <div
+                                    [ngClass]="[
+                                        'flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors',
+                                        selectedCategory() === item.label ? 'bg-primary text-surface-0 dark:text-surface-900 shadow-sm' : 'text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700'
+                                    ]"
+                                    role="button"
+                                    tabindex="0"
+                                    (click)="selectCategory(item.label)"
+                                    (keydown.enter)="selectCategory(item.label)"
+                                    (keydown.space)="selectCategory(item.label)"
+                                >
+                                    <i [class]="item.icon" class="text-xs"></i>
+                                    <span class="flex-1 text-base font-medium">{{ item.label }}</span>
+                                    @if (item.count && item.count > 0) {
+                                        <div
+                                            [ngClass]="[
+                                                'px-2 py-1 rounded-sm text-sm font-semibold text-xs',
+                                                selectedCategory() === item.label ? 'bg-white text-primary-600' : 'bg-surface-200 dark:bg-surface-600 text-surface-900 dark:text-surface-100'
+                                            ]"
+                                        >
+                                            {{ item.count }}
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 flex flex-col h-full overflow-hidden">
+                <!-- Header -->
+                <div class="px-0 py-4 border-b border-surface-200 dark:border-surface-700 h-auto lg:h-[4.28rem]">
+                    <div class="flex items-center gap-3 md:gap-4">
+                        <p-button icon="pi pi-bars" severity="secondary" [outlined]="true" (onClick)="toggleMenuDrawer()" styleClass="lg:hidden! shrink-0" />
+
+                        @if (selectedEmails().length > 0) {
+                            <div class="flex items-center gap-2 shrink-0">
+                                <span class="text-sm text-surface-600 dark:text-surface-300 font-medium">{{ selectedEmails().length }} selected</span>
+                                <p-button icon="pi pi-ellipsis-v" severity="secondary" [outlined]="true" size="small" (onClick)="toggleBulkActionMenu($event)" pTooltip="Bulk actions" />
+                            </div>
+                        }
+
+                        <div class="flex-1 flex items-center justify-between gap-3" [ngClass]="selectedEmails().length > 0 ? 'opacity-50' : ''">
+                            <p-iconfield iconPosition="left" class="flex-1 max-w-full sm:max-w-[296px]">
+                                <p-inputicon class="pi pi-search" />
+                                <input pInputText [(ngModel)]="searchQuery" placeholder="Search mail" class="w-full" />
+                            </p-iconfield>
+
+                            <div class="flex items-center gap-2 md:gap-3 shrink-0">
+                                <p-button label="Compose New" icon="pi pi-plus" severity="secondary" [outlined]="true" styleClass="hidden! xl:flex!" (onClick)="openCompose()" />
+                                <p-button icon="pi pi-plus" severity="secondary" [outlined]="true" styleClass="xl:hidden!" (onClick)="openCompose()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="flex-1 flex flex-col min-h-0">
+                    <p-table [value]="paginatedEmails()" [(selection)]="selectedEmails" dataKey="id" [paginator]="false" styleClass="mail-table" [scrollable]="true" scrollHeight="flex">
+                        <ng-template #header>
+                            <tr>
+                                <th style="width: 3rem">
+                                    <p-tableHeaderCheckbox />
+                                </th>
+                                <th style="width: 220px">From</th>
+                                <th style="width: 120px">Time</th>
+                                <th>Message</th>
+                                <th></th>
+                                <th style="width: 120px"></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-email>
+                            <tr class="cursor-pointer" (click)="navigateToEmail(email)">
+                                <td (click)="$event.stopPropagation()">
+                                    <p-tableCheckbox [value]="email" />
+                                </td>
+                                <td>
+                                    <div class="flex items-center gap-4" [ngClass]="email.read ? 'opacity-60' : ''">
+                                        <div class="relative">
+                                            @if (email.avatar && email.avatar.startsWith('/')) {
+                                                <p-avatar [image]="email.avatar" styleClass="w-8 h-8" shape="square" [pt]="{ image: { class: 'rounded-lg' } }" />
+                                            } @else if (email.avatar) {
+                                                <p-avatar [label]="email.avatar" [ngClass]="getAvatarColor(email.sender)" shape="square" [pt]="{ image: { class: 'rounded-lg' } }" />
+                                            } @else {
+                                                <p-avatar [label]="getAvatarInitials(email.sender)" [ngClass]="getAvatarColor(email.sender)" shape="square" [pt]="{ image: { class: 'rounded-lg' } }" />
+                                            }
+                                            @if (!email.read) {
+                                                <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-surface-0 dark:border-surface-800"></div>
+                                            }
+                                        </div>
+                                        <span class="font-medium text-surface-900 dark:text-surface-0">{{ email.sender }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-sm text-surface-500 dark:text-surface-400" [ngClass]="email.read ? 'opacity-60' : ''">{{ email.time }}</span>
+                                </td>
+                                <td>
+                                    <div class="flex items-end gap-2 w-full max-w-[200px] sm:max-w-[250px] md:max-w-[300px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]" [ngClass]="email.read ? 'opacity-60' : ''">
+                                        <span class="font-normal text-surface-900 dark:text-surface-0 text-sm whitespace-nowrap">{{ email.subject }}</span>
+                                        <span class="flex-1 text-surface-500 dark:text-surface-400 text-sm truncate">{{ email.preview }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (email.tag) {
+                                        <p-tag [value]="email.tag" severity="secondary" styleClass="text-xs" [ngClass]="email.read ? 'opacity-60' : ''" />
+                                    }
+                                </td>
+                                <td (click)="$event.stopPropagation()">
+                                    <div class="flex gap-1">
+                                        <p-button [icon]="email.starred ? 'pi pi-star-fill' : 'pi pi-star'" [ngClass]="email.starred ? 'text-yellow-500' : ''" severity="secondary" [text]="true" size="small" (onClick)="toggleStar(email.id)" />
+                                        <p-button
+                                            [icon]="email.important ? 'pi pi-bookmark-fill' : 'pi pi-bookmark'"
+                                            [ngClass]="email.important ? 'text-orange-500' : ''"
+                                            severity="secondary"
+                                            [text]="true"
+                                            size="small"
+                                            (onClick)="toggleImportant(email.id)"
+                                        />
+                                        <p-button icon="pi pi-ellipsis-v" severity="secondary" [text]="true" size="small" (onClick)="toggleActionMenu($event, email.id)" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                    <div class="p-4 border-t border-surface-200 dark:border-surface-700 flex justify-between items-center">
+                        <span class="text-sm text-surface-500 dark:text-surface-400">Shows {{ Math.min(first() + rows(), filteredEmails().length) }} results of {{ filteredEmails().length }}</span>
+                        <p-paginator [rows]="rows()" [totalRecords]="filteredEmails().length" [first]="first()" (onPageChange)="onPageChange($event)" [showFirstLastIcon]="true" [pt]="{ root: { class: 'border-0 bg-transparent' } }" />
+                    </div>
+                </div>
+            </div>
+
+            <p-menu #actionMenu [model]="actionMenuItems()" [popup]="true" appendTo="body" />
+            <p-menu #bulkActionMenu [model]="bulkActionMenuItems()" [popup]="true" appendTo="body" />
+
+            <!-- Mobile Drawer -->
+            <p-drawer [(visible)]="showMenuDrawer" header="Mails" position="left" styleClass="w-[280px]">
+                <div class="flex flex-col gap-6">
+                    <div class="flex flex-col gap-4">
+                        <div class="text-sm font-medium text-surface-500 dark:text-surface-400 uppercase">Menu</div>
+                        <div class="flex flex-col gap-1">
+                            @for (item of menuItemsWithCounts(); track item.label) {
+                                <div
+                                    [ngClass]="[
+                                        'flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors',
+                                        selectedMenuItem() === item.label ? 'bg-primary text-surface-0 dark:text-surface-900 shadow-sm' : 'text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700'
+                                    ]"
+                                    role="button"
+                                    tabindex="0"
+                                    (click)="selectMenuItem(item.label); showMenuDrawer.set(false)"
+                                    (keydown.enter)="selectMenuItem(item.label); showMenuDrawer.set(false)"
+                                    (keydown.space)="selectMenuItem(item.label); showMenuDrawer.set(false)"
+                                >
+                                    <i [class]="item.icon" class="text-xs"></i>
+                                    <span class="flex-1 text-base font-medium">{{ item.label }}</span>
+                                    @if (item.count && item.count > 0) {
+                                        <div
+                                            [ngClass]="[
+                                                'px-2 py-1 rounded-sm text-sm font-semibold text-xs',
+                                                selectedMenuItem() === item.label ? 'bg-white text-primary-600' : 'bg-surface-200 dark:bg-surface-600 text-surface-900 dark:text-surface-100'
+                                            ]"
+                                        >
+                                            {{ item.count }}
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="h-px bg-surface-200 dark:bg-surface-700"></div>
+
+                    <div class="flex flex-col gap-4">
+                        <div class="text-sm font-medium text-surface-500 dark:text-surface-400 uppercase">Categories</div>
+                        <div class="flex flex-col gap-1">
+                            @for (item of categoryItemsWithCounts(); track item.label) {
+                                <div
+                                    [ngClass]="[
+                                        'flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors',
+                                        selectedCategory() === item.label ? 'bg-primary text-surface-0 dark:text-surface-900 shadow-sm' : 'text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700'
+                                    ]"
+                                    role="button"
+                                    tabindex="0"
+                                    (click)="selectCategory(item.label); showMenuDrawer.set(false)"
+                                    (keydown.enter)="selectCategory(item.label); showMenuDrawer.set(false)"
+                                    (keydown.space)="selectCategory(item.label); showMenuDrawer.set(false)"
+                                >
+                                    <i [class]="item.icon" class="text-xs"></i>
+                                    <span class="flex-1 text-base font-medium">{{ item.label }}</span>
+                                    @if (item.count && item.count > 0) {
+                                        <div
+                                            [ngClass]="[
+                                                'px-2 py-1 rounded-sm text-sm font-semibold text-xs',
+                                                selectedCategory() === item.label ? 'bg-white text-primary-600' : 'bg-surface-200 dark:bg-surface-600 text-surface-900 dark:text-surface-100'
+                                            ]"
+                                        >
+                                            {{ item.count }}
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </p-drawer>
+
+            <app-compose-dialog [(visible)]="showComposeOverlay" (send)="sendEmail()" (closed)="closeCompose()" />
+        </div>

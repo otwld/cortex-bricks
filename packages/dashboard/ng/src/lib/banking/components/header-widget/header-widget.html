@@ -1,0 +1,26 @@
+<div class="flex flex-col items-center gap-6 sm:flex-row">
+  <div class="flex min-w-0 flex-col items-center gap-4 sm:flex-row">
+    <img [alt]="profileViewModel().avatarAlt" [src]="profileViewModel().avatarUrl" class="h-16 w-16 shrink-0 rounded-full" />
+    <div class="flex min-w-0 flex-col items-center sm:items-start">
+      <span class="text-center text-4xl font-bold text-surface-900 sm:text-left dark:text-surface-0">{{ profileViewModel().title }}</span>
+      <p class="m-0 text-center text-surface-600 sm:text-left dark:text-surface-200">{{ profileViewModel().lastLoginLabel }}</p>
+    </div>
+  </div>
+
+  @if (actions().length) {
+  <div class="flex gap-2 sm:ml-auto">
+    @for (action of actions(); track action.id) {
+    <p-button
+      type="button"
+      [pTooltip]="action.label"
+      tooltipPosition="bottom"
+      [icon]="action.icon"
+      [outlined]="action.outlined ?? false"
+      [rounded]="true"
+      [ariaLabel]="action.label"
+      (click)="selectAction(action)"
+    />
+    }
+  </div>
+  }
+</div>

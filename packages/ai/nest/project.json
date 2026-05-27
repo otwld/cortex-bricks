@@ -1,0 +1,20 @@
+{
+  "name": "nest-ai",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/ai/nest/src",
+  "projectType": "library",
+  "tags": ["scope:ai", "type:lib", "framework:nest", "type:brick"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/ai/nest",
+        "tsConfig": "packages/ai/nest/tsconfig.lib.json",
+        "packageJson": "packages/ai/nest/package.json",
+        "main": "packages/ai/nest/src/index.ts",
+        "assets": ["packages/ai/nest/*.md"]
+      }
+    }
+  }
+}

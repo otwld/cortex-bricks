@@ -1,0 +1,37 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <h1 class="text-2xl font-semibold text-surface-900 dark:text-surface-0">AI Object</h1>
+    <p-select
+      [options]="modelOptions()"
+      optionLabel="label"
+      optionValue="value"
+      [ngModel]="selectedModel()"
+      (ngModelChange)="selectedModel.set($event)"
+      class="w-full md:w-56"
+      ariaLabel="Object model"
+    />
+  </div>
+
+  <ai-usage-card />
+
+  <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <section class="card flex flex-col gap-3">
+      <label class="font-medium" for="ai-object-prompt">Prompt</label>
+      <textarea id="ai-object-prompt" pTextarea rows="4" [ngModel]="prompt()" (ngModelChange)="prompt.set($event)" class="w-full"></textarea>
+
+      <label class="font-medium" for="ai-object-input">Input</label>
+      <textarea id="ai-object-input" pTextarea rows="8" [ngModel]="input()" (ngModelChange)="input.set($event)" class="w-full"></textarea>
+
+      <p-button label="Generate Object" icon="pi pi-code" [loading]="loading()" (onClick)="submit()" />
+    </section>
+
+    <section class="card">
+      <h2 class="mb-3 text-lg font-semibold">Structured Result</h2>
+      @if (error()) {
+        <p class="text-red-500">{{ error() }}</p>
+      } @else {
+        <pre class="min-h-72 whitespace-pre-wrap text-sm leading-6">{{ result() | json }}</pre>
+      }
+    </section>
+  </div>
+</div>

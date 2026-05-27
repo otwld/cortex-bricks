@@ -1,0 +1,30 @@
+{
+  "name": "ts-storage",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/storage/ts/src",
+  "projectType": "library",
+  "tags": [
+    "scope:storage",
+    "type:types",
+    "type:brick"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/storage/ts",
+        "main": "packages/storage/ts/src/index.ts",
+        "tsConfig": "packages/storage/ts/tsconfig.lib.json",
+        "format": [
+          "esm"
+        ],
+        "assets": [
+          "packages/storage/ts/*.md"
+        ]
+      }
+    }
+  }
+}

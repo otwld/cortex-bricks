@@ -1,0 +1,56 @@
+<div class="flex-1 self-stretch xl:rounded-tr-3xl xl:rounded-br-3xl flex flex-col overflow-hidden">
+  <div class="self-stretch px-4 sm:px-6 xl:pl-8 xl:pr-6 pt-6 pb-4 flex items-center gap-4">
+    <div class="flex-1 text-surface-950 dark:text-surface-0 text-xl font-medium leading-7">Authorization and Access</div>
+  </div>
+
+  <div class="self-stretch px-4 sm:px-6 flex flex-col gap-2">
+    <div class="self-stretch h-0 border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+  </div>
+
+  <div class="self-stretch p-4 sm:p-6 xl:p-8 flex flex-col items-end gap-6">
+    <div class="self-stretch flex flex-col md:flex-row items-start gap-4 md:gap-8">
+      <div class="w-full md:w-[283px] flex flex-col gap-2">
+        <div class="self-stretch text-surface-950 dark:text-surface-0 text-lg font-medium leading-7">Role</div>
+        <div class="self-stretch text-surface-500 dark:text-surface-400 text-base font-normal leading-normal">Base account role</div>
+      </div>
+
+      <div class="flex-1 w-full grid gap-3 sm:grid-cols-3">
+        @for (role of roleOptions; track role.name) {
+          <button
+            type="button"
+            class="rounded-md border px-4 py-3 text-left"
+            [class.border-primary]="isRoleSelected(role)"
+            [class.bg-primary-50]="isRoleSelected(role)"
+            (click)="setRole(role)"
+          >
+            <span class="block font-medium capitalize">{{ role.name }}</span>
+            <span class="text-sm text-surface-500">{{ role.permissions.length }} role permissions</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="self-stretch h-0 border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+
+    <div class="self-stretch flex flex-col md:flex-row items-start gap-4 md:gap-8">
+      <div class="w-full md:w-[283px] flex flex-col gap-2">
+        <div class="self-stretch text-surface-950 dark:text-surface-0 text-lg font-medium leading-7">Direct Permissions</div>
+        <div class="self-stretch text-surface-500 dark:text-surface-400 text-base font-normal leading-normal">Additional permissions assigned outside roles</div>
+      </div>
+
+      <div class="flex-1 w-full grid gap-3 sm:grid-cols-2">
+        @for (permission of permissionOptions; track permission) {
+          <div class="flex items-center gap-2">
+            <p-checkbox [ngModel]="hasPermission(permission)" (ngModelChange)="setPermission(permission, $event)" [inputId]="permission" [binary]="true" />
+            <label [for]="permission" class="text-surface-900 dark:text-surface-0 text-base font-normal">{{ permission }}</label>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 sm:gap-4 w-full sm:w-auto">
+      <p-button label="Cancel" severity="secondary" [outlined]="true" (onClick)="cancel()" styleClass="cursor-pointer !rounded-xl w-full sm:w-auto" />
+      <p-button label="Continue" severity="primary" (onClick)="next()" styleClass="cursor-pointer !rounded-xl w-full sm:w-auto" />
+    </div>
+  </div>
+</div>

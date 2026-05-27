@@ -1,0 +1,20 @@
+{
+  "name": "nest-storage",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/storage/nest/src",
+  "projectType": "library",
+  "tags": ["scope:storage", "type:lib", "framework:nest", "type:brick"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/storage/nest",
+        "tsConfig": "packages/storage/nest/tsconfig.lib.json",
+        "packageJson": "packages/storage/nest/package.json",
+        "main": "packages/storage/nest/src/index.ts",
+        "assets": ["packages/storage/nest/*.md"]
+      }
+    }
+  }
+}

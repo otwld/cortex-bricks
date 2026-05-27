@@ -1,0 +1,26 @@
+import baseConfig from '../../../eslint.config.mjs';
+
+export default [
+  ...baseConfig,
+  {
+    ignores: ['redis/**'],
+  },
+  {
+    files: ['**/*.json'],
+    rules: {
+      '@nx/dependency-checks': [
+        'error',
+        {
+          ignoredDependencies: ['@nestjs/core', '@nestjs/platform-socket.io'],
+          ignoredFiles: [
+            '{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}',
+            '{projectRoot}/src/**/*.spec.ts',
+          ],
+        },
+      ],
+    },
+    languageOptions: {
+      parser: await import('jsonc-eslint-parser'),
+    },
+  },
+];

@@ -13,7 +13,39 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "paths": {}
+    "paths": {
+      "@otwld/ts-ai": ["./packages/ai/ts/src/index.ts"],
+      "@otwld/nest-ai": ["./packages/ai/nest/src/index.ts"],
+      "@otwld/ng-ai": ["./packages/ai/ng/src/index.ts"],
+
+      "@otwld/nest-auth": ["./packages/auth/nest/src/index.ts"],
+      "@otwld/ng-auth": ["./packages/auth/ng/src/index.ts"],
+      "@otwld/ng-auth/core": ["./packages/auth/ng/core/src/index.ts"],
+
+      "@otwld/ng-dashboard/*": ["./packages/dashboard/ng/src/lib/*"],
+      "@otwld/ng-dashboard/core": ["./packages/dashboard/ng/core/src/index.ts"],
+      "@otwld/ng-dashboard/src/lib/uikit/*": ["./packages/dashboard/ng/src/lib/uikit/*"],
+
+      "@otwld/nest-mongoose": ["./packages/databases/nest/src/index.ts"],
+
+      "@otwld/nest-mail": ["./packages/mail/nest/src/index.ts"],
+
+      "@otwld/nest-sdk": ["./packages/sdk/nest/src/index.ts"],
+      "@otwld/ng-cdk": ["./packages/sdk/ng/src/index.ts"],
+
+      "@otwld/ts-storage": ["./packages/storage/ts/src/index.ts"],
+      "@otwld/nest-storage": ["./packages/storage/nest/src/index.ts"],
+      "@otwld/ng-storage": ["./packages/storage/ng/src/index.ts"],
+
+      "@otwld/ts-users": ["./packages/users/ts/src/index.ts"],
+      "@otwld/nest-users": ["./packages/users/nest/src/index.ts"],
+      "@otwld/ng-users": ["./packages/users/ng/src/index.ts"],
+      "@otwld/ng-users/core": ["./packages/users/ng/core/src/index.ts"],
+
+      "@otwld/ts-websocket": ["./packages/websocket/ts/src/index.ts"],
+      "@otwld/nest-websocket": ["./packages/websocket/nest/src/index.ts"],
+      "@otwld/ng-websocket/core": ["./packages/websocket/ng/core/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

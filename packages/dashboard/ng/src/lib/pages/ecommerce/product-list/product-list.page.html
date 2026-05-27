@@ -1,0 +1,64 @@
+        <div class="p-6 card">
+            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-7 mb-7">
+                <div class="flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-4 w-full ml-auto">
+                    <div class="w-full sm:w-[217px]">
+                        <p-iconfield iconPosition="left">
+                            <p-inputicon class="pi pi-search" />
+                            <input type="text" pInputText [(ngModel)]="searchQuery" placeholder="Search" class="w-full" />
+                        </p-iconfield>
+                    </div>
+
+                    <div class="w-full sm:w-[148px]">
+                        <p-select [(ngModel)]="selectedCategory" [options]="categories" optionLabel="label" optionValue="value" placeholder="Category" styleClass="w-full rounded-xl border border-surface-200 dark:border-surface-700" />
+                    </div>
+
+                    <div class="w-full sm:w-[148px]">
+                        <p-select [(ngModel)]="selectedSort" [options]="sortOptions" optionLabel="label" optionValue="value" placeholder="Sort By" styleClass="w-full rounded-xl border border-surface-200 dark:border-surface-700" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                @for (product of filteredAndSortedProducts; track product.id) {
+                    <div class="h-120 p-4 rounded-3xl flex flex-col justify-end items-start gap-2 overflow-hidden relative group cursor-pointer">
+                        <div class="absolute inset-0 rounded-3xl overflow-hidden">
+                            <img [src]="product.image" class="w-full h-full object-cover" [alt]="product.name" />
+                            <div class="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
+                        </div>
+
+                        <div class="relative z-10 w-full p-4 bg-surface-0 dark:bg-surface-900 rounded-2xl shadow-xl flex flex-col justify-start items-start gap-2 overflow-hidden">
+                            <div class="w-full flex justify-between items-center gap-2">
+                                <p-tag [value]="getCategoryLabel(product.category)" severity="secondary" styleClass="text-xs font-medium" />
+                                <div class="flex justify-start items-center gap-2">
+                                    <div class="p-2 rounded-lg border border-surface-200 dark:border-surface-700 flex justify-center items-center cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors">
+                                        <i class="pi pi-heart text-surface-500 dark:text-surface-400 text-sm sm:text-base"></i>
+                                    </div>
+                                    <div class="p-2 rounded-lg border border-surface-200 dark:border-surface-700 flex justify-center items-center cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors">
+                                        <i class="pi pi-shopping-cart text-surface-500 dark:text-surface-400 text-sm sm:text-base"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="w-full flex flex-col gap-2">
+                                <div class="w-full text-surface-500 dark:text-surface-400 text-base sm:text-lg font-medium leading-6 sm:leading-7">{{ product.name }}</div>
+
+                                <div class="w-full flex justify-between items-center">
+                                    <div class="text-surface-950 dark:text-surface-0 text-xl sm:text-2xl font-medium leading-8 sm:leading-loose">{{ product.price }}</div>
+                                    <div class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 rounded-md flex justify-start items-center gap-1">
+                                        <i class="pi pi-star-fill text-yellow-600 dark:text-yellow-400 text-xs"></i>
+                                        <div class="text-yellow-600 dark:text-yellow-400 text-sm font-semibold leading-tight">{{ product.rating }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (filteredAndSortedProducts.length === 0) {
+                <div class="w-full text-center py-12">
+                    <div class="text-surface-500 dark:text-surface-400 text-lg font-medium mb-2">No products found</div>
+                    <div class="text-surface-400 dark:text-surface-500 text-base">Try adjusting your filters or search terms</div>
+                </div>
+            }
+        </div>

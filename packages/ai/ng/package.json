@@ -1,0 +1,19 @@
+{
+  "name": "@otwld/ng-ai",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@otwld/ts-ai": "0.0.1",
+    "@ai-sdk/angular": "^2.0.176",
+    "ai": "^6.0.175",
+    "primeng": "^21.1.6",
+    "rxjs": "~7.8.0"
+  },
+  "sideEffects": false,
+  "nx": {
+    "tags": [
+      "type:brick"
+    ]
+  }
+}

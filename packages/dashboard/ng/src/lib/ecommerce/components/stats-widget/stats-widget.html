@@ -1,0 +1,50 @@
+@for (metric of metricViewModels(); track metric.id) {
+<div class="col-span-12 md:col-span-6 xl:col-span-3">
+  <div class="card h-full">
+    <div class="flex items-start justify-between gap-3">
+      <span class="text-lg font-semibold">{{ metric.label }}</span>
+
+      @if (showMetricActions()) {
+      <p-button
+        type="button"
+        icon="pi pi-arrow-up-right"
+        [rounded]="true"
+        [text]="true"
+        [plain]="true"
+        [ariaLabel]="'View ' + metric.label + ' metric'"
+        (click)="selectMetric(metric)"
+      />
+      }
+    </div>
+
+    <div class="mt-4 flex items-start justify-between">
+      <div class="w-6/12">
+        <span class="text-4xl font-bold text-surface-900 dark:text-surface-0">{{ metric.value }}</span>
+        <div [class]="metric.changeClass">
+          <span class="font-medium">{{ metric.changeLabel }}</span>
+          <i class="ml-2 text-xs" [class]="metric.changeIcon"></i>
+        </div>
+      </div>
+      <div class="w-6/12" [class.text-right]="metric.visual.type === 'knob'">
+        @switch (metric.visual.type) { @case ('sparkline') {
+        <svg width="100%" [attr.viewBox]="metric.visual.viewBox" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path [attr.d]="metric.visual.path" [attr.stroke-width]="metric.visual.strokeWidth ?? 1" [class]="metric.sparklineClass" />
+        </svg>
+        } @case ('knob') {
+        <p-knob
+          class="-mt-8 ml-8 inline-flex"
+          [ngModel]="metric.knobValue"
+          [valueTemplate]="metric.knobValueTemplate ?? '{value}%'"
+          [readonly]="true"
+          [strokeWidth]="metric.knobStrokeWidth"
+          [size]="metric.knobSize"
+          [min]="metric.knobMin"
+          [max]="metric.knobMax"
+          [ariaLabel]="metric.knobAriaLabel"
+        />
+        } }
+      </div>
+    </div>
+  </div>
+</div>
+}

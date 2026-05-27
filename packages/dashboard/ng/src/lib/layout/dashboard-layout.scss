@@ -1,0 +1,21 @@
+@use './styles/variables/common';
+@use './styles/variables/light';
+@use './styles/variables/dark';
+@use './styles/sidebar/sidebar';
+@use './styles/menutheme/menutheme';
+@use './styles/responsive';
+@use './styles/content';
+@use './styles/utils';
+
+.layout-container {
+  min-height: 100vh;
+  font-weight: 400;
+  background: var(--surface-ground);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  a {
+    text-decoration: none;
+  }
+}

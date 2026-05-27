@@ -1,0 +1,20 @@
+{
+  "name": "ts-users",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/users/ts/src",
+  "projectType": "library",
+  "tags": ["scope:users", "type:types", "type:brick"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/users/ts",
+        "main": "packages/users/ts/src/index.ts",
+        "tsConfig": "packages/users/ts/tsconfig.lib.json",
+        "format": ["esm"],
+        "assets": ["packages/users/ts/*.md"]
+      }
+    }
+  }
+}

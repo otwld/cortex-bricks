@@ -1,0 +1,271 @@
+        <div class="flex flex-col min-h-screen overflow-hidden card">
+            <div class="p-6 border-b border-surface-200 dark:border-surface-700 flex justify-between items-center gap-4">
+                <h1 class="flex-1 text-surface-900 dark:text-surface-0 text-lg font-medium">Create a new post</h1>
+                <p-button icon="pi pi-bars" severity="secondary" styleClass="!flex xl:!hidden" (onClick)="sidebarVisible.set(true)" />
+            </div>
+
+            <div class="flex flex-1 overflow-hidden">
+                <div class="flex-1 p-6 flex flex-col gap-6 min-w-0 overflow-auto">
+                    <div class="flex flex-col gap-2">
+                        <label for="post-cover-file" class="text-surface-900 dark:text-surface-0 text-base font-medium">Cover</label>
+                        <div class="relative h-[19rem] rounded-2xl border border-surface-200 dark:border-surface-700 overflow-hidden">
+                            @if (coverImage()) {
+                                <img [src]="coverImage()" alt="Cover image" class="w-full h-full object-cover" />
+                                <div class="absolute inset-0 bg-linear-to-b from-transparent to-black/30"></div>
+                                <div class="absolute top-[18px] right-[18px]">
+                                    <p-button icon="pi pi-trash" severity="secondary" size="small" styleClass="!text-red-500 dark:!text-red-400" (onClick)="removeCoverImage()" />
+                                </div>
+                            } @else {
+                                <div
+                                    class="w-full h-full bg-surface-100 dark:bg-surface-800 flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-surface-200 dark:hover:bg-surface-700 transition-colors"
+                                    role="button"
+                                    tabindex="0"
+                                    (click)="triggerFileUpload()"
+                                    (keydown.enter)="triggerFileUpload()"
+                                    (keydown.space)="triggerFileUpload()"
+                                >
+                                    <div class="w-12 h-12 rounded-full bg-surface-200 dark:bg-surface-600 flex items-center justify-center">
+                                        <i class="pi pi-cloud-upload text-surface-600 dark:text-surface-300 text-xl"></i>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-surface-900 dark:text-surface-0 text-base font-medium mb-1">Click to upload cover image</div>
+                                        <div class="text-surface-500 dark:text-surface-400 text-sm">PNG, JPG or WebP (max 5MB)</div>
+                                    </div>
+                                </div>
+                            }
+                            <input #fileInput id="post-cover-file" type="file" accept="image/*" (change)="handleFileUpload($event)" class="hidden" />
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="post-title" class="text-surface-900 dark:text-surface-0 text-base font-medium">Title</label>
+                        <input id="post-title" type="text" pInputText [(ngModel)]="title" placeholder="The Smartest Ways to Earn Airline Miles" />
+                    </div>
+
+                    <div class="flex-1 flex flex-col gap-2 min-w-0">
+                        <span id="post-content-label" class="text-surface-900 dark:text-surface-0 text-base font-medium">Content</span>
+                        <p-editor [(ngModel)]="content" aria-labelledby="post-content-label" [style]="{ 'min-height': '320px', 'padding-top': '0', 'overflow-wrap': 'break-word', 'word-break': 'break-word' }" styleClass="!min-w-0" />
+                    </div>
+                </div>
+
+                <div class="hidden xl:block w-[309px] p-6 bg-surface-0 dark:bg-surface-900 border-l border-surface-200 dark:border-surface-700">
+                    <div class="flex flex-col gap-6">
+                        <div class="flex gap-4">
+                            <p-button label="Save Draft" [outlined]="true" severity="secondary" styleClass="w-full" class="flex-1" />
+                            <p-button label="Publish" severity="primary" styleClass="w-full" class="flex-1" />
+                        </div>
+
+                        <div class="w-full border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+
+                        <div class="flex flex-col gap-4">
+                            <div class="flex justify-start items-start gap-2">
+                                <span class="flex-1 text-surface-900 dark:text-surface-0 text-base font-medium">Publish</span>
+                                <a class="text-primary-600 dark:text-primary-400 text-base font-medium underline">Preview</a>
+                            </div>
+                        </div>
+
+                        <p-accordion [multiple]="true" [value]="accordionValue" expandIcon="pi pi-chevron-down !text-primary" collapseIcon="pi pi-chevron-up !text-primary" [pt]="accordionPT">
+                            <p-accordion-panel value="status" [pt]="accordionPanelPT">
+                                <p-accordion-header [pt]="accordionHeaderPT">
+                                    <div class="flex justify-start items-center gap-2 w-full">
+                                        <span class="text-surface-900 dark:text-surface-0 text-base font-medium">Status:</span>
+                                        <span class="flex-1 text-primary-600 dark:text-primary-400 text-base font-medium">{{ status() }}</span>
+                                    </div>
+                                </p-accordion-header>
+                                <p-accordion-content [pt]="accordionContentPT">
+                                    <p-select [(ngModel)]="status" [options]="statusOptions" optionLabel="label" optionValue="value" class="w-full" />
+                                </p-accordion-content>
+                            </p-accordion-panel>
+
+                            <p-accordion-panel value="visibility" [pt]="accordionPanelPT">
+                                <p-accordion-header [pt]="accordionHeaderPT">
+                                    <div class="flex justify-start items-center gap-2 w-full">
+                                        <span class="text-surface-900 dark:text-surface-0 text-base font-medium">Visibility:</span>
+                                        <span class="flex-1 text-primary-600 dark:text-primary-400 text-base font-medium">{{ visibility() }}</span>
+                                    </div>
+                                </p-accordion-header>
+                                <p-accordion-content [pt]="accordionContentPT">
+                                    <div class="flex flex-col gap-3">
+                                        <div class="flex items-center gap-2">
+                                            <p-radioButton [(ngModel)]="visibility" inputId="public" value="Public" />
+                                            <label for="public" class="text-surface-900 dark:text-surface-0 text-base">Public</label>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <p-radioButton [(ngModel)]="visibility" inputId="password" value="Password protected" />
+                                            <label for="password" class="text-surface-900 dark:text-surface-0 text-base">Password protected</label>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <p-radioButton [(ngModel)]="visibility" inputId="private" value="Private" />
+                                            <label for="private" class="text-surface-900 dark:text-surface-0 text-base">Private</label>
+                                        </div>
+                                    </div>
+                                </p-accordion-content>
+                            </p-accordion-panel>
+
+                            <p-accordion-panel value="publish-date" [pt]="accordionPanelPT">
+                                <p-accordion-header [pt]="accordionHeaderPT">
+                                    <div class="flex justify-start items-center gap-2 w-full">
+                                        <span class="text-surface-900 dark:text-surface-0 text-base font-medium">Publish:</span>
+                                        <span class="flex-1 text-primary-600 dark:text-primary-400 text-base font-medium">{{ formattedPublishDate() }}</span>
+                                    </div>
+                                </p-accordion-header>
+                                <p-accordion-content [pt]="accordionContentPT">
+                                    <p-datepicker [(ngModel)]="publishDate" [showIcon]="true" styleClass="!w-full" inputStyleClass="w-full" />
+                                </p-accordion-content>
+                            </p-accordion-panel>
+                        </p-accordion>
+
+                        <div class="flex flex-col gap-2">
+                            <label for="post-authors" class="text-surface-900 dark:text-surface-0 text-base font-medium">Author</label>
+                            <p-multiselect inputId="post-authors" [(ngModel)]="selectedAuthors" [options]="authorOptions" optionLabel="name" placeholder="Select authors">
+                                <ng-template #selecteditems let-value>
+                                    @if (value && value.length > 0) {
+                                        <div class="flex gap-1 overflow-hidden min-h-8">
+                                            @for (author of value; track author.name) {
+                                                <p-chip [label]="author.name" [image]="author.image" [removable]="true" styleClass="!shrink-0" (onRemove)="removeAuthor($event, author)" />
+                                            }
+                                        </div>
+                                    }
+                                </ng-template>
+                            </p-multiselect>
+                        </div>
+
+                        <div class="w-full border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+
+                        <div class="flex flex-col gap-4">
+                            <span class="text-surface-900 dark:text-surface-0 text-base font-medium">Category</span>
+                            <div class="flex flex-col gap-3">
+                                @for (category of categories; track category) {
+                                    <div class="flex items-center gap-2">
+                                        <p-checkbox [(ngModel)]="selectedCategories" [inputId]="category" [value]="category" />
+                                        <label [for]="category" class="text-surface-900 dark:text-surface-0 text-base">{{ category }}</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="w-full border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+
+                        <div class="flex flex-col gap-2">
+                            <label for="post-tags" class="text-surface-900 dark:text-surface-0 text-base font-medium">Tag</label>
+                            <p-multiselect inputId="post-tags" [(ngModel)]="selectedTags" [options]="tagOptions" placeholder="Select tags" display="chip" styleClass="!w-full" />
+                        </div>
+
+                        <div class="w-full border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+
+                        <p-button label="Move to trash" icon="pi pi-trash" severity="danger" [outlined]="true" class="flex-1" styleClass="w-full" />
+                    </div>
+                </div>
+            </div>
+
+            <p-drawer [(visible)]="sidebarVisible" position="right" styleClass="!w-full !max-w-md">
+                <ng-template #header>
+                    <h3 class="text-surface-900 dark:text-surface-0 text-lg font-medium">Publishing Settings</h3>
+                </ng-template>
+
+                <div class="flex flex-col gap-6 p-4 px-2">
+                    <div class="flex gap-4">
+                        <p-button label="Save Draft" [outlined]="true" severity="secondary" styleClass="w-full" class="flex-1" />
+                        <p-button label="Publish" severity="primary" styleClass="w-full" class="flex-1" />
+                    </div>
+
+                    <div class="w-full border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+
+                    <div class="flex flex-col gap-4">
+                        <div class="flex justify-start items-start gap-2">
+                            <span class="flex-1 text-surface-900 dark:text-surface-0 text-base font-medium">Publish</span>
+                            <a class="text-primary-600 dark:text-primary-400 text-base font-medium underline">Preview</a>
+                        </div>
+                    </div>
+
+                    <p-accordion [multiple]="true" [value]="accordionValue" expandIcon="pi pi-chevron-down !text-primary" collapseIcon="pi pi-chevron-up !text-primary" [pt]="accordionPT">
+                        <p-accordion-panel value="status" [pt]="accordionPanelPT">
+                            <p-accordion-header [pt]="accordionHeaderPT">
+                                <div class="flex justify-start items-center gap-2 w-full">
+                                    <span class="text-surface-900 dark:text-surface-0 text-base font-medium">Status:</span>
+                                    <span class="flex-1 text-primary-600 dark:text-primary-400 text-base font-medium">{{ status() }}</span>
+                                </div>
+                            </p-accordion-header>
+                            <p-accordion-content [pt]="accordionContentPT">
+                                <p-select [(ngModel)]="status" [options]="statusOptions" optionLabel="label" optionValue="value" styleClass="!w-full" />
+                            </p-accordion-content>
+                        </p-accordion-panel>
+                        <p-accordion-panel value="visibility" [pt]="accordionPanelPT">
+                            <p-accordion-header [pt]="accordionHeaderPT">
+                                <div class="flex justify-start items-center gap-2 w-full">
+                                    <span class="text-surface-900 dark:text-surface-0 text-base font-medium">Visibility:</span>
+                                    <span class="flex-1 text-primary-600 dark:text-primary-400 text-base font-medium">{{ visibility() }}</span>
+                                </div>
+                            </p-accordion-header>
+                            <p-accordion-content [pt]="accordionContentPT">
+                                <div class="flex flex-col gap-3">
+                                    <div class="flex items-center gap-2">
+                                        <p-radioButton [(ngModel)]="visibility" inputId="mobile-public" value="Public" />
+                                        <label for="mobile-public" class="text-surface-900 dark:text-surface-0 text-base">Public</label>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <p-radioButton [(ngModel)]="visibility" inputId="mobile-password" value="Password protected" />
+                                        <label for="mobile-password" class="text-surface-900 dark:text-surface-0 text-base">Password protected</label>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <p-radioButton [(ngModel)]="visibility" inputId="mobile-private" value="Private" />
+                                        <label for="mobile-private" class="text-surface-900 dark:text-surface-0 text-base">Private</label>
+                                    </div>
+                                </div>
+                            </p-accordion-content>
+                        </p-accordion-panel>
+                        <p-accordion-panel value="publish-date" [pt]="accordionPanelPT">
+                            <p-accordion-header [pt]="accordionHeaderPT">
+                                <div class="flex justify-start items-center gap-2 w-full">
+                                    <span class="text-surface-900 dark:text-surface-0 text-base font-medium">Publish:</span>
+                                    <span class="flex-1 text-primary-600 dark:text-primary-400 text-base font-medium">{{ formattedPublishDate() }}</span>
+                                </div>
+                            </p-accordion-header>
+                            <p-accordion-content [pt]="accordionContentPT">
+                                <p-datepicker [(ngModel)]="publishDate" [showIcon]="true" styleClass="!w-full" inputStyleClass="w-full" />
+                            </p-accordion-content>
+                        </p-accordion-panel>
+                    </p-accordion>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="mobile-post-authors" class="text-surface-900 dark:text-surface-0 text-base font-medium">Author</label>
+                        <p-multiselect inputId="mobile-post-authors" [(ngModel)]="selectedAuthors" [options]="authorOptions" optionLabel="name" placeholder="Select authors">
+                            <ng-template #selecteditems let-value>
+                                @if (value && value.length > 0) {
+                                    <div class="flex gap-1 overflow-hidden min-h-8">
+                                        @for (author of value; track author.name) {
+                                            <p-chip [label]="author.name" [image]="author.image" [removable]="true" styleClass="!shrink-0" (onRemove)="removeAuthor($event, author)" />
+                                        }
+                                    </div>
+                                }
+                            </ng-template>
+                        </p-multiselect>
+                    </div>
+
+                    <div class="w-full border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+
+                    <div class="flex flex-col gap-4">
+                        <span class="text-surface-900 dark:text-surface-0 text-base font-medium">Category</span>
+                        <div class="flex flex-col gap-3">
+                            @for (category of categories; track category) {
+                                <div class="flex items-center gap-2">
+                                    <p-checkbox [(ngModel)]="selectedCategories" [inputId]="'mobile-' + category" [value]="category" />
+                                    <label [for]="'mobile-' + category" class="text-surface-900 dark:text-surface-0 text-base">{{ category }}</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="w-full border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="mobile-post-tags" class="text-surface-900 dark:text-surface-0 text-base font-medium">Tag</label>
+                        <p-multiselect inputId="mobile-post-tags" [(ngModel)]="selectedTags" [options]="tagOptions" placeholder="Select tags" display="chip" styleClass="!w-full" />
+                    </div>
+
+                    <div class="w-full border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+
+                    <p-button label="Move to trash" icon="pi pi-trash" severity="danger" [outlined]="true" />
+                </div>
+            </p-drawer>
+        </div>

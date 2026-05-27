@@ -1,0 +1,15 @@
+{
+  "name": "nest-mail",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/mail/nest/src",
+  "projectType": "library",
+  "tags": ["scope:mail", "type:lib", "framework:nest", "type:brick"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/mail/nest/tsconfig.lib.json"
+      }
+    }
+  }
+}

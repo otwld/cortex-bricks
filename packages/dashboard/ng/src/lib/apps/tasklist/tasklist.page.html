@@ -1,0 +1,371 @@
+        <div class="flex flex-col lg:flex-row h-full bg-surface-0 dark:bg-surface-900 card p-0!">
+            <!-- Mobile Header -->
+            <div class="lg:hidden flex flex-col gap-4 p-4 border-b border-surface-200 dark:border-surface-700">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-surface-900 dark:text-surface-0 text-lg font-semibold">Tasks</h1>
+                    <p-button icon="pi pi-plus" label="New Task" severity="secondary" [outlined]="true" size="small" (onClick)="openNewTaskDrawer()" />
+                </div>
+
+                <div class="flex gap-2 overflow-x-auto">
+                    @for (filter of filterOptions; track filter.key) {
+                        <button
+                            (click)="activeFilter.set(filter.key)"
+                            class="px-4 py-2 rounded-lg flex items-center gap-2 whitespace-nowrap transition-colors cursor-pointer shrink-0"
+                            [ngClass]="activeFilter() === filter.key ? 'bg-primary text-surface-0 dark:text-surface-900 shadow-sm' : 'text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700'"
+                        >
+                            <i [class]="filter.icon + ' text-sm'"></i>
+                            <span class="text-sm font-medium">{{ filter.label }}</span>
+                            @if (taskCounts()[filter.countKey] > 0) {
+                                <div class="px-2 py-1 rounded-sm text-sm font-semibold text-xs" [ngClass]="activeFilter() === filter.key ? 'bg-white text-primary-600' : 'bg-surface-200 dark:bg-surface-600 text-surface-900 dark:text-surface-100'">
+                                    {{ taskCounts()[filter.countKey] }}
+                                </div>
+                            }
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Desktop Sidebar -->
+            <div class="hidden lg:flex w-[237px] bg-surface-0 dark:bg-surface-900 border-r border-surface-200 dark:border-surface-700 flex-col overflow-hidden">
+                <div class="p-6 flex flex-col gap-5">
+                    <p-button icon="pi pi-plus" label="New Task" severity="secondary" [outlined]="true" styleClass="w-full cursor-pointer" (onClick)="openNewTaskDrawer()" />
+
+                    <p-divider styleClass="my-1!" />
+
+                    <div class="flex flex-col gap-3">
+                        <div class="text-surface-500 text-sm font-medium">Task</div>
+
+                        @for (filter of filterOptions; track filter.key) {
+                            <button
+                                (click)="activeFilter.set(filter.key)"
+                                class="w-full px-4 py-2 rounded-lg flex items-center gap-3 transition-colors cursor-pointer"
+                                [ngClass]="activeFilter() === filter.key ? 'bg-primary text-surface-0 dark:text-surface-900 shadow-sm' : 'text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700'"
+                            >
+                                <i [class]="filter.icon + ' text-base'"></i>
+                                <span class="flex-1 text-left text-base font-medium">{{ filter.fullLabel }}</span>
+                                @if (taskCounts()[filter.countKey] > 0) {
+                                    <div class="px-2 py-1 rounded-sm text-sm font-semibold text-xs" [ngClass]="activeFilter() === filter.key ? 'bg-white text-primary-600' : 'bg-surface-200 dark:bg-surface-600 text-surface-900 dark:text-surface-100'">
+                                        {{ taskCounts()[filter.countKey] }}
+                                    </div>
+                                }
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-1 flex flex-col overflow-hidden">
+                <!-- Desktop Search -->
+                <div class="hidden lg:flex p-6 border-b border-surface-200 dark:border-surface-700 items-center gap-4 px-8">
+                    <div class="flex-1">
+                        <p-iconfield>
+                            <p-inputicon class="pi pi-search" />
+                            <input pInputText [(ngModel)]="searchQuery" placeholder="Search" class="w-full" />
+                        </p-iconfield>
+                    </div>
+                </div>
+
+                <!-- Mobile Search -->
+                <div class="lg:hidden p-4 border-b border-surface-200 dark:border-surface-700">
+                    <p-iconfield>
+                        <p-inputicon class="pi pi-search" />
+                        <input pInputText [(ngModel)]="searchQuery" placeholder="Search tasks..." class="w-full" />
+                    </p-iconfield>
+                </div>
+
+                <!-- Tasks List -->
+                <div class="flex-1">
+                    <p-accordion
+                        [value]="openPanels"
+                        [multiple]="true"
+                        styleClass="w-full"
+                        [pt]="{
+                            root: { class: 'border-none!' }
+                        }"
+                    >
+                        <!-- Pending Tasks -->
+                        @if (pendingTasks().length > 0) {
+                            <p-accordionpanel value="0" [pt]="{ root: { class: 'border-none!' } }">
+                                <p-accordionheader>
+                                    <div class="flex items-center gap-4 px-4 lg:px-6">
+                                        <h2 class="text-surface-900 dark:text-surface-0 text-lg font-semibold">{{ pendingTasks().length }} Tasks Pending</h2>
+                                    </div>
+                                </p-accordionheader>
+                                <p-accordioncontent [pt]="{'root': { class: 'overflow-hidden' } }">
+                                    <div class="flex flex-col">
+                                        @for (task of pendingTasks(); track task.id; let i = $index; let last = $last) {
+                                            <ng-container *ngTemplateOutlet="taskItem; context: { task: task, isLast: last }"></ng-container>
+                                        }
+                                    </div>
+                                </p-accordioncontent>
+                            </p-accordionpanel>
+                        }
+
+                        <!-- In Progress Tasks -->
+                        @if (inProgressTasks().length > 0) {
+                            <p-accordionpanel value="1" [pt]="{ root: { class: 'border-none!' } }">
+                                <p-accordionheader>
+                                    <div class="flex items-center gap-4 px-4 lg:px-6">
+                                        <h2 class="text-surface-900 dark:text-surface-0 text-lg font-semibold">{{ inProgressTasks().length }} Tasks In Progress</h2>
+                                    </div>
+                                </p-accordionheader>
+                                <p-accordioncontent [pt]="{'root': { class: 'overflow-hidden' } }">
+                                    <div class="flex flex-col">
+                                        @for (task of inProgressTasks(); track task.id; let i = $index; let last = $last) {
+                                            <ng-container *ngTemplateOutlet="taskItem; context: { task: task, isLast: last }"></ng-container>
+                                        }
+                                    </div>
+                                </p-accordioncontent>
+                            </p-accordionpanel>
+                        }
+
+                        <!-- Completed Tasks -->
+                        @if (completedTasks().length > 0) {
+                            <p-accordionpanel value="2" [pt]="{ root: { class: 'border-none!' } }">
+                                <p-accordionheader>
+                                    <div class="flex items-center gap-4 px-4 lg:px-6">
+                                        <h2 class="text-surface-900 dark:text-surface-0 text-lg font-semibold">{{ completedTasks().length }} Tasks Completed</h2>
+                                    </div>
+                                </p-accordionheader>
+                                <p-accordioncontent [pt]="{'root': { class: 'overflow-hidden' } }">
+                                    <div class="flex flex-col">
+                                        @for (task of completedTasks(); track task.id; let i = $index; let last = $last) {
+                                            <ng-container *ngTemplateOutlet="taskItemCompleted; context: { task: task, isLast: last }"></ng-container>
+                                        }
+                                    </div>
+                                </p-accordioncontent>
+                            </p-accordionpanel>
+                        }
+                    </p-accordion>
+
+                    <!-- Add New Task Button -->
+                    <div class="px-4 lg:px-14 py-3 flex items-center gap-3 cursor-pointer hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors" role="button" tabindex="0" (click)="openNewTaskDrawer()" (keydown.enter)="openNewTaskDrawer()" (keydown.space)="openNewTaskDrawer()">
+                        <i class="pi pi-plus text-xs text-surface-500"></i>
+                        <span class="text-surface-500 text-base font-medium">Add New Task</span>
+                    </div>
+                </div>
+            </div>
+
+            <p-confirmdialog />
+
+            <app-task-drawer [(visible)]="isDrawerVisible" [task]="selectedTask" [mode]="drawerMode" (save)="handleDrawerSave($event)" (cancelled)="handleDrawerCancel()" />
+        </div>
+
+        <!-- Task Item Template -->
+        <ng-template #taskItem let-task="task" let-isLast="isLast">
+            <div class="flex flex-col">
+                <div class="px-4 lg:px-8 pt-4 pb-2">
+                    <div class="flex items-center gap-3">
+                        <p-checkbox [(ngModel)]="task.completed" [binary]="true" [inputId]="'task-' + task.id" (onChange)="toggleTaskCompletion(task, task.completed)" />
+                        <div class="text-base font-medium leading-normal transition-all duration-300 flex-1" [ngClass]="task.completed ? 'text-surface-500 line-through' : 'text-surface-900 dark:text-surface-0'">
+                            {{ task.title }}
+                        </div>
+                    </div>
+                    @if (task.description) {
+                        <div class="text-surface-500 text-sm leading-tight line-clamp-3 pl-8 pt-1">
+                            {{ task.description }}
+                        </div>
+                    }
+                </div>
+
+                <div class="pl-8 lg:pl-16 pr-4 lg:pr-14 pt-2 pb-4 flex flex-col lg:flex-row lg:items-center gap-3">
+                    <!-- Desktop View -->
+                    <div class="hidden lg:flex items-center gap-2 flex-1">
+                        @if (task.startDate || task.endDate) {
+                            @if (task.startDate) {
+                                <div class="flex items-center gap-2">
+                                    <span class="text-surface-500 text-base">Start</span>
+                                    <p-tag [value]="task.startDate" severity="secondary" />
+                                </div>
+                            }
+
+                            @if (task.startDate && task.endDate) {
+                                <div class="w-px h-2.5 bg-surface-200 dark:bg-surface-700"></div>
+                            }
+
+                            @if (task.endDate) {
+                                <div class="flex items-center gap-2">
+                                    <span class="text-surface-500 text-base">End</span>
+                                    <p-tag [value]="task.endDate" severity="secondary" />
+                                </div>
+                            }
+
+                            @if (task.members?.length > 0) {
+                                <div class="w-px h-2.5 bg-surface-200 dark:bg-surface-700"></div>
+                            }
+                        }
+
+                        <div class="flex-1 flex items-start">
+                            @if (task.members?.length > 0) {
+                                <p-avatargroup>
+                                    @for (member of task.members.slice(0, 5); track member.image) {
+                                        <p-avatar [image]="'/demo/images/avatar/' + member.image" shape="circle" styleClass="border border-surface-0 dark:border-surface-900 w-6 h-6" />
+                                    }
+                                    @if (task.members.length > 5) {
+                                        <p-avatar [label]="'+' + (task.members.length - 5)" shape="circle" styleClass="bg-primary-500 text-surface-0 border border-surface-0 dark:border-surface-900 w-6 h-6" />
+                                    }
+                                </p-avatargroup>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Mobile View -->
+                    <div class="flex lg:hidden items-center justify-between">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            @if (task.startDate) {
+                                <div class="flex items-center gap-1">
+                                    <i class="pi pi-calendar text-xs text-surface-500"></i>
+                                    <p-tag [value]="task.startDate" severity="secondary" size="small" />
+                                </div>
+                            }
+
+                            @if (task.startDate && task.endDate) {
+                                <div class="text-surface-500 text-sm">-</div>
+                            }
+
+                            @if (task.endDate) {
+                                <div class="flex items-center gap-1">
+                                    <p-tag [value]="task.endDate" severity="secondary" size="small" />
+                                </div>
+                            }
+
+                            @if ((task.startDate || task.endDate) && task.members?.length > 0) {
+                                <div class="w-px h-3 bg-surface-200 dark:bg-surface-700"></div>
+                            }
+
+                            @if (task.members?.length > 0) {
+                                <p-avatargroup>
+                                    @for (member of task.members.slice(0, 3); track member.image) {
+                                        <p-avatar [image]="'/demo/images/avatar/' + member.image" shape="circle" styleClass="border border-surface-0 dark:border-surface-900 w-6 h-6" />
+                                    }
+                                    @if (task.members.length > 3) {
+                                        <p-avatar [label]="'+' + (task.members.length - 3)" shape="circle" styleClass="bg-primary-500 text-surface-0 border border-surface-0 dark:border-surface-900 w-6 h-6" />
+                                    }
+                                </p-avatargroup>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 lg:ml-auto">
+                        <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" size="small" severity="secondary" styleClass="cursor-pointer" (onClick)="openEditTaskDrawer(task)" />
+                        <p-button icon="pi pi-trash" [text]="true" [rounded]="true" size="small" severity="secondary" styleClass="cursor-pointer" (onClick)="deleteTask(task.id)" />
+                    </div>
+                </div>
+
+                @if (!isLast) {
+                    <div class="px-4 lg:px-14 py-2">
+                        <div class="border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+                    </div>
+                }
+            </div>
+        </ng-template>
+
+        <!-- Completed Task Item Template -->
+        <ng-template #taskItemCompleted let-task="task" let-isLast="isLast">
+            <div class="flex flex-col">
+                <div class="px-4 lg:px-8 pt-4 pb-2">
+                    <div class="flex items-center gap-3">
+                        <p-checkbox [(ngModel)]="task.completed" [binary]="true" [inputId]="'task-' + task.id" (onChange)="toggleTaskCompletion(task, task.completed)" />
+                        <div class="text-surface-500 text-base font-medium leading-normal line-through flex-1">
+                            {{ task.title }}
+                        </div>
+                    </div>
+                    @if (task.description) {
+                        <div class="text-surface-500 text-sm leading-tight line-clamp-3 pl-8 pt-1">
+                            {{ task.description }}
+                        </div>
+                    }
+                </div>
+
+                <div class="pl-8 lg:pl-16 pr-4 lg:pr-14 pt-2 pb-4 flex flex-col lg:flex-row lg:items-center gap-3">
+                    <!-- Desktop View -->
+                    <div class="hidden lg:flex items-center gap-2 flex-1">
+                        @if (task.startDate || task.endDate) {
+                            @if (task.startDate) {
+                                <div class="flex items-center gap-2">
+                                    <span class="text-surface-500 text-base">Start</span>
+                                    <p-tag [value]="task.startDate" severity="secondary" />
+                                </div>
+                            }
+
+                            @if (task.startDate && task.endDate) {
+                                <div class="w-px h-2.5 bg-surface-200 dark:bg-surface-700"></div>
+                            }
+
+                            @if (task.endDate) {
+                                <div class="flex items-center gap-2">
+                                    <span class="text-surface-500 text-base">End</span>
+                                    <p-tag [value]="task.endDate" severity="secondary" />
+                                </div>
+                            }
+
+                            @if (task.members?.length > 0) {
+                                <div class="w-px h-2.5 bg-surface-200 dark:bg-surface-700"></div>
+                            }
+                        }
+
+                        <div class="flex-1 flex items-start">
+                            @if (task.members?.length > 0) {
+                                <p-avatargroup>
+                                    @for (member of task.members.slice(0, 5); track member.image) {
+                                        <p-avatar [image]="'/demo/images/avatar/' + member.image" shape="circle" styleClass="border border-surface-0 dark:border-surface-900 w-6 h-6" />
+                                    }
+                                    @if (task.members.length > 5) {
+                                        <p-avatar [label]="'+' + (task.members.length - 5)" shape="circle" styleClass="bg-primary-500 text-surface-0 border border-surface-0 dark:border-surface-900 w-6 h-6" />
+                                    }
+                                </p-avatargroup>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Mobile View -->
+                    <div class="flex lg:hidden items-center justify-between">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            @if (task.startDate) {
+                                <div class="flex items-center gap-1">
+                                    <i class="pi pi-calendar text-xs text-surface-500"></i>
+                                    <p-tag [value]="task.startDate" severity="secondary" size="small" />
+                                </div>
+                            }
+
+                            @if (task.startDate && task.endDate) {
+                                <div class="text-surface-500 text-sm">-</div>
+                            }
+
+                            @if (task.endDate) {
+                                <div class="flex items-center gap-1">
+                                    <p-tag [value]="task.endDate" severity="secondary" size="small" />
+                                </div>
+                            }
+
+                            @if ((task.startDate || task.endDate) && task.members?.length > 0) {
+                                <div class="w-px h-3 bg-surface-200 dark:bg-surface-700"></div>
+                            }
+
+                            @if (task.members?.length > 0) {
+                                <p-avatargroup>
+                                    @for (member of task.members.slice(0, 3); track member.image) {
+                                        <p-avatar [image]="'/demo/images/avatar/' + member.image" shape="circle" styleClass="border border-surface-0 dark:border-surface-900 w-6 h-6" />
+                                    }
+                                    @if (task.members.length > 3) {
+                                        <p-avatar [label]="'+' + (task.members.length - 3)" shape="circle" styleClass="bg-primary-500 text-surface-0 border border-surface-0 dark:border-surface-900 w-6 h-6" />
+                                    }
+                                </p-avatargroup>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 lg:ml-auto">
+                        <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" size="small" severity="secondary" styleClass="cursor-pointer" (onClick)="openEditTaskDrawer(task)" />
+                        <p-button icon="pi pi-trash" [text]="true" [rounded]="true" size="small" severity="secondary" styleClass="cursor-pointer" (onClick)="deleteTask(task.id)" />
+                    </div>
+                </div>
+
+                @if (!isLast) {
+                    <div class="px-4 lg:px-14 py-2">
+                        <div class="border-t border-dashed border-surface-200 dark:border-surface-700"></div>
+                    </div>
+                }
+            </div>
+        </ng-template>

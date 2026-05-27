@@ -1,0 +1,33 @@
+<div class="card h-full">
+  <div class="mb-4 text-xl font-semibold text-surface-900 dark:text-surface-0">{{ title() }}</div>
+
+  @if (productViewModels().length) {
+  <ul class="m-0 list-none p-0">
+    @for (product of productViewModels(); track product.id) {
+    <li class="flex items-center justify-between gap-4 rounded-border p-4 transition-colors hover:bg-surface-50 dark:hover:bg-surface-800">
+      <div class="inline-flex min-w-0 items-center">
+        <img [src]="product.imageSrc" [alt]="product.imageAlt" width="75" height="75" class="shrink-0 rounded-border object-cover shadow" />
+        <div class="ml-4 flex min-w-0 flex-col">
+          <span class="mb-1 truncate text-lg font-medium text-surface-900 dark:text-surface-0">{{ product.name }}</span>
+          <p-rating [ngModel]="product.rating" [readonly]="true" />
+        </div>
+      </div>
+      <span class="ml-auto shrink-0 text-xl font-semibold text-muted-color">
+        {{ product.price | currency: currencyCode() : currencyDisplay() : currencyDigits() }}
+      </span>
+      <p-button
+        type="button"
+        icon="pi pi-eye"
+        [rounded]="true"
+        [text]="true"
+        [plain]="true"
+        [ariaLabel]="'View ' + product.name"
+        (click)="selectProduct(product)"
+      />
+    </li>
+    }
+  </ul>
+  } @else {
+  <div class="rounded-border border border-surface-200 p-6 text-center text-muted-color dark:border-surface-700">{{ emptyMessage() }}</div>
+  }
+</div>

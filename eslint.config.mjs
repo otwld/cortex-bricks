@@ -26,6 +26,12 @@ export default [
     },
   },
   {
+    files: ['**/vitest.config.ts'],
+    rules: {
+      '@nx/enforce-module-boundaries': 'off',
+    },
+  },
+  {
     files: [
       '**/*.ts',
       '**/*.tsx',

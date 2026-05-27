@@ -1,0 +1,70 @@
+{
+  "name": "ng-dashboard",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/dashboard/ng/src",
+  "prefix": "dashboard",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": [
+        "dist/{projectRoot}"
+      ],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
+  "tags": [
+    "scope:dashboard",
+    "type:lib",
+    "framework:ng",
+    "type:brick"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": [
+        "{workspaceRoot}/dist/{projectRoot}"
+      ],
+      "options": {
+        "project": "packages/dashboard/ng/ng-package.json",
+        "tsConfig": "packages/dashboard/ng/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/dashboard/ng/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "env -u NO_COLOR pnpm exec nx run ng-dashboard:unit-test --skip-nx-cache"
+      }
+    },
+    "unit-test": {
+      "executor": "@nx/angular:unit-test",
+      "options": {
+        "include": [
+          "**/*.spec.ts",
+          "**/*.test.ts",
+          "../core/src/**/*.spec.ts",
+          "../core/src/**/*.test.ts"
+        ],
+        "setupFiles": [
+          "packages/dashboard/ng/src/test-setup.ts"
+        ],
+        "watch": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

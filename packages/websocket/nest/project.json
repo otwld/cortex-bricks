@@ -1,0 +1,20 @@
+{
+  "name": "nest-websocket",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/websocket/nest/src",
+  "projectType": "library",
+  "tags": ["scope:websocket", "type:lib", "framework:nest", "type:brick"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/websocket/nest",
+        "main": "packages/websocket/nest/src/index.ts",
+        "tsConfig": "packages/websocket/nest/tsconfig.lib.json",
+        "packageJson": "packages/websocket/nest/package.json",
+        "assets": ["packages/websocket/nest/*.md"]
+      }
+    }
+  }
+}

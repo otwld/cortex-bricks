@@ -1,0 +1,30 @@
+{
+  "name": "ts-ai",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/ai/ts/src",
+  "projectType": "library",
+  "tags": [
+    "scope:ai",
+    "type:types",
+    "type:brick"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/ai/ts",
+        "main": "packages/ai/ts/src/index.ts",
+        "tsConfig": "packages/ai/ts/tsconfig.lib.json",
+        "format": [
+          "esm"
+        ],
+        "assets": [
+          "packages/ai/ts/*.md"
+        ]
+      }
+    }
+  }
+}

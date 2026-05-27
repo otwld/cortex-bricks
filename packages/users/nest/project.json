@@ -1,0 +1,20 @@
+{
+  "name": "nest-users",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/users/nest/src",
+  "projectType": "library",
+  "tags": ["scope:users", "type:lib", "framework:nest", "type:brick"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/users/nest",
+        "tsConfig": "packages/users/nest/tsconfig.lib.json",
+        "packageJson": "packages/users/nest/package.json",
+        "main": "packages/users/nest/src/index.ts",
+        "assets": ["packages/users/nest/*.md"]
+      }
+    }
+  }
+}

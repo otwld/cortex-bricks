@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="mb-4 text-xl font-semibold text-surface-900 dark:text-surface-0">{{ title() }}</div>
+
+  @if (transactionViewModels().length) {
+  <ul class="m-0 list-none p-0">
+    @for (transaction of transactionViewModels(); track transaction.id; let last = $last) {
+    <li class="flex items-center gap-4 border-surface-200 p-4 dark:border-surface-700" [class.mb-4]="!last" [class.border-b]="!last">
+      <img [alt]="transaction.imageAlt" [src]="transaction.imageUrl" [class]="transaction.imageClass" />
+      <div class="flex min-w-0 flex-col">
+        <span class="mb-1 truncate text-xl font-medium text-surface-900 dark:text-surface-0">{{ transaction.merchant }}</span>
+        <span>{{ transaction.date }}</span>
+      </div>
+      <span class="ml-auto shrink-0 text-xl font-semibold text-surface-900 dark:text-surface-0">
+        {{ transaction.amount | currency: currencyCode() : currencyDisplay() : currencyDigits() }}
+      </span>
+      @if (showTransactionActions()) {
+      <p-button
+        type="button"
+        icon="pi pi-eye"
+        [rounded]="true"
+        [text]="true"
+        [plain]="true"
+        [ariaLabel]="'View ' + transaction.merchant + ' transaction'"
+        (click)="selectTransaction(transaction)"
+      />
+      }
+    </li>
+    }
+  </ul>
+  } @else {
+  <div class="rounded-border border border-surface-200 p-6 text-center text-muted-color dark:border-surface-700">{{ emptyMessage() }}</div>
+  }
+</div>

@@ -1,0 +1,36 @@
+{
+  "name": "@otwld/nest-storage",
+  "version": "0.0.1",
+  "private": true,
+  "type": "commonjs",
+  "sideEffects": false,
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "@otwld/ts-storage": "0.0.1",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/mongoose": "^11.0.4",
+    "express": "^4.21.2",
+    "mongoose": "^9.6.1",
+    "tslib": "^2.3.0",
+    "zod": "^3.24.0"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-s3": "^3.1042.0",
+    "@aws-sdk/s3-request-presigner": "^3.1042.0"
+  },
+  "peerDependenciesMeta": {
+    "@aws-sdk/client-s3": {
+      "optional": true
+    },
+    "@aws-sdk/s3-request-presigner": {
+      "optional": true
+    }
+  },
+  "nx": {
+    "tags": [
+      "type:brick"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@otwld/nest-users",
+  "version": "0.0.1",
+  "private": true,
+  "type": "commonjs",
+  "sideEffects": false,
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "@otwld/nest-auth": "0.0.1",
+    "@otwld/ts-users": "0.0.1",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/mongoose": "^11.0.4",
+    "bcrypt": "^6.0.0",
+    "mongoose": "^9.6.1",
+    "tslib": "^2.3.0",
+    "zod": "^3.24.0"
+  },
+  "nx": {
+    "tags": [
+      "type:brick"
+    ]
+  }
+}

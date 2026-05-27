@@ -1,0 +1,84 @@
+<div class="card">
+  <div class="mb-4 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+    <div class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{ title() }}</div>
+
+    <div class="inline-flex items-center gap-3">
+      @if (showSearch()) {
+      <p-iconfield>
+        <p-inputicon class="pi pi-search" />
+        <input
+          pInputText
+          type="text"
+          class="w-full rounded-full"
+          [attr.aria-label]="searchAriaLabel()"
+          [placeholder]="searchPlaceholder()"
+          (input)="queueGlobalFilter($event)"
+        />
+      </p-iconfield>
+      } @if (showExport()) {
+      <p-button
+        type="button"
+        icon="pi pi-upload"
+        class="export-target-button shrink-0"
+        [rounded]="true"
+        [ariaLabel]="exportAriaLabel()"
+        [pTooltip]="exportTooltip()"
+        (click)="exportSales()"
+      />
+      }
+    </div>
+  </div>
+
+  <p-table
+    #salesTable
+    [value]="saleViewModels()"
+    [columns]="columnViewModels()"
+    [paginator]="paginator()"
+    [rows]="rows()"
+    [globalFilterFields]="tableGlobalFilterFields()"
+    [exportHeader]="'customExportHeader'"
+    [tableStyle]="tableStyle()"
+    scrollHeight="flex"
+    dataKey="id"
+  >
+    <ng-template #header let-columns>
+      <tr>
+        @for (column of columns; track column.field) {
+        <th [pSortableColumn]="column.field" [pSortableColumnDisabled]="!column.sortable">
+          <span class="flex items-center gap-2" [class]="column.minWidthClass">
+            {{ column.header }} @if (column.sortable) {
+            <p-sortIcon [field]="column.field" />
+            }
+          </span>
+        </th>
+        } @if (showViewAction()) {
+        <th class="w-16 text-center">{{ viewHeader() }}</th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-sale let-columns="columns">
+      <tr>
+        @for (column of columns; track column.field) {
+        <td>
+          <span class="block" [class]="column.minWidthClass">
+            @switch (column.type) { @case ('currency') { {{ sale.values[column.field] | currency: currencyCode() }} } @case ('status') {
+            <p-tag [value]="sale.statusLabel" [severity]="sale.statusSeverity" />
+            } @default { {{ sale.values[column.field] }} } }
+          </span>
+        </td>
+        } @if (showViewAction()) {
+        <td class="text-center">
+          <p-button type="button" icon="pi pi-search" [outlined]="true" [rounded]="true" [ariaLabel]="viewAriaLabel(sale)" (click)="selectSale(sale)" />
+        </td>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td [attr.colspan]="emptyStateColumnSpan()" class="py-6 text-center text-muted-color">{{ emptyMessage() }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

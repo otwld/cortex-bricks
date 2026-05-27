@@ -1,0 +1,20 @@
+{
+  "name": "nest-auth",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/auth/nest/src",
+  "projectType": "library",
+  "tags": ["scope:auth", "type:lib", "framework:nest", "type:brick"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/auth/nest",
+        "tsConfig": "packages/auth/nest/tsconfig.lib.json",
+        "packageJson": "packages/auth/nest/package.json",
+        "main": "packages/auth/nest/src/index.ts",
+        "assets": ["packages/auth/nest/*.md"]
+      }
+    }
+  }
+}

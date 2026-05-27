@@ -1,0 +1,49 @@
+@for (card of cardViewModels(); track card.id) {
+<div [class]="card.wrapperClass">
+  <div class="card relative h-full overflow-hidden">
+    @if (card.variant === 'debit') {
+    <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" class="absolute left-0 top-0 h-full w-full" preserveAspectRatio="none" aria-hidden="true">
+      <rect x="0" y="0" width="900" height="600" class="fill-primary-600"></rect>
+      <path
+        d="M0 400L30 386.5C60 373 120 346 180 334.8C240 323.7 300 328.3 360 345.2C420 362 480 391 540 392C600 393 660 366 720 355.2C780 344.3 840 349.7 870 352.3L900 355L900 601L870 601C840 601 780 601 720 601C660 601 600 601 540 601C480 601 420 601 360 601C300 601 240 601 180 601C120 601 60 601 30 601L0 601Z"
+        class="fill-primary-500"
+        stroke-linecap="round"
+        stroke-linejoin="miter"
+      ></path>
+    </svg>
+    } @if (showCardActions()) {
+    <p-button
+      type="button"
+      icon="pi pi-arrow-up-right"
+      [rounded]="true"
+      [text]="true"
+      [plain]="card.variant !== 'debit'"
+      class="absolute right-4 top-4 z-30"
+      [ariaLabel]="'View ' + card.title"
+      (click)="selectCard(card)"
+    />
+    } @switch (card.variant) { @case ('summary') {
+    <div class="flex h-full flex-col items-center justify-center">
+      <i class="mb-6 text-4xl! text-primary" [class]="card.icon"></i>
+      <span class="mb-6 text-lg font-medium text-surface-900 dark:text-surface-0">{{ card.title }}</span>
+      <span class="text-2xl font-bold text-primary">{{ card.value }}</span>
+    </div>
+    } @default {
+    <div class="relative z-20" [class]="card.variant === 'debit' ? 'text-white' : ''">
+      <div class="mb-4 flex items-center justify-between gap-4">
+        <div [class]="card.titleClass">{{ card.title }}</div>
+        @if (card.logoSrc) {
+        <img [alt]="card.logoAlt" [src]="card.logoSrc" class="h-4" />
+        }
+      </div>
+      <div class="mb-1 font-semibold" [class]="card.mutedClass">{{ card.label }}</div>
+      <div class="mb-8 text-2xl font-bold" [class]="card.valueClass">{{ card.value }}</div>
+      <div class="flex items-center justify-between">
+        <span class="text-lg" [class]="card.titleClass">{{ card.number }}</span>
+        <span class="text-lg font-medium" [class]="card.mutedClass">{{ card.expiry }}</span>
+      </div>
+    </div>
+    } }
+  </div>
+</div>
+}

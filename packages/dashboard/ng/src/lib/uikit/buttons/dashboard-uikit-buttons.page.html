@@ -1,0 +1,167 @@
+<div class="flex flex-col gap-8 md:flex-row">
+  <div class="md:w-1/2">
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Default</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button label="Submit" />
+        <p-button label="Disabled" [disabled]="true" />
+        <p-button label="Link" link />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Severities</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button label="Primary" />
+        <p-button label="Secondary" severity="secondary" />
+        <p-button label="Success" severity="success" />
+        <p-button label="Info" severity="info" />
+        <p-button label="Warn" severity="warn" />
+        <p-button label="Help" severity="help" />
+        <p-button label="Danger" severity="danger" />
+        <p-button label="Contrast" severity="contrast" />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Text</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button label="Primary" variant="text" />
+        <p-button label="Secondary" severity="secondary" variant="text" />
+        <p-button label="Success" severity="success" variant="text" />
+        <p-button label="Info" severity="info" variant="text" />
+        <p-button label="Warn" severity="warn" variant="text" />
+        <p-button label="Help" severity="help" variant="text" />
+        <p-button label="Danger" severity="danger" variant="text" />
+        <p-button label="Plain" variant="text" />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Outlined</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button label="Primary" variant="outlined" />
+        <p-button label="Secondary" severity="secondary" variant="outlined" />
+        <p-button label="Success" severity="success" variant="outlined" />
+        <p-button label="Info" severity="info" variant="outlined" />
+        <p-button label="Warn" severity="warn" variant="outlined" />
+        <p-button label="Help" severity="help" variant="outlined" />
+        <p-button label="Danger" severity="danger" variant="outlined" />
+        <p-button label="Contrast" severity="contrast" variant="outlined" />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Group</div>
+      <div class="flex flex-wrap gap-2">
+        <p-buttongroup>
+          <p-button label="Save" icon="pi pi-check" />
+          <p-button label="Delete" icon="pi pi-trash" />
+          <p-button label="Cancel" icon="pi pi-times" />
+        </p-buttongroup>
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">SplitButton</div>
+      <div class="flex flex-wrap gap-2">
+        <p-splitbutton label="Save" [model]="splitButtonItems" />
+        <p-splitbutton label="Save" [model]="splitButtonItems" severity="secondary" />
+        <p-splitbutton label="Save" [model]="splitButtonItems" severity="success" />
+        <p-splitbutton label="Save" [model]="splitButtonItems" severity="info" />
+        <p-splitbutton label="Save" [model]="splitButtonItems" severity="warn" />
+        <p-splitbutton label="Save" [model]="splitButtonItems" severity="help" />
+        <p-splitbutton label="Save" [model]="splitButtonItems" severity="danger" />
+        <p-splitbutton label="Save" [model]="splitButtonItems" severity="contrast" />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Templating</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button type="button">
+          <img alt="PrimeNG logo" src="https://primefaces.org/cdn/primeng/images/logo.svg" class="w-6" />
+        </p-button>
+        <p-button type="button" variant="outlined" severity="success">
+          <img alt="PrimeNG logo" src="https://primefaces.org/cdn/primeng/images/logo.svg" class="w-6" />
+          <span class="font-bold">PrimeNG</span>
+        </p-button>
+      </div>
+    </div>
+  </div>
+  <div class="md:w-1/2">
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Icons</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button icon="pi pi-star-fill" ariaLabel="Favorite" />
+        <p-button label="Bookmark" icon="pi pi-bookmark" />
+        <p-button label="Bookmark" icon="pi pi-bookmark" iconPos="right" />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Raised</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button label="Primary" raised />
+        <p-button label="Secondary" severity="secondary" raised />
+        <p-button label="Success" severity="success" raised />
+        <p-button label="Info" severity="info" raised />
+        <p-button label="Warn" severity="warn" raised />
+        <p-button label="Help" severity="help" raised />
+        <p-button label="Danger" severity="danger" raised />
+        <p-button label="Contrast" severity="contrast" raised />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Rounded</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button label="Primary" rounded />
+        <p-button label="Secondary" severity="secondary" rounded />
+        <p-button label="Success" severity="success" rounded />
+        <p-button label="Info" severity="info" rounded />
+        <p-button label="Warn" severity="warn" rounded />
+        <p-button label="Help" severity="help" rounded />
+        <p-button label="Danger" severity="danger" rounded />
+        <p-button label="Contrast" severity="contrast" rounded />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Rounded Icons</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button icon="pi pi-check" rounded ariaLabel="Confirm" />
+        <p-button icon="pi pi-bookmark" severity="secondary" rounded ariaLabel="Bookmark" />
+        <p-button icon="pi pi-search" severity="success" rounded ariaLabel="Search" />
+        <p-button icon="pi pi-user" severity="info" rounded ariaLabel="Profile" />
+        <p-button icon="pi pi-bell" severity="warn" rounded ariaLabel="Notifications" />
+        <p-button icon="pi pi-heart" severity="help" rounded ariaLabel="Favorite" />
+        <p-button icon="pi pi-times" severity="danger" rounded ariaLabel="Cancel" />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Rounded Text</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button icon="pi pi-check" variant="text" raised rounded ariaLabel="Confirm" />
+        <p-button icon="pi pi-bookmark" severity="secondary" variant="text" raised rounded ariaLabel="Bookmark" />
+        <p-button icon="pi pi-search" severity="success" variant="text" raised rounded ariaLabel="Search" />
+        <p-button icon="pi pi-user" severity="info" variant="text" raised rounded ariaLabel="Profile" />
+        <p-button icon="pi pi-bell" severity="warn" variant="text" raised rounded ariaLabel="Notifications" />
+        <p-button icon="pi pi-heart" severity="help" variant="text" raised rounded ariaLabel="Favorite" />
+        <p-button icon="pi pi-times" severity="danger" variant="text" raised rounded ariaLabel="Cancel" />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Rounded Outlined</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button icon="pi pi-check" rounded variant="outlined" ariaLabel="Confirm" />
+        <p-button icon="pi pi-bookmark" severity="secondary" rounded variant="outlined" ariaLabel="Bookmark" />
+        <p-button icon="pi pi-search" severity="success" rounded variant="outlined" ariaLabel="Search" />
+        <p-button icon="pi pi-user" severity="info" rounded variant="outlined" ariaLabel="Profile" />
+        <p-button icon="pi pi-bell" severity="warn" rounded variant="outlined" ariaLabel="Notifications" />
+        <p-button icon="pi pi-heart" severity="help" rounded variant="outlined" ariaLabel="Favorite" />
+        <p-button icon="pi pi-times" severity="danger" rounded variant="outlined" ariaLabel="Cancel" />
+      </div>
+    </div>
+    <div class="card flex flex-col gap-4">
+      <div class="text-xl font-semibold">Loading</div>
+      <div class="flex flex-wrap gap-2">
+        <p-button type="button" label="Search" icon="pi pi-search" [loading]="loading()[0]" (onClick)="load(0)" />
+        <p-button type="button" label="Search" icon="pi pi-search" iconPos="right" [loading]="loading()[1]" (onClick)="load(1)" />
+        <p-button type="button" icon="pi pi-search" [loading]="loading()[2]" ariaLabel="Search" (onClick)="load(2)" />
+        <p-button type="button" label="Search" [loading]="loading()[3]" (onClick)="load(3)" />
+      </div>
+    </div>
+  </div>
+</div>
