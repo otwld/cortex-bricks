@@ -1,56 +1,105 @@
-# Cortex
+![otwld cortex bricks banner](./banner.png)
 
-Cortex is OTWLD's prerelease workspace for reusable Angular and NestJS
-building blocks used across software agency projects.
+![GitHub License](https://img.shields.io/github/license/otwld/cortex-bricks)
+[![Discord](https://img.shields.io/badge/Discord-OTWLD-blue?logo=discord&logoColor=white)](https://discord.otwld.com)
 
-It collects internal-first libraries for application shells, backend modules,
-shared contracts, client utilities, and product-facing UI surfaces. The project
-is public-readable, but it is still evolving quickly and should be treated as an
-active prerelease codebase rather than a stable platform contract.
+# Cortex Bricks
 
-## Status
+Cortex Bricks is a public preview source-brick repository for Angular, NestJS,
+and framework-neutral TypeScript building blocks used in Nx monorepos.
+It is maintained by OTWLD.
 
-Cortex does not have public production adoption yet. APIs, package boundaries,
-module names, and internal architecture can change directly when a cleaner model
-emerges.
+This repository contains source files, project structure, package boundaries,
+and implementation patterns that are meant to become consumable by the upcoming
+`bricks` CLI. It is not primarily a compiled npm package distribution.
 
-That means the project favors:
+## Public Preview
 
-- simple current architecture over compatibility layers;
-- clear package boundaries over broad catch-all utilities;
-- package-local documentation over a large root manual;
-- direct refactors over migration shims before public stability.
+Cortex Bricks is currently at `v0.1.0` preview status. The source is public so
+Nx app builders can inspect the bricks, follow the architecture, and watch the
+ecosystem take shape.
 
-## Workspace Shape
+For now, the supported external workflow is:
 
-The workspace is organized around scoped packages and apps:
+- browse the source;
+- study the package boundaries and implementation patterns;
+- star or watch the repository for the `bricks` CLI launch.
 
-- Angular libraries for UI, dashboards, auth, users, storage, AI, websockets,
-  and reusable client utilities.
-- NestJS libraries for backend auth, users, storage, mail, AI, websockets,
-  MongoDB/Mongoose infrastructure, and shared server utilities.
-- TypeScript-first packages for DTOs, models, enums, validation contracts, and
-  other framework-neutral types.
-- Internal app surfaces used to exercise and compose the libraries.
+Manual source copying is not the supported path yet. APIs, folder boundaries,
+brick names, and internal implementation details may change while the project is
+still in preview.
 
-Individual package publication status varies. Treat this repository and the
-package-level READMEs as the source of truth for what is currently available and
-how each package is intended to be used.
+## Coming Soon: `bricks` CLI
+
+We are building a separate CLI named `bricks`.
+
+The CLI will consume source-brick repositories like this one and bring selected
+bricks into your own Nx monorepo. The goal is source ownership instead of black
+box package consumption: copy the files you need, keep them in your repo, and
+sync improvements when it makes sense.
+
+Planned workflow:
+
+- discover source bricks from repositories such as Cortex Bricks;
+- copy or paste selected source files into an Nx workspace;
+- sync source changes over time;
+- support three-way merge flows for local edits and upstream updates.
+
+The CLI is in active development and will be shared as soon as the first
+external workflow is ready.
+
+## What Is In This Repository
+
+Cortex Bricks is organized as an Nx workspace with source bricks grouped by
+runtime and domain:
+
+- Angular bricks for UI, dashboard surfaces, auth, users, storage, AI,
+  websockets, and client utilities.
+- NestJS bricks for backend auth, users, storage, mail, AI, websockets,
+  MongoDB/Mongoose infrastructure, and server utilities.
+- TypeScript bricks for framework-neutral DTOs, models, enums, validation
+  contracts, and shared type surfaces.
+- Internal app surfaces used to exercise and compose the bricks during
+  development.
+
+Some packages have local package manifests because the workspace uses normal Nx,
+TypeScript, Angular, and NestJS tooling. Treat those manifests as part of the
+source-brick development environment, not as the primary public consumption
+model.
 
 ## Design Principles
 
-Cortex libraries are expected to stay modular, focused, and explicit about their
-runtime. Framework-neutral contracts belong in `ts-*` packages; Angular code
-belongs in Angular packages; NestJS code belongs in NestJS packages; reusable
-MongoDB infrastructure belongs in the Mongoose infrastructure package rather
-than feature-specific modules.
+Cortex Bricks favors direct, readable source over compatibility layers. The
+project is still early, so cleaner architecture wins over preserving old shapes.
 
-The codebase is intentionally allowed to evolve without legacy adapters while it
-is still prerelease. When an API or internal model is wrong, the preferred fix is
-to replace it with the cleaner shape and update callers directly.
+The main boundaries are:
+
+- framework-neutral contracts belong in `ts-*` packages;
+- Angular components, directives, pipes, providers, and browser services belong
+  in Angular packages;
+- NestJS modules, controllers, providers, guards, pipes, and backend services
+  belong in NestJS packages;
+- reusable MongoDB and Mongoose infrastructure belongs in the database
+  infrastructure package rather than feature packages.
+
+The repository should stay modular. Shared code should have a clear owner and a
+real consumer, not become a dumping ground for generic utilities.
 
 ## Where To Start
 
-Start with the package README closest to the capability you need. Root
-documentation gives the workspace-level orientation; package documentation owns
-runtime-specific setup, examples, and implementation details.
+Start by browsing the package closest to the capability you care about. The root
+README explains the repository model; package-level READMEs explain local
+responsibility and current usage where that documentation exists.
+
+Good first areas to inspect:
+
+- `packages/ai` for AI contracts, Angular helpers, and NestJS integration;
+- `packages/auth` for authentication source bricks;
+- `packages/storage` for storage contracts and runtime integrations;
+- `packages/users` for user-management bricks;
+- `packages/websocket` for realtime contracts and runtime integrations;
+- `packages/dashboard` for Angular dashboard and UI surfaces.
+
+## License
+
+Cortex Bricks is released under the MIT license. See `LICENSE`.
