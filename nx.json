@@ -14,6 +14,9 @@
     ]
   },
   "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"]
+    },
     "@angular/build:application": {
       "cache": true,
       "dependsOn": ["^build"],

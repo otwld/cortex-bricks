@@ -1,25 +1,21 @@
 {
-  "name": "@otwld/ts-users",
+  "name": "@otwld/nest-mail",
   "version": "0.0.1",
-  "type": "module",
+  "private": true,
+  "type": "commonjs",
   "sideEffects": false,
   "main": "./src/index.js",
-  "module": "./src/index.js",
   "types": "./src/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./src/index.d.ts",
-      "import": "./src/index.js"
-    }
-  },
   "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "nodemailer": "^6.9.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@nx/js": "22.7.0",
     "@nx/vite": "22.7.0",
     "@nx/vitest": "22.7.0",
     "@types/node": "20.19.9",
+    "@types/nodemailer": "^6.4.0",
     "nx": "22.7.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"

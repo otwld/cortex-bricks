@@ -2,7 +2,9 @@
   "name": "@cortex/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "audit:brick-manifests": "node tools/audit-brick-manifests.mjs"
+  },
   "private": true,
   "dependencies": {
     "@ai-sdk/angular": "2.0.176",

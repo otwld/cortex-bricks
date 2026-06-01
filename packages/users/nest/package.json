@@ -7,14 +7,26 @@
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "dependencies": {
-    "@otwld/nest-auth": "0.0.1",
-    "@otwld/ts-users": "0.0.1",
+    "@otwld/nest-auth": "workspace:0.0.1",
+    "@otwld/ts-users": "workspace:0.0.1",
     "@nestjs/common": "^11.0.0",
     "@nestjs/mongoose": "^11.0.4",
     "bcrypt": "^6.0.0",
+    "express": "^4.21.2",
     "mongoose": "^9.6.1",
     "tslib": "^2.3.0",
     "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@nx/js": "22.7.0",
+    "@nx/vite": "22.7.0",
+    "@nx/vitest": "22.7.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "20.19.9",
+    "nx": "22.7.0",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
   },
   "nx": {
     "tags": [

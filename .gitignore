@@ -46,3 +46,9 @@ Thumbs.db
 .angular
 
 __screenshots__/
+
+# Bricks local state
+.bricks/sources/
+.bricks/locks/
+.bricks/tmp/
+.bricks/merge/

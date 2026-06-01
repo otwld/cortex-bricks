@@ -16,6 +16,16 @@
     "tslib": "^2.3.0",
     "zod": "^3.24.0"
   },
+  "devDependencies": {
+    "@nx/js": "22.7.0",
+    "@nx/vite": "22.7.0",
+    "@nx/vitest": "22.7.0",
+    "@types/node": "20.19.9",
+    "jsonc-eslint-parser": "^2.1.0",
+    "nx": "22.7.0",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  },
   "nx": {
     "tags": [
       "type:brick"

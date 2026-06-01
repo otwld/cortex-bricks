@@ -26,6 +26,25 @@
     "tslib": "^2.3.0",
     "zod": "^3.24.0"
   },
+  "devDependencies": {
+    "@nestjs/testing": "^11.0.0",
+    "@nx/js": "22.7.0",
+    "@nx/vite": "22.7.0",
+    "@nx/vitest": "22.7.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^4.17.21",
+    "@types/node": "20.19.9",
+    "@types/passport-github2": "^1.2.9",
+    "@types/passport-google-oauth20": "^2.0.17",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
+    "@types/supertest": "^7.2.0",
+    "nx": "22.7.0",
+    "supertest": "^7.2.2",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  },
   "nx": {
     "tags": [
       "type:brick"
