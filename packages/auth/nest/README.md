@@ -1,6 +1,6 @@
 # nest-auth
 
-NestJS server-side authentication and authorization library.
+NestJS server-side authentication and upstream authorization policy library.
 
 ## Purpose
 

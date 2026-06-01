@@ -1,3 +1,3 @@
 # nest-users
 
-Reusable NestJS user-management domain for business profiles, invitations, and `/api/users/*` endpoints.
+Reusable NestJS user-management domain for upstream profile lifecycle, invitations, and `/api/users/*` endpoints.
