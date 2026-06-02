@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "backend.fullname" . }}-env
+  labels:
+    {{- include "backend.labels" . | nindent 4 }}
+data:
+  NODE_ENV: {{ .Values.config.nodeEnv | quote }}
+  PORT: {{ .Values.config.port | quote }}
+  FRONTEND_URL: {{ .Values.config.frontendUrl | quote }}
+  GOOGLE_CALLBACK_URL: {{ .Values.config.auth.googleCallbackUrl | quote }}
+  GITHUB_CALLBACK_URL: {{ .Values.config.auth.githubCallbackUrl | quote }}
+  MAIL_TRANSPORT: {{ .Values.config.mail.transport | quote }}
+  MAIL_FROM: {{ .Values.config.mail.from | quote }}
+  {{- if .Values.config.mongodb.uri }}
+  MONGODB_URI: {{ .Values.config.mongodb.uri | quote }}
+  {{- end }}
+  MINIO_ENDPOINT: {{ .Values.config.minio.endpoint | quote }}
+  MINIO_PORT: {{ .Values.config.minio.port | quote }}
+  MINIO_USE_SSL: {{ .Values.config.minio.useSsl | quote }}
+  MINIO_BUCKET: {{ .Values.config.minio.bucket | quote }}
+  AI_CHAT_MODEL: {{ .Values.config.ai.chatModel | quote }}
+  AI_FAST_MODEL: {{ .Values.config.ai.fastModel | quote }}
+  AI_STRUCTURED_MODEL: {{ .Values.config.ai.structuredModel | quote }}
+  ADMIN_EMAILS: {{ join "," .Values.config.adminEmails | quote }}
+  {{- if eq .Values.config.mail.transport "postal" }}
+  POSTAL_SERVER_URL: {{ .Values.config.mail.postalServerUrl | quote }}
+  {{- end }}
+  {{- if eq .Values.config.mail.transport "smtp" }}
+  SMTP_HOST: {{ .Values.config.mail.smtp.host | quote }}
+  SMTP_PORT: {{ .Values.config.mail.smtp.port | quote }}
+  SMTP_SECURE: {{ .Values.config.mail.smtp.secure | quote }}
+  {{- end }}
+  {{- if eq .Values.config.mail.transport "preview" }}
+  MAILPIT_HOST: {{ .Values.config.mail.mailpit.host | quote }}
+  MAILPIT_SMTP_PORT: {{ .Values.config.mail.mailpit.smtpPort | quote }}
+  {{- end }}

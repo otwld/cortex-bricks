@@ -1,0 +1,18 @@
+{
+  "name": "@monorepo-starter/ts-chat",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "peerDependencies": {
+    "@monorepo-starter/websocket-common": "0.0.1",
+    "zod": "^3.24.0",
+    "tslib": "^2.3.0"
+  },
+  "nx": {
+    "tags": [
+      "type:brick"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      @tailwind utilities;
+    </style>
+    <if condition="page.preheader">
+      <div class="hidden max-h-0 overflow-hidden opacity-0">{{ page.preheader }}</div>
+    </if>
+  </head>
+  <body class="bg-gray-100 py-8 font-sans">
+    <div class="mx-auto max-w-xl rounded-xl bg-white p-8 shadow">
+      <yield />
+    </div>
+    <p class="mt-6 text-center text-xs text-gray-400">
+      You received this email because you have an account with us.
+    </p>
+  </body>
+</html>

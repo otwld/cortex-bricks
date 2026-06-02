@@ -44,7 +44,9 @@
 
       "@otwld/ts-websocket": ["./packages/websocket/ts/src/index.ts"],
       "@otwld/nest-websocket": ["./packages/websocket/nest/src/index.ts"],
-      "@otwld/ng-websocket/core": ["./packages/websocket/ng/core/src/index.ts"]
+      "@otwld/ng-websocket": ["./packages/websocket/ng/src/index.ts"],
+
+      "@otwld/ts-chat": ["./packages/chat/ts/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

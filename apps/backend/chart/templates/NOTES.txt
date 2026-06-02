@@ -1,0 +1,4 @@
+Backend service:
+  name: {{ include "backend.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  port: {{ .Values.service.port }}

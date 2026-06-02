@@ -1,0 +1,122 @@
+replicaCount: 1
+
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  commonLabels: {}
+  commonAnnotations: {}
+
+image:
+  registry: ""
+  repository: otwld/monorepo-start/backend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+  automountServiceAccountToken: false
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: false
+  seccompProfile:
+    type: RuntimeDefault
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+
+config:
+  nodeEnv: production
+  port: 3000
+  frontendUrl: http://app.localhost
+  adminEmails: []
+  auth:
+    googleCallbackUrl: http://api.app.localhost/api/auth/google/callback
+    githubCallbackUrl: http://api.app.localhost/api/auth/github/callback
+  mail:
+    transport: preview
+    from: noreply@example.com
+    postalServerUrl: ""
+    smtp:
+      host: ""
+      port: 587
+      secure: false
+    mailpit:
+      host: stack-mailpit
+      smtpPort: 1025
+  ai:
+    chatModel: gpt-5.4
+    fastModel: gpt-5.4-mini
+    structuredModel: gpt-5.4
+    openaiApiKey:
+      value: ""
+      existingSecret: ""
+      key: OPENAI_API_KEY
+  mongodb:
+    uri: ""
+    existingSecret: ""
+    key: MONGODB_URI
+  minio:
+    endpoint: stack-minio
+    port: 9000
+    useSsl: false
+    bucket: monorepo-starter-backend
+
+secrets:
+  existingSecret: ""
+  values:
+    jwtSecret: ""
+    jwtRefreshSecret: ""
+    googleClientId: ""
+    googleClientSecret: ""
+    githubClientId: ""
+    githubClientSecret: ""
+    mongodbUri: ""
+    postalApiKey: ""
+    smtpUser: ""
+    smtpPassword: ""
+    minioAccessKey: ""
+    minioSecretKey: ""
+
+resources: {}
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
+
+networkPolicy:
+  enabled: false
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+topologySpreadConstraints: []
+extraEnv: []
+extraEnvFrom: []
+extraVolumes: []
+extraVolumeMounts: []

@@ -1,7 +1,7 @@
 {
-  "name": "ng-websocket-core",
-  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/websocket/ng/core/src",
+  "name": "ng-websocket",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/websocket/ng/src",
   "prefix": "lib",
   "projectType": "library",
   "release": {
@@ -26,12 +26,12 @@
         "{workspaceRoot}/dist/{projectRoot}"
       ],
       "options": {
-        "project": "packages/websocket/ng/core/ng-package.json",
-        "tsConfig": "packages/websocket/ng/core/tsconfig.lib.json"
+        "project": "packages/websocket/ng/ng-package.json",
+        "tsConfig": "packages/websocket/ng/tsconfig.lib.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "packages/websocket/ng/core/tsconfig.lib.prod.json"
+          "tsConfig": "packages/websocket/ng/tsconfig.lib.prod.json"
         },
         "development": {}
       },

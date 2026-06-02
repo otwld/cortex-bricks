@@ -1,5 +1,5 @@
 import nx from '@nx/eslint-plugin';
-import baseConfig from '../../../../eslint.config.mjs';
+import baseConfig from '../../../eslint.config.mjs';
 
 export default [
   ...nx.configs['flat/angular'],
@@ -15,7 +15,7 @@ export default [
             '{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}',
             '{projectRoot}/src/**/*.spec.ts',
           ],
-          ignoredDependencies: ['@angular/common', 'zod'],
+          ignoredDependencies: [],
         },
       ],
     },

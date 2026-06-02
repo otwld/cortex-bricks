@@ -1,0 +1,110 @@
+{
+  "name": "backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/backend/src",
+  "projectType": "application",
+  "tags": ["scope:backend", "type:app", "framework:nest"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["mail:build", "^build"],
+      "options": {
+        "command": "webpack-cli build",
+        "args": ["--node-env=production"],
+        "cwd": "apps/backend"
+      },
+      "configurations": {
+        "development": {
+          "args": ["--node-env=development"]
+        }
+      }
+    },
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": ["{workspaceRoot}/dist/apps/backend/package.json", "{workspaceRoot}/dist/apps/backend/pnpm-lock.yaml"],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": ["{workspaceRoot}/dist/apps/backend/workspace_modules"],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
+    },
+    "install-production-deps": {
+      "dependsOn": ["prune"],
+      "cache": true,
+      "outputs": ["{workspaceRoot}/dist/apps/backend/node_modules"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "dist/apps/backend",
+        "command": "pnpm install --prod --frozen-lockfile --offline"
+      }
+    },
+    "docker:build": {
+      "dependsOn": ["install-production-deps"],
+      "cache": false,
+      "inputs": ["production", "^production", "{workspaceRoot}/apps/backend/Dockerfile", "{workspaceRoot}/.dockerignore"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build --file apps/backend/Dockerfile --tag apps-backend --tag ${DOCKER_REGISTRY:-harbor.otwld.com}/${DOCKER_NAMESPACE:-otwld/monorepo-start}/${BACKEND_IMAGE_NAME:-backend}:${IMAGE_TAG:-latest} ."
+      }
+    },
+    "docker:push": {
+      "dependsOn": ["docker:build"],
+      "cache": false,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker push ${DOCKER_REGISTRY:-harbor.otwld.com}/${DOCKER_NAMESPACE:-otwld/monorepo-start}/${BACKEND_IMAGE_NAME:-backend}:${IMAGE_TAG:-latest}"
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["mail:build", "build"],
+      "options": {
+        "buildTarget": "backend:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "backend:build:development"
+        },
+        "production": {
+          "buildTarget": "backend:build:production"
+        }
+      }
+    },
+    "test": {
+      "options": {
+        "passWithNoTests": true
+      }
+    },
+    "mail:build": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": [
+        { "externalDependencies": ["@maizzle/framework"] },
+        "{projectRoot}/mail/src/**/*",
+        "{projectRoot}/mail/config.js",
+        "{projectRoot}/mail/tailwind.config.js"
+      ],
+      "outputs": ["{projectRoot}/mail/build"],
+      "options": {
+        "command": "npx maizzle build",
+        "cwd": "apps/backend/mail"
+      }
+    }
+  }
+}

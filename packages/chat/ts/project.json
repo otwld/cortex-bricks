@@ -1,0 +1,30 @@
+{
+  "name": "ts-chat",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/chat/ts/src",
+  "projectType": "library",
+  "tags": [
+    "scope:websocket",
+    "type:types",
+    "type:brick"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/chat/ts",
+        "main": "packages/chat/ts/src/index.ts",
+        "tsConfig": "packages/chat/ts/tsconfig.lib.json",
+        "format": [
+          "esm"
+        ],
+        "assets": [
+          "packages/chat/ts/*.md"
+        ]
+      }
+    }
+  }
+}

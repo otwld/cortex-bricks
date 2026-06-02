@@ -18,15 +18,6 @@ const defaultFactory: SocketIoFactory = (url, opts) => ioFactory(url, opts) as u
  * @param contract Source contract.
  * @param config Client configuration.
  */
-/**
- * Runs provide websocket.
- *
- * @param contract - contract value.
- *
- * @param config - config value.
- *
- * @returns The provide websocket result.
- */
 export function provideWebsocket<TContract extends Contract>(
   contract: TContract,
   config: WsConfig,
