@@ -4,11 +4,21 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/frontend/src",
-  "tags": [],
+  "tags": [
+    "scope:frontend",
+    "type:app",
+    "framework:ng",
+    "type:brick"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "syncGenerators": [
+        "@juristr/nx-tailwind-sync:source-directives"
+      ],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/frontend",
         "browser": "apps/frontend/src/main.ts",
@@ -19,10 +29,28 @@
             "input": "apps/frontend/public"
           }
         ],
-        "styles": ["apps/frontend/src/styles.css"]
+        "styles": [
+          "apps/frontend/src/styles.css"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "apps/frontend/src/styles"
+          ]
+        },
+        "server": "apps/frontend/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/frontend/src/server.ts"
+        },
+        "outputMode": "server"
       },
       "configurations": {
         "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/frontend/src/app/ws-demo/ws-demo.routes.ts",
+              "with": "apps/frontend/src/app/ws-demo/ws-demo.routes.prod.ts"
+            }
+          ],
           "budgets": [
             {
               "type": "initial",
@@ -32,10 +60,14 @@
             {
               "type": "anyComponentStyle",
               "maximumWarning": "4kb",
-              "maximumError": "8kb"
+              "maximumError": "30kb"
             }
           ],
           "outputHashing": "all"
+        },
+        "stats": {
+          "outputHashing": "all",
+          "statsJson": true
         },
         "development": {
           "optimization": false,
@@ -48,12 +80,18 @@
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "syncGenerators": [
+        "@juristr/nx-tailwind-sync:source-directives"
+      ],
       "configurations": {
         "production": {
-          "buildTarget": "frontend:build:production"
+          "buildTarget": "frontend:build:production",
+          "proxyConfig": "apps/frontend/proxy.conf.json"
         },
         "development": {
-          "buildTarget": "frontend:build:development"
+          "buildTarget": "frontend:build:development",
+          "poll": 1000,
+          "proxyConfig": "apps/frontend/proxy.conf.json"
         }
       },
       "defaultConfiguration": "development"
@@ -63,17 +101,42 @@
     },
     "test": {
       "executor": "@angular/build:unit-test",
-      "options": {
-        "watch": false
-      }
+      "options": {}
     },
     "serve-static": {
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "frontend:build",
+        "port": 4200,
         "staticFilePath": "dist/apps/frontend/browser",
         "spa": true
+      }
+    },
+    "docker:build": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": false,
+      "inputs": [
+        "production",
+        "^production",
+        "{workspaceRoot}/apps/frontend/Dockerfile",
+        "{workspaceRoot}/.dockerignore"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build --file apps/frontend/Dockerfile --tag apps-frontend --tag ${DOCKER_REGISTRY:-harbor.otwld.com}/${DOCKER_NAMESPACE:-otwld/monorepo-start}/${FRONTEND_IMAGE_NAME:-frontend}:${IMAGE_TAG:-latest} ."
+      }
+    },
+    "docker:push": {
+      "dependsOn": [
+        "docker:build"
+      ],
+      "cache": false,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker push ${DOCKER_REGISTRY:-harbor.otwld.com}/${DOCKER_NAMESPACE:-otwld/monorepo-start}/${FRONTEND_IMAGE_NAME:-frontend}:${IMAGE_TAG:-latest}"
       }
     }
   }

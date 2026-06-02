@@ -1,0 +1,4 @@
+Frontend service:
+  name: {{ include "frontend.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  port: {{ .Values.service.port }}
