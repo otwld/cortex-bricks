@@ -5,7 +5,7 @@ global:
   commonLabels: {}
 image:
   registry: ""
-  repository: otwld/monorepo-start/frontend
+  repository: otwld/monorepo-starter/frontend
   tag: latest
   pullPolicy: IfNotPresent
 imagePullSecrets: []

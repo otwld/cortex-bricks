@@ -6,7 +6,7 @@
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "peerDependencies": {
-    "@monorepo-starter/websocket-common": "0.0.1",
+    "@otwd/ts-websocket": "workspace:0.0.1",
     "zod": "^3.24.0",
     "tslib": "^2.3.0"
   },

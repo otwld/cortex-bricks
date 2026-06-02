@@ -126,7 +126,7 @@
       ],
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker build --file apps/frontend/Dockerfile --tag apps-frontend --tag ${DOCKER_REGISTRY:-harbor.otwld.com}/${DOCKER_NAMESPACE:-otwld/monorepo-start}/${FRONTEND_IMAGE_NAME:-frontend}:${IMAGE_TAG:-latest} ."
+        "command": "docker build --file apps/frontend/Dockerfile --tag apps-frontend --tag ${DOCKER_REGISTRY:-harbor.otwld.com}/${DOCKER_NAMESPACE:-otwld/monorepo-starter}/${FRONTEND_IMAGE_NAME:-frontend}:${IMAGE_TAG:-latest} ."
       }
     },
     "docker:push": {
@@ -136,7 +136,7 @@
       "cache": false,
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker push ${DOCKER_REGISTRY:-harbor.otwld.com}/${DOCKER_NAMESPACE:-otwld/monorepo-start}/${FRONTEND_IMAGE_NAME:-frontend}:${IMAGE_TAG:-latest}"
+        "command": "docker push ${DOCKER_REGISTRY:-harbor.otwld.com}/${DOCKER_NAMESPACE:-otwld/monorepo-starter}/${FRONTEND_IMAGE_NAME:-frontend}:${IMAGE_TAG:-latest}"
       }
     }
   }
