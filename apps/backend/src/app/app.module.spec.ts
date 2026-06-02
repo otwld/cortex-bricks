@@ -6,6 +6,8 @@ import { MailModule } from '@otwld/nest-mail';
 import { USERS_MODULE_OPTIONS } from '@otwld/nest-users';
 import { StorageDriver } from '@otwld/ts-storage';
 import { STORAGE_MODULE_OPTIONS, TUS_MODULE_OPTIONS } from '@otwld/nest-storage';
+import type { Mock } from 'vitest';
+import { vi } from 'vitest';
 
 interface AppModuleConfigStub {
   get<T>(key: string): T | undefined;
@@ -34,10 +36,16 @@ function createConfigStub(): AppModuleConfigStub {
   };
 }
 
+function normalizeModuleName(name: string | undefined): string | undefined {
+  return name?.replace(/\d+$/, '');
+}
+
+function isDynamicModuleNamed(imported: unknown, name: string): imported is DynamicModule {
+  return typeof imported === 'object' && imported !== null && normalizeModuleName((imported as DynamicModule).module?.name) === name;
+}
+
 function findDynamicModule(imports: unknown[], name: string): DynamicModule | undefined {
-  return imports.find(
-    (imported): imported is DynamicModule => typeof imported === 'object' && imported !== null && (imported as DynamicModule).module?.name === name,
-  );
+  return imports.find((imported): imported is DynamicModule => isDynamicModuleNamed(imported, name));
 }
 
 function findProvider<T>(providers: DynamicModule['providers'] | undefined, provide: unknown): T | undefined {
@@ -67,18 +75,19 @@ Object.assign(process.env, {
   MONGODB_URI: 'mongodb://localhost:27017/backend-test',
   POSTAL_API_KEY: 'postal-api-key',
   POSTAL_SERVER_URL: 'http://postal.local',
+  WS_DEMO_ONLY: 'false',
 });
 
-const { AppModule } = require('./app.module') as typeof import('./app.module');
+describe('AppModule', () => {
+  let imports: unknown[];
 
-describe(AppModule.name, () => {
-  const imports = Reflect.getMetadata(MODULE_METADATA.IMPORTS, AppModule) as unknown[];
+  beforeAll(async () => {
+    const module = await import('./app.module');
+    imports = Reflect.getMetadata(MODULE_METADATA.IMPORTS, module.AppModule) as unknown[];
+  });
 
   it('does not import an unconfigured MailModule inside AuthModule async options', () => {
-    const authModule = imports.find(
-      (imported): imported is DynamicModule =>
-        typeof imported === 'object' && imported !== null && (imported as DynamicModule).module?.name === 'AuthModule',
-    );
+    const authModule = findDynamicModule(imports, 'AuthModule');
 
     expect(authModule).toBeDefined();
     expect(authModule.imports).not.toContain(MailModule);
@@ -89,13 +98,13 @@ describe(AppModule.name, () => {
     const authOptionsModule = findDynamicModule(authModule?.imports ?? [], 'AuthOptionsModule');
     const optionsProvider = findProvider<{
       provide: unknown;
-      useFactory: (config: AppModuleConfigStub, mailService: { send: jest.Mock }) => {
+      useFactory: (config: AppModuleConfigStub, mailService: { send: Mock }) => {
         mail: {
           onForgotPassword: (params: { email: string; name: string; resetToken: string }) => Promise<void>;
         };
       };
     }>(authOptionsModule?.providers, 'AUTH_MODULE_OPTIONS');
-    const mailService = { send: jest.fn().mockResolvedValue(undefined) };
+    const mailService = { send: vi.fn().mockResolvedValue(undefined) };
 
     const options = optionsProvider?.useFactory(createConfigStub(), mailService);
     await options?.mail.onForgotPassword({ email: 'ada@example.com', name: 'Ada', resetToken: 'reset-token' });
@@ -110,10 +119,7 @@ describe(AppModule.name, () => {
   });
 
   it('protects AI sandbox endpoints with JWT auth and request limits', () => {
-    const aiModule = imports.find(
-      (imported): imported is DynamicModule =>
-        typeof imported === 'object' && imported !== null && (imported as DynamicModule).module?.name === 'AiModule',
-    );
+    const aiModule = findDynamicModule(imports, 'AiModule');
     const endpointProvider = aiModule?.providers?.find(
       (provider) => typeof provider === 'object' && provider !== null && 'provide' in provider && provider.provide === AI_ENDPOINT_OPTIONS,
     ) as { useValue: unknown } | undefined;
@@ -136,10 +142,7 @@ describe(AppModule.name, () => {
   });
 
   it('configures backend storage for MinIO through the S3-compatible storage module', async () => {
-    const storageModule = imports.find(
-      (imported): imported is DynamicModule =>
-        typeof imported === 'object' && imported !== null && (imported as DynamicModule).module?.name === 'StorageModule',
-    );
+    const storageModule = findDynamicModule(imports, 'StorageModule');
     const optionsProvider = storageModule?.providers?.find(
       (provider) => typeof provider === 'object' && provider !== null && 'provide' in provider && provider.provide === STORAGE_MODULE_OPTIONS,
     ) as { useFactory: (config: { getOrThrow: (key: string) => string | number | boolean }) => Promise<unknown> } | undefined;
@@ -172,10 +175,7 @@ describe(AppModule.name, () => {
   });
 
   it('configures TUS upload locations with the global API prefix included', () => {
-    const tusModule = imports.find(
-      (imported): imported is DynamicModule =>
-        typeof imported === 'object' && imported !== null && (imported as DynamicModule).module?.name === 'TusModule',
-    );
+    const tusModule = findDynamicModule(imports, 'TusModule');
     const optionsProvider = tusModule?.providers?.find(
       (provider) => typeof provider === 'object' && provider !== null && 'provide' in provider && provider.provide === TUS_MODULE_OPTIONS,
     ) as { useValue: unknown } | undefined;
@@ -184,10 +184,7 @@ describe(AppModule.name, () => {
   });
 
   it('mounts the users management module', () => {
-    const usersModule = imports.find(
-      (imported): imported is DynamicModule =>
-        typeof imported === 'object' && imported !== null && (imported as DynamicModule).module?.name === 'UsersModule',
-    );
+    const usersModule = findDynamicModule(imports, 'UsersModule');
     const optionsProvider = usersModule?.providers?.find(
       (provider) => typeof provider === 'object' && provider !== null && 'provide' in provider && provider.provide === USERS_MODULE_OPTIONS,
     ) as { useFactory: unknown } | undefined;
@@ -200,13 +197,13 @@ describe(AppModule.name, () => {
     const usersModule = findDynamicModule(imports, 'UsersModule');
     const optionsProvider = findProvider<{
       provide: unknown;
-      useFactory: (config: AppModuleConfigStub, mailService: { send: jest.Mock }) => {
+      useFactory: (config: AppModuleConfigStub, mailService: { send: Mock }) => {
         mail: {
           onPasswordResetRequested: (params: { email: string; name: string; resetToken: string }) => Promise<void>;
         };
       };
     }>(usersModule?.providers, USERS_MODULE_OPTIONS);
-    const mailService = { send: jest.fn().mockResolvedValue(undefined) };
+    const mailService = { send: vi.fn().mockResolvedValue(undefined) };
 
     const options = optionsProvider?.useFactory(createConfigStub(), mailService);
     await options?.mail.onPasswordResetRequested({ email: 'ada@example.com', name: 'Ada', resetToken: 'reset-token' });

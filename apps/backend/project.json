@@ -86,11 +86,6 @@
         }
       }
     },
-    "test": {
-      "options": {
-        "passWithNoTests": true
-      }
-    },
     "mail:build": {
       "executor": "nx:run-commands",
       "cache": true,
