@@ -51,10 +51,18 @@
         "command": "pnpm install --prod --frozen-lockfile --offline"
       }
     },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
     "docker:build": {
       "dependsOn": ["install-production-deps"],
       "cache": false,
-      "inputs": ["production", "^production", "{workspaceRoot}/apps/backend/Dockerfile", "{workspaceRoot}/.dockerignore"],
+      "inputs": [
+        "production",
+        "^production",
+        "{workspaceRoot}/apps/backend/Dockerfile",
+        "{workspaceRoot}/.dockerignore"
+      ],
       "executor": "nx:run-commands",
       "options": {
         "command": "docker build --file apps/backend/Dockerfile --tag apps-backend --tag ${DOCKER_REGISTRY:-harbor.otwld.com}/${DOCKER_NAMESPACE:-otwld/monorepo-start}/${BACKEND_IMAGE_NAME:-backend}:${IMAGE_TAG:-latest} ."

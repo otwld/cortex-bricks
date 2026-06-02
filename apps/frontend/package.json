@@ -20,5 +20,12 @@
     "@monorepo-starter/ts-chat": "workspace:0.0.1",
     "@otwld/ng-websocket": "workspace:0.0.1",
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@juristr/nx-tailwind-sync": "^0.0.9",
+    "tailwindcss": "^4.3.0",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@angular/platform-server": "~21.2.0",
+    "primeicons": "^7.0.0"
   }
 }
