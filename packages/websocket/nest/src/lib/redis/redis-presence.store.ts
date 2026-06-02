@@ -17,6 +17,8 @@ interface SerializedUser {
   authenticatedAt: number;
 }
 
+type RedisPresenceClient = ReturnType<typeof createPresenceClient>;
+
 /**
  * Redis-backed `PresenceStore` for multi-node deployments.
  */
@@ -25,7 +27,7 @@ export class RedisPresenceStore extends PresenceStore {
   private readonly prefix: string;
 
   private constructor(
-    private readonly client: ReturnType<typeof createClient>,
+    private readonly client: RedisPresenceClient,
     options: RedisPresenceStoreOptions,
   ) {
     super();
@@ -45,7 +47,7 @@ export class RedisPresenceStore extends PresenceStore {
    * @returns The redis presence store create result.
    */
   public static async create(options: RedisPresenceStoreOptions): Promise<RedisPresenceStore> {
-    const client = createClient({ url: options.url });
+    const client = createPresenceClient(options.url);
     await client.connect();
     return new RedisPresenceStore(client, options);
   }
@@ -90,7 +92,7 @@ export class RedisPresenceStore extends PresenceStore {
    * @returns The redis presence store remove member result.
    */
   public async removeMember(room: RoomId, socketId: string): Promise<UserContext | undefined> {
-    const userJson = await this.client.hGet(this.roomKey(room), socketId);
+    const userJson = await this.hGetString(this.roomKey(room), socketId);
     const tx = this.client.multi();
     tx.hDel(this.roomKey(room), socketId);
     tx.sRem(this.socketRoomsKey(socketId), room);
@@ -117,7 +119,7 @@ export class RedisPresenceStore extends PresenceStore {
    */
   public async removeSocket(socketId: string): Promise<readonly RoomId[]> {
     const rooms = await this.client.sMembers(this.socketRoomsKey(socketId));
-    const userJson = await this.client.hGet(this.socketKey(socketId), 'user');
+    const userJson = await this.hGetString(this.socketKey(socketId), 'user');
     const tx = this.client.multi();
     for (const room of rooms) tx.hDel(this.roomKey(room), socketId);
     tx.del(this.socketKey(socketId));
@@ -187,7 +189,7 @@ export class RedisPresenceStore extends PresenceStore {
       const sockets = await this.client.sMembers(key);
       const firstSocket = sockets[0];
       if (!firstSocket) continue;
-      const userJson = await this.client.hGet(this.socketKey(firstSocket), 'user');
+      const userJson = await this.hGetString(this.socketKey(firstSocket), 'user');
       if (!userJson) continue;
       const user = deserialize(JSON.parse(userJson) as SerializedUser);
       seen.set(user.id, user);
@@ -210,6 +212,15 @@ export class RedisPresenceStore extends PresenceStore {
   private userKey(userId: string): string {
     return `${this.prefix}user:${userId}`;
   }
+
+  private async hGetString(key: string, field: string): Promise<string | undefined> {
+    const value = (await this.client.hGet(key, field)) as string | null;
+    return value ?? undefined;
+  }
+}
+
+function createPresenceClient(url: string) {
+  return createClient<{}, {}, {}, 2, {}>({ url });
 }
 
 function serialize(user: UserContext): SerializedUser {
