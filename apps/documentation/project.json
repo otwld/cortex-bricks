@@ -1,0 +1,95 @@
+{
+  "name": "documentation",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/documentation/src",
+  "projectType": "application",
+  "tags": [
+    "type:app",
+    "scope:docs",
+    "layer:app"
+  ],
+  "implicitDependencies": [
+    "ng-*",
+    "nest-*",
+    "ts-*"
+  ],
+  "targets": {
+    "storybook": {
+      "executor": "@analogjs/storybook-angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "apps/documentation/.storybook",
+        "compodoc": false,
+        "experimentalZoneless": true,
+        "stylePreprocessorOptions": {
+          "loadPaths": [],
+          "sass": {
+            "silenceDeprecations": [
+              "mixed-decls",
+              "color-functions",
+              "global-builtin",
+              "import"
+            ]
+          }
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build": {
+      "executor": "@analogjs/storybook-angular:build-storybook",
+      "outputs": [
+        "{options.outputDir}"
+      ],
+      "options": {
+        "outputDir": "dist/apps/documentation",
+        "configDir": "apps/documentation/.storybook",
+        "compodoc": false,
+        "experimentalZoneless": true,
+        "stylePreprocessorOptions": {
+          "loadPaths": [],
+          "sass": {
+            "silenceDeprecations": [
+              "mixed-decls",
+              "color-functions",
+              "global-builtin",
+              "import"
+            ]
+          }
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "concurrently -k --success=first -n \"SERVE,TEST\" -c \"cyan,magenta\" \"nx run documentation:static-storybook -c ci --port=5000\" \"wait-on http://localhost:5000 && test-storybook -c apps/documentation/.storybook --url=http://localhost:5000\""
+      },
+      "configurations": {
+        "ci": {
+          "command": "concurrently -k --success=first -n \"SERVE,TEST\" -c \"cyan,magenta\" \"nx run documentation:static-storybook -c ci --port=5000\" \"wait-on http://localhost:5000 && test-storybook -c apps/documentation/.storybook --url=http://localhost:5000 --ci\""
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "documentation:build",
+        "staticFilePath": "dist/apps/documentation",
+        "port": 5000
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "documentation:build:ci"
+        }
+      }
+    }
+  }
+}

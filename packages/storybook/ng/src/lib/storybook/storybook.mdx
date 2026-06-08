@@ -1,0 +1,144 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="ng/storybook" name="storybook"   />
+
+# Storybook Helpers
+
+`@otwld/ng-storybook` provides deterministic Storybook infrastructure for:
+
+- Angular provider wiring
+- MSW bootstrap and handler composition
+- Seeded faker genetics data generation
+- Reusable search/list endpoint mocks
+
+This is designed for stable Chromatic visual regression snapshots.
+
+## Angular Providers
+
+```ts
+import { provideRouter } from '@angular/router';
+import { withStorybookProviders } from '@otwld/ng-storybook';
+
+export default {
+  decorators: [
+    withStorybookProviders([provideRouter([])]),
+  ],
+};
+```
+
+## MSW Preview Setup
+
+```ts
+import type { Preview } from '@storybook/angular';
+import {
+  createJsonGetHandler,
+  createStorybookMswPreview,
+  defineStorybookMswHandlers,
+} from '@otwld/ng-storybook';
+
+const mswPreview = createStorybookMswPreview(
+  defineStorybookMswHandlers({
+    auth: [
+      createJsonGetHandler('/api/auth/session', { authenticated: true }),
+    ],
+  })
+);
+
+const preview: Preview = {
+  loaders: [...(mswPreview.loaders ?? [])],
+  parameters: {
+    ...(mswPreview.parameters ?? {}),
+  },
+};
+
+export default preview;
+```
+
+## Story-level Handler Composition
+
+```ts
+import { createJsonGetHandler, withStoryMswHandlers } from '@otwld/ng-storybook';
+
+export const ErrorState = {
+  parameters: {
+    ...withStoryMswHandlers({
+      candidate: createJsonGetHandler(
+        '/api/candidates/candidate-1',
+        { message: 'Forbidden' },
+        { status: 403 }
+      ),
+    }),
+  },
+};
+```
+
+## Seeded Faker Genetics (Stable Snapshots)
+
+```ts
+import { createFakerGenetics } from '@otwld/ng-storybook';
+
+const genetics = createFakerGenetics({
+  seed: 'chromatic-v1',
+  refDate: '2026-01-01T00:00:00.000Z',
+});
+
+const buildCompany = genetics.defineEntityFactory('company', ({ faker, id, key }) => ({
+  id: id('company', key),
+  name: faker.company.name(),
+}));
+
+const buildCandidate = genetics.defineEntityFactory<{
+  companyKey: string;
+}>('candidate', ({ faker, id, key }, input) => ({
+  id: id('candidate', key),
+  companyId: id('company', input.companyKey),
+  fullName: faker.person.fullName(),
+}));
+```
+
+## Reusable Search Responses for MSW
+
+```ts
+import {
+  createFakerGenetics,
+  createMswSearchGetHandler,
+  withStoryMswHandlers,
+} from '@otwld/ng-storybook';
+
+const genetics = createFakerGenetics({ seed: 1337 });
+const companies = genetics.many(24, (index) =>
+  ({ id: genetics.createId('company', index), name: `Company ${index}` })
+);
+
+const companySearchHandler = createMswSearchGetHandler(
+  genetics,
+  '/api/companies/search',
+  companies,
+  {
+    search: {
+      searchBy: ['name'],
+      sorters: { name: (item) => item.name },
+    },
+  },
+);
+
+export const SearchSuccess = {
+  parameters: {
+    ...withStoryMswHandlers({
+      companies: [companySearchHandler],
+    }),
+  },
+};
+```
+
+`createMswSearchGetHandler(...)` reads URL params (`query`, `page`, `pageSize`, `sortBy`, `sortDirection`) and delegates filtering/sorting/pagination to `genetics.search(...)`.
+
+## Conventions for Stable Visual Regression
+
+1. Use fixed seeds (`seed: 'chromatic-...'`), never unseeded randomness.
+2. Set `refDate` when using faker date utilities.
+3. Build cross-entity references with deterministic IDs:
+   - `id('company', companyKey)`
+   - `id('candidate', candidateKey)`
+4. Keep mock handlers composable through `parameters.msw.handlers` groups.
+5. Keep reusable factory/search logic in `@otwld/ng-storybook`; keep scenario payload tweaks in stories.

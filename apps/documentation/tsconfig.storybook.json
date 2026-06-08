@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "module": "esnext",
+    "moduleResolution": "bundler"
+  },
+  "exclude": ["**/*.spec.ts", "**/*.test.ts"],
+  "include": [
+    "src/**/*.stories.ts",
+    "src/**/*.stories.js",
+    "src/**/*.stories.jsx",
+    "src/**/*.stories.tsx",
+    "src/**/*.stories.mdx",
+    ".storybook/*.js",
+    ".storybook/*.ts",
+    "../../packages/**/*.stories.ts",
+    "../../packages/**/*.stories.js",
+    "../../packages/**/*.stories.jsx",
+    "../../packages/**/*.stories.tsx",
+    "../../packages/**/*.stories.mdx"
+  ]
+}

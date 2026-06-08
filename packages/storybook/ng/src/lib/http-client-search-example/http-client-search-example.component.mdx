@@ -1,0 +1,64 @@
+import { Canvas, Controls, Description, Meta, Source } from '@storybook/addon-docs/blocks';
+
+import * as Stories from './http-client-search-example.component.stories';
+
+<Meta title="ng/storybook/http-client-search-example" name="Documentation"   />
+
+# HttpClient + MSW + Faker Genetics
+
+This example demonstrates a full deterministic data flow for visual regression:
+
+1. Angular component calls `HttpClient.get(...)`
+2. MSW intercepts the request in Storybook
+3. Response is generated from seeded faker genetics data
+4. Search/sort/pagination logic is shared and reusable
+
+## Why This Pattern
+
+- Stable snapshots for Chromatic.
+- Realistic but reproducible data.
+- Reusable search handler logic across many stories.
+- Deterministic relationship IDs (`candidate.companyId -> company.id`).
+
+## Core pieces
+
+```ts
+const genetics = createFakerGenetics({
+  seed: 'chromatic-storybook-http-client-search-v1',
+  refDate: '2026-01-01T00:00:00.000Z',
+});
+
+const searchHandler = createMswSearchGetHandler(
+  genetics,
+  '/api/recruitment/candidates/search',
+  candidates,
+  {
+    search: {
+      searchBy: ['fullName', 'email', 'companyName', (item) => item.skills.join(' ')],
+      sorters: {
+        fullName: (item) => item.fullName,
+      },
+    },
+  }
+);
+```
+
+`createMswSearchGetHandler` parses request URL query params and runs `genetics.search(...)`.
+
+## Stories
+
+### Success
+
+<Canvas of={Stories.HttpClientSeededSearchSuccess} />
+<Controls of={Stories.HttpClientSeededSearchSuccess} />
+<Source of={Stories.HttpClientSeededSearchSuccess} />
+
+### No Results
+
+<Canvas of={Stories.HttpClientSeededSearchNoResults} />
+<Description of={Stories.HttpClientSeededSearchNoResults} />
+
+### Server Error
+
+<Canvas of={Stories.HttpClientSearchServerError} />
+<Description of={Stories.HttpClientSearchServerError} />

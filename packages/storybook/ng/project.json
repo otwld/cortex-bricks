@@ -1,0 +1,39 @@
+{
+  "name": "ng-storybook",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/storybook/ng/src",
+  "prefix": "storybook",
+  "projectType": "library",
+  "tags": [
+    "type:lib",
+    "scope:ng",
+    "layer:infra",
+    "npm:private"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": [
+        "{workspaceRoot}/dist/{projectRoot}"
+      ],
+      "options": {
+        "project": "packages/storybook/ng/ng-package.json",
+        "tsConfig": "packages/storybook/ng/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/storybook/ng/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/angular:unit-test",
+      "options": {}
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

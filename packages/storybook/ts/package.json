@@ -1,0 +1,38 @@
+{
+  "name": "@otwld/ts-storybook",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    },
+    "./vite": {
+      "types": "./vite/src/index.d.ts",
+      "import": "./vite/src/index.js"
+    }
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "vite": "^7.0.0"
+  },
+  "devDependencies": {
+    "@nx/js": "22.7.0",
+    "@nx/vitest": "22.7.0",
+    "@types/node": "20.19.9",
+    "nx": "22.7.0",
+    "typescript": "~5.9.2"
+  },
+  "nx": {
+    "tags": [
+      "type:brick"
+    ]
+  }
+}

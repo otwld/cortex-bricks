@@ -1,0 +1,92 @@
+import { type JsonBodyType, HttpResponse, http, type RequestHandler } from 'msw';
+
+import {
+  type FakerGeneticsRuntime,
+  type GeneticsSearchOptions,
+  type GeneticsSearchRequest,
+  type GeneticsSearchResult,
+} from './faker-genetics';
+
+type HttpResponseInit = Parameters<typeof HttpResponse.json>[1];
+
+/**
+ * Msw Search Get Handler Options definition used across Cortex libraries.
+ * For example, search candidates by skill and paginate results for recruiter dashboards.
+ */
+export interface MswSearchGetHandlerOptions<
+  TEntity,
+  TResponse extends JsonBodyType = GeneticsSearchResult<TEntity>
+> {
+  search?: GeneticsSearchOptions<TEntity>;
+  parseRequest?: (url: URL) => GeneticsSearchRequest;
+  mapResponse?: (
+    result: GeneticsSearchResult<TEntity>,
+    request: GeneticsSearchRequest,
+    url: URL
+  ) => TResponse;
+  responseInit?: HttpResponseInit;
+}
+
+/**
+ * parse Positive Int operation used across Cortex libraries.
+ * For example, support recruiter and candidate workflows in the job-board universe.
+ */
+function parsePositiveInt(value: string | null, fallback: number): number {
+  if (!value) {
+    return fallback;
+  }
+
+  const numeric = Number.parseInt(value, 10);
+
+  if (Number.isNaN(numeric) || numeric < 1) {
+    return fallback;
+  }
+
+  return numeric;
+}
+
+/**
+ * default Parse Search Request operation used across Cortex libraries.
+ * For example, search candidates by skill and paginate results for recruiter dashboards.
+ */
+function defaultParseSearchRequest(url: URL): GeneticsSearchRequest {
+  const queryParam = url.searchParams.get('query') ?? url.searchParams.get('q') ?? undefined;
+  const sortDirectionRaw = url.searchParams.get('sortDirection');
+  const sortDirection =
+    sortDirectionRaw === 'asc' || sortDirectionRaw === 'desc'
+      ? sortDirectionRaw
+      : undefined;
+
+  return {
+    query: queryParam ?? undefined,
+    page: parsePositiveInt(url.searchParams.get('page'), 1),
+    pageSize: parsePositiveInt(url.searchParams.get('pageSize'), 25),
+    sortBy: url.searchParams.get('sortBy') ?? undefined,
+    sortDirection,
+  };
+}
+
+/**
+ * Creates a reusable MSW GET search handler backed by faker-genetics search logic.
+ * Suitable for list/search endpoints consumed by HttpClient in stories.
+ */
+export function createMswSearchGetHandler<
+  TEntity,
+  TResponse extends JsonBodyType = GeneticsSearchResult<TEntity>
+>(
+  genetics: Pick<FakerGeneticsRuntime, 'search'>,
+  path: Parameters<typeof http.get>[0],
+  items: readonly TEntity[],
+  options: MswSearchGetHandlerOptions<TEntity, TResponse> = {}
+): RequestHandler {
+  return http.get(path, ({ request }) => {
+    const url = new URL(request.url);
+    const parsedRequest = (options.parseRequest ?? defaultParseSearchRequest)(url);
+    const result = genetics.search(items, parsedRequest, options.search);
+    const responseBody = options.mapResponse
+      ? options.mapResponse(result, parsedRequest, url)
+      : (result as unknown as TResponse);
+
+    return HttpResponse.json(responseBody, options.responseInit);
+  });
+}

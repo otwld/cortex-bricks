@@ -1,0 +1,28 @@
+{
+  "name": "ts-storybook",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/storybook/ts/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/storybook/ts",
+        "main": "packages/storybook/ts/src/index.ts",
+        "tsConfig": "packages/storybook/ts/tsconfig.lib.json",
+        "assets": [
+          "packages/storybook/ts/*.md"
+        ]
+      }
+    }
+  },
+  "tags": [
+    "type:lib",
+    "scope:ts",
+    "layer:infra",
+    "npm:private"
+  ]
+}
