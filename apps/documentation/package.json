@@ -13,5 +13,8 @@
     "@angular/router": "~21.2.0",
     "@storybook/angular": "10.4.1",
     "@otwld/ng-storybook": "workspace:0.0.1"
+  },
+  "devDependencies": {
+    "@storybook/addon-docs": "10.4.1"
   }
 }
