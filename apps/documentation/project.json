@@ -18,7 +18,7 @@
       "executor": "@analogjs/storybook-angular:start-storybook",
       "options": {
         "port": 4400,
-        "configDir": "apps/documentation/.storybook",
+        "configDir": "apps/documentation/src/storybook",
         "compodoc": false,
         "experimentalZoneless": true,
         "stylePreprocessorOptions": {
@@ -46,7 +46,7 @@
       ],
       "options": {
         "outputDir": "dist/apps/documentation",
-        "configDir": "apps/documentation/.storybook",
+        "configDir": "apps/documentation/src/storybook",
         "compodoc": false,
         "experimentalZoneless": true,
         "stylePreprocessorOptions": {
@@ -70,12 +70,21 @@
     "test-storybook": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "concurrently -k --success=first -n \"SERVE,TEST\" -c \"cyan,magenta\" \"nx run documentation:static-storybook -c ci --port=5000\" \"wait-on http://localhost:5000 && test-storybook -c apps/documentation/.storybook --url=http://localhost:5000\""
+        "command": "concurrently -k --success=first -n \"SERVE,TEST\" -c \"cyan,magenta\" \"nx run documentation:static-storybook -c ci --port=5000\" \"wait-on http://localhost:5000 && test-storybook -c apps/documentation/src/storybook --url=http://localhost:5000\""
       },
       "configurations": {
         "ci": {
-          "command": "concurrently -k --success=first -n \"SERVE,TEST\" -c \"cyan,magenta\" \"nx run documentation:static-storybook -c ci --port=5000\" \"wait-on http://localhost:5000 && test-storybook -c apps/documentation/.storybook --url=http://localhost:5000 --ci\""
+          "command": "concurrently -k --success=first -n \"SERVE,TEST\" -c \"cyan,magenta\" \"nx run documentation:static-storybook -c ci --port=5000\" \"wait-on http://localhost:5000 && test-storybook -c apps/documentation/src/storybook --url=http://localhost:5000 --ci\""
         }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/documentation/**/*.{ts,tsx,js,jsx,mjs,cjs}",
+          "apps/documentation/package.json"
+        ]
       }
     },
     "static-storybook": {

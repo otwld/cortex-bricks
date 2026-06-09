@@ -25,7 +25,7 @@ const preview: Preview = {
       providers: [provideRouter([])],
     }),
   ],
-  loaders: [...(mswPreview.loaders ?? [])],
+  loaders: [...(Array.isArray(mswPreview.loaders) ? mswPreview.loaders : [])],
   parameters: {
     docs: {
       codePanel: true,
