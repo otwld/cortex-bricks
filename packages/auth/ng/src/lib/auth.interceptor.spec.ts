@@ -2,10 +2,7 @@ import { HttpErrorResponse, HttpHandlerFn, HttpRequest } from '@angular/common/h
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { Subject, throwError } from 'rxjs';
-import { authInterceptor } from '../../core/src/lib/interceptors/auth.interceptor';
-import { AuthService } from '../../core/src/lib/services/auth.service';
-import { AuthStateService } from '../../core/src/lib/services/auth-state.service';
-import { AUTH_CONFIG } from '../../core/src/lib/tokens/auth-config.token';
+import { AUTH_CONFIG, AuthService, AuthStateService, authInterceptor } from '@otwld/ng-auth/core';
 
 describe('authInterceptor', () => {
   it('errors queued 401 requests when the shared refresh request fails', () => {

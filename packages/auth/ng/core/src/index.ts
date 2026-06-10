@@ -2,6 +2,7 @@ export { provideAuth } from './lib/provide-auth';
 export { type AuthConfig, AUTH_CONFIG } from './lib/tokens/auth-config.token';
 export { AuthService, type RegisterDto } from './lib/services/auth.service';
 export { AuthStateService, type AuthUser } from './lib/services/auth-state.service';
+export { authInterceptor } from './lib/interceptors/auth.interceptor';
 export { AbilityService } from './lib/casl/ability.service';
 export { CanPipe } from './lib/casl/can.pipe';
 export { authGuard } from './lib/guards/auth.guard';

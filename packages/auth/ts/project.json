@@ -1,0 +1,40 @@
+{
+  "name": "ts-auth",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/auth/ts/src",
+  "projectType": "library",
+  "tags": [
+    "scope:auth",
+    "type:types",
+    "type:brick"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/auth/ts",
+        "main": "packages/auth/ts/src/index.ts",
+        "tsConfig": "packages/auth/ts/tsconfig.lib.json",
+        "format": [
+          "esm"
+        ],
+        "assets": [
+          "packages/auth/ts/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/auth/ts/tsconfig.lib.json --noEmit",
+        "forwardAllArgs": false
+      }
+    }
+  }
+}

@@ -1,53 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import type { AuthRegisterInput, AuthUser } from '@otwld/ts-auth';
 import { catchError, finalize, tap, throwError } from 'rxjs';
 import { AUTH_CONFIG } from '../tokens/auth-config.token';
-import { AuthStateService, AuthUser } from './auth-state.service';
+import { AuthStateService } from './auth-state.service';
 
-/**
- * Registration payload submitted to the auth API.
- *
- * @example
- * ```ts
- * const dto: RegisterDto = {
- *   email: 'user@example.com',
- *   password: 'correct-horse-battery-staple',
- *   firstName: 'Ada',
- *   lastName: 'Lovelace',
- * };
- * ```
- */
-export interface RegisterDto {
-  /**
-   * Email address for the new account.
-   */
-  email: string;
+export type RegisterDto = AuthRegisterInput;
 
-  /**
-   * Plain-text password submitted to the backend registration endpoint.
-   */
-  password: string;
-
-  /**
-   * Optional given name for the new account profile.
-   */
-  firstName?: string;
-
-  /**
-   * Optional family name for the new account profile.
-   */
-  lastName?: string;
-}
-
-/**
- * Client-side auth API facade for credential, provider, session, and verification flows.
- *
- * @example
- * ```ts
- * authService.login('user@example.com', 'password').subscribe();
- * ```
- */
+/** Client-side auth API facade for credential, provider, session, and verification flows. */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   /**
