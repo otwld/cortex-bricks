@@ -12,10 +12,12 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@nx/eslint": "22.7.0",
     "@nx/vite": "22.7.0",
     "@nx/vitest": "22.7.0",
     "@types/node": "20.19.9",
     "@types/nodemailer": "^6.4.0",
+    "eslint": "^9.8.0",
     "nx": "22.7.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"

@@ -98,7 +98,7 @@ function auditProject(projectFile) {
       }
     }
     if (executor === '@nx/eslint:lint') {
-      for (const name of ['angular-eslint', 'eslint']) {
+      for (const name of ['eslint', ...(hasTag(project, 'framework:ng') ? ['angular-eslint'] : [])]) {
         requireDependency(manifest, all, name, 'dev', `executor ${executor}`);
       }
     }
@@ -147,6 +147,10 @@ function requireDependency(manifest, dependencies, name, category, reason) {
   if (dependencies[name] === undefined) {
     errors.push(`${manifest.name}: missing ${category} dependency ${name} (${reason}).`);
   }
+}
+
+function hasTag(project, tag) {
+  return (project.tags ?? []).includes(tag);
 }
 
 function importedSpecifiers(file) {

@@ -8,9 +8,11 @@
 @source "../../../packages/ai/ng";
 @source "../../../packages/ai/ts";
 @source "../../../packages/auth/ng";
+@source "../../../packages/auth/ts";
 @source "../../../packages/chat/ts";
 @source "../../../packages/dashboard/ng";
 @source "../../../packages/sdk/ng";
+@source "../../../packages/sdk/ts";
 @source "../../../packages/storage/ng";
 @source "../../../packages/storage/ts";
 @source "../../../packages/users/ng";

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { STORAGE_CONFIG } from '@otwld/ng-storage/core';
+import { STORAGE_CONFIG } from '@otwld/ng-storage';
 import { appConfig } from './app.config';
 
 describe('appConfig storage providers', () => {

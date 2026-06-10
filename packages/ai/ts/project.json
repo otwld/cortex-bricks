@@ -25,6 +25,16 @@
           "packages/ai/ts/*.md"
         ]
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/ai/ts/tsconfig.lib.json --noEmit",
+        "forwardAllArgs": false
+      }
     }
   }
 }

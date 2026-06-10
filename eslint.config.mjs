@@ -17,8 +17,28 @@ export default [
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
           depConstraints: [
             {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
+              sourceTag: 'type:types',
+              onlyDependOnLibsWithTags: ['type:types'],
+            },
+            {
+              sourceTag: 'framework:ng',
+              notDependOnLibsWithTags: ['framework:nest'],
+            },
+            {
+              sourceTag: 'framework:nest',
+              notDependOnLibsWithTags: ['framework:ng'],
+            },
+            {
+              sourceTag: 'type:lib',
+              notDependOnLibsWithTags: ['type:app'],
+            },
+            {
+              sourceTag: 'type:feature',
+              notDependOnLibsWithTags: ['type:app'],
+            },
+            {
+              sourceTag: 'type:app',
+              onlyDependOnLibsWithTags: ['type:lib', 'type:types', 'type:feature', 'type:brick', 'layer:infra'],
             },
           ],
         },

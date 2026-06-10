@@ -17,7 +17,7 @@
     "@otwld/ng-dashboard": "workspace:0.0.1",
     "@primeuix/themes": "^2.0.3",
     "primeng": "^21.1.6",
-    "@monorepo-starter/ts-chat": "workspace:0.0.1",
+    "@otwld/ts-chat": "workspace:0.0.1",
     "@otwld/ng-websocket": "workspace:0.0.1",
     "express": "^4.21.2"
   },
