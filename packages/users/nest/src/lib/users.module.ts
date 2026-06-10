@@ -20,7 +20,7 @@ function createAsyncOptionsProvider(asyncOptions: UsersModuleAsyncOptions): Prov
     return {
       provide: USERS_MODULE_OPTIONS,
       useFactory: asyncOptions.useFactory,
-      inject: (asyncOptions.inject ?? []) as never[],
+      inject: asyncOptions.inject ?? [],
     };
   }
 

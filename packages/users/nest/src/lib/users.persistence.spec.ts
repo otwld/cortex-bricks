@@ -1,17 +1,16 @@
 import { BadRequestException } from '@nestjs/common';
-import { UserDocument } from '@otwld/nest-auth';
 import {
   UserAccountStatus,
   UserInvitationStatus,
 } from '@otwld/ts-users';
-import { ClientSession, Model } from 'mongoose';
+import { ClientSession } from 'mongoose';
 import { AuthAccountRepository } from './auth-account.repository';
 import { UserInvitationRepository } from './user-invitations.repository';
 import { UsersRepository } from './users.repository';
 
 describe('users persistence helpers', () => {
   it('maps profile documents into safe profile DTOs', () => {
-    const repository = new UsersRepository({} as any);
+    const repository = Object.create(UsersRepository.prototype) as UsersRepository;
     const profile = repository.toProfileDto({
       _id: 'profile-1',
       authUserId: 'auth-1',
@@ -25,7 +24,7 @@ describe('users persistence helpers', () => {
       permissions: [],
       createdAt: new Date('2026-05-07T00:00:00.000Z'),
       updatedAt: new Date('2026-05-07T00:00:00.000Z'),
-    } as any);
+    });
 
     expect(profile).toMatchObject({
       id: 'profile-1',
@@ -38,7 +37,7 @@ describe('users persistence helpers', () => {
   });
 
   it('hashes raw invitation tokens before persistence lookup', () => {
-    const repository = new UserInvitationRepository({} as any);
+    const repository = Object.create(UserInvitationRepository.prototype) as UserInvitationRepository;
     const hash = repository.hashToken('raw-token');
 
     expect(hash).toHaveLength(64);
@@ -56,7 +55,7 @@ describe('users persistence helpers', () => {
       findOne: vi.fn().mockReturnValue({ exec: execFindOne }),
       findByIdAndUpdate: vi.fn().mockReturnValue({ exec: execUpdate }),
     };
-    const repository = new AuthAccountRepository(userModel as any);
+    const repository = new AuthAccountRepository(userModel);
 
     await expect(
       repository.resetPassword('reset-token', 'new-password'),
@@ -79,10 +78,8 @@ describe('users persistence helpers', () => {
     const userModel = {
       findByIdAndUpdate: vi.fn().mockReturnValue({ exec: execUpdate }),
     };
-    const repository = new AuthAccountRepository(
-      userModel as unknown as Model<UserDocument>,
-    );
-    const session = { id: 'session-1' } as unknown as ClientSession;
+    const repository = new AuthAccountRepository(userModel);
+    const session = { id: 'session-1' } as ClientSession;
 
     await repository.disableAccount('auth-1', session);
 

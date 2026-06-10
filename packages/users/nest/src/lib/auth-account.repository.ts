@@ -23,11 +23,19 @@ export interface CreatePendingAuthAccount {
   permissions?: string[];
 }
 
+type AuthUserDocumentFactory = {
+  save(options?: { session?: ClientSession }): Promise<UserDocument>;
+};
+
+type AuthUserModel = Pick<Model<UserDocument>, 'findOne' | 'findById' | 'findByIdAndUpdate'> & {
+  new (value: Partial<User>): AuthUserDocumentFactory;
+};
+
 /** Persistence bridge for auth accounts owned by the auth package. */
 @Injectable()
 export class AuthAccountRepository {
   /** Create the auth account repository. */
-  constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>) {}
+  constructor(@InjectModel(User.name) private readonly userModel: AuthUserModel) {}
 
   /** Finds one auth account by email. */
   findByEmail(email: string) {

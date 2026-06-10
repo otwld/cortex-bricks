@@ -1,11 +1,22 @@
 import { UserAccountStatus, UserInvitationStatus, UserOAuthProvider } from '@otwld/ts-users';
+import type { Schema, SchemaType } from 'mongoose';
 import { UserInvitationSchema } from './user-invitation.schema';
 import { UserProfileSchema } from './user-profile.schema';
 
+type EnumSchemaPath = SchemaType & { enumValues: string[] };
+
+function enumPath(schema: Schema, path: string): EnumSchemaPath {
+  const schemaPath = schema.path(path);
+  if (!schemaPath || !('enumValues' in schemaPath)) {
+    throw new Error(`Expected ${path} to be an enum schema path.`);
+  }
+  return schemaPath as EnumSchemaPath;
+}
+
 describe('user mongoose schemas', () => {
   it('stores invitation enum fields as constrained strings', () => {
-    const statusPath = UserInvitationSchema.path('status') as any;
-    const providerPath = UserInvitationSchema.path('oauthStateProvider') as any;
+    const statusPath = enumPath(UserInvitationSchema, 'status');
+    const providerPath = enumPath(UserInvitationSchema, 'oauthStateProvider');
 
     expect(statusPath.instance).toBe('String');
     expect(statusPath.enumValues).toEqual(expect.arrayContaining(Object.values(UserInvitationStatus)));
@@ -14,8 +25,8 @@ describe('user mongoose schemas', () => {
   });
 
   it('stores profile enum fields as constrained strings', () => {
-    const accountStatusPath = UserProfileSchema.path('accountStatus') as any;
-    const invitationStatusPath = UserProfileSchema.path('invitationStatus') as any;
+    const accountStatusPath = enumPath(UserProfileSchema, 'accountStatus');
+    const invitationStatusPath = enumPath(UserProfileSchema, 'invitationStatus');
 
     expect(accountStatusPath.instance).toBe('String');
     expect(accountStatusPath.enumValues).toEqual(expect.arrayContaining(Object.values(UserAccountStatus)));

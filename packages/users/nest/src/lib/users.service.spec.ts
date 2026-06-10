@@ -11,6 +11,12 @@ import {
 } from '@otwld/ts-users';
 import { UsersService } from './users.service';
 
+type UsersRepositoryMock = ConstructorParameters<typeof UsersService>[0];
+type InvitationsRepositoryMock = ConstructorParameters<typeof UsersService>[1];
+type AuthAccountsRepositoryMock = ConstructorParameters<typeof UsersService>[2];
+type UsersServiceOptions = ConstructorParameters<typeof UsersService>[3];
+type UsersServiceConnection = NonNullable<ConstructorParameters<typeof UsersService>[4]>;
+
 describe(UsersService.name, () => {
   const profile = {
     id: 'profile-1',
@@ -33,13 +39,13 @@ describe(UsersService.name, () => {
       ),
       endSession: vi.fn().mockResolvedValue(undefined),
     };
-    const connection = {
+    const connection: UsersServiceConnection = {
       startSession: vi.fn().mockResolvedValue(session),
     };
     return { connection, session };
   }
 
-  function createService(options?: unknown, connection?: unknown) {
+  function createService(options: UsersServiceOptions = {}, connection?: UsersServiceConnection) {
     const users = {
       listActive: vi.fn().mockResolvedValue([profile]),
       create: vi.fn().mockResolvedValue(profile),
@@ -58,7 +64,7 @@ describe(UsersService.name, () => {
           ...profile,
           accountStatus: UserAccountStatus.Deleted,
         }),
-    };
+    } satisfies UsersRepositoryMock;
     const invitations = {
       create: vi
         .fn()
@@ -84,7 +90,7 @@ describe(UsersService.name, () => {
       clearOAuthState: vi.fn().mockResolvedValue(undefined),
       accept: vi.fn().mockResolvedValue(undefined),
       revokeByRawToken: vi.fn().mockResolvedValue({ authUserId: 'auth-1' }),
-    };
+    } satisfies InvitationsRepositoryMock;
     const authAccounts = {
       findByEmail: vi.fn().mockResolvedValue(null),
       createPendingAccount: vi.fn().mockResolvedValue({ _id: 'auth-1' }),
@@ -100,14 +106,14 @@ describe(UsersService.name, () => {
       resetPassword: vi
         .fn()
         .mockResolvedValue({ email: 'ada@example.com', firstName: 'Ada' }),
-    };
-    const service = new (UsersService as any)(
+    } satisfies AuthAccountsRepositoryMock;
+    const service = new UsersService(
       users,
       invitations,
       authAccounts,
       options,
       connection,
-    ) as UsersService;
+    );
     return { service, users, invitations, authAccounts };
   }
 

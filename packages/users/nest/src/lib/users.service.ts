@@ -15,7 +15,7 @@ import {
   UserOAuthProvider,
   UserProfile,
 } from '@otwld/ts-users';
-import { ClientSession, Connection } from 'mongoose';
+import type { ClientSession } from 'mongoose';
 import { AuthAccountRepository } from './auth-account.repository';
 import { USERS_MODULE_OPTIONS, UsersModuleOptions } from './config/users-module-options';
 import { UserInvitationDocument } from './schemas/user-invitation.schema';
@@ -24,6 +24,41 @@ import { UsersRepository } from './users.repository';
 
 type InvitationDocumentLike = Pick<UserInvitationDocument, 'authUserId' | 'expiresAt' | 'status'> & { _id: unknown };
 type GeneratedInvitation = { rawToken: string; expiresAt: Date };
+type UsersTransactionSession = Pick<ClientSession, 'withTransaction' | 'endSession'>;
+type UsersTransactionConnection = {
+  startSession(): Promise<UsersTransactionSession>;
+};
+/** User profile repository operations required by the users service. */
+type UsersProfileRepository = {
+  listActive(): ReturnType<UsersRepository['listActive']>;
+  create(dto: Parameters<UsersRepository['create']>[0], session?: UsersTransactionSession): ReturnType<UsersRepository['create']>;
+  findById(id: string): ReturnType<UsersRepository['findById']>;
+  findByAuthUserId(authUserId: string): ReturnType<UsersRepository['findByAuthUserId']>;
+  updateById(id: string, update: Parameters<UsersRepository['updateById']>[1], session?: UsersTransactionSession): ReturnType<UsersRepository['updateById']>;
+  updateByAuthUserId(authUserId: string, update: Parameters<UsersRepository['updateByAuthUserId']>[1], session?: UsersTransactionSession): ReturnType<UsersRepository['updateByAuthUserId']>;
+  softDelete(id: string, session?: UsersTransactionSession): ReturnType<UsersRepository['softDelete']>;
+};
+/** Invitation repository operations required by the users service. */
+type UsersInvitationRepository = {
+  create(profileId: string, authUserId: string, expiresAt: Date, session?: UsersTransactionSession): ReturnType<UserInvitationRepository['create']>;
+  createOAuthState(invitationId: string, provider: UserOAuthProvider, expiresAt: Date): ReturnType<UserInvitationRepository['createOAuthState']>;
+  findByRawToken(rawToken: string): ReturnType<UserInvitationRepository['findByRawToken']>;
+  findByOAuthState(state: string): ReturnType<UserInvitationRepository['findByOAuthState']>;
+  clearOAuthState(invitationId: string): ReturnType<UserInvitationRepository['clearOAuthState']>;
+  accept(invitationId: string, session?: UsersTransactionSession): ReturnType<UserInvitationRepository['accept']>;
+  revokeByRawToken(rawToken: string): ReturnType<UserInvitationRepository['revokeByRawToken']>;
+};
+/** Auth-account repository operations required by the users service. */
+type UsersAuthAccountRepository = {
+  findByEmail(email: string): ReturnType<AuthAccountRepository['findByEmail']>;
+  createPendingAccount(dto: Parameters<AuthAccountRepository['createPendingAccount']>[0], session?: UsersTransactionSession): ReturnType<AuthAccountRepository['createPendingAccount']>;
+  updateAssignments(authUserId: string, update: Parameters<AuthAccountRepository['updateAssignments']>[1], session?: UsersTransactionSession): ReturnType<AuthAccountRepository['updateAssignments']>;
+  setLocalCredentials(authUserId: string, password: string, username?: string, session?: UsersTransactionSession): ReturnType<AuthAccountRepository['setLocalCredentials']>;
+  changePassword(authUserId: string, currentPassword: string, nextPassword: string): ReturnType<AuthAccountRepository['changePassword']>;
+  disableAccount(authUserId: string, session?: UsersTransactionSession): ReturnType<AuthAccountRepository['disableAccount']>;
+  requestPasswordReset(email: string): ReturnType<AuthAccountRepository['requestPasswordReset']>;
+  resetPassword(rawToken: string, nextPassword: string): ReturnType<AuthAccountRepository['resetPassword']>;
+};
 
 /** Business service for dashboard-managed users and invitations. */
 @Injectable()
@@ -40,11 +75,11 @@ export class UsersService {
    * @param connection - Optional Mongoose connection used for transactions.
    */
   constructor(
-    private readonly users: UsersRepository,
-    private readonly invitations: UserInvitationRepository,
-    private readonly authAccounts: AuthAccountRepository,
+    @Inject(UsersRepository) private readonly users: UsersProfileRepository,
+    @Inject(UserInvitationRepository) private readonly invitations: UsersInvitationRepository,
+    @Inject(AuthAccountRepository) private readonly authAccounts: UsersAuthAccountRepository,
     @Optional() @Inject(USERS_MODULE_OPTIONS) private readonly options: UsersModuleOptions = {},
-    @Optional() @InjectConnection() private readonly connection?: Connection,
+    @Optional() @InjectConnection() private readonly connection?: UsersTransactionConnection,
   ) {}
 
   /** Lists active dashboard-managed users. */
@@ -269,15 +304,18 @@ export class UsersService {
     return new Date(Date.now() + 10 * 60 * 1000);
   }
 
-  private async inTransaction<T>(work: (session?: ClientSession) => Promise<T>): Promise<T> {
+  private async inTransaction<T>(work: (session?: UsersTransactionSession) => Promise<T>): Promise<T> {
     if (!this.connection) return work(undefined);
 
     const session = await this.connection.startSession();
     try {
-      let result!: T;
+      let result: T | undefined;
       await session.withTransaction(async () => {
         result = await work(session);
       });
+      if (result === undefined) {
+        throw new Error('Users transaction completed without a result.');
+      }
       return result;
     } finally {
       await session.endSession();
