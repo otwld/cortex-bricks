@@ -3,7 +3,7 @@ import baseConfig from '../../eslint.config.mjs';
 export default [
   ...baseConfig,
   {
-    files: ['apps/documentation/src/storybook/main.ts'],
+    files: ['apps/documentation/src/main.ts'],
     rules: {
       '@nx/enforce-module-boundaries': 'off',
     },
