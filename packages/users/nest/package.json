@@ -18,15 +18,15 @@
     "zod": "^3.24.0"
   },
   "devDependencies": {
-    "@nx/eslint": "22.7.0",
-    "@nx/js": "22.7.0",
-    "@nx/vite": "22.7.0",
-    "@nx/vitest": "22.7.0",
+    "@nx/eslint": "22.7.5",
+    "@nx/js": "22.7.5",
+    "@nx/vite": "22.7.5",
+    "@nx/vitest": "22.7.5",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^4.17.21",
     "@types/node": "20.19.9",
     "eslint": "^9.8.0",
-    "nx": "22.7.0",
+    "nx": "22.7.5",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   },

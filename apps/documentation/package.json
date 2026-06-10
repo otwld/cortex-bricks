@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@nx/vite": "22.7.0",
+    "@nx/vite": "22.7.5",
     "@analogjs/storybook-angular": "^2.5.3",
     "@otwld/ts-storybook": "workspace:0.0.1",
     "remark-gfm": "^4.0.1",
