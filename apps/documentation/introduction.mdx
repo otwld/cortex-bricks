@@ -2,4 +2,17 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="app/documentation/introduction" name="Documentation" />
 
-# Welcome!
+# Cortex Bricks
+
+Cortex Bricks is a public-preview source-brick workspace for Angular, NestJS,
+and framework-neutral TypeScript building blocks used in Nx monorepos.
+
+Use these docs to browse the current bricks, inspect package boundaries, and
+study the implementation patterns. The primary external workflow today is
+source inspection. The upcoming `bricks` CLI lives outside this repository and
+will consume source-brick repositories like this one to copy, sync, and
+eventually three-way-merge selected source into application workspaces.
+
+The local package manifests support development and validation inside this Nx
+workspace. They are not the primary public consumption path while the project is
+still in prerelease source-brick form.
