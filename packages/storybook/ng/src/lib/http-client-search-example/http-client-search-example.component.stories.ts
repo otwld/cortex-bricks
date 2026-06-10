@@ -87,6 +87,9 @@ export default meta;
 
 type Story = StoryObj<HttpClientSearchExampleComponent>;
 
+/**
+ * Search story with deterministic candidate data and a successful MSW response.
+ */
 export const HttpClientSeededSearchSuccess: Story = {
   parameters: {
     ...withStoryMswHandlers({
@@ -95,6 +98,9 @@ export const HttpClientSeededSearchSuccess: Story = {
   },
 };
 
+/**
+ * Search story for the empty-results state.
+ */
 export const HttpClientSeededSearchNoResults: Story = {
   args: {
     initialQuery: 'nosuchcandidate',
@@ -106,6 +112,9 @@ export const HttpClientSeededSearchNoResults: Story = {
   },
 };
 
+/**
+ * Search story for a server-side failure response.
+ */
 export const HttpClientSearchServerError: Story = {
   parameters: {
     ...withStoryMswHandlers({

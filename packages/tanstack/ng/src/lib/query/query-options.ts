@@ -4,6 +4,9 @@ import { AsyncOperation, resolveAsyncOperation } from './async-operation';
 import { runSkippableQuery } from './run-skippable-query';
 import { Skippable } from './skippable';
 
+/**
+ * Creates a typed TanStack query-options factory without a default mapper.
+ */
 export function queryOptions<TQueryKey extends QueryKey, TDto, TQueryFnData>(
   queryFn: (dto: TDto) => AsyncOperation<TQueryFnData>,
   queryKey: (dto: Skippable<TDto>) => TQueryKey,
@@ -15,6 +18,10 @@ export function queryOptions<TQueryKey extends QueryKey, TDto, TQueryFnData>(
   ): ReturnType<typeof _queryOptions<TQueryFnData, Error, TOut, TQueryKey>>;
 };
 
+/**
+ * Creates a typed TanStack query-options factory with a default mapper applied
+ * before optional per-call mapping.
+ */
 export function queryOptions<TQueryKey extends QueryKey, TDto, TQueryFnData, TBase>(
   queryFn: (dto: TDto) => AsyncOperation<TQueryFnData>,
   queryKey: (dto: Skippable<TDto>) => TQueryKey,
@@ -27,6 +34,9 @@ export function queryOptions<TQueryKey extends QueryKey, TDto, TQueryFnData, TBa
   ): ReturnType<typeof _queryOptions<TQueryFnData, Error, TOut, TQueryKey>>;
 };
 
+/**
+ * Builds query options that run only when the supplied DTO is not skipped.
+ */
 export function queryOptions<TQueryKey extends QueryKey, TDto, TQueryFnData, TBase>(
   queryFn: (dto: TDto) => AsyncOperation<TQueryFnData>,
   queryKey: (dto: Skippable<TDto>) => TQueryKey,

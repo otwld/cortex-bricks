@@ -50,30 +50,38 @@ interface StatusOption {
 })
 export class TaskDrawer implements OnChanges {
     /**
-     * Runs visible.
+     * Whether the drawer is visible.
      */
     @Input() visible = false;
+
     /**
-     * Runs task.
+     * Task loaded into the form when editing.
      */
     @Input() task: Task | null = null;
+
     /**
-     * Runs mode.
+     * Drawer mode that determines create or edit copy.
      */
     @Input() mode: 'create' | 'edit' = 'create';
+
     /**
-     * Runs visible change.
+     * Emits drawer visibility changes for two-way binding.
      */
     @Output() visibleChange = new EventEmitter<boolean>();
+
     /**
-     * Runs save.
+     * Emits normalized task data when the drawer form is saved.
      */
     @Output() save = new EventEmitter<Task>();
+
     /**
-     * Runs cancelled.
+     * Emits when the drawer is cancelled or hidden.
      */
     @Output() cancelled = new EventEmitter<void>();
 
+    /**
+     * Mutable drawer form state used for create and edit flows.
+     */
     formData: FormData = {
         id: null,
         title: '',
@@ -85,14 +93,23 @@ export class TaskDrawer implements OnChanges {
         members: []
     };
 
+    /**
+     * Status options available in the task status selector.
+     */
     statusOptions: StatusOption[] = [
         { label: 'Pending', value: 'pending' },
         { label: 'In Progress', value: 'in-progress' },
         { label: 'Completed', value: 'completed' }
     ];
 
+    /**
+     * Member autocomplete results for the current query.
+     */
     filteredMembers: Member[] = [];
 
+    /**
+     * Demo members available for task assignment.
+     */
     availableMembers: Member[] = [
         { name: 'Amy Elsner', image: 'amyelsner.png' },
         { name: 'Anna Fali', image: 'annafali.png' },
@@ -101,18 +118,18 @@ export class TaskDrawer implements OnChanges {
     ];
 
     /**
-     * Runs drawer title.
+     * Title shown in the drawer header for the active mode.
      *
-     * @returns The task drawer drawer title result.
+     * @returns Create or edit drawer title.
      */
     get drawerTitle(): string {
         return this.mode === 'create' ? 'Create New Task' : 'Edit Task';
     }
 
     /**
-     * Runs ng on changes.
+     * Synchronizes the drawer form when the selected task changes.
      *
-     * @param changes - changes value.
+     * @param changes - Angular input changes for the drawer.
      */
     ngOnChanges(changes: SimpleChanges) {
         if (changes['task']) {
@@ -135,11 +152,10 @@ export class TaskDrawer implements OnChanges {
     }
 
     /**
-     * Runs parse date.
+     * Parses a `dd.mm.yyyy` task date into a Date instance.
      *
-     * @param dateStr - date str value.
-     *
-     * @returns The task drawer parse date result.
+     * @param dateStr - Date string stored on task records.
+     * @returns Parsed Date, or null when the value is empty or malformed.
      */
     parseDate(dateStr: string): Date | null {
         if (!dateStr) return null;
@@ -151,7 +167,7 @@ export class TaskDrawer implements OnChanges {
     }
 
     /**
-     * Runs reset form.
+     * Resets the drawer form to a new pending task draft.
      */
     resetForm() {
         this.formData = {
@@ -167,9 +183,9 @@ export class TaskDrawer implements OnChanges {
     }
 
     /**
-     * Runs filter members.
+     * Filters available members for the autocomplete query.
      *
-     * @param event - event value.
+     * @param event - PrimeNG autocomplete event containing the query.
      */
     filterMembers(event: AutoCompleteCompleteEvent) {
         if (!event.query) {
@@ -181,11 +197,10 @@ export class TaskDrawer implements OnChanges {
     }
 
     /**
-     * Runs format date for save.
+     * Formats a Date for storage on task records.
      *
-     * @param date - date value.
-     *
-     * @returns The task drawer format date for save result.
+     * @param date - Date value selected in the drawer.
+     * @returns `dd.mm.yyyy` string, or null when no date is selected.
      */
     formatDateForSave(date: Date | null): string | null {
         if (!date) return null;
@@ -194,7 +209,7 @@ export class TaskDrawer implements OnChanges {
     }
 
     /**
-     * Runs handle save.
+     * Emits normalized task data and closes the drawer.
      */
     handleSave() {
         const taskData: Task = {
@@ -213,7 +228,7 @@ export class TaskDrawer implements OnChanges {
     }
 
     /**
-     * Runs handle cancel.
+     * Resets form state and closes the drawer without saving.
      */
     handleCancel() {
         this.resetForm();
@@ -223,7 +238,7 @@ export class TaskDrawer implements OnChanges {
     }
 
     /**
-     * Runs on hide.
+     * Handles the drawer hide event by cancelling the current edit flow.
      */
     onHide() {
         this.handleCancel();

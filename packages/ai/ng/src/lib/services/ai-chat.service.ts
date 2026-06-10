@@ -4,20 +4,12 @@ import { AiChatRequest } from '@otwld/ts-ai';
 import { DefaultChatTransport } from 'ai';
 import { AI_CONFIG } from '../tokens/ai-config.token';
 
-/**
- * Provides ai chat service behavior.
- */
+/** Angular client for streamed AI chat sessions. */
 @Injectable({ providedIn: 'root' })
 export class AiChatService {
   private readonly config = inject(AI_CONFIG);
 
-  /**
-   * Runs create chat.
-   *
-   * @param initialRequest - initial request value.
-   *
-   * @returns The ai chat service create chat result.
-   */
+  /** Create a chat instance that sends messages to the configured backend endpoint. */
   createChat(initialRequest: Partial<Omit<AiChatRequest, 'messages'>> = {}): Chat {
     return new Chat({
       transport: new DefaultChatTransport({

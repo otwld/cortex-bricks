@@ -23,15 +23,6 @@ export class TypedServerRegistry {
    *
    * @param namespace Contract namespace path.
    */
-  /**
-   * Runs get.
-   *
-   * @param namespace - namespace value.
-   *
-   * @returns The typed server registry get result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   public get(namespace: string): Namespace {
     const found = this.namespaces.get(namespace);
     if (!found) throw new Error(`TypedServer namespace "${namespace}" has not been initialized`);

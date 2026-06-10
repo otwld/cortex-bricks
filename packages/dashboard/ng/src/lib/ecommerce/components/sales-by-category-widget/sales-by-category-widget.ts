@@ -5,8 +5,14 @@ import { $dt } from '@primeuix/themes';
 import { ChartModule } from 'primeng/chart';
 import { Subject } from 'rxjs';
 
+/**
+ * Semantic color tone for sales-by-category chart slices.
+ */
 export type SalesByCategoryTone = 'primary-700' | 'primary-400' | 'primary-100' | 'cyan' | 'orange' | 'gray';
 
+/**
+ * Color scheme used when resolving PrimeNG design tokens for the chart.
+ */
 export type SalesByCategoryColorScheme = 'light' | 'dark';
 
 /**
@@ -29,6 +35,9 @@ export interface SalesByCategoryDataSelectEvent {
   readonly category: SalesByCategoryItem | null;
 }
 
+/**
+ * Union of events emitted by the sales-by-category widget event stream.
+ */
 export type SalesByCategoryWidgetEvent = { readonly type: 'data' } & SalesByCategoryDataSelectEvent;
 
 interface SalesByCategoryThemeToken {
@@ -62,6 +71,9 @@ const HOVER_TONE_TOKENS: Record<SalesByCategoryTone, SalesByCategoryThemeToken> 
 
 const TEXT_COLOR_TOKEN: SalesByCategoryThemeToken = { tokenPath: 'text.color', fallback: '#334155' };
 
+/**
+ * Ecommerce widget that renders a pie chart of sales by category.
+ */
 @Component({
   selector: 'app-sales-by-category-widget',
   imports: [ChartModule],

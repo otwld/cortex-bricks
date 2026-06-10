@@ -424,9 +424,7 @@ export abstract class AbstractRepository<
     return updated ?? null;
   }
 
-  /**
-   * Runs a paginated aggregation **without relational lookups**.
-   */
+  /** Execute a paginated aggregation without relational lookups. */
   public async aggregate(dto: TMatch, pagination?: PaginationQuery): Promise<PaginationResult<TEntity>> {
     const pipeline = buildPipeline(
       this.buildMatch(dto),
@@ -439,9 +437,7 @@ export abstract class AbstractRepository<
     return result;
   }
 
-  /**
-   * Runs a non-paginated aggregation **without relational lookups**.
-   */
+  /** Execute a non-paginated aggregation without relational lookups. */
   public async aggregateOne(dto: TMatch): Promise<TEntity | null> {
     const pipeline = buildPipeline(this.buildMatch(dto), this.sort, buildFacet([], this.extraFields()));
 
@@ -450,9 +446,7 @@ export abstract class AbstractRepository<
     return result ?? null;
   }
 
-  /**
-   * Runs a paginated aggregation **with relational lookups**.
-   */
+  /** Execute a paginated aggregation with relational lookups. */
   public async aggregateWithRelations(
     dto: TMatch,
     pagination?: PaginationQuery,
@@ -468,9 +462,7 @@ export abstract class AbstractRepository<
     return result;
   }
 
-  /**
-   * Runs a non-paginated aggregation **with relational lookups**.
-   */
+  /** Execute a non-paginated aggregation with relational lookups. */
   public async aggregateOneWithRelation(dto: TMatch): Promise<TEntityWithRelations | null> {
     const pipeline = buildPipeline(
       this.buildMatch(dto),

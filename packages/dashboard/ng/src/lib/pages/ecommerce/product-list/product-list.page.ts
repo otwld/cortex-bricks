@@ -29,6 +29,9 @@ interface SelectOption {
     templateUrl: './product-list.page.html',
 })
 export class ProductListPage {
+    /**
+     * Product cards shown by the listing page before filtering and sorting.
+     */
     products: Product[] = [
         {
             id: 1,
@@ -152,10 +155,24 @@ export class ProductListPage {
         }
     ];
 
+    /**
+     * Product name search query.
+     */
     searchQuery = '';
+
+    /**
+     * Category value currently selected in the category filter.
+     */
     selectedCategory: string | null = null;
+
+    /**
+     * Sort mode currently selected in the sort filter.
+     */
     selectedSort: string | null = null;
 
+    /**
+     * Category filter options displayed above the product grid.
+     */
     categories: SelectOption[] = [
         { label: 'All Products', value: null },
         { label: 'New Product', value: 'new' },
@@ -163,6 +180,9 @@ export class ProductListPage {
         { label: 'Featured', value: 'featured' }
     ];
 
+    /**
+     * Sort options displayed above the product grid.
+     */
     sortOptions: SelectOption[] = [
         { label: 'Default', value: null },
         { label: 'Price: Low to High', value: 'price_asc' },
@@ -172,9 +192,9 @@ export class ProductListPage {
     ];
 
     /**
-     * Runs filtered and sorted products.
+     * Products after applying search, category, and sort selections.
      *
-     * @returns The product list page filtered and sorted products result.
+     * @returns Filtered and sorted product list for the grid.
      */
     get filteredAndSortedProducts(): Product[] {
         let filtered = this.products;
@@ -209,11 +229,10 @@ export class ProductListPage {
     }
 
     /**
-     * Runs get category label.
+     * Returns the display label for a product category value.
      *
-     * @param category - category value.
-     *
-     * @returns The product list page get category label result.
+     * @param category - Category value stored on the product.
+     * @returns Human-readable category label.
      */
     getCategoryLabel(category: string): string {
         switch (category) {

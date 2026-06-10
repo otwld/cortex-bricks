@@ -72,13 +72,6 @@ export class TypedServer<TContract extends Contract> {
    *
    * @param rooms Single room id or array of room ids.
    */
-  /**
-   * Runs to.
-   *
-   * @param rooms - rooms value.
-   *
-   * @returns The typed server to result.
-   */
   public to(rooms: RoomId | readonly RoomId[]): TypedRoomEmitter<TContract> {
     const list = Array.isArray(rooms) ? [...rooms] : [rooms];
     return {
@@ -94,13 +87,6 @@ export class TypedServer<TContract extends Contract> {
    *
    * @param rooms Single room id or array of room ids.
    */
-  /**
-   * Runs except.
-   *
-   * @param rooms - rooms value.
-   *
-   * @returns The typed server except result.
-   */
   public except(rooms: RoomId | readonly RoomId[]): TypedRoomEmitter<TContract> {
     const list = Array.isArray(rooms) ? [...rooms] : [rooms];
     return {
@@ -112,11 +98,6 @@ export class TypedServer<TContract extends Contract> {
   }
 
   /** Fetch every connected socket in the namespace. */
-  /**
-   * Runs fetch sockets.
-   *
-   * @returns The typed server fetch sockets result.
-   */
   public async fetchSockets(): Promise<readonly Socket[]> {
     const sockets = await this.namespace.fetchSockets();
     return sockets as unknown as readonly Socket[];

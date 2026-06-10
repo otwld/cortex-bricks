@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+/**
+ * Runtime environment schema for the backend app.
+ */
 export const envSchema = z.object({
   MONGODB_URI: z.string().min(1),
   JWT_SECRET: z.string().min(1),
@@ -93,8 +96,18 @@ export const envSchema = z.object({
   }
 });
 
+/**
+ * Backend environment after schema validation and defaulting.
+ */
 export type AppEnv = z.infer<typeof envSchema>;
 
+/**
+ * Validates raw environment values before the backend configuration factory
+ * reads from `process.env`.
+ *
+ * @throws When required variables are missing or cross-field transport settings
+ * are inconsistent.
+ */
 export function validate(config: Record<string, unknown>): AppEnv {
   const result = envSchema.safeParse(config);
   if (!result.success) {

@@ -96,15 +96,6 @@ const DAY_MS = 24 * HOUR_MS;
 const WEEK_MS = 7 * DAY_MS;
 
 /** Returns the start timestamp for the fixed window that contains the supplied date. */
-/**
- * Runs get ai quota window start.
- *
- * @param window - window value.
- *
- * @param date - date value.
- *
- * @returns The get ai quota window start result.
- */
 export function getAiQuotaWindowStart(window: AiQuotaWindow, date: Date): Date {
   if (window.unit === 'minute') {
     return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), Math.floor(date.getUTCMinutes() / window.size) * window.size));
@@ -130,29 +121,11 @@ export function getAiQuotaWindowStart(window: AiQuotaWindow, date: Date): Date {
 }
 
 /** Returns the reset timestamp for the fixed window that contains the supplied date. */
-/**
- * Runs get ai quota window reset.
- *
- * @param window - window value.
- *
- * @param date - date value.
- *
- * @returns The get ai quota window reset result.
- */
 export function getAiQuotaWindowReset(window: AiQuotaWindow, date: Date): Date {
   return new Date(getAiQuotaWindowStart(window, date).getTime() + durationMs(window));
 }
 
 /** Creates a stable quota bucket key for a fixed window. */
-/**
- * Runs create ai quota window key.
- *
- * @param window - window value.
- *
- * @param date - date value.
- *
- * @returns The create ai quota window key result.
- */
 export function createAiQuotaWindowKey(window: AiQuotaWindow, date: Date): string {
   return `${window.unit}:${window.size}:${getAiQuotaWindowStart(window, date).toISOString()}`;
 }

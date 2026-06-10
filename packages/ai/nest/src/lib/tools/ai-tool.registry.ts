@@ -3,47 +3,27 @@ import { AiToolDescriptor } from '@otwld/ts-ai';
 import { z } from 'zod';
 import { AiToolDefinition } from './ai-tool-definition';
 
-/**
- * Provides ai tool registry behavior.
- */
+/** Registry for tool definitions exposed to AI provider calls and clients. */
 @Injectable()
 export class AiToolRegistry {
   private readonly tools = new Map<string, AiToolDefinition>();
 
-  /**
-   * Runs register.
-   *
-   * @param definition - definition value.
-   */
+  /** Register or replace a tool definition by name. */
   register(definition: AiToolDefinition): void {
     this.tools.set(definition.name, definition);
   }
 
-  /**
-   * Runs get.
-   *
-   * @param name - name value.
-   *
-   * @returns The ai tool registry get result.
-   */
+  /** Return a registered tool definition by name. */
   get(name: string): AiToolDefinition | undefined {
     return this.tools.get(name);
   }
 
-  /**
-   * Runs list definitions.
-   *
-   * @returns The ai tool registry list definitions result.
-   */
+  /** List registered executable tool definitions. */
   listDefinitions(): AiToolDefinition[] {
     return Array.from(this.tools.values());
   }
 
-  /**
-   * Runs list descriptors.
-   *
-   * @returns The ai tool registry list descriptors result.
-   */
+  /** List client-safe tool descriptors with JSON-schema input shapes. */
   listDescriptors(): AiToolDescriptor[] {
     return Array.from(this.tools.values()).map((definition) => ({
       name: definition.name,

@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 
+/**
+ * Dashboard AI sandbox child routes.
+ */
 export const aiRoutes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'chat' },
   { path: 'chat', loadComponent: () => import('./chat').then((m) => m.AiChatPage), data: { breadcrumb: 'AI Chat' } },

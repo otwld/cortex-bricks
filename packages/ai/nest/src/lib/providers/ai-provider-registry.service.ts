@@ -5,9 +5,7 @@ import { AiModelAlias } from '@otwld/ts-ai';
 import { AI_MODULE_OPTIONS, NormalizedAiModuleOptions } from '../config/ai-module-options';
 import { AiException } from '../exceptions/ai.exception';
 
-/**
- * Provides ai provider registry service behavior.
- */
+/** Resolves configured model aliases to concrete AI SDK language models. */
 @Injectable()
 export class AiProviderRegistryService {
   private readonly openai = this.options.providers.openai
@@ -18,17 +16,13 @@ export class AiProviderRegistryService {
     : null;
 
   /**
-   * Creates a ai provider registry service instance.
+   * Create the AI provider registry.
    *
-   * @param options - options value.
+   * @param options - Normalized AI module options containing provider and model aliases.
    */
   constructor(@Inject(AI_MODULE_OPTIONS) private readonly options: NormalizedAiModuleOptions) {}
 
-  /**
-   * Runs list models.
-   *
-   * @returns The ai provider registry service list models result.
-   */
+  /** List public model aliases and their capabilities. */
   listModels(): AiModelAlias[] {
     return Object.entries(this.options.models).map(([alias, model]) => ({
       alias,
@@ -38,30 +32,14 @@ export class AiProviderRegistryService {
     }));
   }
 
-  /**
-   * Runs resolve model reference.
-   *
-   * @param alias - alias value.
-   *
-   * @returns The ai provider registry service resolve model reference result.
-   *
-   * @throws When the operation cannot be completed.
-   */
+  /** Resolve a public model alias to its provider-prefixed model reference. */
   resolveModelReference(alias = 'chat'): string {
     const model = this.options.models[alias];
     if (!model) throw AiException.modelNotAllowed(alias);
     return model.providerModel;
   }
 
-  /**
-   * Runs resolve language model.
-   *
-   * @param alias - alias value.
-   *
-   * @returns The ai provider registry service resolve language model result.
-   *
-   * @throws When the operation cannot be completed.
-   */
+  /** Resolve a public model alias to an AI SDK language model instance. */
   resolveLanguageModel(alias = 'chat'): LanguageModel {
     const reference = this.resolveModelReference(alias);
     const separatorIndex = reference.indexOf(':');

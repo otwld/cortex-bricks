@@ -3,7 +3,10 @@ import { z } from 'zod';
 const metadataSchema = z.record(z.unknown()).optional();
 
 /**
- * Describes ai request limits values.
+ * Validation limits applied to AI request payload schemas.
+ *
+ * These values protect server endpoints from unbounded prompt, message, tool,
+ * and output-token payloads before provider-specific adapters are invoked.
  */
 export interface AiRequestLimits {
   maxPromptLength: number;
@@ -13,6 +16,9 @@ export interface AiRequestLimits {
   maxToolSteps: number;
 }
 
+/**
+ * Conservative default limits used by the exported AI request schemas.
+ */
 export const DEFAULT_AI_REQUEST_LIMITS: AiRequestLimits = {
   maxPromptLength: 16_000,
   maxMessageContentLength: 16_000,
@@ -21,6 +27,9 @@ export const DEFAULT_AI_REQUEST_LIMITS: AiRequestLimits = {
   maxToolSteps: 5,
 };
 
+/**
+ * Zod schema that validates and defaults AI request limit configuration.
+ */
 export const aiRequestLimitsSchema = z.object({
   maxPromptLength: z.number().int().positive().default(DEFAULT_AI_REQUEST_LIMITS.maxPromptLength),
   maxMessageContentLength: z.number().int().positive().default(DEFAULT_AI_REQUEST_LIMITS.maxMessageContentLength),
@@ -30,11 +39,11 @@ export const aiRequestLimitsSchema = z.object({
 });
 
 /**
- * Runs normalize ai request limits.
+ * Normalizes partial AI request limits into a complete validated limit set.
  *
- * @param limits - limits value.
+ * @param limits - Overrides for the default request limits.
  *
- * @returns The normalize ai request limits result.
+ * @returns Complete request limits with defaults applied.
  */
 export function normalizeAiRequestLimits(limits: Partial<AiRequestLimits> = {}): AiRequestLimits {
   const parsed = aiRequestLimitsSchema.parse({ ...DEFAULT_AI_REQUEST_LIMITS, ...limits });
@@ -112,11 +121,11 @@ function createAiMessageSchema(limits: AiRequestLimits) {
 }
 
 /**
- * Runs create ai request schemas.
+ * Creates AI request schemas with caller-provided validation limits.
  *
- * @param limits - limits value.
+ * @param limits - Optional validation limits for the generated schemas.
  *
- * @returns The create ai request schemas result.
+ * @returns Zod schemas for message, chat, completion, and object requests.
  */
 export function createAiRequestSchemas(limits: Partial<AiRequestLimits> = {}) {
   const normalizedLimits = normalizeAiRequestLimits(limits);
@@ -143,9 +152,24 @@ export function createAiRequestSchemas(limits: Partial<AiRequestLimits> = {}) {
 
 const defaultSchemas = createAiRequestSchemas();
 
+/**
+ * Default schema for a single chat message payload.
+ */
 export const aiMessageSchema = defaultSchemas.aiMessageSchema;
+
+/**
+ * Default schema for chat-completion style request payloads.
+ */
 export const aiChatRequestSchema = defaultSchemas.aiChatRequestSchema;
+
+/**
+ * Default schema for single-prompt completion request payloads.
+ */
 export const aiCompletionRequestSchema = defaultSchemas.aiCompletionRequestSchema;
+
+/**
+ * Default schema for structured-object generation request payloads.
+ */
 export const aiObjectRequestSchema = defaultSchemas.aiObjectRequestSchema;
 
 /**

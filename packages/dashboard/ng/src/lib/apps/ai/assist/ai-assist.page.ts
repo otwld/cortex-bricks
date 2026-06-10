@@ -14,9 +14,7 @@ interface AssistActivity {
   detail: string;
 }
 
-/**
- * Provides ai assist page behavior.
- */
+/** Demo page for applying AI assist prompts to editable form fields. */
 @Component({
   selector: 'app-ai-assist-page',
   imports: [AiAssistDirective, ButtonModule, FormsModule, InputTextModule, SelectModule, TagModule, TextareaModule],
@@ -25,30 +23,80 @@ interface AssistActivity {
 export class AiAssistPage implements OnInit {
   private readonly modelsService = inject(AiModelsService);
 
+  /**
+   * Available AI model aliases loaded from the shared AI models service.
+   */
   readonly models = signal<AiModelAlias[]>([]);
+
+  /**
+   * Model alias currently selected for assist completions.
+   */
   readonly selectedModel = signal('fast');
+
+  /**
+   * Recent accepted and failed assist operations shown in the activity list.
+   */
   readonly activity = signal<AssistActivity[]>([]);
 
+  /**
+   * Customer name inserted into the support reply prompt.
+   */
   readonly customerName = signal('Maya Chen');
+
+  /**
+   * Customer message used as source context for the support reply prompt.
+   */
   readonly customerMessage = signal(
     'I tried the new upload flow this morning. It is faster, but I was not sure if the last file was still processing or already failed.',
   );
+
+  /**
+   * Draft support reply edited by the AI assist directive.
+   */
   readonly supportReply = signal('Thanks for flagging this. I checked the upload logs and can see where the progress state becomes unclear.');
 
+  /**
+   * Product name inserted into the product-description prompt.
+   */
   readonly productName = signal('Atlas Task Board');
+
+  /**
+   * Audience description used to keep generated product copy specific.
+   */
   readonly productAudience = signal('operations teams');
+
+  /**
+   * Draft product description edited by the AI assist directive.
+   */
   readonly productDescription = signal('A compact planning board for teams that coordinate daily work across support, logistics, and field tasks.');
 
+  /**
+   * Profile role used by the profile-bio rewrite prompt.
+   */
   readonly profileRole = signal('Customer Success Lead');
+
+  /**
+   * Desired profile tone used by the profile-bio rewrite prompt.
+   */
   readonly profileTone = signal('confident and approachable');
+
+  /**
+   * Draft profile biography edited by the AI assist directive.
+   */
   readonly profileBio = signal('I help customers turn complex workflows into simple operating habits.');
 
+  /**
+   * Select options for models that support completion requests.
+   */
   readonly modelOptions = computed(() =>
     this.models()
       .filter((model) => model.capabilities.includes('completion'))
       .map((model) => ({ label: model.label ?? model.alias, value: model.alias })),
   );
 
+  /**
+   * Prompt builder for rewriting the support reply while preserving customer context.
+   */
   readonly supportReplyPrompt: AiAssistPrompt = ({ value }) => ({
     prompt: [
       'Draft a concise customer support reply.',
@@ -60,6 +108,9 @@ export class AiAssistPage implements OnInit {
     system: 'You write precise, warm B2B support replies. Avoid promises that are not stated in the prompt.',
   });
 
+  /**
+   * Prompt builder for tightening product copy for an operational dashboard product.
+   */
   readonly productDescriptionPrompt: AiAssistPrompt = ({ value }) => ({
     prompt: [
       'Improve this product description for a dashboard product form.',
@@ -71,6 +122,9 @@ export class AiAssistPage implements OnInit {
     system: 'You write clear product copy for operational software.',
   });
 
+  /**
+   * Prompt builder for rewriting a full profile bio or the current text selection.
+   */
   readonly profileBioPrompt: AiAssistPrompt = ({ selectedText, value }) => ({
     prompt: [
       selectedText ? 'Rewrite the selected part of this profile bio.' : 'Rewrite this profile bio.',
@@ -86,7 +140,7 @@ export class AiAssistPage implements OnInit {
   });
 
   /**
-   * Runs ng on init.
+   * Loads available models and selects the first model that can perform completions.
    */
   async ngOnInit(): Promise<void> {
     const models = await this.modelsService.list();
@@ -97,11 +151,10 @@ export class AiAssistPage implements OnInit {
   }
 
   /**
-   * Runs record accepted.
+   * Records accepted assist output in the visible activity feed.
    *
-   * @param label - label value.
-   *
-   * @param event - event value.
+   * @param label - Demo section label associated with the assist action.
+   * @param event - Accepted assist event emitted by the directive.
    */
   recordAccepted(label: string, event: AiAssistAcceptedEvent): void {
     this.pushActivity({
@@ -112,11 +165,10 @@ export class AiAssistPage implements OnInit {
   }
 
   /**
-   * Runs record error.
+   * Records failed assist output in the visible activity feed.
    *
-   * @param label - label value.
-   *
-   * @param event - event value.
+   * @param label - Demo section label associated with the assist action.
+   * @param event - Error event emitted by the directive.
    */
   recordError(label: string, event: AiAssistErrorEvent): void {
     this.pushActivity({
@@ -127,7 +179,7 @@ export class AiAssistPage implements OnInit {
   }
 
   /**
-   * Runs reset demo.
+   * Restores all demo fields and clears the assist activity feed.
    */
   resetDemo(): void {
     this.customerName.set('Maya Chen');

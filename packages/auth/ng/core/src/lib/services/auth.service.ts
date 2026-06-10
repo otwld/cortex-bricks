@@ -6,6 +6,9 @@ import { catchError, finalize, tap, throwError } from 'rxjs';
 import { AUTH_CONFIG } from '../tokens/auth-config.token';
 import { AuthStateService } from './auth-state.service';
 
+/**
+ * Registration payload accepted by the Angular auth facade.
+ */
 export type RegisterDto = AuthRegisterInput;
 
 /** Client-side auth API facade for credential, provider, session, and verification flows. */

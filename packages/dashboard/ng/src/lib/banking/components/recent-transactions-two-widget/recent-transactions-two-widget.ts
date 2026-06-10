@@ -37,6 +37,9 @@ export interface BankingPaymentSendEvent {
   readonly recipient: BankingRecipient | null;
 }
 
+/**
+ * Union of events emitted by the send-money recent transactions widget.
+ */
 export type RecentTransactionsTwoWidgetEvent =
   | ({ readonly type: 'recipient' } & BankingRecipientSelectEvent)
   | ({ readonly type: 'amount' } & BankingAmountChangeEvent)
@@ -56,6 +59,9 @@ const DEFAULT_RECIPIENTS: readonly BankingRecipient[] = [
   { id: 'sarah-mctamish', name: 'Sarah McTamish', avatarUrl: '/demo/images/avatar/circle/avatar-f-4.png' },
 ];
 
+/**
+ * Banking widget for selecting a recent recipient and sending an amount.
+ */
 @Component({
   standalone: true,
   selector: 'app-recent-transactions-two-widget',

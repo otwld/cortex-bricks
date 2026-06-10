@@ -7,6 +7,10 @@ const shouldTransform = (id: string): boolean => {
   return true;
 };
 
+/**
+ * Vitest plugin that transpiles NestJS TypeScript files with decorator
+ * metadata enabled.
+ */
 export function nestDecoratorMetadataPlugin(): Plugin {
   return {
     name: 'nest-decorator-metadata',

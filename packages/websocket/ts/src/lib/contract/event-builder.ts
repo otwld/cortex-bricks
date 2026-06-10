@@ -69,13 +69,6 @@ interface ClientEventDefInit<TPattern extends string> {
  *
  * @param pattern Wire-level pattern string.
  */
-/**
- * Runs client event.
- *
- * @param pattern - pattern value.
- *
- * @returns The client event result.
- */
 export function clientEvent<const TPattern extends string>(
   pattern: TPattern,
 ): ClientEventDefInit<TPattern> {
@@ -139,13 +132,6 @@ interface ServerEventDefInit<TPattern extends string> {
  * Build a Server to Client event definition.
  *
  * @param pattern Wire-level pattern string.
- */
-/**
- * Runs server event.
- *
- * @param pattern - pattern value.
- *
- * @returns The server event result.
  */
 export function serverEvent<const TPattern extends string>(
   pattern: TPattern,

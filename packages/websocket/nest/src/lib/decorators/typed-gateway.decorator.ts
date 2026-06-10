@@ -35,15 +35,6 @@ export interface TypedGatewayOptions {
  * @param contract Contract this gateway serves.
  * @param options Per-gateway options.
  */
-/**
- * Runs typed gateway.
- *
- * @param contract - contract value.
- *
- * @param options - options value.
- *
- * @returns The typed gateway result.
- */
 export function TypedGateway<TContract extends Contract>(
   contract: TContract,
   options: TypedGatewayOptions = {},
@@ -67,13 +58,6 @@ export function TypedGateway<TContract extends Contract>(
  * Read the contract attached by `@TypedGateway`.
  *
  * @param target Gateway class or instance.
- */
-/**
- * Runs get typed gateway contract.
- *
- * @param target - target value.
- *
- * @returns The get typed gateway contract result.
  */
 export function getTypedGatewayContract(target: Type<unknown> | object): Contract | undefined {
   const ctor = typeof target === 'function' ? target : target.constructor;

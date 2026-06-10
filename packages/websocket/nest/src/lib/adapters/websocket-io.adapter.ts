@@ -4,16 +4,13 @@ import type { ServerOptions } from 'socket.io';
 import type { ResolvedWebsocketModuleOptions } from '../config/websocket-module-options';
 import { WS_RESOLVED_OPTIONS } from '../tokens';
 
-/**
- * Provides websocket io adapter behavior.
- */
+/** Socket.IO adapter that applies resolved websocket module defaults. */
 export class WebsocketIoAdapter extends IoAdapter {
   /**
-   * Creates a websocket io adapter instance.
+   * Create a Socket.IO adapter for a Nest application context.
    *
-   * @param appOrHttpServer - app or http server value.
-   *
-   * @param resolved - resolved value.
+   * @param appOrHttpServer - Nest application context or HTTP server accepted by `IoAdapter`.
+   * @param resolved - Resolved websocket module options.
    */
   public constructor(
     appOrHttpServer: INestApplicationContext,
@@ -22,15 +19,7 @@ export class WebsocketIoAdapter extends IoAdapter {
     super(appOrHttpServer);
   }
 
-  /**
-   * Runs create ioserver.
-   *
-   * @param port - port value.
-   *
-   * @param options - options value.
-   *
-   * @returns The websocket io adapter create ioserver result.
-   */
+  /** Create a Socket.IO server with module-level CORS defaults when none are supplied. */
   public override createIOServer(port: number, options?: Partial<ServerOptions>): unknown {
     const merged: Partial<ServerOptions> = {
       ...(options ?? {}),
@@ -48,13 +37,7 @@ export class WebsocketIoAdapter extends IoAdapter {
   }
 }
 
-/**
- * Runs create websocket io adapter.
- *
- * @param app - app value.
- *
- * @returns The create websocket io adapter result.
- */
+/** Create the websocket Socket.IO adapter from a Nest application context. */
 export function createWebsocketIoAdapter(app: INestApplicationContext): WebsocketIoAdapter {
   return new WebsocketIoAdapter(app, app.get(WS_RESOLVED_OPTIONS, { strict: false }));
 }

@@ -18,20 +18,10 @@ export const DEFAULT_TUS_MODULE_OPTIONS: TusModuleOptions = {
   allowOrigin: '*',
 };
 
-/**
- * Provides tus module behavior.
- */
-@Module({})
 /** Nest module exposing TUS resumable upload endpoints and services. */
+@Module({})
 export class TusModule {
   /** Configure TUS endpoints and persistence providers. */
-  /**
-   * Runs for root.
-   *
-   * @param options - options value.
-   *
-   * @returns The tus module for root result.
-   */
   static forRoot(options: Partial<TusModuleOptions> = {}): DynamicModule {
     const resolved = { ...DEFAULT_TUS_MODULE_OPTIONS, ...options };
     return {

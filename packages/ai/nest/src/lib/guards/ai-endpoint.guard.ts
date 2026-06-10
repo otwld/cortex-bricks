@@ -4,30 +4,21 @@ import { isObservable, lastValueFrom } from 'rxjs';
 import { AI_ENDPOINT_OPTIONS, NormalizedAiEndpointOptions } from '../config/ai-module-options';
 import { AiException } from '../exceptions/ai.exception';
 
-/**
- * Provides ai endpoint guard behavior.
- */
+/** Composes configured Nest guards around AI controller endpoints. */
 @Injectable()
 export class AiEndpointGuard implements CanActivate {
   /**
-   * Creates a ai endpoint guard instance.
+   * Create the AI endpoint guard.
    *
-   * @param endpoints - endpoints value.
-   *
-   * @param moduleRef - module ref value.
+   * @param endpoints - Endpoint guard configuration from the AI module.
+   * @param moduleRef - Nest module reference used to resolve configured guards.
    */
   constructor(
     @Inject(AI_ENDPOINT_OPTIONS) private readonly endpoints: Pick<NormalizedAiEndpointOptions, 'guards'>,
     private readonly moduleRef: ModuleRef,
   ) {}
 
-  /**
-   * Runs can activate.
-   *
-   * @param context - context value.
-   *
-   * @returns The ai endpoint guard can activate result.
-   */
+  /** Execute configured endpoint guards in order for the current request. */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     for (const guardType of this.endpoints.guards ?? []) {
       const guard = this.resolveGuard(guardType.name, guardType);

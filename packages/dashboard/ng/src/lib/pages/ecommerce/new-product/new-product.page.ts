@@ -47,12 +47,34 @@ interface ColorOption {
     templateUrl: './new-product.page.html',
 })
 export class NewProductPage {
+    /**
+     * Popup menu used for selecting additional product colors.
+     */
     @ViewChild('colorMenu') colorMenu!: Menu;
+
+    /**
+     * Hidden native input used to upload the cover product image.
+     */
     @ViewChild('coverInput') coverInput!: ElementRef<HTMLInputElement>;
+
+    /**
+     * Hidden native input used to upload the first additional product image.
+     */
     @ViewChild('image1Input') image1Input!: ElementRef<HTMLInputElement>;
+
+    /**
+     * Hidden native input used to upload the second additional product image.
+     */
     @ViewChild('image2Input') image2Input!: ElementRef<HTMLInputElement>;
+
+    /**
+     * Hidden native input used to upload the third additional product image.
+     */
     @ViewChild('image3Input') image3Input!: ElementRef<HTMLInputElement>;
 
+    /**
+     * Draft product fields bound to the new-product form.
+     */
     product: Product = {
         name: '',
         code: '158692',
@@ -64,6 +86,9 @@ export class NewProductPage {
         cargoCompany: null
     };
 
+    /**
+     * Product category options shown in the category selector.
+     */
     categories: SelectOption[] = [
         { label: 'Jackets', value: 'jackets' },
         { label: 'Coats', value: 'coats' },
@@ -71,6 +96,9 @@ export class NewProductPage {
         { label: 'Suits', value: 'suits' }
     ];
 
+    /**
+     * Cargo company options shown in the shipping multiselect.
+     */
     cargoCompanies: SelectOption[] = [
         { label: 'FedEx', value: 'fedex' },
         { label: 'DHL', value: 'dhl' },
@@ -78,13 +106,34 @@ export class NewProductPage {
         { label: 'USPS', value: 'usps' }
     ];
 
+    /**
+     * Size chips available for the product variant selector.
+     */
     sizes: Size[] = [{ label: 'XS' }, { label: 'S' }, { label: 'M' }, { label: 'L' }, { label: 'XL' }, { label: 'XXL' }];
 
+    /**
+     * Size labels currently selected for the product.
+     */
     selectedSizes = signal<string[]>([]);
+
+    /**
+     * Color values currently selected for the product.
+     */
     selectedColors = signal<string[]>(['blue', 'red']);
+
+    /**
+     * Uploaded cover image data URL shown in the main image preview.
+     */
     coverImage = signal<string | null>(null);
+
+    /**
+     * Uploaded additional image data URLs shown in the three secondary slots.
+     */
     additionalImages = signal<(string | null)[]>([null, null, null]);
 
+    /**
+     * Available color swatches and utility classes for product colors.
+     */
     colorOptions: ColorOption[] = [
         { name: 'Red', value: 'red', class: 'bg-red-500' },
         { name: 'Blue', value: 'blue', class: 'bg-blue-500' },
@@ -98,6 +147,9 @@ export class NewProductPage {
         { name: 'White', value: 'white', class: 'bg-white border border-gray-300' }
     ];
 
+    /**
+     * Color menu items excluding colors that are already selected.
+     */
     menuItems = computed(() =>
         this.colorOptions
             .filter((color) => !this.selectedColors().includes(color.value))
@@ -108,9 +160,9 @@ export class NewProductPage {
     );
 
     /**
-     * Runs trigger file upload.
+     * Opens the hidden upload input for the requested image slot.
      *
-     * @param type - type value.
+     * @param type - Image slot identifier to open.
      */
     triggerFileUpload(type: string) {
         switch (type) {
@@ -130,9 +182,9 @@ export class NewProductPage {
     }
 
     /**
-     * Runs handle cover upload.
+     * Reads an uploaded image file into the cover image preview.
      *
-     * @param event - event value.
+     * @param event - Native change event from the cover image input.
      */
     handleCoverUpload(event: Event) {
         const input = event.target as HTMLInputElement;
@@ -148,11 +200,10 @@ export class NewProductPage {
     }
 
     /**
-     * Runs handle image upload.
+     * Reads an uploaded image file into one secondary image preview slot.
      *
-     * @param event - event value.
-     *
-     * @param index - index value.
+     * @param event - Native change event from the image input.
+     * @param index - Secondary image slot index to update.
      */
     handleImageUpload(event: Event, index: number) {
         const input = event.target as HTMLInputElement;
@@ -170,9 +221,9 @@ export class NewProductPage {
     }
 
     /**
-     * Runs toggle size.
+     * Toggles one size label in the selected size list.
      *
-     * @param sizeLabel - size label value.
+     * @param sizeLabel - Size label to add or remove.
      */
     toggleSize(sizeLabel: string) {
         const sizes = [...this.selectedSizes()];
@@ -186,9 +237,9 @@ export class NewProductPage {
     }
 
     /**
-     * Runs add color.
+     * Adds a color value when it is not already selected.
      *
-     * @param colorValue - color value value.
+     * @param colorValue - Color value to add.
      */
     addColor(colorValue: string) {
         if (!this.selectedColors().includes(colorValue)) {
@@ -197,29 +248,28 @@ export class NewProductPage {
     }
 
     /**
-     * Runs remove color.
+     * Removes a color value from the selected color list.
      *
-     * @param colorValue - color value value.
+     * @param colorValue - Color value to remove.
      */
     removeColor(colorValue: string) {
         this.selectedColors.set(this.selectedColors().filter((c) => c !== colorValue));
     }
 
     /**
-     * Runs show color menu.
+     * Opens the color picker popup menu.
      *
-     * @param event - event value.
+     * @param event - Browser event used to anchor the popup menu.
      */
     showColorMenu(event: Event) {
         this.colorMenu.toggle(event);
     }
 
     /**
-     * Runs get color class.
+     * Resolves the swatch utility classes for one color value.
      *
-     * @param colorValue - color value value.
-     *
-     * @returns The new product page get color class result.
+     * @param colorValue - Color value to look up.
+     * @returns CSS utility classes for the color swatch.
      */
     getColorClass(colorValue: string): string {
         const color = this.colorOptions.find((c) => c.value === colorValue);
@@ -227,9 +277,9 @@ export class NewProductPage {
     }
 
     /**
-     * Runs remove cover image.
+     * Clears the cover image preview without opening the upload input.
      *
-     * @param event - event value.
+     * @param event - Click event from the cover image remove button.
      */
     removeCoverImage(event: Event) {
         event.stopPropagation();
@@ -237,11 +287,10 @@ export class NewProductPage {
     }
 
     /**
-     * Runs remove additional image.
+     * Clears one secondary image preview without opening the upload input.
      *
-     * @param event - event value.
-     *
-     * @param index - index value.
+     * @param event - Click event from the image remove button.
+     * @param index - Secondary image slot index to clear.
      */
     removeAdditionalImage(event: Event, index: number) {
         event.stopPropagation();
@@ -251,9 +300,7 @@ export class NewProductPage {
     }
 
     /**
-     * Runs add product.
+     * Handles the product form submit action for host integration.
      */
-    addProduct() {
-        // Implementation for adding product
-    }
+    addProduct() {}
 }

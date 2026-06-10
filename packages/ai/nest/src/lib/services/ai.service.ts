@@ -28,21 +28,16 @@ type AiObjectResult = GenerateObjectResult<unknown>;
 type AiUiMessage = Omit<UIMessage<Record<string, unknown>>, 'id'>;
 type AiUiMessagePart = TextUIPart | FileUIPart;
 
-/**
- * Provides ai service behavior.
- */
+/** Orchestrates AI SDK calls with configured models, tools, and object schemas. */
 @Injectable()
 export class AiService {
   /**
-   * Creates a ai service instance.
+   * Create the AI orchestration service.
    *
-   * @param providers - providers value.
-   *
-   * @param schemas - schemas value.
-   *
-   * @param tools - tools value.
-   *
-   * @param endpoints - endpoints value.
+   * @param providers - Registry that resolves model aliases to provider models.
+   * @param schemas - Registry of schemas available for object generation.
+   * @param tools - Registry of executable tool definitions.
+   * @param endpoints - Endpoint limits used by provider calls.
    */
   constructor(
     private readonly providers: AiProviderRegistryService,
@@ -51,31 +46,17 @@ export class AiService {
     @Inject(AI_ENDPOINT_OPTIONS) private readonly endpoints: Pick<NormalizedAiEndpointOptions, 'limits'>,
   ) {}
 
-  /**
-   * Runs list models.
-   *
-   * @returns The ai service list models result.
-   */
+  /** List model aliases available to client endpoints. */
   listModels() {
     return this.providers.listModels();
   }
 
-  /**
-   * Runs list tools.
-   *
-   * @returns The ai service list tools result.
-   */
+  /** List client-safe AI tool descriptors. */
   listTools() {
     return this.tools.listDescriptors();
   }
 
-  /**
-   * Runs stream chat.
-   *
-   * @param request - request value.
-   *
-   * @returns The ai service stream chat result.
-   */
+  /** Start a streamed chat response from UI messages. */
   async streamChat(request: AiChatRequest): Promise<AiTextStreamResult> {
     const tools = this.createTools();
     const stopWhen = this.createToolStopCondition(tools);
@@ -94,13 +75,7 @@ export class AiService {
     });
   }
 
-  /**
-   * Runs stream completion.
-   *
-   * @param request - request value.
-   *
-   * @returns The ai service stream completion result.
-   */
+  /** Start a streamed text completion response. */
   streamCompletion(request: AiCompletionRequest): AiTextStreamResult {
     const tools = this.createTools();
     const stopWhen = this.createToolStopCondition(tools);
@@ -116,13 +91,7 @@ export class AiService {
     });
   }
 
-  /**
-   * Runs complete.
-   *
-   * @param request - request value.
-   *
-   * @returns The ai service complete result.
-   */
+  /** Generate a non-streaming text completion. */
   async complete(request: AiCompletionRequest): Promise<AiTextResult> {
     const tools = this.createTools();
     const stopWhen = this.createToolStopCondition(tools);
@@ -138,15 +107,7 @@ export class AiService {
     });
   }
 
-  /**
-   * Runs generate object.
-   *
-   * @param schemaKey - schema key value.
-   *
-   * @param request - request value.
-   *
-   * @returns The ai service generate object result.
-   */
+  /** Generate a structured object using a registered Zod schema. */
   async generateObject(schemaKey: string, request: AiObjectRequest): Promise<AiObjectResult> {
     const schema = this.toAiSchema(this.schemas.get(schemaKey));
 

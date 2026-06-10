@@ -58,13 +58,6 @@ function createAsyncOptionsClassProvider(asyncOptions: UsersModuleAsyncOptions):
 })
 export class UsersModule {
   /** Configures the reusable users module with static options. */
-  /**
-   * Runs for root.
-   *
-   * @param options - options value.
-   *
-   * @returns The users module for root result.
-   */
   static forRoot(options: UsersModuleOptions = {}): DynamicModule {
     return {
       module: UsersModule,
@@ -73,13 +66,6 @@ export class UsersModule {
   }
 
   /** Configures the reusable users module with async options. */
-  /**
-   * Runs for root async.
-   *
-   * @param asyncOptions - async options value.
-   *
-   * @returns The users module for root async result.
-   */
   static forRootAsync(asyncOptions: UsersModuleAsyncOptions): DynamicModule {
     return {
       module: UsersModule,

@@ -28,173 +28,73 @@ export class UsersService {
     return this.config.apiUrl.replace(/\/$/, '');
   }
 
-  /** Lists users. */
-  /**
-   * Runs list.
-   *
-   * @returns The users service list result.
-   */
+  /** Lists users visible to the current users API context. */
   list(): Observable<ListUsersResponse> {
     return this.http.get<ListUsersResponse>(this.base);
   }
 
-  /** Loads a user by id. */
-  /**
-   * Runs get.
-   *
-   * @param id - id value.
-   *
-   * @returns The users service get result.
-   */
+  /** Loads one user profile by id. */
   get(id: string): Observable<UserProfileResponse> {
     return this.http.get<UserProfileResponse>(`${this.base}/${encodeURIComponent(id)}`);
   }
 
-  /** Creates an invited user. */
-  /**
-   * Runs create.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service create result.
-   */
+  /** Creates an invited user from the wizard request payload. */
   create(dto: CreateUserRequest): Observable<UserProfileResponse> {
     return this.http.post<UserProfileResponse>(this.base, dto);
   }
 
-  /** Updates a user. */
-  /**
-   * Runs update.
-   *
-   * @param id - id value.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service update result.
-   */
+  /** Updates one user profile by id. */
   update(id: string, dto: UpdateUserRequest): Observable<UserProfileResponse> {
     return this.http.patch<UserProfileResponse>(`${this.base}/${encodeURIComponent(id)}`, dto);
   }
 
-  /** Soft deletes a user. */
-  /**
-   * Runs delete.
-   *
-   * @param id - id value.
-   *
-   * @returns The users service delete result.
-   */
+  /** Soft deletes one user by id. */
   delete(id: string): Observable<UserProfileResponse> {
     return this.http.delete<UserProfileResponse>(`${this.base}/${encodeURIComponent(id)}`);
   }
 
-  /** Resends a user invitation. */
-  /**
-   * Runs resend invitation.
-   *
-   * @param id - id value.
-   *
-   * @returns The users service resend invitation result.
-   */
+  /** Resends an invitation for one user by id. */
   resendInvitation(id: string): Observable<UserProfileResponse> {
     return this.http.post<UserProfileResponse>(`${this.base}/${encodeURIComponent(id)}/resend-invitation`, {});
   }
 
-  /** Loads invitation details. */
-  /**
-   * Runs get invitation.
-   *
-   * @param token - token value.
-   *
-   * @returns The users service get invitation result.
-   */
+  /** Loads invitation details for an invitation token. */
   getInvitation(token: string): Observable<UserInvitationResponse> {
     return this.http.get<UserInvitationResponse>(`${this.base}/invitations/${encodeURIComponent(token)}`);
   }
 
-  /** Accepts an invitation with local credentials. */
-  /**
-   * Runs accept credentials.
-   *
-   * @param token - token value.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service accept credentials result.
-   */
+  /** Accepts an invitation by creating local username/password credentials. */
   acceptCredentials(token: string, dto: AcceptInvitationCredentialsRequest): Observable<AcceptInvitationResponse> {
     return this.http.post<AcceptInvitationResponse>(`${this.base}/invitations/${encodeURIComponent(token)}/credentials`, dto);
   }
 
   /** Starts social invitation acceptance in the current browser tab. */
-  /**
-   * Runs start oauth.
-   *
-   * @param token - token value.
-   *
-   * @param provider - provider value.
-   */
   startOAuth(token: string, provider: UserOAuthProvider): void {
     window.open(`${this.base}/invitations/${encodeURIComponent(token)}/oauth/${provider}`, '_self');
   }
 
-  /** Completes social invitation acceptance after OAuth login. */
-  /**
-   * Runs complete oauth.
-   *
-   * @param token - token value.
-   *
-   * @returns The users service complete oauth result.
-   */
+  /** Completes social invitation acceptance after OAuth login using an invitation token. */
   completeOAuth(token: string): Observable<AcceptInvitationResponse> {
     return this.http.post<AcceptInvitationResponse>(`${this.base}/invitations/${encodeURIComponent(token)}/oauth/complete`, {});
   }
 
   /** Completes social invitation acceptance with a single-use OAuth state. */
-  /**
-   * Runs complete oauth state.
-   *
-   * @param state - state value.
-   *
-   * @returns The users service complete oauth state result.
-   */
   completeOAuthState(state: string): Observable<AcceptInvitationResponse> {
     const body: CompleteInvitationOAuthRequest = { state };
     return this.http.post<AcceptInvitationResponse>(`${this.base}/invitations/oauth/complete`, body);
   }
 
   /** Changes the current user's password. */
-  /**
-   * Runs change password.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service change password result.
-   */
   changePassword(dto: ChangeUserPasswordRequest): Observable<PasswordFlowResponse> {
     return this.http.post<PasswordFlowResponse>(`${this.base}/me/password`, dto);
   }
 
-  /** Requests a password reset. */
-  /**
-   * Runs request password reset.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service request password reset result.
-   */
+  /** Requests a password reset for the submitted account identifier. */
   requestPasswordReset(dto: RequestUserPasswordResetRequest): Observable<PasswordFlowResponse> {
     return this.http.post<PasswordFlowResponse>(`${this.base}/password-reset/request`, dto);
   }
 
-  /** Completes a password reset. */
-  /**
-   * Runs reset password.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service reset password result.
-   */
+  /** Completes a password reset using the supplied reset token and new password. */
   resetPassword(dto: ResetUserPasswordRequest): Observable<PasswordFlowResponse> {
     return this.http.post<PasswordFlowResponse>(`${this.base}/password-reset/complete`, dto);
   }

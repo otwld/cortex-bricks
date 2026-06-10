@@ -11,6 +11,13 @@ const DEFAULT_MIN_POOL_SIZE = 1;
 const DEFAULT_SERVER_SELECTION_TIMEOUT_MS = 5_000;
 const DEFAULT_SOCKET_TIMEOUT_MS = 45_000;
 
+/**
+ * Builds the MongoDB connection URI used by `NestMongooseModule`.
+ *
+ * A non-empty explicit `uri` wins. Otherwise the URI is assembled from component
+ * options and throws when required pieces such as hosts, `dbName`, or a matching
+ * password for `user` are missing.
+ */
 export function buildNestMongooseUri(
   options: NestMongooseConnectionOptions,
 ): string {
@@ -69,6 +76,13 @@ export function buildNestMongooseUri(
   )}${queryString ? `?${queryString}` : ''}`;
 }
 
+/**
+ * Converts Cortex Mongoose options into NestJS Mongoose factory options.
+ *
+ * The returned object applies conservative connection defaults, maps Cortex
+ * option names to Mongoose option names, and wraps the connection factory so
+ * connection lifecycle logging can be enabled or disabled per module.
+ */
 export function createNestMongooseModuleOptions(
   options: NestMongooseConnectionOptions,
 ): MongooseModuleFactoryOptions {

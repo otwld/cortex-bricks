@@ -1,5 +1,8 @@
 import type { Plugin } from 'vite';
 
+/**
+ * Runtime hooks and naming options for the Storybook source-loader plugin.
+ */
 export interface StorybookSourceLoaderPluginOptions {
   importPrefix?: string;
   pluginName?: string;

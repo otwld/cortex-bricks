@@ -31,20 +31,31 @@ export class BlockViewer {
     /** Whether this block should show a new badge. */
     @Input({ transform: booleanAttribute }) new = false;
 
+    /**
+     * Block view enum exposed for template comparisons.
+     */
     BlockView = BlockView;
 
+    /**
+     * Currently active block viewer tab.
+     */
     blockView = signal<BlockView>(BlockView.PREVIEW);
 
+    /**
+     * Whether code is currently being copied to the clipboard.
+     */
     codeCopyLoading = signal(false);
 
+    /**
+     * Whether the copy confirmation state should be shown.
+     */
     codeCopied = signal(false);
 
     /**
-     * Runs activate view.
+     * Switches between preview and code views.
      *
-     * @param event - event value.
-     *
-     * @param blockView - block view value.
+     * @param event - Click event from the tab control.
+     * @param blockView - Block view to activate.
      */
     activateView(event: Event, blockView: BlockView) {
         this.blockView.set(blockView);
@@ -52,9 +63,9 @@ export class BlockViewer {
     }
 
     /**
-     * Runs copy code.
+     * Copies the block code to the clipboard and shows a transient confirmation.
      *
-     * @param event - event value.
+     * @param event - Click event from the copy action.
      */
     async copyCode(event: Event) {
         this.codeCopyLoading.set(true);

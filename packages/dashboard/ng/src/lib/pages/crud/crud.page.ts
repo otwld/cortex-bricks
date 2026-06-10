@@ -89,10 +89,11 @@ export class CrudPage implements OnInit {
   /** Export mappings for the table. */
   exportColumns: ExportColumn[] = [];
 
+  /** PrimeNG table instance used for CSV export. */
   @ViewChild('dt') dt!: Table;
 
   /**
-   * Runs ng on init.
+   * Loads product data and initializes table status/export metadata.
    */
   ngOnInit(): void {
     this.productService.getProducts().then((data) => this.products.set(data));

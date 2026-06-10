@@ -21,14 +21,44 @@ interface Country {
     templateUrl: './user-create.page.html',
 })
 export class UserCreatePage {
+    /**
+     * Nickname value entered for the new user profile.
+     */
     nickname = '';
+
+    /**
+     * Biography text entered for the new user profile.
+     */
     bio = '';
+
+    /**
+     * Email address entered for the new user.
+     */
     email = '';
+
+    /**
+     * City value entered for the new user's location.
+     */
     city = '';
+
+    /**
+     * State or region value entered for the new user's location.
+     */
     state = '';
+
+    /**
+     * Website URL entered for the new user profile.
+     */
     website = '';
+
+    /**
+     * Country selected for the new user's location.
+     */
     selectedCountry: Country | null = null;
 
+    /**
+     * Country options shown in the user profile form.
+     */
     countries: Country[] = [
         { name: 'Australia', code: 'AU' },
         { name: 'Brazil', code: 'BR' },

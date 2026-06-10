@@ -7,15 +7,18 @@ import {
   Renderer2,
 } from '@angular/core';
 
+/**
+ * Maps element visibility to host opacity with an intersection observer.
+ */
 @Directive({
   selector: '[kitScrollOpacity]',
   standalone: true,
 })
-/** Maps element visibility to host opacity with an intersection observer. */
 export class ScrollOpacityDirective implements OnInit, OnDestroy {
-  // Minimum opacity value
+  /** Minimum opacity applied when the element is not visible. */
   public readonly minOpacity = input(0);
-  // Maximum opacity value
+
+  /** Maximum opacity applied when the element is fully visible. */
   public readonly maxOpacity = input(1.0);
 
   private observer: IntersectionObserver | undefined;

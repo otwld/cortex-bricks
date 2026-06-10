@@ -1,9 +1,24 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
+/**
+ * Layout mode used by `LoaderComponent`.
+ */
 export type LoaderMode = 'inline' | 'block' | 'overlay' | 'fullscreen' | 'button';
+
+/**
+ * Spinner size used by `LoaderComponent`.
+ */
 export type LoaderSize = 'sm' | 'md' | 'lg';
+
+/**
+ * Position of optional loader text relative to the spinner.
+ */
 export type LoaderTextPosition = 'right' | 'bottom';
 
+/**
+ * Accessible loading indicator for inline, block, overlay, fullscreen, and
+ * button contexts.
+ */
 @Component({
   selector: 'kit-loader',
   standalone: true,
@@ -114,13 +129,28 @@ export type LoaderTextPosition = 'right' | 'bottom';
   },
 })
 export class LoaderComponent {
+  /** Loader layout mode. */
   readonly mode = input<LoaderMode>('inline');
+
+  /** Optional visible loading text. */
   readonly text = input<string | null>(null);
+
+  /** Spinner size. */
   readonly size = input<LoaderSize>('md');
+
+  /** Position of optional visible loading text. */
   readonly textPosition = input<LoaderTextPosition>('bottom');
+
+  /** Whether overlay and fullscreen modes render a backdrop. */
   readonly showBackdrop = input(true);
+
+  /** Whether the backdrop should be transparent. */
   readonly transparent = input(false);
+
+  /** Backdrop opacity for overlay and fullscreen modes. */
   readonly backdropOpacity = input(0.4);
+
+  /** Optional accessible label; falls back to visible text or "Loading". */
   readonly ariaLabel = input<string | null>(null);
 
   protected readonly hostClass = computed(() =>

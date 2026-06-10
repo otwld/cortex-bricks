@@ -4,11 +4,10 @@ import { DARK_MODE_CONFIG, DEFAULT_DARK_MODE_CONFIG } from './dark-mode.token';
 import { DarkModeConfig } from './dark-mode.types';
 
 /**
- * Runs provide dark mode.
+ * Registers dark-mode configuration and optional auto-sync initialization.
  *
- * @param config - config value.
- *
- * @returns The provide dark mode result.
+ * @param config - Partial dark-mode configuration merged with defaults.
+ * @returns Environment providers for dark-mode services.
  */
 export function provideDarkMode(config: DarkModeConfig = {}): EnvironmentProviders {
   const resolvedConfig = { ...DEFAULT_DARK_MODE_CONFIG, ...config };

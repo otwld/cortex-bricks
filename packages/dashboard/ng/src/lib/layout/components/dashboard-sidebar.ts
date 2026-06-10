@@ -8,6 +8,9 @@ import { DashboardLayoutService } from '@otwld/ng-dashboard/core';
 
 const BREAKPOINT = 992;
 
+/**
+ * Responsive dashboard sidebar that owns overlay, hover, and route state.
+ */
 @Component({
   selector: 'dashboard-sidebar',
   imports: [DashboardMenu, RouterModule],
@@ -31,12 +34,25 @@ export class DashboardSidebar implements OnDestroy {
   private readonly window = inject(WA_WINDOW);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+
+  /**
+   * Shared layout service used to read and mutate sidebar state.
+   */
   layoutService = inject(DashboardLayoutService);
 
+  /**
+   * Router used for route-change synchronization and active menu paths.
+   */
   router = inject(Router);
 
+  /**
+   * Host element reference used to detect outside clicks.
+   */
   el = inject(ElementRef);
 
+  /**
+   * Scrollable menu container element used for scroll offsets and active-item observation.
+   */
   readonly menuContainer = viewChild.required<ElementRef>('menuContainer');
 
   private timeout: ReturnType<typeof setTimeout> | null = null;
@@ -47,10 +63,19 @@ export class DashboardSidebar implements OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  /**
+   * Whether the sidebar is using drawer menu mode.
+   */
   isDrawer = computed(() => this.layoutService.layoutConfig().menuMode === 'drawer');
 
+  /**
+   * Whether the sidebar is using reveal menu mode.
+   */
   isReveal = computed(() => this.layoutService.layoutConfig().menuMode === 'reveal');
 
+  /**
+   * Whether the sidebar is pinned open by the user.
+   */
   isAnchored = computed(() => this.layoutService.layoutState().anchored);
 
   constructor() {
@@ -191,6 +216,9 @@ export class DashboardSidebar implements OnDestroy {
     );
   }
 
+  /**
+   * Expands drawer or reveal sidebars on hover when the sidebar is not anchored.
+   */
   onMouseEnter() {
     if (!this.isAnchored() && (this.isDrawer() || this.isReveal())) {
       if (this.timeout) {
@@ -204,6 +232,9 @@ export class DashboardSidebar implements OnDestroy {
     }
   }
 
+  /**
+   * Collapses an unanchored sidebar shortly after the pointer leaves it.
+   */
   onMouseLeave() {
     if (!this.isAnchored() && !this.timeout) {
       this.timeout = setTimeout(() => {
@@ -215,6 +246,9 @@ export class DashboardSidebar implements OnDestroy {
     }
   }
 
+  /**
+   * Toggles whether the sidebar remains pinned open.
+   */
   onAnchorToggle() {
     this.layoutService.layoutState.update((state) => ({
       ...state,
@@ -222,6 +256,9 @@ export class DashboardSidebar implements OnDestroy {
     }));
   }
 
+  /**
+   * Tracks menu scroll offsets and closes desktop overlay submenus when scrolling.
+   */
   onMenuScroll() {
     const menuContainer = this.menuContainer();
     if (menuContainer?.nativeElement) {

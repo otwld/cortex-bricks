@@ -23,6 +23,9 @@ export interface FeatureFlagsApi {
   getConditionMeta(scope: FeatureScope): Observable<ResolvedConditionMetaMap>;
 }
 
+/**
+ * Injection token for the browser-side feature flags API adapter.
+ */
 export const FEATURE_FLAGS_API_TOKEN = new InjectionToken<FeatureFlagsApi>('FEATURE_FLAGS_API_TOKEN');
 
 /**

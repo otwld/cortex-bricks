@@ -61,42 +61,22 @@ interface SelectedUser {
     templateUrl: './chatsidebar.html',
 })
 export class ChatSidebar {
-    /**
-     * Runs show contact info.
-     */
+    /** Whether the contact details pane is visible. */
     @Input() showContactInfo = false;
-    /**
-     * Runs show user profile.
-     */
+    /** Whether the selected user's profile pane is visible. */
     @Input() showUserProfile = false;
-    /**
-     * Runs active chat.
-     */
+    /** Chat room currently selected in the chat app. */
     @Input() activeChat: ChatRoom | null = null;
-    /**
-     * Runs selected user.
-     */
+    /** User currently selected in the sidebar. */
     @Input() selectedUser: SelectedUser | null = null;
-    /**
-     * Runs open user profile event.
-     */
+    /** Emits when the profile pane should open for a user id. */
     @Output() openUserProfileEvent = new EventEmitter<number>();
-    /**
-     * Runs close user profile event.
-     */
+    /** Emits when the profile pane should close. */
     @Output() closeUserProfileEvent = new EventEmitter<void>();
-    /**
-     * Runs toggle contact info event.
-     */
+    /** Emits when the contact details pane should toggle. */
     @Output() toggleContactInfoEvent = new EventEmitter<void>();
 
-    /**
-     * Runs get avatar initials.
-     *
-     * @param name - name value.
-     *
-     * @returns The chat sidebar get avatar initials result.
-     */
+    /** Convert a display name into initials for avatar fallback text. */
     getAvatarInitials(name: string): string {
         return name
             .split(' ')
@@ -105,25 +85,17 @@ export class ChatSidebar {
             .toUpperCase();
     }
 
-    /**
-     * Runs open user profile.
-     *
-     * @param userId - user id value.
-     */
+    /** Request that the selected user's profile pane opens. */
     openUserProfile(userId: number) {
         this.openUserProfileEvent.emit(userId);
     }
 
-    /**
-     * Runs close user profile.
-     */
+    /** Request that the user profile pane closes. */
     closeUserProfile() {
         this.closeUserProfileEvent.emit();
     }
 
-    /**
-     * Runs toggle contact info.
-     */
+    /** Request that contact information visibility toggles. */
     toggleContactInfo() {
         this.toggleContactInfoEvent.emit();
     }

@@ -8,9 +8,7 @@ import { BestSellingWidget } from './components/best-selling-widget/best-selling
 import { NotificationsWidget } from './components/notifications-widget/notifications-widget';
 import { RevenueStreamWidget } from './components/revenue-stream-widget/revenue-stream-widget';
 
-/**
- * Provides dashboard ecommerce page behavior.
- */
+/** E-commerce dashboard page composed from commerce metric widgets. */
 @Component({
   selector: 'dashboard-ecommerce',
   imports: [

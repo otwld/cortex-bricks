@@ -19,13 +19,11 @@ export interface StorageConfig {
 /** Injection token for normalized storage configuration. */
 export const STORAGE_CONFIG = new InjectionToken<Required<StorageConfig>>('storage.config');
 
-/** Normalize partial storage configuration with defaults. */
 /**
- * Runs normalize storage config.
+ * Normalizes partial storage configuration with runtime defaults.
  *
- * @param config - config value.
- *
- * @returns The normalize storage config result.
+ * @param config - Storage client configuration supplied by the host app.
+ * @returns Required storage configuration consumed by services.
  */
 export function normalizeStorageConfig(config: StorageConfig): Required<StorageConfig> {
   return {

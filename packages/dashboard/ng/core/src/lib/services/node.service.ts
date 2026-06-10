@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 
-/**
- * Provides node service behavior.
- */
+/** Supplies tree node fixtures for PrimeNG tree and tree-table demos. */
 @Injectable()
 export class NodeService {
-  /**
-   * Runs get tree nodes data.
-   *
-   * @returns The node service get tree nodes data result.
-   */
+  /** Return the default static tree node dataset. */
   getTreeNodesData() {
     return [
       {
@@ -132,11 +126,7 @@ export class NodeService {
     ];
   }
 
-  /**
-   * Runs get tree table nodes data.
-   *
-   * @returns The node service get tree table nodes data result.
-   */
+  /** Return the default static tree-table node dataset. */
   getTreeTableNodesData() {
     return [
       {
@@ -490,11 +480,7 @@ export class NodeService {
     ];
   }
 
-  /**
-   * Runs get lazy nodes data.
-   *
-   * @returns The node service get lazy nodes data result.
-   */
+  /** Return placeholder nodes used by lazy-loading demos. */
   getLazyNodesData() {
     return [
       {
@@ -521,11 +507,7 @@ export class NodeService {
     ];
   }
 
-  /**
-   * Runs get file system nodes data.
-   *
-   * @returns The node service get file system nodes data result.
-   */
+  /** Return static file-system style tree-table fixtures. */
   getFileSystemNodesData() {
     return [
       {
@@ -839,15 +821,7 @@ export class NodeService {
     ];
   }
 
-  /**
-   * Runs get dynamic tree nodes.
-   *
-   * @param parentCount - parent count value.
-   *
-   * @param childrenCount - children count value.
-   *
-   * @returns The node service get dynamic tree nodes result.
-   */
+  /** Generate a configurable parent/child tree fixture. */
   getDynamicTreeNodes(parentCount: number, childrenCount: number): TreeNode[] {
     const nodes: TreeNode[] = [];
 
@@ -873,56 +847,32 @@ export class NodeService {
     return nodes;
   }
 
-  /**
-   * Runs get large tree nodes.
-   *
-   * @returns The node service get large tree nodes result.
-   */
+  /** Resolve a large generated tree fixture. */
   getLargeTreeNodes() {
     return Promise.resolve(this.getDynamicTreeNodes(10, 100));
   }
 
-  /**
-   * Runs get tree table nodes.
-   *
-   * @returns The node service get tree table nodes result.
-   */
+  /** Resolve tree-table fixtures through the async demo API. */
   getTreeTableNodes() {
     return Promise.resolve(this.getTreeTableNodesData());
   }
 
-  /**
-   * Runs get tree nodes.
-   *
-   * @returns The node service get tree nodes result.
-   */
+  /** Resolve tree fixtures through the async demo API. */
   getTreeNodes() {
     return Promise.resolve(this.getTreeNodesData());
   }
 
-  /**
-   * Runs get files.
-   *
-   * @returns The node service get files result.
-   */
+  /** Resolve file tree fixtures through the async demo API. */
   getFiles() {
     return Promise.resolve(this.getTreeNodesData());
   }
 
-  /**
-   * Runs get lazy files.
-   *
-   * @returns The node service get lazy files result.
-   */
+  /** Resolve lazy file placeholders through the async demo API. */
   getLazyFiles() {
     return Promise.resolve(this.getLazyNodesData());
   }
 
-  /**
-   * Runs get filesystem.
-   *
-   * @returns The node service get filesystem result.
-   */
+  /** Resolve file-system tree-table fixtures through the async demo API. */
   getFilesystem() {
     return Promise.resolve(this.getFileSystemNodesData());
   }

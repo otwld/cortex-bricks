@@ -4,7 +4,7 @@ import { AiToolService } from '@otwld/ng-ai';
 import { TableModule } from 'primeng/table';
 
 /**
- * Provides ai tools page behavior.
+ * Displays registered AI tool descriptors in a dashboard table.
  */
 @Component({
   selector: 'app-ai-tools-page',
@@ -13,10 +13,14 @@ import { TableModule } from 'primeng/table';
 })
 export class AiToolsPage implements OnInit {
   private readonly toolsService = inject(AiToolService);
+
+  /**
+   * Tool descriptors loaded from the shared AI tool service.
+   */
   readonly tools = signal<AiToolDescriptor[]>([]);
 
   /**
-   * Runs ng on init.
+   * Loads registered AI tool descriptors for display.
    */
   async ngOnInit(): Promise<void> {
     this.tools.set(await this.toolsService.list());

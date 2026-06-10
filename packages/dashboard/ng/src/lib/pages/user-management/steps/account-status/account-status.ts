@@ -18,11 +18,34 @@ import { FormStateService } from '../../form-state.service';
     templateUrl: './account-status.html',
 })
 export class AccountStatus {
+    /**
+     * Whether the create-user request is currently in flight.
+     */
     readonly saving = signal(false);
+
+    /**
+     * User-facing error message from validation or API failure.
+     */
     readonly error = signal<string | null>(null);
+
+    /**
+     * User profile returned after a successful create request.
+     */
     readonly createdUser = signal<UserProfile | null>(null);
+
+    /**
+     * Invitation result returned after creating a user.
+     */
     readonly invitation = signal<UserInvitationResult | null>(null);
+
+    /**
+     * Whether the invitation link has been copied in this session.
+     */
     readonly copied = signal(false);
+
+    /**
+     * Account status options shown in the final wizard step.
+     */
     accountStatusOptions = [
         { label: 'Active', value: UserAccountStatus.Active },
         { label: 'Inactive', value: UserAccountStatus.Inactive },
@@ -34,41 +57,40 @@ export class AccountStatus {
     private readonly usersService = inject(UsersService);
 
     /**
-     * Runs form state.
+     * Shared wizard form state.
      *
-     * @returns The account status form state result.
+     * @returns Writable signal managed by the form state service.
      */
     get formState() {
         return this.formStateService.formState;
     }
 
     /**
-     * Runs update field.
+     * Updates one field in the shared wizard form state.
      *
-     * @param field - field value.
-     *
-     * @param value - value value.
+     * @param field - Form state field to update.
+     * @param value - New field value.
      */
     updateField<K extends keyof ReturnType<typeof this.formState>>(field: K, value: ReturnType<typeof this.formState>[K]) {
         this.formStateService.updateField(field, value);
     }
 
     /**
-     * Runs cancel.
+     * Cancels user creation and returns to the user list.
      */
     cancel() {
         this.router.navigate(['/dashboard/profile/list']);
     }
 
     /**
-     * Runs go to list.
+     * Navigates to the user list after user creation.
      */
     goToList() {
         this.router.navigate(['/dashboard/profile/list']);
     }
 
     /**
-     * Runs save.
+     * Creates the user from wizard state and stores the returned invitation data.
      */
     save() {
         if (!this.formState().email.trim()) {
@@ -97,7 +119,7 @@ export class AccountStatus {
     }
 
     /**
-     * Runs copy invitation link.
+     * Copies the generated invitation link to the clipboard with a DOM fallback.
      */
     async copyInvitationLink() {
         const link = this.invitation()?.link;
@@ -112,7 +134,7 @@ export class AccountStatus {
     }
 
     /**
-     * Runs open invitation link.
+     * Opens the generated invitation link in a new tab when available.
      */
     openInvitationLink() {
         const link = this.invitation()?.link;

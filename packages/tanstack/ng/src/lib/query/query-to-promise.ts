@@ -1,6 +1,10 @@
 import { effect } from '@angular/core';
 import { CreateQueryResult } from '@tanstack/angular-query-experimental';
 
+/**
+ * Resolves with the first non-null successful query value or rejects with the
+ * query error.
+ */
 export function queryToPromise<TData, TError>(query: CreateQueryResult<TData, TError>): Promise<NonNullable<TData>> {
   return new Promise((resolve, reject) => {
     let settled = false;

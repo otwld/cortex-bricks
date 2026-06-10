@@ -13,6 +13,9 @@ import type { FeatureFlagScope } from '../feature-flags.types';
 export class FeatureFlagEnabledPipe implements PipeTransform {
   private readonly flags = inject(FeatureFlagsService);
 
+  /**
+   * Returns the enabled feature payload for template truthiness checks.
+   */
   transform(slug: string, scope: FeatureFlagScope): false | Record<string, unknown> {
     return this.flags.isEnabled(slug, scope);
   }

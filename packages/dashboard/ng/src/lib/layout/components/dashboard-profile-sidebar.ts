@@ -9,6 +9,9 @@ import { RippleModule } from 'primeng/ripple';
 import { DashboardLayoutService } from '@otwld/ng-dashboard/core';
 import { AuthService } from '@otwld/ng-auth/core';
 
+/**
+ * Profile drawer shown from the dashboard topbar.
+ */
 @Component({
   selector: 'dashboard-profile-sidebar',
   imports: [AvatarModule, BadgeModule, DrawerModule, MenuModule, RippleModule],

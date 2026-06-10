@@ -17,9 +17,19 @@ import { FormsModule } from '@angular/forms';
     templateUrl: './blocks.page.html',
 })
 export class BlocksPage {
+    /**
+     * Password value bound by the embedded sign-in block preview.
+     */
     password = '';
+
+    /**
+     * Checkbox value bound by the embedded form block preview.
+     */
     checked = false;
 
+    /**
+     * Hero section block with split text and image composition.
+     */
     block1 = `<div class="relative min-h-160 lg:min-h-0 bg-surface-0 dark:bg-surface-900 flex lg:flex-row flex-col">
     <div class="flex lg:flex lg:flex-row flex-col justify-center md:justify-normal h-full flex-1">
         <div class="relative flex-1 z-20 flex items-center justify-center">
@@ -49,6 +59,9 @@ export class BlocksPage {
     </div>
 </div>`;
 
+    /**
+     * Feature grid block describing product capabilities.
+     */
     block2 = `<div class="bg-surface-0 dark:bg-surface-950 px-6 md:px-12 lg:px-20 py-20 text-center">
     <div class="flex flex-col gap-6">
         <div class="flex flex-col items-center gap-4">
@@ -117,6 +130,9 @@ export class BlocksPage {
     </div>
 </div>`;
 
+    /**
+     * Glassmorphism sign-in block with username and password fields.
+     */
     block3 = `<div
         class="px-6 py-20 md:px-20 lg:px-80 flex items-center justify-center backdrop-blur-3xl bg-cover! bg-center! bg-no-repeat!"
         style="background-image: url('https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/block.images/blocks/signin/signin-glass.jpg')"
@@ -156,6 +172,9 @@ export class BlocksPage {
         </div>
     </div>`;
 
+    /**
+     * Three-tier pricing table block.
+     */
     block4 = `<div class="bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20">
     <div class="flex flex-col gap-4 items-center justify-center mb-12">
         <div class="text-surface-900 dark:text-surface-0 font-bold text-4xl lg:text-5xl text-center leading-tight">Pricing Plans</div>
@@ -262,6 +281,9 @@ export class BlocksPage {
     </div>
 </div>`;
 
+    /**
+     * Discord community call-to-action block.
+     */
     block5 = `<div class="bg-surface-0 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20">
     <div class="text-surface-700 dark:text-surface-100 text-center flex flex-col items-center gap-4">
         <div class="text-primary font-bold text-lg leading-tight"><i class="pi pi-discord text-lg! leading-none!"></i>&nbsp;POWERED BY DISCORD</div>
@@ -271,6 +293,9 @@ export class BlocksPage {
     </div>
 </div>`;
 
+    /**
+     * Promotional banner block for temporary offers.
+     */
     block6 = `<div class="pb-20 bg-surface-0 dark:bg-surface-950">
     <div class="bg-surface-900 text-surface-100 py-4 px-6 lg:px-20 flex justify-between items-center flex-wrap">
         <div class="font-bold">🔥 Hot Deals!</div>
@@ -282,6 +307,9 @@ export class BlocksPage {
     </div>
 </div>`;
 
+    /**
+     * Page heading block with breadcrumb, metrics, and action buttons.
+     */
     block7 = `<div class="bg-surface-0 dark:bg-surface-950 px-6 py-8 md:px-12 lg:px-20">
     <ul class="list-none p-0 m-0 flex items-center font-medium mb-5">
         <li>
@@ -319,6 +347,9 @@ export class BlocksPage {
     </div>
 </div>`;
 
+    /**
+     * Metrics summary card grid block.
+     */
     block8 = `<div class="bg-surface-50 dark:bg-surface-950 px-6 py-8 md:px-12 lg:px-20">
     <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
         <div class="bg-surface-0 dark:bg-surface-900 shadow-sm p-5 rounded-2xl">
@@ -386,6 +417,9 @@ export class BlocksPage {
     </div>
 </div>`;
 
+    /**
+     * Centered sign-in form block with logo, password input, and remember-me state.
+     */
     block9 = `<div class="bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20 flex items-center justify-center">
     <div class="bg-surface-0 dark:bg-surface-900 p-8 md:p-12 shadow-sm rounded-2xl w-full max-w-xl mx-auto flex flex-col gap-8">
         <div class="flex flex-col items-center gap-4">
@@ -428,6 +462,9 @@ export class BlocksPage {
     </div>
 </div>`;
 
+    /**
+     * Contact form block with split user input and message fields.
+     */
     block10 = `<div class="bg-surface-0 dark:bg-surface-950 px-8 md:px-20 py-12 md:py-20 lg:px-80">
     <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2 pb-4">
@@ -505,6 +542,9 @@ export class BlocksPage {
     </div>
 </div>`;
 
+    /**
+     * Large form layout block for account-style data entry.
+     */
     block11 = `<div class="bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20">
     <div class="bg-surface-0 dark:bg-surface-900 p-6 shadow rounded-2xl flex flex-col gap-4">
         <div class="flex gap-4">

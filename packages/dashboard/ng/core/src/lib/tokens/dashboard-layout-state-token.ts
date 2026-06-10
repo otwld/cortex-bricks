@@ -14,14 +14,17 @@ const DASHBOARD_LAYOUT_STATE_TOKEN_DEFAULT: DashboardLayoutState = {
   profileSidebarVisible: false,
 };
 
+/**
+ * Injection token for the mutable dashboard layout state signal.
+ */
 export const DASHBOARD_LAYOUT_STATE = new InjectionToken<WritableSignal<DashboardLayoutState>>('DashboardLayoutState');
 
 /**
- * Runs provide dashboard layout state.
+ * Provides dashboard layout state with package defaults applied.
  *
- * @param options - options value.
+ * @param options - Initial layout state overrides.
  *
- * @returns The provide dashboard layout state result.
+ * @returns Environment providers for the layout state signal.
  */
 export function provideDashboardLayoutState(options: DashboardLayoutState = DASHBOARD_LAYOUT_STATE_TOKEN_DEFAULT): EnvironmentProviders {
   return makeEnvironmentProviders([

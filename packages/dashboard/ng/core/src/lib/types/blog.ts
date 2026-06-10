@@ -1,3 +1,6 @@
+/**
+ * Blog entry displayed by dashboard demo blog surfaces.
+ */
 export interface Blog {
   name?: string;
   coverImage?: string;
@@ -13,6 +16,9 @@ export interface Blog {
   tags?: string[];
 }
 
+/**
+ * Comment entry displayed with dashboard demo blog content.
+ */
 export interface Comment {
   image?: string;
   name?: string;

@@ -1,3 +1,6 @@
+/**
+ * Kanban card rendered by dashboard board demos.
+ */
 export interface KanbanCardType {
   id: string;
   title?: string;
@@ -13,12 +16,18 @@ export interface KanbanCardType {
   taskList: TaskList;
 }
 
+/**
+ * Kanban list containing ordered cards.
+ */
 export interface KanbanListType {
   listId: string;
   title?: string;
   cards: KanbanCardType[];
 }
 
+/**
+ * Comment attached to a kanban card.
+ */
 export interface Comment {
   id?: string;
   name: string;
@@ -26,22 +35,34 @@ export interface Comment {
   text: string;
 }
 
+/**
+ * List identifier and display name used by kanban selectors.
+ */
 export interface ListName {
   listId?: string;
   title: string;
 }
 
+/**
+ * Task group attached to a kanban card.
+ */
 export interface TaskList {
   id?: string;
   title: string;
   tasks: Task[];
 }
 
+/**
+ * Checklist task inside a kanban task list.
+ */
 export interface Task {
   text: string;
   completed: boolean;
 }
 
+/**
+ * User assigned to a kanban card.
+ */
 export interface Assignee {
   name: string;
   image: string;

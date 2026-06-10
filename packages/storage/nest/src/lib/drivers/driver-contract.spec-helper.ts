@@ -11,6 +11,12 @@ const drainStream = async (stream: Readable): Promise<Buffer> => {
 
 const meta = (size: number): UploadMeta => ({ filename: 'f', mimetype: 'application/octet-stream', size });
 
+/**
+ * Shared behavioral contract for storage driver implementations.
+ *
+ * Driver specs call this helper with a factory so filesystem, S3, and future
+ * drivers prove the same put/read/delete/existence/signed-URL guarantees.
+ */
 export function describeStorageDriver(factory: () => Promise<StorageDriver>): void {
   let driver: StorageDriver;
 
@@ -42,6 +48,9 @@ export function describeStorageDriver(factory: () => Promise<StorageDriver>): vo
   });
 }
 
+/**
+ * Shared behavioral contract for multipart-capable storage drivers.
+ */
 export function describeMultipartStorageDriver(factory: () => Promise<MultipartStorageDriver>): void {
   let driver: MultipartStorageDriver;
 

@@ -4,6 +4,13 @@ import type {
 } from '@nestjs/mongoose';
 import type { NestFeatureModuleAsyncOptions } from '@otwld/nest-sdk';
 
+/**
+ * Connection settings consumed by `NestMongooseModule`.
+ *
+ * Callers may provide a full `uri` or build one from `hosts`, credentials, and
+ * `dbName`. Timeout names use lower-camel Cortex option names and are mapped to
+ * the corresponding Mongoose options by the module utilities.
+ */
 export interface NestMongooseConnectionOptions {
   appName?: string;
   authSource?: string;
@@ -45,5 +52,8 @@ export interface NestMongooseConnectionOptions {
   connectionFactory?: MongooseModuleFactoryOptions['connectionFactory'];
 }
 
+/**
+ * Async options accepted by `NestMongooseModule.forRootAsync` and `registerAsync`.
+ */
 export type NestMongooseAsyncOptions =
   NestFeatureModuleAsyncOptions<NestMongooseConnectionOptions>;

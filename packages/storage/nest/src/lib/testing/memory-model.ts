@@ -18,6 +18,13 @@ class MemoryDocument<T extends object> {
   }
 }
 
+/**
+ * Creates a small in-memory model with the Mongoose methods needed by storage
+ * service tests.
+ *
+ * This helper is intentionally limited to the query operators exercised by the
+ * storage package tests and should not be treated as a general Mongoose mock.
+ */
 export function createMemoryModel<T extends object = Record<string, unknown>>() {
   const rows: T[] = [];
 

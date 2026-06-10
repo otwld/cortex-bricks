@@ -82,26 +82,69 @@ interface Contact {
     templateUrl: './chat.page.html',
 })
 export class ChatPage implements OnInit {
+    /**
+     * Overflow menu used for actions on the active chat.
+     */
     @ViewChild('menu') menu!: Menu;
 
+    /**
+     * Chat room collection loaded from the demo chat data file.
+     */
     chatRooms = signal<ChatRoom[]>([]);
+
+    /**
+     * Current chat user metadata used when sending messages.
+     */
     currentUser = signal<CurrentUser>({ id: 'me', name: 'You' });
+
+    /**
+     * Contact profile records keyed by user id for the sidebar profile view.
+     */
     userData = signal<Record<number, SelectedUser>>({});
+
+    /**
+     * Chat room id currently open in the message pane.
+     */
     activeChatId = signal<number | null>(1);
+
+    /**
+     * Whether the group chat contact information sidebar is visible.
+     */
     showContactInfo = false;
+
+    /**
+     * Whether the one-on-one user profile sidebar is visible.
+     */
     showUserProfile = false;
+
+    /**
+     * User id currently open in the profile sidebar.
+     */
     selectedUserId = signal<number | null>(null);
+
+    /**
+     * Whether the responsive mobile chat view is showing messages instead of the menu.
+     */
     showChatView = false;
 
+    /**
+     * Active chat room resolved from the selected chat id.
+     */
     activeChat = computed(() => {
         return this.chatRooms().find((chat) => chat.id === this.activeChatId()) ?? null;
     });
 
+    /**
+     * Contact profile resolved from the selected user id.
+     */
     selectedUser = computed(() => {
         const userId = this.selectedUserId();
         return userId ? this.userData()[userId] : null;
     });
 
+    /**
+     * Action menu items for pinning, deleting, archiving, or restoring the active chat.
+     */
     menuItems = computed<MenuItem[]>(() => {
         this.chatRooms();
         const chat = this.activeChat();
@@ -126,7 +169,7 @@ export class ChatPage implements OnInit {
     private readonly confirmationService = inject(ConfirmationService);
 
     /**
-     * Runs ng on init.
+     * Loads chat rooms, current user metadata, and contact profiles from demo data.
      */
     async ngOnInit() {
         const response = await fetch('/demo/data/chatData.json');
@@ -137,7 +180,7 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs delete chat.
+     * Confirms and deletes the active chat, then selects the next available room.
      */
     deleteChat() {
         this.confirmationService.confirm({
@@ -170,7 +213,7 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs archive chat.
+     * Archives the active chat and selects the next non-archived room when available.
      */
     archiveChat() {
         const rooms = this.chatRooms();
@@ -189,7 +232,7 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs restore chat.
+     * Restores the active archived chat to the normal chat lists.
      */
     restoreChat() {
         const rooms = this.chatRooms();
@@ -201,7 +244,7 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs toggle pin.
+     * Toggles the pinned state of the active chat.
      */
     togglePin() {
         const rooms = this.chatRooms();
@@ -213,11 +256,10 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs format participants.
+     * Formats participant names for compact group chat headers.
      *
-     * @param participants - participants value.
-     *
-     * @returns The chat page format participants result.
+     * @param participants - Group chat participants to display.
+     * @returns Up to three participant names, followed by an ellipsis when more exist.
      */
     formatParticipants(participants: Participant[]): string {
         if (participants.length <= 3) {
@@ -231,7 +273,7 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs toggle contact info.
+     * Toggles the appropriate sidebar for the active chat type.
      */
     toggleContactInfo() {
         if (this.activeChat()?.type === 'individual') {
@@ -250,9 +292,9 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs open user profile.
+     * Opens a one-on-one participant profile sidebar.
      *
-     * @param userId - user id value.
+     * @param userId - Participant id to resolve from profile data.
      */
     openUserProfile(userId: string | number) {
         this.selectedUserId.set(Number(userId));
@@ -261,7 +303,7 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs close user profile.
+     * Closes the user profile sidebar and clears the selected profile id.
      */
     closeUserProfile() {
         this.showUserProfile = false;
@@ -269,18 +311,18 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs show menu.
+     * Opens the active chat overflow menu.
      *
-     * @param event - event value.
+     * @param event - Browser event used to anchor the popup menu.
      */
     showMenu(event: Event) {
         this.menu.toggle(event);
     }
 
     /**
-     * Runs select chat.
+     * Selects a chat and opens the responsive message view.
      *
-     * @param chatId - chat id value.
+     * @param chatId - Chat room id selected from the menu.
      */
     selectChat(chatId: number) {
         this.activeChatId.set(chatId);
@@ -288,16 +330,16 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs go back to menu.
+     * Returns the responsive layout from the message pane to the chat menu.
      */
     goBackToMenu() {
         this.showChatView = false;
     }
 
     /**
-     * Runs create new chat.
+     * Creates and selects a new one-on-one chat for a contact.
      *
-     * @param contact - contact value.
+     * @param contact - Contact selected from the new chat dialog.
      */
     createNewChat(contact: Contact) {
         const rooms = this.chatRooms();
@@ -322,9 +364,9 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs handle send message.
+     * Appends a sent message to the active chat room.
      *
-     * @param message - message value.
+     * @param message - Message emitted by the chat box.
      */
     handleSendMessage(message: Message) {
         const rooms = this.chatRooms();
@@ -336,11 +378,10 @@ export class ChatPage implements OnInit {
     }
 
     /**
-     * Runs encode uricomponent.
+     * Exposes URL encoding to the template for avatar image paths.
      *
-     * @param str - str value.
-     *
-     * @returns The chat page encode uricomponent result.
+     * @param str - Raw string to encode.
+     * @returns URI component encoded string.
      */
     encodeURIComponent(str: string): string {
         return encodeURIComponent(str);

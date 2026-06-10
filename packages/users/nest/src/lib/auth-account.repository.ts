@@ -26,60 +26,25 @@ export interface CreatePendingAuthAccount {
 /** Persistence bridge for auth accounts owned by the auth package. */
 @Injectable()
 export class AuthAccountRepository {
-  /** Creates the auth account repository. */
-  /**
-   * Creates a auth account repository instance.
-   *
-   * @param userModel - user model value.
-   */
+  /** Create the auth account repository. */
   constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>) {}
 
   /** Finds one auth account by email. */
-  /**
-   * Runs find by email.
-   *
-   * @param email - email value.
-   *
-   * @returns The auth account repository find by email result.
-   */
   findByEmail(email: string) {
     return this.userModel.findOne({ email: email.toLowerCase() }).exec();
   }
 
   /** Finds one auth account by id. */
-  /**
-   * Runs find by id.
-   *
-   * @param id - id value.
-   *
-   * @returns The auth account repository find by id result.
-   */
   findById(id: string) {
     return this.userModel.findById(id).exec();
   }
 
   /** Finds one auth account by id and includes the hidden password hash. */
-  /**
-   * Runs find by id with password.
-   *
-   * @param id - id value.
-   *
-   * @returns The auth account repository find by id with password result.
-   */
   findByIdWithPassword(id: string) {
     return this.userModel.findById(id).select('+password').exec();
   }
 
   /** Creates an auth account that cannot use local login until credentials are set. */
-  /**
-   * Runs create pending account.
-   *
-   * @param dto - dto value.
-   *
-   * @param session - session value.
-   *
-   * @returns The auth account repository create pending account result.
-   */
   createPendingAccount(dto: CreatePendingAuthAccount, session?: ClientSession) {
     return new this.userModel({
       email: dto.email.toLowerCase(),
@@ -94,17 +59,6 @@ export class AuthAccountRepository {
   }
 
   /** Updates auth account assignment and profile mirror fields. */
-  /**
-   * Runs update assignments.
-   *
-   * @param id - id value.
-   *
-   * @param update - update value.
-   *
-   * @param session - session value.
-   *
-   * @returns The auth account repository update assignments result.
-   */
   updateAssignments(id: string, update: Partial<User>, session?: ClientSession) {
     return this.userModel.findByIdAndUpdate(id, update, { new: true, session }).exec();
   }
@@ -140,36 +94,12 @@ export class AuthAccountRepository {
   }
 
   /** Sets local credentials for an invited account. */
-  /**
-   * Runs set local credentials.
-   *
-   * @param id - id value.
-   *
-   * @param password - password value.
-   *
-   * @param username - username value.
-   *
-   * @param session - session value.
-   *
-   * @returns The auth account repository set local credentials result.
-   */
   async setLocalCredentials(id: string, password: string, username?: string, session?: ClientSession) {
     const hashed = await bcrypt.hash(password, 12);
     return this.userModel.findByIdAndUpdate(id, { password: hashed, username }, { new: true, session }).exec();
   }
 
   /** Changes an account password after validating the current password. */
-  /**
-   * Runs change password.
-   *
-   * @param id - id value.
-   *
-   * @param currentPassword - current password value.
-   *
-   * @param newPassword - new password value.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async changePassword(id: string, currentPassword: string, newPassword: string) {
     const user = await this.findByIdWithPassword(id);
     if (!user?.password) throw new UnauthorizedException('Current password is invalid');
@@ -180,13 +110,6 @@ export class AuthAccountRepository {
   }
 
   /** Generates a raw password reset token and stores only its hash. */
-  /**
-   * Runs request password reset.
-   *
-   * @param email - email value.
-   *
-   * @returns The auth account repository request password reset result.
-   */
   async requestPasswordReset(email: string): Promise<{ rawToken: string; expiresAt: Date; user: UserDocument } | undefined> {
     const user = await this.findByEmail(email);
     if (!user) return undefined;
@@ -202,17 +125,6 @@ export class AuthAccountRepository {
   }
 
   /** Resets an account password using a valid raw reset token. */
-  /**
-   * Runs reset password.
-   *
-   * @param rawToken - raw token value.
-   *
-   * @param newPassword - new password value.
-   *
-   * @returns The auth account repository reset password result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async resetPassword(rawToken: string, newPassword: string) {
     const user = await this.userModel
       .findOne({ passwordResetToken: this.hashToken(rawToken), passwordResetExpires: { $gt: new Date() } })
@@ -229,13 +141,6 @@ export class AuthAccountRepository {
   }
 
   /** Hashes reset tokens before persistence. */
-  /**
-   * Runs hash token.
-   *
-   * @param token - token value.
-   *
-   * @returns The auth account repository hash token result.
-   */
   hashToken(token: string): string {
     return createHash('sha256').update(token).digest('hex');
   }

@@ -30,19 +30,14 @@ type GeneratedInvitation = { rawToken: string; expiresAt: Date };
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
-  /** Creates the users service. */
   /**
-   * Creates a users service instance.
+   * Create the users service.
    *
-   * @param users - users value.
-   *
-   * @param invitations - invitations value.
-   *
-   * @param authAccounts - auth accounts value.
-   *
-   * @param options - options value.
-   *
-   * @param connection - connection value.
+   * @param users - Profile persistence gateway.
+   * @param invitations - Invitation token persistence gateway.
+   * @param authAccounts - Auth account persistence bridge.
+   * @param options - Optional module callbacks and frontend URL settings.
+   * @param connection - Optional Mongoose connection used for transactions.
    */
   constructor(
     private readonly users: UsersRepository,
@@ -53,26 +48,12 @@ export class UsersService {
   ) {}
 
   /** Lists active dashboard-managed users. */
-  /**
-   * Runs list.
-   *
-   * @returns The users service list result.
-   */
   async list() {
     const profiles = await this.users.listActive();
     return { users: profiles };
   }
 
   /** Creates a linked auth account, profile, and optional invitation. */
-  /**
-   * Runs create.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service create result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async create(dto: CreateUserRequest) {
     const email = dto.email.toLowerCase();
     const existing = await this.authAccounts.findByEmail(email);
@@ -113,15 +94,6 @@ export class UsersService {
   }
 
   /** Gets one safe user profile by profile id. */
-  /**
-   * Runs get.
-   *
-   * @param id - id value.
-   *
-   * @returns The users service get result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async get(id: string) {
     const user = await this.users.findById(id);
     if (!user) throw new NotFoundException('User not found');
@@ -129,17 +101,6 @@ export class UsersService {
   }
 
   /** Updates profile and linked auth account assignment fields. */
-  /**
-   * Runs update.
-   *
-   * @param id - id value.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service update result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async update(id: string, dto: UpdateUserRequest) {
     const current = await this.users.findById(id);
     if (!current) throw new NotFoundException('User not found');
@@ -168,13 +129,6 @@ export class UsersService {
   }
 
   /** Resends an invitation for an existing user profile. */
-  /**
-   * Runs resend invitation.
-   *
-   * @param id - id value.
-   *
-   * @returns The users service resend invitation result.
-   */
   async resendInvitation(id: string) {
     const result = await this.inTransaction(async (session) => {
       const user = await this.users.findById(id);
@@ -196,15 +150,6 @@ export class UsersService {
   }
 
   /** Reads safe invitation details by raw token. */
-  /**
-   * Runs get invitation.
-   *
-   * @param rawToken - raw token value.
-   *
-   * @returns The users service get invitation result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async getInvitation(rawToken: string): Promise<{ invitation: UserInvitationDetails }> {
     const invitation = await this.invitations.findByRawToken(rawToken);
     if (!invitation) throw new NotFoundException('Invitation not found');
@@ -223,17 +168,6 @@ export class UsersService {
   }
 
   /** Accepts an invitation with local credentials. */
-  /**
-   * Runs accept credentials.
-   *
-   * @param rawToken - raw token value.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service accept credentials result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async acceptCredentials(rawToken: string, dto: AcceptInvitationCredentialsRequest) {
     const invitation = await this.requirePendingInvitation(rawToken);
     await this.authAccounts.setLocalCredentials(invitation.authUserId, dto.password, dto.username);
@@ -249,17 +183,6 @@ export class UsersService {
   }
 
   /** Marks an OAuth invitation accepted after the current auth session matches the invitation. */
-  /**
-   * Runs complete oauth.
-   *
-   * @param rawToken - raw token value.
-   *
-   * @param authUserId - auth user id value.
-   *
-   * @returns The users service complete oauth result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async completeOAuth(rawToken: string, authUserId: string) {
     const invitation = await this.requirePendingInvitation(rawToken);
     if (invitation.authUserId !== authUserId) throw new BadRequestException('Invitation does not match current user');
@@ -274,17 +197,6 @@ export class UsersService {
   }
 
   /** Marks an OAuth invitation accepted using a single-use OAuth state. */
-  /**
-   * Runs complete oauth state.
-   *
-   * @param dto - dto value.
-   *
-   * @param authUserId - auth user id value.
-   *
-   * @returns The users service complete oauth state result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async completeOAuthState(dto: CompleteInvitationOAuthRequest, authUserId: string) {
     const invitation = await this.invitations.findByOAuthState(dto.state);
     if (!invitation) throw new NotFoundException('Invitation not found');
@@ -304,17 +216,6 @@ export class UsersService {
   }
 
   /** Creates a transient OAuth state and returns the auth provider route. */
-  /**
-   * Runs start oauth.
-   *
-   * @param rawToken - raw token value.
-   *
-   * @param provider - provider value.
-   *
-   * @returns The users service start oauth result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async startOAuth(rawToken: string, provider: UserOAuthProvider) {
     if (!Object.values(UserOAuthProvider).includes(provider)) throw new BadRequestException('Unsupported OAuth provider');
     await this.requirePendingInvitation(rawToken);
@@ -323,15 +224,6 @@ export class UsersService {
   }
 
   /** Revokes an invitation. */
-  /**
-   * Runs revoke invitation.
-   *
-   * @param rawToken - raw token value.
-   *
-   * @returns The users service revoke invitation result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async revokeInvitation(rawToken: string) {
     const invitation = await this.invitations.revokeByRawToken(rawToken);
     if (!invitation) throw new NotFoundException('Invitation not found');
@@ -340,28 +232,12 @@ export class UsersService {
   }
 
   /** Changes the current user's password after checking the current password. */
-  /**
-   * Runs change password.
-   *
-   * @param authUserId - auth user id value.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service change password result.
-   */
   async changePassword(authUserId: string, dto: ChangeUserPasswordRequest) {
     await this.authAccounts.changePassword(authUserId, dto.currentPassword, dto.newPassword);
     return { changed: true };
   }
 
   /** Requests a password reset without exposing whether the account exists. */
-  /**
-   * Runs request password reset.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service request password reset result.
-   */
   async requestPasswordReset(dto: RequestUserPasswordResetRequest) {
     const reset = await this.authAccounts.requestPasswordReset(dto.email);
     if (reset) {
@@ -376,13 +252,6 @@ export class UsersService {
   }
 
   /** Resets a password using a raw reset token. */
-  /**
-   * Runs reset password.
-   *
-   * @param dto - dto value.
-   *
-   * @returns The users service reset password result.
-   */
   async resetPassword(dto: ResetUserPasswordRequest) {
     const user = await this.authAccounts.resetPassword(dto.token, dto.password);
     await this.runMailCallback('onPasswordReset', () => this.options.mail?.onPasswordReset?.({

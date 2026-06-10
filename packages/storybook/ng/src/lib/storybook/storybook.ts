@@ -19,6 +19,9 @@ export function withStorybookProviders(providers: Provider[]): Decorator {
   return applicationConfig({ providers });
 }
 
+/**
+ * Named MSW handler groups accepted by Storybook preview and story helpers.
+ */
 export type StorybookMswHandlerGroups = Record<
   string,
   RequestHandler | RequestHandler[] | null

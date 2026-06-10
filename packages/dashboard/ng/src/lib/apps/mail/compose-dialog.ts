@@ -21,30 +21,37 @@ interface ComposeData {
 })
 export class ComposeDialog implements OnChanges {
     /**
-     * Runs visible.
+     * Whether the compose dialog is visible.
      */
     @Input() visible = false;
+
     /**
-     * Runs initial data.
+     * Initial recipient, subject, and message values copied into the form.
      */
     @Input() initialData: ComposeData = { to: '', subject: '', message: '' };
+
     /**
-     * Runs visible change.
+     * Emits dialog visibility changes for two-way binding.
      */
     @Output() visibleChange = new EventEmitter<boolean>();
+
     /**
-     * Runs send.
+     * Emits the composed email payload when the user sends.
      */
     @Output() send = new EventEmitter<ComposeData>();
+
     /**
-     * Runs closed.
+     * Emits when the dialog closes without requiring a send.
      */
     @Output() closed = new EventEmitter<void>();
 
+    /**
+     * Mutable compose form data shown inside the dialog.
+     */
     composeData: ComposeData = { to: '', subject: '', message: '' };
 
     /**
-     * Runs ng on changes.
+     * Copies input data into the mutable compose form whenever inputs change.
      */
     ngOnChanges() {
         this.composeData = {
@@ -55,7 +62,7 @@ export class ComposeDialog implements OnChanges {
     }
 
     /**
-     * Runs close compose.
+     * Closes the dialog and emits the corresponding close events.
      */
     closeCompose() {
         this.closed.emit();
@@ -64,7 +71,7 @@ export class ComposeDialog implements OnChanges {
     }
 
     /**
-     * Runs send email.
+     * Emits a copy of the compose form data and closes the dialog.
      */
     sendEmail() {
         this.send.emit({ ...this.composeData });
@@ -72,7 +79,7 @@ export class ComposeDialog implements OnChanges {
     }
 
     /**
-     * Runs on hide.
+     * Handles the PrimeNG dialog hide event by closing the compose flow.
      */
     onHide() {
         this.closeCompose();

@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 
-/**
- * Provides country service behavior.
- */
+/** Supplies country option fixtures for dashboard demos. */
 @Injectable()
 export class CountryService {
-  /**
-   * Runs get data.
-   *
-   * @returns The country service get data result.
-   */
+  /** Return the static list of country labels and ISO-like codes. */
   getData() {
     return [
       { name: 'Afghanistan', code: 'AF' },
@@ -260,11 +254,7 @@ export class CountryService {
     ];
   }
 
-  /**
-   * Runs get countries.
-   *
-   * @returns The country service get countries result.
-   */
+  /** Resolve country fixtures through the async service API used by demos. */
   getCountries() {
     return Promise.resolve(this.getData());
   }

@@ -17,18 +17,12 @@ export interface Product {
   rating?: number;
 }
 
-/**
- * Provides product service behavior.
- */
+/** Supplies product fixtures and demo product API helpers. */
 @Injectable()
 export class ProductService {
   private readonly http = inject(HttpClient);
 
-  /**
-   * Runs get products data.
-   *
-   * @returns The product service get products data result.
-   */
+  /** Return static product catalog fixtures. */
   getProductsData() {
     return [
       {
@@ -394,11 +388,7 @@ export class ProductService {
     ];
   }
 
-  /**
-   * Runs get products with orders data.
-   *
-   * @returns The product service get products with orders data result.
-   */
+  /** Return product fixtures that include nested order history. */
   getProductsWithOrdersData() {
     return [
       {
@@ -1233,8 +1223,14 @@ export class ProductService {
     ];
   }
 
+  /**
+   * Inventory statuses used when generating demo product records.
+   */
   status: string[] = ['OUTOFSTOCK', 'INSTOCK', 'LOWSTOCK'];
 
+  /**
+   * Product names used by the random demo product generator.
+   */
   productNames: string[] = [
     'Bamboo Watch',
     'Black Watch',
@@ -1269,45 +1265,45 @@ export class ProductService {
   ];
 
   /**
-   * Runs get products mini.
+   * Returns the smallest demo product list.
    *
-   * @returns The product service get products mini result.
+   * @returns Promise resolving to the first five demo products.
    */
   getProductsMini() {
     return Promise.resolve(this.getProductsData().slice(0, 5));
   }
 
   /**
-   * Runs get products small.
+   * Returns a short demo product list.
    *
-   * @returns The product service get products small result.
+   * @returns Promise resolving to the first ten demo products.
    */
   getProductsSmall() {
     return Promise.resolve(this.getProductsData().slice(0, 10));
   }
 
   /**
-   * Runs get products.
+   * Returns the complete demo product list.
    *
-   * @returns The product service get products result.
+   * @returns Promise resolving to all demo products.
    */
   getProducts() {
     return Promise.resolve(this.getProductsData());
   }
 
   /**
-   * Runs get products with orders small.
+   * Returns a short demo product list that includes order history.
    *
-   * @returns The product service get products with orders small result.
+   * @returns Promise resolving to the first ten products with orders.
    */
   getProductsWithOrdersSmall() {
     return Promise.resolve(this.getProductsWithOrdersData().slice(0, 10));
   }
 
   /**
-   * Runs generate prduct.
+   * Generates one randomized demo product record.
    *
-   * @returns The product service generate prduct result.
+   * @returns Product with generated id, name, price, quantity, status, and image name.
    */
   generatePrduct(): Product {
     const product: Product = {
@@ -1326,9 +1322,9 @@ export class ProductService {
   }
 
   /**
-   * Runs generate id.
+   * Generates a five-character alphanumeric product id.
    *
-   * @returns The product service generate id result.
+   * @returns Random product id.
    */
   generateId() {
     let text = '';
@@ -1342,45 +1338,45 @@ export class ProductService {
   }
 
   /**
-   * Runs generate name.
+   * Selects a random demo product name.
    *
-   * @returns The product service generate name result.
+   * @returns Product name from the configured name list.
    */
   generateName() {
     return this.productNames[Math.floor(Math.random() * Math.floor(30))];
   }
 
   /**
-   * Runs generate price.
+   * Generates a random demo product price.
    *
-   * @returns The product service generate price result.
+   * @returns Integer price between 1 and 299.
    */
   generatePrice() {
     return Math.floor(Math.random() * Math.floor(299) + 1);
   }
 
   /**
-   * Runs generate quantity.
+   * Generates a random inventory quantity.
    *
-   * @returns The product service generate quantity result.
+   * @returns Integer quantity between 1 and 75.
    */
   generateQuantity() {
     return Math.floor(Math.random() * Math.floor(75) + 1);
   }
 
   /**
-   * Runs generate status.
+   * Selects a random inventory status.
    *
-   * @returns The product service generate status result.
+   * @returns Inventory status from the configured status list.
    */
   generateStatus() {
     return this.status[Math.floor(Math.random() * Math.floor(3))];
   }
 
   /**
-   * Runs generate rating.
+   * Generates a random product rating.
    *
-   * @returns The product service generate rating result.
+   * @returns Integer rating between 1 and 5.
    */
   generateRating() {
     return Math.floor(Math.random() * Math.floor(5) + 1);

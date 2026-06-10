@@ -6,6 +6,9 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { Subject } from 'rxjs';
 
+/**
+ * Payment status displayed in the monthly payments table.
+ */
 export type MonthlyPaymentStatus = 'completed' | 'pending';
 
 /**
@@ -26,6 +29,9 @@ export interface MonthlyPaymentSelectEvent {
   readonly payment: MonthlyPayment;
 }
 
+/**
+ * Union of events emitted by the monthly payments widget event stream.
+ */
 export type MonthlyPaymentsWidgetEvent = { readonly type: 'payment' } & MonthlyPaymentSelectEvent;
 
 interface MonthlyPaymentViewModel extends MonthlyPayment {
@@ -43,6 +49,9 @@ const DEFAULT_PAYMENTS: readonly MonthlyPayment[] = [
   { id: 'streaming', name: 'Streaming', amount: 40.9, paid: false, date: '20/04/2022' },
 ];
 
+/**
+ * Banking widget that lists monthly payments and their payment status.
+ */
 @Component({
   standalone: true,
   selector: 'app-monthly-payments-widget',

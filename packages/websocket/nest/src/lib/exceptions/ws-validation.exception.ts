@@ -27,11 +27,6 @@ export class WsValidationException extends WsException {
   }
 
   /** Convenience accessor for the error kind. */
-  /**
-   * Runs kind.
-   *
-   * @returns The ws validation exception kind result.
-   */
   public get kind(): WsErrorKind {
     return this.validationError.kind;
   }

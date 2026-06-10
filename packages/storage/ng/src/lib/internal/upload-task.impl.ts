@@ -8,14 +8,31 @@ import { RequiredStorageConfig } from '../provide-storage';
 import { createFileHash } from '../utils/storage-utils';
 import { LocalStorageUrlStorage } from './local-storage-url-storage';
 
+/**
+ * Callbacks used by `UploadTaskImpl` to notify the owning storage service.
+ */
 export interface UploadTaskCallbacks {
   onUpdate(): void;
   onComplete(task: UploadTaskImpl): void;
   onError(task: UploadTaskImpl, error: Error): void;
 }
 
+/**
+ * Client-side resumable upload task backed by tus-js-client.
+ *
+ * The task owns upload lifecycle state, retry progress, resumable fingerprint
+ * persistence, and cleanup. Consumers observe state through readonly Angular
+ * signals exposed by the `UploadTask` contract.
+ */
 export class UploadTaskImpl implements UploadTask {
+  /**
+   * Stable client-side id for tracking this upload task.
+   */
   readonly id = crypto.randomUUID();
+
+  /**
+   * Browser file being uploaded through tus.
+   */
   readonly file: File;
 
   private readonly _status = signal<UploadStatus>(UploadStatus.Pending);
@@ -26,12 +43,39 @@ export class UploadTaskImpl implements UploadTask {
   private readonly _retryAttempt = signal(0);
   private readonly _nextRetryIn = signal(0);
 
+  /**
+   * Current upload lifecycle status.
+   */
   readonly status = this._status.asReadonly();
+
+  /**
+   * Upload progress percentage from 0 to 100.
+   */
   readonly progress = this._progress.asReadonly();
+
+  /**
+   * Number of bytes accepted by the tus upload endpoint.
+   */
   readonly bytesUploaded = this._bytesUploaded.asReadonly();
+
+  /**
+   * Last upload error, including cancellation errors.
+   */
   readonly error = this._error.asReadonly();
+
+  /**
+   * Storage file returned by the backend after a successful upload.
+   */
   readonly storageFile = this._storageFile.asReadonly();
+
+  /**
+   * Current retry attempt count reported by tus.
+   */
   readonly retryAttempt = this._retryAttempt.asReadonly();
+
+  /**
+   * Delay before the next retry attempt in milliseconds.
+   */
   readonly nextRetryIn = this._nextRetryIn.asReadonly();
 
   _fingerprint = '';
@@ -48,6 +92,9 @@ export class UploadTaskImpl implements UploadTask {
     this.file = file;
   }
 
+  /**
+   * Starts the tus upload unless it is already starting or active.
+   */
   start(): void {
     if (this.starting || this._status() === UploadStatus.Active) return;
     this.starting = true;
@@ -59,6 +106,9 @@ export class UploadTaskImpl implements UploadTask {
     });
   }
 
+  /**
+   * Aborts the current tus request and marks the task as paused.
+   */
   pause(): void {
     this.startOperation++;
     this.starting = false;
@@ -67,10 +117,16 @@ export class UploadTaskImpl implements UploadTask {
     this.callbacks.onUpdate();
   }
 
+  /**
+   * Resumes a paused upload by starting a new tus operation.
+   */
   resume(): void {
     this.start();
   }
 
+  /**
+   * Cancels the upload, aborts tus with termination, and emits a cancellation error.
+   */
   cancel(): void {
     this.startOperation++;
     this.starting = false;
@@ -82,6 +138,9 @@ export class UploadTaskImpl implements UploadTask {
     this.callbacks.onUpdate();
   }
 
+  /**
+   * Aborts in-flight work when the task is discarded before completion.
+   */
   dispose(): void {
     if (this._status() !== UploadStatus.Completed) {
       this.startOperation++;

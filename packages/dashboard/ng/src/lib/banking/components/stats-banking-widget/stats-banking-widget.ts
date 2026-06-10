@@ -3,6 +3,9 @@ import { Component, DestroyRef, computed, inject, input, output } from '@angular
 import { ButtonModule } from 'primeng/button';
 import { Subject } from 'rxjs';
 
+/**
+ * Visual card variant rendered by the banking stats widget.
+ */
 export type BankingStatCardVariant = 'debit' | 'credit' | 'summary';
 
 /**
@@ -28,6 +31,9 @@ export interface BankingStatCardSelectEvent {
   readonly card: BankingStatCard;
 }
 
+/**
+ * Union of events emitted by the banking stats widget.
+ */
 export type StatsBankingWidgetEvent = { readonly type: 'card' } & BankingStatCardSelectEvent;
 
 interface BankingStatCardViewModel extends BankingStatCard {
@@ -75,6 +81,9 @@ const DEFAULT_CARDS: readonly BankingStatCard[] = [
   },
 ];
 
+/**
+ * Banking widget that displays debit, credit, and balance summary cards.
+ */
 @Component({
   standalone: true,
   selector: 'app-stats-banking-widget',

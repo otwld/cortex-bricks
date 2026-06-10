@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+/**
+ * Tailwind-only landing page for the frontend shell.
+ */
 @Component({
   selector: 'app-landing-page',
   imports: [RouterLink],

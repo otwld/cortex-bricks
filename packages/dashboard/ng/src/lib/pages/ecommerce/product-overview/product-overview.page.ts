@@ -40,16 +40,34 @@ interface Size {
     templateUrl: './product-overview.page.html',
 })
 export class ProductOverviewPage {
+    /**
+     * Review action menu instances rendered for visible review rows.
+     */
     @ViewChildren('reviewMenu') reviewMenus!: QueryList<Menu>;
 
+    /**
+     * Product size currently selected by the shopper.
+     */
     selectedSize = signal('S');
 
+    /**
+     * Index of the currently highlighted recommendation image.
+     */
     selectedRecommendation = signal(0);
 
+    /**
+     * Active product information tab.
+     */
     activeTab = model<string>('description');
 
+    /**
+     * Rating filter applied to the reviews list.
+     */
     selectedRating = signal<number | 'all'>('all');
 
+    /**
+     * Reviews visible after applying the selected rating filter.
+     */
     filteredReviews = computed(() => {
         const rating = this.selectedRating();
         if (rating === 'all') {
@@ -58,6 +76,9 @@ export class ProductOverviewPage {
         return this.reviews[rating] || [];
     });
 
+    /**
+     * Product question-and-answer entries shown in the Q&A tab.
+     */
     qaItems: QAItem[] = [
         {
             question: 'Is this jacket suitable for heavy rain?',
@@ -73,6 +94,9 @@ export class ProductOverviewPage {
         }
     ];
 
+    /**
+     * Product reviews grouped by rating for filter tabs.
+     */
     reviews: { [key: number]: Review[] } = {
         5: [
             {
@@ -142,6 +166,9 @@ export class ProductOverviewPage {
         ]
     };
 
+    /**
+     * Product gallery image URLs used by the overview preview.
+     */
     images: string[] = [
         '/demo/images/ecommerce/productoverview/ecommerce-productoverview-1.jpg',
         '/demo/images/ecommerce/productoverview/ecommerce-productoverview-2.jpg',
@@ -149,6 +176,9 @@ export class ProductOverviewPage {
         '/demo/images/ecommerce/productoverview/ecommerce-productoverview-4.jpg'
     ];
 
+    /**
+     * Recommended product thumbnails shown below the main gallery.
+     */
     recommendations: Recommendation[] = [
         { id: 1, image: '/demo/images/ecommerce/productoverview/ecommerce-productoverview-5.jpg', active: true },
         { id: 2, image: '/demo/images/ecommerce/productoverview/ecommerce-productoverview-6.jpg', active: false },
@@ -156,6 +186,9 @@ export class ProductOverviewPage {
         { id: 4, image: '/demo/images/ecommerce/productoverview/ecommerce-productoverview-8.jpg', active: false }
     ];
 
+    /**
+     * Available product sizes and disabled states for the size picker.
+     */
     sizes: Size[] = [
         { label: 'XS', disabled: true },
         { label: 'S', disabled: false },
@@ -165,6 +198,9 @@ export class ProductOverviewPage {
         { label: 'XXL', disabled: false }
     ];
 
+    /**
+     * Static action menu items shown for each product review.
+     */
     reviewMenuItems = [
         {
             label: 'Report Review',
@@ -187,18 +223,18 @@ export class ProductOverviewPage {
     ];
 
     /**
-     * Runs select rating.
+     * Updates the active rating filter for the reviews list.
      *
-     * @param rating - rating value.
+     * @param rating - Rating value to filter by, or `all` for every review.
      */
     selectRating(rating: number | 'all') {
         this.selectedRating.set(rating);
     }
 
     /**
-     * Runs set size.
+     * Selects a product size when it is available.
      *
-     * @param size - size value.
+     * @param size - Size label selected by the shopper.
      */
     setSize(size: string) {
         const sizeItem = this.sizes.find((s) => s.label === size);
@@ -208,9 +244,9 @@ export class ProductOverviewPage {
     }
 
     /**
-     * Runs set recommendation.
+     * Sets the active recommendation thumbnail and clears the previous active marker.
      *
-     * @param index - index value.
+     * @param index - Recommendation index to activate.
      */
     setRecommendation(index: number) {
         this.selectedRecommendation.set(index);
@@ -220,11 +256,10 @@ export class ProductOverviewPage {
     }
 
     /**
-     * Runs toggle review menu.
+     * Opens the action menu for a visible review row.
      *
-     * @param event - event value.
-     *
-     * @param index - index value.
+     * @param event - Browser event used to anchor the popup menu.
+     * @param index - Visible review row index associated with the menu.
      */
     toggleReviewMenu(event: Event, index: number) {
         const menuArray = this.reviewMenus.toArray();
@@ -234,22 +269,20 @@ export class ProductOverviewPage {
     }
 
     /**
-     * Runs get date part.
+     * Extracts the date portion from a review timestamp string.
      *
-     * @param dateStr - date str value.
-     *
-     * @returns The product overview page get date part result.
+     * @param dateStr - Review timestamp formatted as `date | time`.
+     * @returns Date portion before the separator.
      */
     getDatePart(dateStr: string): string {
         return dateStr.split(' | ')[0];
     }
 
     /**
-     * Runs get time part.
+     * Extracts the time portion from a review timestamp string.
      *
-     * @param dateStr - date str value.
-     *
-     * @returns The product overview page get time part result.
+     * @param dateStr - Review timestamp formatted as `date | time`.
+     * @returns Time portion after the separator.
      */
     getTimePart(dateStr: string): string {
         return dateStr.split(' | ')[1];

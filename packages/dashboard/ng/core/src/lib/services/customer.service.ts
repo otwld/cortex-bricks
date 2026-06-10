@@ -36,18 +36,12 @@ type CustomerQueryParams = Record<
   string | number | boolean | readonly (string | number | boolean)[]
 >;
 
-/**
- * Provides customer service behavior.
- */
+/** Supplies customer fixtures and remote customer demo API helpers. */
 @Injectable()
 export class CustomerService {
   private readonly http = inject(HttpClient);
 
-  /**
-   * Runs get data.
-   *
-   * @returns The customer service get data result.
-   */
+  /** Return the static customer fixture dataset. */
   getData() {
     return [
       {
@@ -9053,58 +9047,32 @@ export class CustomerService {
     ];
   }
 
-  /**
-   * Runs get customers mini.
-   *
-   * @returns The customer service get customers mini result.
-   */
+  /** Resolve a five-row customer fixture sample. */
   getCustomersMini() {
     return Promise.resolve(this.getData().slice(0, 5));
   }
 
-  /**
-   * Runs get customers small.
-   *
-   * @returns The customer service get customers small result.
-   */
+  /** Resolve a ten-row customer fixture sample. */
   getCustomersSmall() {
     return Promise.resolve(this.getData().slice(0, 10));
   }
 
-  /**
-   * Runs get customers medium.
-   *
-   * @returns The customer service get customers medium result.
-   */
+  /** Resolve a fifty-row customer fixture sample. */
   getCustomersMedium() {
     return Promise.resolve(this.getData().slice(0, 50));
   }
 
-  /**
-   * Runs get customers large.
-   *
-   * @returns The customer service get customers large result.
-   */
+  /** Resolve a two-hundred-row customer fixture sample. */
   getCustomersLarge() {
     return Promise.resolve(this.getData().slice(0, 200));
   }
 
-  /**
-   * Runs get customers xlarge.
-   *
-   * @returns The customer service get customers xlarge result.
-   */
+  /** Resolve the full customer fixture dataset. */
   getCustomersXLarge() {
     return Promise.resolve(this.getData());
   }
 
-  /**
-   * Runs get customers.
-   *
-   * @param params - params value.
-   *
-   * @returns The customer service get customers result.
-   */
+  /** Query the PrimeFaces customer demo endpoint with optional parameters. */
   getCustomers(params?: CustomerQueryParams) {
     return this.http
       .get<Customer[]>('https://www.primefaces.org/data/customers', {

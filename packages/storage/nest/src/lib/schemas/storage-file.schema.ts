@@ -5,6 +5,7 @@ import mongoose, { HydratedDocument } from 'mongoose';
 /** Hydrated Mongoose document for a stored file record. */
 export type StorageFileDocument = HydratedDocument<StorageFileRecord>;
 
+/** MongoDB record describing a stored file. */
 @Schema({
   collection: 'storage_files',
   timestamps: true,
@@ -18,7 +19,6 @@ export type StorageFileDocument = HydratedDocument<StorageFileRecord>;
     },
   },
 })
-/** MongoDB record describing a stored file. */
 export class StorageFileRecord {
   /** Driver-relative storage key. */
   @Prop({ required: true, unique: true, index: true })

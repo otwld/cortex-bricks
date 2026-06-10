@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+
 /**
- * StatusBadgeTone type used across libs/ng/kit.
+ * Visual tone used by `StatusBadgeComponent` to communicate status severity.
  */
-
-
 export type StatusBadgeTone = 'neutral' | 'positive' | 'info' | 'warning' | 'negative';
-/**
- * StatusBadgeSize type used across libs/ng/kit.
- */
 
+/**
+ * Badge size used by `StatusBadgeComponent`.
+ */
 export type StatusBadgeSize = 'sm' | 'md' | 'lg';
 
+/**
+ * Compact status label with tone and size variants.
+ */
 @Component({
   selector: 'kit-status-badge',
   template: '{{ label() }}',
@@ -82,9 +84,16 @@ export type StatusBadgeSize = 'sm' | 'md' | 'lg';
   },
 })
 export class StatusBadgeComponent {
+  /** Visible status label. */
   readonly label = input.required<string>();
+
+  /** Visual status tone. */
   readonly tone = input<StatusBadgeTone>('neutral');
+
+  /** Badge size. */
   readonly size = input<StatusBadgeSize>('md');
+
+  /** Optional accessible label when visible text needs more context. */
   readonly ariaLabel = input<string | null>(null);
 
   protected readonly hostClass = computed(

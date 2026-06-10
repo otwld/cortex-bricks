@@ -24,6 +24,9 @@ export interface BankingTransactionSelectEvent {
   readonly transaction: BankingTransaction;
 }
 
+/**
+ * Union of events emitted by the compact recent transactions widget.
+ */
 export type RecentTransactionsWidgetEvent = { readonly type: 'transaction' } & BankingTransactionSelectEvent;
 
 interface BankingTransactionViewModel extends BankingTransaction {
@@ -40,6 +43,9 @@ const DEFAULT_TRANSACTIONS: readonly BankingTransaction[] = [
   { id: 'amazon-041222-small', merchant: 'Amazon', date: '04/12/2022', amount: 12.5, imageUrl: '/demo/images/banking/amazon.png' },
 ];
 
+/**
+ * Banking widget that renders a compact list of recent merchant transactions.
+ */
 @Component({
   standalone: true,
   selector: 'app-recent-transactions-widget',

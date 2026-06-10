@@ -5,8 +5,14 @@ import { $dt } from '@primeuix/themes';
 import { ChartModule } from 'primeng/chart';
 import { Subject } from 'rxjs';
 
+/**
+ * Semantic color tone for banking overview chart series.
+ */
 export type BankingOverviewTone = 'green' | 'primary' | 'cyan' | 'orange' | 'gray';
 
+/**
+ * Color scheme used when resolving PrimeNG design tokens for the chart.
+ */
 export type BankingOverviewColorScheme = 'light' | 'dark';
 
 /**
@@ -30,6 +36,9 @@ export interface BankingOverviewDataSelectEvent {
   readonly event: unknown;
 }
 
+/**
+ * Union of events emitted by the banking overview widget event stream.
+ */
 export type BankingOverviewWidgetEvent = { readonly type: 'data' } & BankingOverviewDataSelectEvent;
 
 interface BankingOverviewThemeToken {
@@ -66,6 +75,9 @@ const TEXT_MUTED_COLOR_TOKEN: BankingOverviewThemeToken = { tokenPath: 'text.mut
 
 const CONTENT_BORDER_COLOR_TOKEN: BankingOverviewThemeToken = { tokenPath: 'content.border.color', fallback: '#e2e8f0' };
 
+/**
+ * Banking dashboard line-chart widget for income and expense overview data.
+ */
 @Component({
   standalone: true,
   selector: 'app-overview-widget',

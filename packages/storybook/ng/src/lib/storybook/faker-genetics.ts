@@ -5,7 +5,14 @@ import {
   type LocaleDefinition,
 } from '@faker-js/faker';
 
+/**
+ * Seed value used to make generated Storybook data deterministic.
+ */
 export type FakerSeed = number | string;
+
+/**
+ * Stable entity key used when deriving deterministic IDs and records.
+ */
 export type FakerEntityKey = string | number;
 type GeneticsComparable = string | number | boolean | Date | null | undefined;
 
@@ -33,11 +40,17 @@ export interface FakerEntityContext {
   oneOf: <TValue>(values: readonly TValue[]) => TValue;
 }
 
+/**
+ * Builder callback used by a faker genetics entity factory.
+ */
 export type FakerEntityBuilder<TInput, TEntity> = (
   context: FakerEntityContext,
   input: TInput
 ) => TEntity;
 
+/**
+ * Deterministic factory for one Storybook data entity.
+ */
 export type FakerEntityFactory<TInput, TEntity> = (
   key: FakerEntityKey,
   input: TInput

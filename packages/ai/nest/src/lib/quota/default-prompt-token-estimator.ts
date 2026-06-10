@@ -7,15 +7,6 @@ export type AiQuotaRequestKind = 'chat' | 'completion' | 'object';
 export type AiQuotaRequestBody = AiChatRequest | AiCompletionRequest | AiObjectRequest;
 
 /** Estimates prompt tokens with a conservative character ratio. */
-/**
- * Runs estimate prompt tokens.
- *
- * @param kind - kind value.
- *
- * @param request - request value.
- *
- * @returns The estimate prompt tokens result.
- */
 export function estimatePromptTokens(kind: AiQuotaRequestKind, request: AiQuotaRequestBody): number {
   const text = collectPromptText(kind, request);
   return Math.max(1, Math.ceil(text.length / 4));

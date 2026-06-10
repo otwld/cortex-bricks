@@ -15,13 +15,6 @@ export class PresenceService {
    *
    * @param room Room id.
    */
-  /**
-   * Runs members.
-   *
-   * @param room - room value.
-   *
-   * @returns The presence service members result.
-   */
   public members(room: RoomId): Signal<readonly UserContextSnapshot[]> {
     return this.tracker.signalFor(room);
   }

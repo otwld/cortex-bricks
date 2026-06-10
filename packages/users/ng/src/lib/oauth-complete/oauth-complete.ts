@@ -34,7 +34,7 @@ export class OAuthCompletePage implements OnInit {
   protected readonly error = signal<string | null>(null);
 
   /**
-   * Runs ng on init.
+   * Completes invitation OAuth using the returned state query parameter.
    */
   ngOnInit(): void {
     const state = this.route.snapshot.queryParamMap.get('state');

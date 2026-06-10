@@ -5,6 +5,9 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { ProgressBarModule } from 'primeng/progressbar';
 
+/**
+ * Visual tone used by best-selling product progress rows.
+ */
 export type BestSellingTone = 'orange' | 'cyan' | 'pink' | 'green' | 'purple' | 'teal' | 'primary';
 
 /**
@@ -65,6 +68,9 @@ const TONE_CLASSES: Record<BestSellingTone, Pick<BestSellingProductViewModel, 'p
   primary: { progressClass: 'bg-primary', textClass: 'text-primary' },
 };
 
+/**
+ * Ecommerce widget that ranks products by sales share.
+ */
 @Component({
   selector: 'app-best-selling-widget',
   imports: [ButtonModule, MenuModule, ProgressBarModule],

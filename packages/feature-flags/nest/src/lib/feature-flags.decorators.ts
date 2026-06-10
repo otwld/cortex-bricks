@@ -1,10 +1,14 @@
 import { createParamDecorator, ExecutionContext, SetMetadata } from '@nestjs/common';
 import type { FeatureFlagKey, FeatureScope } from '@otwld/ts-feature-flags';
 
+/**
+ * Metadata key used by guards to discover required feature flags.
+ */
 export const FEATURE_FLAG_REQUIREMENT_KEY = 'feature-flags:require';
-/** FeatureFlagRequirement. */
 
-
+/**
+ * Feature flag requirement stored on a controller or route handler.
+ */
 export type FeatureFlagRequirement = { name: FeatureFlagKey; scope: FeatureScope };
 
 /**

@@ -13,11 +13,8 @@ import { UploadTask } from '../models/upload-task';
 import { STORAGE_CONFIG } from '../tokens/storage-config.token';
 import { getUploadProgress, isMimeTypeAllowed } from '../utils/storage-utils';
 
-/**
- * Provides storage service behavior.
- */
-@Injectable({ providedIn: 'root' })
 /** Root Angular service for creating upload tasks and requesting signed URLs. */
+@Injectable({ providedIn: 'root' })
 export class StorageService implements OnDestroy {
   private readonly config = inject(STORAGE_CONFIG);
   private readonly http = inject(HttpClient);
@@ -47,16 +44,7 @@ export class StorageService implements OnDestroy {
     });
   }
 
-  /** Create an upload task for a file and optionally auto-start it. */
-  /**
-   * Runs upload.
-   *
-   * @param file - file value.
-   *
-   * @param options - options value.
-   *
-   * @returns The storage service upload result.
-   */
+  /** Creates an upload task for a file and optionally auto-starts it. */
   upload(file: File, options: UploadOptions = {}): UploadTask {
     this.assertBrowser();
     this.validateFile(file, options);
@@ -70,16 +58,7 @@ export class StorageService implements OnDestroy {
     return task;
   }
 
-  /** Create upload tasks for multiple files and expose them as a group. */
-  /**
-   * Runs upload group.
-   *
-   * @param files - files value.
-   *
-   * @param options - options value.
-   *
-   * @returns The storage service upload group result.
-   */
+  /** Creates upload tasks for multiple files and exposes them as a group. */
   uploadGroup(files: File[], options: GroupUploadOptions = {}): UploadGroup {
     this.assertBrowser();
     const groupId = options.groupId ?? crypto.randomUUID();
@@ -89,32 +68,17 @@ export class StorageService implements OnDestroy {
     return group;
   }
 
-  /** Pause a task by id. */
-  /**
-   * Runs pause.
-   *
-   * @param taskId - task id value.
-   */
+  /** Pauses a tracked task by id. */
   pause(taskId: string): void {
     this._tasks().get(taskId)?.pause();
   }
 
-  /** Resume a task by id. */
-  /**
-   * Runs resume.
-   *
-   * @param taskId - task id value.
-   */
+  /** Resumes a tracked task by id. */
   resume(taskId: string): void {
     this._tasks().get(taskId)?.resume();
   }
 
-  /** Cancel a task by id. */
-  /**
-   * Runs cancel.
-   *
-   * @param taskId - task id value.
-   */
+  /** Cancels a tracked task by id. */
   cancel(taskId: string): void {
     this._tasks().get(taskId)?.cancel();
   }
@@ -134,17 +98,10 @@ export class StorageService implements OnDestroy {
     this.tasks().forEach((task) => this.resume(task.id));
   }
 
-  /** Request a signed read URL from the configured endpoint. */
   /**
-   * Runs get signed url.
+   * Requests a signed read URL from the configured endpoint.
    *
-   * @param key - key value.
-   *
-   * @param expiresIn - expires in value.
-   *
-   * @returns The storage service get signed url result.
-   *
-   * @throws When the operation cannot be completed.
+   * @throws StorageClientError when the endpoint request fails.
    */
   async getSignedUrl(key: string, expiresIn = this.config.defaultExpiresIn): Promise<string> {
     try {

@@ -101,51 +101,23 @@ export class AiUsageCardComponent implements OnInit, OnDestroy {
   }
 
   /** Returns the percentage of the bucket already consumed or reserved. */
-  /**
-   * Runs percent.
-   *
-   * @param bucket - bucket value.
-   *
-   * @returns The ai usage card component percent result.
-   */
   percent(bucket: AiQuotaUsageBucket): number {
     if (bucket.limitTokens === 0) return 0;
     return Math.min(100, Math.round(((bucket.usedTokens + bucket.reservedTokens) / bucket.limitTokens) * 100));
   }
 
   /** Returns a compact label for a quota bucket window. */
-  /**
-   * Runs window label.
-   *
-   * @param bucket - bucket value.
-   *
-   * @returns The ai usage card component window label result.
-   */
   windowLabel(bucket: AiQuotaUsageBucket): string {
     const unit = bucket.window.size === 1 ? bucket.window.unit : `${bucket.window.unit}s`;
     return `${bucket.window.size} ${unit}`;
   }
 
   /** Returns a local reset timestamp label. */
-  /**
-   * Runs reset label.
-   *
-   * @param bucket - bucket value.
-   *
-   * @returns The ai usage card component reset label result.
-   */
   resetLabel(bucket: AiQuotaUsageBucket): string {
     return new Date(bucket.resetAt).toLocaleString();
   }
 
   /** Returns usage text severity classes for the bucket. */
-  /**
-   * Runs bucket class.
-   *
-   * @param bucket - bucket value.
-   *
-   * @returns The ai usage card component bucket class result.
-   */
   bucketClass(bucket: AiQuotaUsageBucket): string {
     if (bucket.exceeded) return 'font-semibold text-red-500';
     if (this.percent(bucket) >= 80) return 'font-semibold text-amber-500';

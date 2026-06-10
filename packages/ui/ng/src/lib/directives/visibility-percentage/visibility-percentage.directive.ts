@@ -7,12 +7,15 @@ import {
   AfterViewInit,
 } from '@angular/core';
 
+/**
+ * Emits rounded intersection visibility percentages for the host element.
+ */
 @Directive({
   selector: '[kitVisibilityPercentage]',
   standalone: true,
 })
-/** Emits rounded intersection visibility percentages for the host element. */
 export class VisibilityPercentageDirective implements AfterViewInit, OnDestroy {
+  /** Emits the rounded 0-100 intersection percentage for the host element. */
   @Output() visibilityChange = new EventEmitter<number>();
 
   private observer: IntersectionObserver | undefined;

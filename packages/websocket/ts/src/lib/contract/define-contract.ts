@@ -50,15 +50,6 @@ export interface Contract<
  *
  * @param input Contract input.
  */
-/**
- * Runs define contract.
- *
- * @param input - input value.
- *
- * @returns The define contract result.
- *
- * @throws When the operation cannot be completed.
- */
 export function defineContract<
   const TC2s extends ClientEventGroup,
   const TS2c extends ServerEventGroup,

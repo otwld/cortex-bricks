@@ -14,6 +14,12 @@ function sign(message: string, secret: string): string {
   return createHmac('sha256', secret).update(message).digest('base64url');
 }
 
+/**
+ * Creates a compact HMAC-signed token for filesystem-backed read URLs.
+ *
+ * The token format is JWT-like but private to the storage brick; callers should
+ * treat it as opaque and validate it with `verifyFilesystemSignedToken`.
+ */
 export function createFilesystemSignedToken(key: string, secret: string, expiresAt: number): string {
   const header = encode({ alg: 'HS256', typ: 'JWT' });
   const payload = encode({ k: key, e: expiresAt } satisfies FilesystemSignedPayload);
@@ -21,6 +27,13 @@ export function createFilesystemSignedToken(key: string, secret: string, expires
   return `${message}.${sign(message, secret)}`;
 }
 
+/**
+ * Verifies and decodes a filesystem signed URL token.
+ *
+ * Invalid, malformed, or expired tokens are surfaced as storage not-found
+ * exceptions so the public filesystem route does not reveal whether the object
+ * key exists.
+ */
 export function verifyFilesystemSignedToken(token: string, secret: string): { key: string; exp: number } {
   const [header, payload, signature] = token.split('.');
   if (!header || !payload || !signature) {

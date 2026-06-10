@@ -6,7 +6,7 @@ import { DarkModePreference } from './dark-mode.types';
 type MediaQueryChangeListener = (event: MediaQueryListEvent) => void;
 
 /**
- * Provides dark mode service behavior.
+ * Manages persisted, system, and explicit dark-mode preferences for Angular apps.
  */
 @Injectable({ providedIn: 'root' })
 export class DarkModeService {
@@ -19,7 +19,14 @@ export class DarkModeService {
   private readonly preferenceState = signal<DarkModePreference>(this.readInitialPreference());
   private initialized = false;
 
+  /**
+   * Current dark-mode preference selected by the user or initial config.
+   */
   readonly preference: Signal<DarkModePreference> = this.preferenceState.asReadonly();
+
+  /**
+   * Resolved dark-mode state after applying explicit or system preference.
+   */
   readonly isDarkMode = computed(() => {
     const preference = this.preferenceState();
 
@@ -40,9 +47,9 @@ export class DarkModeService {
   }
 
   /**
-   * Runs set preference.
+   * Sets the dark-mode preference and persists it when configured.
    *
-   * @param preference - preference value.
+   * @param preference - Preference to apply.
    */
   setPreference(preference: DarkModePreference): void {
     this.preferenceState.set(preference);
@@ -51,23 +58,23 @@ export class DarkModeService {
   }
 
   /**
-   * Runs set dark mode.
+   * Sets an explicit light or dark preference from a boolean state.
    *
-   * @param enabled - enabled value.
+   * @param enabled - Whether dark mode should be forced on.
    */
   setDarkMode(enabled: boolean): void {
     this.setPreference(enabled ? 'dark' : 'light');
   }
 
   /**
-   * Runs use system preference.
+   * Switches back to following the operating system color-scheme preference.
    */
   useSystemPreference(): void {
     this.setPreference('system');
   }
 
   /**
-   * Runs toggle dark mode.
+   * Toggles between explicit light and dark preferences.
    */
   toggleDarkMode(): void {
     this.setDarkMode(!this.isDarkMode());

@@ -11,11 +11,6 @@ export class AiUsageService {
   private readonly http = inject(HttpClient);
 
   /** Loads the current user's effective AI quota usage snapshot. */
-  /**
-   * Runs snapshot.
-   *
-   * @returns The ai usage service snapshot result.
-   */
   snapshot(): Promise<AiQuotaUsageSnapshot> {
     return firstValueFrom(this.http.get<AiQuotaUsageSnapshot>(`${this.config.apiBaseUrl}/usage`));
   }

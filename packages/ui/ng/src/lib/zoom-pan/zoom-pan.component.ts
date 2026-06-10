@@ -13,6 +13,9 @@ import {
 import { Subscription, fromEvent } from 'rxjs';
 import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
+/**
+ * Provides pan and zoom interactions for arbitrary projected content.
+ */
 @Component({
   selector: 'kit-zoom-pan',
   standalone: true,
@@ -21,17 +24,25 @@ import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
   styleUrl: './zoom-pan.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-/** Provides pan and zoom interactions for arbitrary projected content. */
 export class ZoomPanComponent implements OnDestroy {
   private readonly wrapperRef = viewChild.required<ElementRef<HTMLElement>>('wrapper');
   private readonly contentRef = viewChild.required<ElementRef<HTMLElement>>('content');
 
   private subs = new Subscription();
 
+  /** Current zoom level. */
   public readonly zoom = model<number>(1);
+
+  /** Maximum allowed zoom level. */
   public readonly maxZoom = input<number>(5);
+
+  /** Minimum allowed zoom level. */
   public readonly minZoom = input<number>(1);
+
+  /** Current horizontal pan offset in pixels. */
   public readonly panX = model<number>(0);
+
+  /** Current vertical pan offset in pixels. */
   public readonly panY = model<number>(0);
 
   constructor() {

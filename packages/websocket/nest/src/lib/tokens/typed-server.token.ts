@@ -12,13 +12,6 @@ const typedServerTokens = new WeakMap<Contract, symbol>();
  *
  * @param contract Contract served by the typed server.
  */
-/**
- * Runs typed server.
- *
- * @param contract - contract value.
- *
- * @returns The typed server result.
- */
 export function TYPED_SERVER<TContract extends Contract>(contract: TContract): symbol {
   let token = typedServerTokens.get(contract);
   if (!token) {
@@ -32,13 +25,6 @@ export function TYPED_SERVER<TContract extends Contract>(contract: TContract): s
  * Provider factory for a contract-scoped `TypedServer`.
  *
  * @param contract Contract served by the typed server.
- */
-/**
- * Runs provide typed server.
- *
- * @param contract - contract value.
- *
- * @returns The provide typed server result.
  */
 export function provideTypedServer<TContract extends Contract>(contract: TContract): Provider {
   return {

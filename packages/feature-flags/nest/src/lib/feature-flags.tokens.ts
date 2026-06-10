@@ -9,6 +9,9 @@ import type {
   FeatureFlagUserContext,
 } from '@otwld/ts-feature-flags';
 
+/**
+ * Evaluator behavior options for primitive condition comparison.
+ */
 export interface FeatureFlagEvaluatorOptions {
   string?: {
     caseSensitive?: boolean;
@@ -30,14 +33,32 @@ export interface FeatureFlagEvaluator {
   test(condition: FeatureCondition, context: FeatureFlagContext): Promise<boolean>;
 }
 
+/**
+ * Resolves feature-flag evaluation context from the active request.
+ */
 export interface FeatureFlagsContextResolver {
   resolveAppContext(request: unknown): Promise<FeatureFlagAppContext>;
   resolveUserContext(request: unknown): Promise<FeatureFlagUserContext>;
 }
 
+/**
+ * Injection token for the condition evaluator implementation.
+ */
 export const FEATURE_FLAGS_EVALUATOR_TOKEN = Symbol('FEATURE_FLAGS_EVALUATOR_TOKEN');
+
+/**
+ * Injection token for resolved condition metadata grouped by subject.
+ */
 export const FEATURE_FLAGS_CONDITION_META_MAP_TOKEN = Symbol('FEATURE_FLAGS_CONDITION_META_MAP_TOKEN');
+
+/**
+ * Injection token for the optional feature-flag catalog.
+ */
 export const FEATURE_FLAGS_CATALOG_TOKEN = Symbol('FEATURE_FLAGS_CATALOG_TOKEN');
+
+/**
+ * Injection token for request-to-context resolution.
+ */
 export const FEATURE_FLAGS_CONTEXT_RESOLVER_TOKEN = Symbol('FEATURE_FLAGS_CONTEXT_RESOLVER_TOKEN');
 
 /**

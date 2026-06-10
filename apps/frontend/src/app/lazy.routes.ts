@@ -58,6 +58,9 @@ const primeNgProvider = provideEnvironmentInitializer(() => {
   });
 });
 
+/**
+ * Auth routes wrapped with PrimeNG theme providers.
+ */
 export const authPrimeNgRoutes: Routes = [
   {
     path: '',
@@ -66,6 +69,9 @@ export const authPrimeNgRoutes: Routes = [
   },
 ];
 
+/**
+ * User-management routes wrapped with PrimeNG theme providers.
+ */
 export const usersPrimeNgRoutes: Routes = [
   {
     path: '',
@@ -74,6 +80,9 @@ export const usersPrimeNgRoutes: Routes = [
   },
 ];
 
+/**
+ * Dashboard routes wrapped with PrimeNG theme and dashboard layout providers.
+ */
 export const dashboardPrimeNgRoutes: Routes = [
   {
     path: '',

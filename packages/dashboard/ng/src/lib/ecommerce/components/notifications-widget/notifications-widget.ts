@@ -5,8 +5,14 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { Subject } from 'rxjs';
 
+/**
+ * Visual tone used by notification icon badges.
+ */
 export type NotificationTone = 'blue' | 'orange' | 'pink' | 'green' | 'purple' | 'cyan' | 'teal' | 'primary';
 
+/**
+ * Text emphasis variant used by notification message fragments.
+ */
 export type NotificationTextVariant = 'default' | 'muted' | 'primary';
 
 /**
@@ -61,6 +67,9 @@ export interface NotificationSelectionEvent {
   readonly notification: EcommerceNotification;
 }
 
+/**
+ * Union of events emitted by the notifications widget event stream.
+ */
 export type NotificationsWidgetEvent =
   | ({ readonly type: 'action' } & NotificationActionEvent)
   | ({ readonly type: 'notification' } & NotificationSelectionEvent);
@@ -165,6 +174,9 @@ const TEXT_CLASSES: Record<NotificationTextVariant, string> = {
   primary: 'font-bold text-primary',
 };
 
+/**
+ * Ecommerce widget that groups notifications and exposes notification actions.
+ */
 @Component({
   selector: 'app-notifications-widget',
   imports: [ButtonModule, MenuModule],

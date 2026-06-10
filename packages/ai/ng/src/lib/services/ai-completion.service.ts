@@ -4,25 +4,22 @@ import { AiCompletionRequest, AiErrorCode } from '@otwld/ts-ai';
 import { AiClientError } from '../errors/ai-client-error';
 import { AI_CONFIG } from '../tokens/ai-config.token';
 
-/**
- * Provides ai completion service behavior.
- */
+/** Angular client for streamed AI text completions. */
 @Injectable({ providedIn: 'root' })
 export class AiCompletionService {
   private readonly config = inject(AI_CONFIG);
   private completion: Completion | null = null;
 
+  /** Current streamed completion text. */
   readonly text = signal('');
+
+  /** Whether the completion request is currently active. */
   readonly loading = signal(false);
+
+  /** Most recent completion client error. */
   readonly error = signal<AiClientError | null>(null);
 
-  /**
-   * Runs create completion.
-   *
-   * @param initialRequest - initial request value.
-   *
-   * @returns The ai completion service create completion result.
-   */
+  /** Create a low-level completion instance with shared request defaults. */
   createCompletion(initialRequest: Partial<Omit<AiCompletionRequest, 'prompt'>> = {}): Completion {
     return new Completion({
       api: `${this.config.apiBaseUrl}/completion`,
@@ -32,15 +29,7 @@ export class AiCompletionService {
     });
   }
 
-  /**
-   * Runs complete.
-   *
-   * @param request - request value.
-   *
-   * @returns The ai completion service complete result.
-   *
-   * @throws When the operation cannot be completed.
-   */
+  /** Stream a completion request and mirror its state through Angular signals. */
   async complete(request: AiCompletionRequest): Promise<string> {
     const completion = this.createCompletion(this.requestOptions(request));
     this.completion = completion;
@@ -67,9 +56,7 @@ export class AiCompletionService {
     }
   }
 
-  /**
-   * Runs abort.
-   */
+  /** Stop the active completion stream, if one exists. */
   abort(): void {
     this.completion?.stop();
     this.loading.set(false);

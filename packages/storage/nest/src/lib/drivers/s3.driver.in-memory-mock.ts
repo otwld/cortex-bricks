@@ -16,6 +16,12 @@ const toBuffer = async (body: unknown): Promise<Buffer> => {
   return Buffer.concat(chunks);
 };
 
+/**
+ * Creates an in-memory AWS S3 client mock for storage driver tests.
+ *
+ * The returned object implements the `send` method shape used by the S3 driver
+ * and keeps object and multipart state externally inspectable for assertions.
+ */
 export function createMockS3({
   storage = new Map<string, Buffer>(),
   multiparts = new Map<string, { key: string; parts: Map<number, Buffer> }>(),

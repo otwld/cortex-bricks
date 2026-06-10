@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 
-/**
- * Provides nest sdk module behavior.
- */
+/** Empty Nest SDK module reserved for shared backend SDK providers. */
 @Module({
   controllers: [],
   providers: [],

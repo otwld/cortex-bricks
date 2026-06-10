@@ -28,10 +28,20 @@ interface Section {
     `
 })
 export class Detail2 implements OnInit, OnDestroy {
+    /**
+     * Article section id currently highlighted in the sticky table of contents.
+     */
     activeSection = signal('manufacturing-giants');
+
+    /**
+     * Whether scroll spy updates are paused during smooth programmatic scrolling.
+     */
     isScrollBlocked = false;
     private scrollHandler: (() => void) | null = null;
 
+    /**
+     * Article sections tracked by the table of contents and scroll spy.
+     */
     sections: Section[] = [
         { id: 'manufacturing-giants', title: 'How Manufacturing Giants Drive Economic Growth' },
         { id: 'manufacturing-investment', title: 'Manufacturing Investment: Risk or Opportunity?' },
@@ -40,7 +50,7 @@ export class Detail2 implements OnInit, OnDestroy {
     ];
 
     /**
-     * Runs ng on init.
+     * Registers the scroll listener and initializes the active section.
      */
     ngOnInit() {
         this.scrollHandler = this.handleScroll.bind(this);
@@ -49,7 +59,7 @@ export class Detail2 implements OnInit, OnDestroy {
     }
 
     /**
-     * Runs ng on destroy.
+     * Removes the scroll listener registered by this page.
      */
     ngOnDestroy() {
         if (this.scrollHandler) {
@@ -58,9 +68,9 @@ export class Detail2 implements OnInit, OnDestroy {
     }
 
     /**
-     * Runs scroll to section.
+     * Smoothly scrolls to an article section and temporarily blocks scroll spy updates.
      *
-     * @param sectionId - section id value.
+     * @param sectionId - Section id to scroll into view.
      */
     scrollToSection(sectionId: string) {
         this.activeSection.set(sectionId);
@@ -89,9 +99,9 @@ export class Detail2 implements OnInit, OnDestroy {
     }
 
     /**
-     * Runs get indicator offset.
+     * Calculates the table-of-contents indicator offset for the active section.
      *
-     * @returns The detail2 get indicator offset result.
+     * @returns Pixel offset for the active section indicator.
      */
     getIndicatorOffset(): number {
         const index = this.sections.findIndex((s) => s.id === this.activeSection());

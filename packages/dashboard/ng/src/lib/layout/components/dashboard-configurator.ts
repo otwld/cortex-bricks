@@ -77,6 +77,9 @@ const ATLANTIS_THEME_VALUES = {
   },
 } as const;
 
+/**
+ * Dashboard theme and layout configurator drawer.
+ */
 @Component({
   selector: 'app-configurator',
 
@@ -245,27 +248,54 @@ const ATLANTIS_THEME_VALUES = {
 export class DashboardConfigurator {
   protected readonly atlantisThemeValues = ATLANTIS_THEME_VALUES;
 
+  /**
+   * Enables the compact cog-only trigger used by embedded dashboard layouts.
+   */
   readonly simple = input<boolean, unknown>(false, {
     transform: booleanAttribute,
   });
 
+  /**
+   * Router dependency reserved for route-aware configurator behavior.
+   */
   router = inject(Router);
 
+  /**
+   * PrimeNG configuration service used by the theme controls.
+   */
   config = inject(PrimeNG);
 
+  /**
+   * Shared dashboard layout state updated by menu and drawer controls.
+   */
   layoutService = inject(DashboardLayoutService);
 
+  /**
+   * Dark-mode state service backing the color-scheme selector.
+   */
   darkModeService = inject(DarkModeService);
 
+  /**
+   * PrimeNG runtime API used for theme preset updates.
+   */
   primeng = inject(PrimeNG);
 
+  /**
+   * Available PrimeNG preset names displayed in the preset selector.
+   */
   presets = Object.keys(presets);
 
+  /**
+   * Binary color-scheme options bound to the dark-mode select button.
+   */
   themeOptions = [
     { name: 'Light', value: false },
     { name: 'Dark', value: true },
   ];
 
+  /**
+   * Supported surface palettes offered by the theme configurator.
+   */
   surfaces: SurfacesType[] = [
     {
       name: 'slate',
@@ -392,22 +422,46 @@ export class DashboardConfigurator {
     },
   ];
 
+  /**
+   * Currently selected primary palette name from the layout configuration.
+   */
   selectedPrimaryColor = computed(() => {
     return this.layoutService.layoutConfig().primary;
   });
 
+  /**
+   * Currently selected surface palette name from the layout configuration.
+   */
   selectedSurfaceColor = computed(() => this.layoutService.layoutConfig().surface);
 
+  /**
+   * Currently selected PrimeNG preset name from the layout configuration.
+   */
   selectedPreset = computed(() => this.layoutService.layoutConfig().preset);
 
+  /**
+   * Writable menu mode model shared with the menu type radio controls.
+   */
   menuMode = model(this.layoutService.layoutConfig().menuMode);
 
+  /**
+   * Whether the settings drawer is currently visible.
+   */
   visible = computed(() => this.layoutService.layoutState().configSidebarVisible ?? false);
 
+  /**
+   * Current dark-mode state used by the color-scheme selector.
+   */
   darkModeEnabled = computed(() => this.darkModeService.isDarkMode());
 
+  /**
+   * Selected surface palette name used to highlight the active surface swatch.
+   */
   selectedSurface = computed(() => this.layoutService.layoutConfig().surface);
 
+  /**
+   * Primary palettes derived from the active PrimeNG preset plus the Atlantis default.
+   */
   primaryColors = computed<SurfacesType[]>(() => {
     const presetPalette = presets[this.layoutService.layoutConfig().preset as KeyOfType<typeof presets>].primitive;
     const colors = [
@@ -442,8 +496,14 @@ export class DashboardConfigurator {
     return palettes;
   });
 
+  /**
+   * Current menu theme strategy from the shared layout configuration.
+   */
   menuTheme = computed(() => this.layoutService.layoutConfig().menuTheme);
 
+  /**
+   * Builds the PrimeNG preset extension for noir and colored primary palettes.
+   */
   getPresetExt() {
     const color: SurfacesType = this.primaryColors().find((c) => c.name === this.selectedPrimaryColor()) ?? {
       name: 'noir',
@@ -537,6 +597,9 @@ export class DashboardConfigurator {
     }
   }
 
+  /**
+   * Updates the selected palette in layout state and applies the matching theme change.
+   */
   updateColors(event: Event, type: 'primary' | 'surface', color: SurfacesType) {
     if (type === 'primary') {
       this.layoutService.layoutConfig.update((state) => ({
@@ -554,6 +617,9 @@ export class DashboardConfigurator {
     event.stopPropagation();
   }
 
+  /**
+   * Applies primary preset or surface palette updates through the PrimeUI theme runtime.
+   */
   applyTheme(type: 'primary' | 'surface', color: SurfacesType) {
     if (type === 'primary') {
       updatePreset(this.getPresetExt());
@@ -562,6 +628,9 @@ export class DashboardConfigurator {
     }
   }
 
+  /**
+   * Switches PrimeNG presets while preserving the selected primary and surface palettes.
+   */
   onPresetChange(event: KeyOfType<typeof presets>) {
     this.layoutService.layoutConfig.update((state) => ({
       ...state,
@@ -572,6 +641,9 @@ export class DashboardConfigurator {
     $t().preset(preset).preset(this.getPresetExt()).surfacePalette(surfacePalette).use({ useDefaultOptions: true });
   }
 
+  /**
+   * Synchronizes the shared layout state after the settings drawer closes.
+   */
   onDrawerHide() {
     this.layoutService.layoutState.update((prev) => ({
       ...prev,
@@ -579,6 +651,9 @@ export class DashboardConfigurator {
     }));
   }
 
+  /**
+   * Updates the menu mode and resets incompatible transparent menu themes.
+   */
   setMenuMode(mode: string) {
     const nonTransparentModes = ['reveal', 'drawer', 'overlay'];
     const currentMenuTheme = this.menuTheme();
@@ -601,10 +676,16 @@ export class DashboardConfigurator {
     }
   }
 
+  /**
+   * Sets the application-wide dark-mode preference.
+   */
   setDarkMode(enabled: boolean): void {
     this.darkModeService.setDarkMode(enabled);
   }
 
+  /**
+   * Toggles the settings drawer visibility in shared layout state.
+   */
   toggleConfigSidebar() {
     this.layoutService.layoutState.update((prev) => ({
       ...prev,
@@ -612,6 +693,9 @@ export class DashboardConfigurator {
     }));
   }
 
+  /**
+   * Updates the active menu theme strategy in shared layout state.
+   */
   setMenuTheme(theme: string) {
     this.layoutService.layoutConfig.update((prev) => ({
       ...prev,
@@ -619,6 +703,9 @@ export class DashboardConfigurator {
     }));
   }
 
+  /**
+   * Returns whether the transparent menu theme is unavailable for the active mode.
+   */
   isTransparentThemeOptionDisabled() {
     const menuMode = this.menuMode();
     return ['reveal', 'overlay', 'drawer'].includes(menuMode as string);

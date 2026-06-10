@@ -10,11 +10,10 @@ import { AiQuotaRequestBody, AiQuotaRequestKind, estimatePromptTokens } from './
 @Injectable()
 export class AiQuotaService {
   /**
-   * Creates a ai quota service instance.
+   * Create the AI quota service.
    *
-   * @param endpoints - endpoints value.
-   *
-   * @param storage - storage value.
+   * @param endpoints - Quota and endpoint limit configuration.
+   * @param storage - Optional quota storage provider used when quota is enabled.
    */
   constructor(
     @Inject(AI_ENDPOINT_OPTIONS) private readonly endpoints: Pick<NormalizedAiEndpointOptions, 'quota' | 'limits'>,
@@ -22,19 +21,6 @@ export class AiQuotaService {
   ) {}
 
   /** Reserves quota for a request body before an AI provider call starts. */
-  /**
-   * Runs reserve for request.
-   *
-   * @param request - request value.
-   *
-   * @param kind - kind value.
-   *
-   * @param body - body value.
-   *
-   * @returns The ai quota service reserve for request result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async reserveForRequest(request: unknown, kind: AiQuotaRequestKind, body: AiQuotaRequestBody): Promise<AiQuotaReservation | null> {
     if (!this.endpoints.quota.enabled) return null;
     if (!this.storage) throw AiException.misconfigured('AI quota is enabled but no quota storage provider is registered');
@@ -58,15 +44,6 @@ export class AiQuotaService {
   }
 
   /** Returns the current user's effective quota usage snapshot. */
-  /**
-   * Runs snapshot for request.
-   *
-   * @param request - request value.
-   *
-   * @returns The ai quota service snapshot for request result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async snapshotForRequest(request: unknown): Promise<AiQuotaUsageSnapshot> {
     if (!this.endpoints.quota.enabled) {
       throw AiException.misconfigured('AI quota usage is unavailable because quota is disabled');
@@ -85,37 +62,18 @@ export class AiQuotaService {
   }
 
   /** Commits actual provider usage against an existing reservation. */
-  /**
-   * Runs commit.
-   *
-   * @param reservation - reservation value.
-   *
-   * @param usage - usage value.
-   */
   async commit(reservation: AiQuotaReservation | null, usage: unknown): Promise<void> {
     if (!reservation || !this.storage) return;
     await this.storage.commit(reservation, this.normalizeUsage(usage));
   }
 
   /** Releases an existing reservation without committing usage. */
-  /**
-   * Runs release.
-   *
-   * @param reservation - reservation value.
-   */
   async release(reservation: AiQuotaReservation | null): Promise<void> {
     if (!reservation || !this.storage) return;
     await this.storage.release(reservation);
   }
 
   /** Commits or releases a streaming reservation once final usage is available. */
-  /**
-   * Runs commit when usage settles.
-   *
-   * @param reservation - reservation value.
-   *
-   * @param usage - usage value.
-   */
   commitWhenUsageSettles(reservation: AiQuotaReservation | null, usage: PromiseLike<unknown> | undefined): void {
     if (!reservation || !usage) return;
     void Promise.resolve(usage)

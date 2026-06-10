@@ -21,13 +21,6 @@ export abstract class WsAuthAdapter {
    *
    * @param handshake Frozen view of the handshake.
    */
-  /**
-   * Runs authenticate.
-   *
-   * @param handshake - handshake value.
-   *
-   * @returns The ws auth adapter authenticate result.
-   */
   public abstract authenticate(handshake: HandshakeContext): Promise<UserContext | null>;
 
   /**
@@ -35,26 +28,12 @@ export abstract class WsAuthAdapter {
    *
    * @param socket Authenticated socket whose token is expiring.
    */
-  /**
-   * Runs on token expired.
-   *
-   * @param socket - socket value.
-   *
-   * @returns The ws auth adapter on token expired result.
-   */
   public onTokenExpired?(socket: AuthenticatedSocket): Promise<'disconnect' | 'allow'>;
 
   /**
    * Auto-join rooms based on user claims after authentication.
    *
    * @param user Authenticated user context.
-   */
-  /**
-   * Runs resolve rooms.
-   *
-   * @param user - user value.
-   *
-   * @returns The ws auth adapter resolve rooms result.
    */
   public resolveRooms?(user: UserContext): Promise<readonly RoomId[]>;
 }

@@ -8,6 +8,9 @@ import {
 } from '@angular/router';
 import { of } from 'rxjs';
 
+/**
+ * Values used to build an Angular `ActivatedRoute` test double.
+ */
 export interface ActivatedRouteTestingConfig {
   data?: Data;
   fragment?: string | null;
@@ -17,6 +20,9 @@ export interface ActivatedRouteTestingConfig {
   snapshot?: Partial<ActivatedRouteSnapshot>;
 }
 
+/**
+ * Provides an `ActivatedRoute` mock with observable and snapshot values.
+ */
 export function provideActivatedRoute(
   config: ActivatedRouteTestingConfig = {},
 ): Provider {

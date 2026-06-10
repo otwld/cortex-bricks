@@ -18,6 +18,9 @@ export interface FeatureFlagUsersDataSource {
   search(term: string, page?: number, pageSize?: number): Promise<FeatureFlagUserSummary[]>;
 }
 
+/**
+ * Injection token for user search used by feature-targeting UI.
+ */
 export const FEATURE_FLAG_USERS_DATA_SOURCE_TOKEN = new InjectionToken<FeatureFlagUsersDataSource>(
   'FEATURE_FLAG_USERS_DATA_SOURCE_TOKEN',
 );

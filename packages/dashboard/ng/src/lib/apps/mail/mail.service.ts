@@ -36,7 +36,7 @@ export interface Email {
 }
 
 /**
- * Provides mail service behavior.
+ * Loads demo mail data and applies local message state changes for mail pages.
  */
 @Injectable({
     providedIn: 'root'
@@ -45,11 +45,18 @@ export class MailService {
     private _emailsData = signal<Email[]>([]);
     private _loaded = signal(false);
 
+    /**
+     * Readonly email collection consumed by inbox and detail views.
+     */
     emailsData = this._emailsData.asReadonly();
+
+    /**
+     * Whether demo email data has already been fetched.
+     */
     loaded = this._loaded.asReadonly();
 
     /**
-     * Runs load emails.
+     * Loads demo email data once and caches it in service state.
      */
     async loadEmails() {
         if (this._loaded()) return;
@@ -61,22 +68,20 @@ export class MailService {
     }
 
     /**
-     * Runs get email by id.
+     * Finds one email in the cached collection.
      *
-     * @param id - id value.
-     *
-     * @returns The mail service get email by id result.
+     * @param id - Email id to look up.
+     * @returns Matching email, or null when it is not loaded.
      */
     getEmailById(id: number): Email | null {
         return this._emailsData().find((email) => email.id === id) ?? null;
     }
 
     /**
-     * Runs update email.
+     * Merges partial state into one cached email record.
      *
-     * @param id - id value.
-     *
-     * @param updates - updates value.
+     * @param id - Email id to update.
+     * @param updates - Partial email fields to merge.
      */
     updateEmail(id: number, updates: Partial<Email>) {
         const emails = this._emailsData();
@@ -88,27 +93,27 @@ export class MailService {
     }
 
     /**
-     * Runs mark as read.
+     * Marks one email as read.
      *
-     * @param id - id value.
+     * @param id - Email id to update.
      */
     markAsRead(id: number) {
         this.updateEmail(id, { read: true });
     }
 
     /**
-     * Runs mark as unread.
+     * Marks one email as unread.
      *
-     * @param id - id value.
+     * @param id - Email id to update.
      */
     markAsUnread(id: number) {
         this.updateEmail(id, { read: false });
     }
 
     /**
-     * Runs toggle star.
+     * Toggles the starred state for one email.
      *
-     * @param id - id value.
+     * @param id - Email id to update.
      */
     toggleStar(id: number) {
         const email = this.getEmailById(id);
@@ -118,9 +123,9 @@ export class MailService {
     }
 
     /**
-     * Runs toggle important.
+     * Toggles the important state for one email.
      *
-     * @param id - id value.
+     * @param id - Email id to update.
      */
     toggleImportant(id: number) {
         const email = this.getEmailById(id);
@@ -130,45 +135,45 @@ export class MailService {
     }
 
     /**
-     * Runs archive email.
+     * Marks one email as archived.
      *
-     * @param id - id value.
+     * @param id - Email id to update.
      */
     archiveEmail(id: number) {
         this.updateEmail(id, { archived: true });
     }
 
     /**
-     * Runs unarchive email.
+     * Removes the archived state from one email.
      *
-     * @param id - id value.
+     * @param id - Email id to update.
      */
     unarchiveEmail(id: number) {
         this.updateEmail(id, { archived: false });
     }
 
     /**
-     * Runs mark as spam.
+     * Marks one email as spam.
      *
-     * @param id - id value.
+     * @param id - Email id to update.
      */
     markAsSpam(id: number) {
         this.updateEmail(id, { spam: true });
     }
 
     /**
-     * Runs delete email.
+     * Moves one email to trash.
      *
-     * @param id - id value.
+     * @param id - Email id to update.
      */
     deleteEmail(id: number) {
         this.updateEmail(id, { deleted: true });
     }
 
     /**
-     * Runs recover email.
+     * Recovers one email from trash or spam.
      *
-     * @param id - id value.
+     * @param id - Email id to update.
      */
     recoverEmail(id: number) {
         this.updateEmail(id, { deleted: false, spam: false });

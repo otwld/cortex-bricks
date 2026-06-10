@@ -12,6 +12,10 @@ const DEFAULT_REGION_KEY = 'MINIO_REGION';
 const DEFAULT_SECRET_KEY_KEY = 'MINIO_SECRET_KEY';
 const DEFAULT_USE_SSL_KEY = 'MINIO_USE_SSL';
 
+/**
+ * Environment-key mapping used when deriving S3 storage options from MinIO
+ * configuration.
+ */
 export interface MinioStorageConfigKeyOptions {
   accessKeyKey?: string;
   bucketKey?: string;
@@ -83,6 +87,13 @@ function buildEndpointUrl(
   return `${useSsl ? 'https' : 'http'}://${endpoint}${port ? `:${port}` : ''}`;
 }
 
+/**
+ * Reads MinIO settings from Nest `ConfigService` and returns S3 storage options.
+ *
+ * Required values must be present and non-empty. The endpoint setting must be a
+ * host name rather than a full URL because the helper derives the protocol from
+ * the configured SSL flag.
+ */
 export function getStorageS3OptionsFromMinioConfig(
   configService: ConfigService,
   options: MinioStorageConfigKeyOptions = {},

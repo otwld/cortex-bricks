@@ -7,8 +7,14 @@ import { ChartModule } from 'primeng/chart';
 import { SelectModule } from 'primeng/select';
 import { Subject } from 'rxjs';
 
+/**
+ * Semantic color tone for revenue overview chart series.
+ */
 export type RevenueOverviewTone = 'primary' | 'primary-soft' | 'cyan' | 'orange' | 'gray';
 
+/**
+ * Color scheme used when resolving PrimeNG design tokens for the chart.
+ */
 export type RevenueOverviewColorScheme = 'light' | 'dark';
 
 /**
@@ -49,6 +55,9 @@ export interface RevenueOverviewDataSelectEvent {
   readonly event: unknown;
 }
 
+/**
+ * Union of events emitted by the revenue overview widget event stream.
+ */
 export type RevenueOverviewWidgetEvent =
   | ({ readonly type: 'period' } & RevenueOverviewPeriodChangeEvent)
   | ({ readonly type: 'data' } & RevenueOverviewDataSelectEvent);
@@ -93,6 +102,9 @@ const TEXT_MUTED_COLOR_TOKEN: RevenueOverviewThemeToken = { tokenPath: 'text.mut
 
 const CONTENT_BORDER_COLOR_TOKEN: RevenueOverviewThemeToken = { tokenPath: 'content.border.color', fallback: '#e2e8f0' };
 
+/**
+ * Ecommerce widget that charts revenue trends and supports period filtering.
+ */
 @Component({
   selector: 'app-revenue-overview-widget',
   imports: [ChartModule, FormsModule, SelectModule],

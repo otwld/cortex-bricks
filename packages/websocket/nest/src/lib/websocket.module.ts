@@ -416,13 +416,6 @@ export class WebsocketModule extends ConfigurableModuleClass {
    *
    * @param options Module options.
    */
-  /**
-   * Runs for root.
-   *
-   * @param options - options value.
-   *
-   * @returns The websocket module for root result.
-   */
   public static override forRoot(options: typeof OPTIONS_TYPE): DynamicModule {
     const resolved = resolveWebsocketModuleOptions(options);
     return this.composeModule(resolved, options.authAdapter, super.forRoot(options));
@@ -435,13 +428,6 @@ export class WebsocketModule extends ConfigurableModuleClass {
    * applied lazily by the options provider for the common synchronous path.
    *
    * @param options Async options from `ConfigurableModuleBuilder`.
-   */
-  /**
-   * Runs for root async.
-   *
-   * @param options - options value.
-   *
-   * @returns The websocket module for root async result.
    */
   public static override forRootAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule {
     return this.composeAsyncModule(super.forRootAsync(options));

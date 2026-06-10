@@ -6,6 +6,9 @@ function websocketUrl(): string {
   return typeof window === 'undefined' ? 'http://localhost:3000' : window.location.origin;
 }
 
+/**
+ * Development websocket demo route with a local bearer-token auth adapter.
+ */
 export const websocketDemoRoutes: Routes = [
   {
     path: 'ws-demo',

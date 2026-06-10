@@ -41,8 +41,13 @@ type Configuration = {
   };
 };
 
-// Safe because ConfigModule.forRoot runs validate() before this factory,
-// guaranteeing all vars are present.
+/**
+ * Builds the typed backend runtime configuration from validated environment
+ * variables.
+ *
+ * `ConfigModule.forRoot` runs `validate` before this factory, so required
+ * values are safe to read from `process.env` here.
+ */
 export const configuration = (): Configuration => ({
   mongodb: { uri: process.env['MONGODB_URI'] as string },
   jwt: {

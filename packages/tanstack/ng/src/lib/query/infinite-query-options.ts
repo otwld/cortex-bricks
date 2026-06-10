@@ -5,11 +5,10 @@ import { AsyncOperation, resolveAsyncOperation } from './async-operation';
 import { BackendPaginatedResult, getNextPageParam, selectPaginatedResponse } from './infinite-query';
 import { runSkippableQuery } from './run-skippable-query';
 import { Skippable, isSkipped } from './skippable';
+
 /**
- * Internal type used by toolkit/ng-tanstack.
+ * Page parameter type used by this package's infinite-query helpers.
  */
-
-
 type PageParam = number;
 
 /**
@@ -36,9 +35,10 @@ export interface InfiniteQueryOptionsArgs<
    */
   defaultMapper?: (page: BackendPaginatedResult<TQueryFnItem>) => BackendPaginatedResult<TBaseItem>;
 }
-/** InfiniteQueryOptionsBuildArgs. */
 
-
+/**
+ * Runtime input accepted when building infinite query options from a factory.
+ */
 export type InfiniteQueryOptionsBuildArgs<TDto, TItem> = {
   dto: Skippable<TDto>;
   mapper?: (item: TItem) => unknown;
@@ -94,6 +94,9 @@ export function infiniteQueryOptions<
   >;
 };
 
+/**
+ * Creates an infinite-query-options factory with a default page mapper.
+ */
 export function infiniteQueryOptions<
   TDto extends { pagination?: PaginationQuery },
   TQueryKey extends QueryKey,
@@ -129,6 +132,10 @@ export function infiniteQueryOptions<
   >;
 };
 
+/**
+ * Builds infinite query options that request the selected page and flatten the
+ * selected pages into a `PaginatedResult`.
+ */
 export function infiniteQueryOptions<
   TDto extends { pagination?: PaginationQuery },
   TQueryKey extends QueryKey,

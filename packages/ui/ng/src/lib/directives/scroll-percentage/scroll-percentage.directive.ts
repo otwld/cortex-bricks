@@ -7,16 +7,22 @@ import {
   Output,
 } from '@angular/core';
 
+/**
+ * Emits how much of the host element is currently visible in the viewport.
+ */
 @Directive({
   selector: '[kitScrollPercentage]',
   standalone: true,
 })
-/** Emits how much of the host element is currently visible in the viewport. */
 export class ScrollPercentageDirective {
+  /** Emits a 0-100 visibility percentage whenever the window scrolls. */
   @Output() scrollPercentageChange = new EventEmitter<number>();
 
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
+  /**
+   * Calculates and emits the visible percentage of the host element.
+   */
   @HostListener('window:scroll')
   onScroll(): void {
     const rect = this.elementRef.nativeElement.getBoundingClientRect();

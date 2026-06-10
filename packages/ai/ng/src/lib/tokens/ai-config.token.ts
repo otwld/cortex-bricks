@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
 /**
- * Describes ai config values.
+ * Browser AI client configuration supplied by `provideAi`.
  */
 export interface AiConfig {
   apiBaseUrl: string;
@@ -9,21 +9,24 @@ export interface AiConfig {
 }
 
 /**
- * Describes normalized ai config values.
+ * AI client configuration after URL and credentials defaults are applied.
  */
 export interface NormalizedAiConfig {
   apiBaseUrl: string;
   credentials: RequestCredentials;
 }
 
+/**
+ * Injection token for normalized browser AI client configuration.
+ */
 export const AI_CONFIG = new InjectionToken<NormalizedAiConfig>('AI_CONFIG');
 
 /**
- * Runs normalize ai config.
+ * Normalizes browser AI configuration for service consumption.
  *
- * @param config - config value.
+ * @param config - Raw AI configuration from `provideAi`.
  *
- * @returns The normalize ai config result.
+ * @returns Configuration with trailing API URL slashes removed.
  */
 export function normalizeAiConfig(config: AiConfig): NormalizedAiConfig {
   return {

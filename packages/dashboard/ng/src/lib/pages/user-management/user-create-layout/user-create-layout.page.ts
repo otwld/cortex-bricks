@@ -18,6 +18,9 @@ interface MenuItem {
     templateUrl: './user-create-layout.page.html',
 })
 export class UserCreateLayoutPage {
+    /**
+     * Wizard navigation items in display order.
+     */
     menuItems: MenuItem[] = [
         {
             label: 'Basic Information',
@@ -51,6 +54,9 @@ export class UserCreateLayoutPage {
         }
     ];
 
+    /**
+     * Current router URL used to style the active wizard step.
+     */
     currentRoute = '';
 
     private readonly router = inject(Router);
@@ -61,31 +67,29 @@ export class UserCreateLayoutPage {
     }
 
     /**
-     * Runs is active.
+     * Checks whether a wizard menu route is the current route.
      *
-     * @param menuRoute - menu route value.
-     *
-     * @returns The user create layout page is active result.
+     * @param menuRoute - Wizard route to compare against the current URL.
+     * @returns True when the route is active.
      */
     isActive(menuRoute: string): boolean {
         return this.currentRoute === menuRoute;
     }
 
     /**
-     * Runs navigate to.
+     * Navigates to a wizard step route.
      *
-     * @param menuRoute - menu route value.
+     * @param menuRoute - Wizard route to navigate to.
      */
     navigateTo(menuRoute: string) {
         this.router.navigate([menuRoute]);
     }
 
     /**
-     * Runs get menu button class.
+     * Builds the desktop menu button class for a wizard route.
      *
-     * @param route - route value.
-     *
-     * @returns The user create layout page get menu button class result.
+     * @param route - Wizard route represented by the button.
+     * @returns Class string for active or inactive desktop menu state.
      */
     getMenuButtonClass(route: string): string {
         const baseClass = 'pl-3 pr-2 py-2 rounded-xl flex items-center gap-2 transition-colors cursor-pointer';
@@ -96,11 +100,10 @@ export class UserCreateLayoutPage {
     }
 
     /**
-     * Runs get mobile menu button class.
+     * Builds the mobile menu button class for a wizard route.
      *
-     * @param route - route value.
-     *
-     * @returns The user create layout page get mobile menu button class result.
+     * @param route - Wizard route represented by the button.
+     * @returns Class string for active or inactive mobile menu state.
      */
     getMobileMenuButtonClass(route: string): string {
         const baseClass = 'px-4 py-2 rounded-xl flex items-center gap-2 transition-colors cursor-pointer whitespace-nowrap';

@@ -81,18 +81,10 @@ function createQuotaExports(endpoints: NormalizedAiEndpointOptions): Array<symbo
   return [];
 }
 
-/**
- * Provides ai module behavior.
- */
+/** Nest module that wires AI providers, endpoint controllers, tools, schemas, and quota storage. */
 @Module({})
 export class AiModule {
-  /**
-   * Runs for root.
-   *
-   * @param options - options value.
-   *
-   * @returns The ai module for root result.
-   */
+  /** Configure AI providers and endpoints with synchronous options. */
   static forRoot(options: AiModuleOptions): DynamicModule {
     const validated = validateAiModuleOptions(options);
     return {
@@ -110,13 +102,7 @@ export class AiModule {
     };
   }
 
-  /**
-   * Runs for root async.
-   *
-   * @param asyncOptions - async options value.
-   *
-   * @returns The ai module for root async result.
-   */
+  /** Configure AI providers and endpoints with an async factory or options class. */
   static forRootAsync(asyncOptions: ManualAiModuleAsyncOptions): DynamicModule {
     const endpoints = normalizeAiEndpointOptions(asyncOptions.endpoints);
 
@@ -136,6 +122,9 @@ export class AiModule {
     };
   }
 
+  /**
+   * Development smoke helper retained for local module wiring checks.
+   */
   static test() {
     console.info('test');
     console.info('test2');
@@ -143,10 +132,16 @@ export class AiModule {
     console.info('test4');
   }
 
+  /**
+   * Development smoke helper that returns a stable numeric value.
+   */
   static test2() {
     return 0;
   }
   
+  /**
+   * Development smoke helper that returns a stable numeric value.
+   */
   static test3() {
     return 2;
   }

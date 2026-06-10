@@ -6,20 +6,14 @@ interface MemberResponse {
   readonly data: Member[];
 }
 
-/**
- * Provides member service behavior.
- */
+/** Loads member fixtures for dashboard people and team demos. */
 @Injectable({
   providedIn: 'root',
 })
 export class MemberService {
   private readonly http = inject(HttpClient);
 
-  /**
-   * Runs get members.
-   *
-   * @returns The member service get members result.
-   */
+  /** Load member fixture data from the demo JSON asset. */
   getMembers() {
     return this.http
       .get<MemberResponse>('/demo/data/members.json')

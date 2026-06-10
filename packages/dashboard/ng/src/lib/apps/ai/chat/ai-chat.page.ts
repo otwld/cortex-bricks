@@ -21,7 +21,7 @@ interface AiChatDisplayMessage {
 }
 
 /**
- * Provides ai chat page behavior.
+ * Demonstrates model-backed AI chat with visible text and tool message parts.
  */
 @Component({
   selector: 'app-ai-chat-page',
@@ -32,10 +32,29 @@ export class AiChatPage implements OnInit {
   private readonly chatService = inject(AiChatService);
   private readonly modelsService = inject(AiModelsService);
 
+  /**
+   * Available AI model aliases loaded from the shared AI models service.
+   */
   readonly models = signal<AiModelAlias[]>([]);
+
+  /**
+   * Draft user message bound to the chat input.
+   */
   readonly input = signal('Explain the AI package architecture in three bullets.');
+
+  /**
+   * Model alias currently selected for chat requests.
+   */
   readonly selectedModel = signal('chat');
+
+  /**
+   * Active chat session created for the selected model.
+   */
   readonly chat: WritableSignal<ReturnType<AiChatService['createChat']>> = signal(this.chatService.createChat({ model: this.selectedModel() }));
+
+  /**
+   * Select options for models that support chat requests.
+   */
   readonly modelOptions = computed(() =>
     this.models()
       .filter((model) => model.capabilities.includes('chat'))
@@ -43,16 +62,16 @@ export class AiChatPage implements OnInit {
   );
 
   /**
-   * Runs ng on init.
+   * Loads available AI model metadata for the model selector.
    */
   async ngOnInit(): Promise<void> {
     this.models.set(await this.modelsService.list());
   }
 
   /**
-   * Runs select model.
+   * Switches the selected model and starts a fresh chat session.
    *
-   * @param model - model value.
+   * @param model - Model alias to use for subsequent chat messages.
    */
   selectModel(model: string): void {
     this.selectedModel.set(model);
@@ -60,7 +79,7 @@ export class AiChatPage implements OnInit {
   }
 
   /**
-   * Runs send.
+   * Sends the current input text to the active chat and clears the draft.
    */
   async send(): Promise<void> {
     const text = this.input().trim();
@@ -71,60 +90,56 @@ export class AiChatPage implements OnInit {
   }
 
   /**
-   * Runs stop.
+   * Requests cancellation of the active chat response.
    */
   stop(): void {
     void this.chat().stop();
   }
 
   /**
-   * Runs visible messages.
+   * Returns chat messages that contain visible text or tool parts.
    *
-   * @returns The ai chat page visible messages result.
+   * @returns Messages with at least one visible part.
    */
   visibleMessages(): AiChatDisplayMessage[] {
     return this.chat().messages.filter((message) => this.visibleParts(message).length > 0);
   }
 
   /**
-   * Runs visible parts.
+   * Filters message parts to those rendered by the demo.
    *
-   * @param message - message value.
-   *
-   * @returns The ai chat page visible parts result.
+   * @param message - Chat message to inspect.
+   * @returns Text and tool parts shown in the UI.
    */
   visibleParts(message: AiChatDisplayMessage): AiChatDisplayPart[] {
     return message.parts.filter((part) => part.type === 'text' || part.type.startsWith('tool-'));
   }
 
   /**
-   * Runs is tool part.
+   * Determines whether a message part represents a tool invocation.
    *
-   * @param part - part value.
-   *
-   * @returns The ai chat page is tool part result.
+   * @param part - Message part to inspect.
+   * @returns True when the part type starts with `tool-`.
    */
   isToolPart(part: AiChatDisplayPart): boolean {
     return part.type.startsWith('tool-');
   }
 
   /**
-   * Runs tool name.
+   * Extracts the tool name from a tool message part type.
    *
-   * @param part - part value.
-   *
-   * @returns The ai chat page tool name result.
+   * @param part - Tool message part to inspect.
+   * @returns Tool name without the `tool-` prefix.
    */
   toolName(part: AiChatDisplayPart): string {
     return part.type.replace(/^tool-/, '');
   }
 
   /**
-   * Runs tool payload.
+   * Formats tool input or output payload for display.
    *
-   * @param part - part value.
-   *
-   * @returns The ai chat page tool payload result.
+   * @param part - Tool message part to inspect.
+   * @returns Pretty-printed JSON payload.
    */
   toolPayload(part: AiChatDisplayPart): string {
     const payload = part.output ?? part.input ?? {};

@@ -51,13 +51,6 @@ export class PresenceService {
    *
    * @param socketId Socket id.
    */
-  /**
-   * Runs drop socket.
-   *
-   * @param socketId - socket id value.
-   *
-   * @returns The presence service drop socket result.
-   */
   public async dropSocket(socketId: string): Promise<readonly RoomId[]> {
     return this.store.removeSocket(socketId);
   }
@@ -66,13 +59,6 @@ export class PresenceService {
    * Stream join events for a room.
    *
    * @param room Room id.
-   */
-  /**
-   * Runs on join.
-   *
-   * @param room - room value.
-   *
-   * @returns The presence service on join result.
    */
   public onJoin(room: RoomId): Observable<UserContext> {
     return this.events$.pipe(
@@ -86,13 +72,6 @@ export class PresenceService {
    *
    * @param room Room id.
    */
-  /**
-   * Runs on leave.
-   *
-   * @param room - room value.
-   *
-   * @returns The presence service on leave result.
-   */
   public onLeave(room: RoomId): Observable<UserContext> {
     return this.events$.pipe(
       filter((event) => event.type === 'leave' && event.room === room),
@@ -101,47 +80,21 @@ export class PresenceService {
   }
 
   /** Proxy: members of `room`. */
-  /**
-   * Runs members.
-   *
-   * @param room - room value.
-   *
-   * @returns The presence service members result.
-   */
   public members(room: RoomId): Promise<readonly UserContext[]> {
     return this.store.members(room);
   }
 
   /** Proxy: rooms that `userId` is in. */
-  /**
-   * Runs rooms of.
-   *
-   * @param userId - user id value.
-   *
-   * @returns The presence service rooms of result.
-   */
   public roomsOf(userId: string): Promise<readonly RoomId[]> {
     return this.store.roomsOf(userId);
   }
 
   /** Proxy: whether `userId` is online. */
-  /**
-   * Runs is online.
-   *
-   * @param userId - user id value.
-   *
-   * @returns The presence service is online result.
-   */
   public isOnline(userId: string): Promise<boolean> {
     return this.store.isOnline(userId);
   }
 
   /** Proxy: every distinct online user. */
-  /**
-   * Runs online.
-   *
-   * @returns The presence service online result.
-   */
   public online(): Promise<readonly UserContext[]> {
     return this.store.online();
   }

@@ -8,11 +8,8 @@ import { MultipartStorageDriver } from './multipart-storage-driver';
 type S3ClientModule = typeof import('@aws-sdk/client-s3');
 type PresignerModule = typeof import('@aws-sdk/s3-request-presigner');
 
-/**
- * Provides s3 storage driver behavior.
- */
-@Injectable()
 /** S3-compatible storage driver with lazy AWS SDK imports. */
+@Injectable()
 export class S3StorageDriver extends MultipartStorageDriver {
   private readonly options: NormalizedStorageModuleOptions;
   private readonly logger = new Logger(S3StorageDriver.name);
@@ -21,10 +18,9 @@ export class S3StorageDriver extends MultipartStorageDriver {
   private presignerModule?: PresignerModule;
 
   /**
-   * Creates a s3 storage driver instance.
+   * Create an S3-compatible storage driver from module options.
    *
-   * @param rawOptions - raw options value.
-   *
+   * @param rawOptions - Raw storage module options supplied through Nest DI.
    * @throws When the operation cannot be completed.
    */
   constructor(@Inject(STORAGE_MODULE_OPTIONS) private readonly rawOptions: StorageModuleOptions) {
@@ -36,15 +32,6 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Upload a stream to S3 with content type and sanitized metadata. */
-  /**
-   * Runs put.
-   *
-   * @param key - key value.
-   *
-   * @param stream - stream value.
-   *
-   * @param meta - meta value.
-   */
   async put(key: string, stream: Readable, meta: UploadMeta): Promise<void> {
     const s3 = await this.aws();
     this.logger.debug(`PUT s3://${this.bucket()}/${key} (${meta.size} bytes)`);
@@ -60,11 +47,6 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Delete an S3 object. */
-  /**
-   * Runs delete.
-   *
-   * @param key - key value.
-   */
   async delete(key: string): Promise<void> {
     const s3 = await this.aws();
     this.logger.debug(`DELETE s3://${this.bucket()}/${key}`);
@@ -72,15 +54,6 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Generate a clamped S3 presigned read URL. */
-  /**
-   * Runs get signed url.
-   *
-   * @param key - key value.
-   *
-   * @param expiresIn - expires in value.
-   *
-   * @returns The s3 storage driver get signed url result.
-   */
   async getSignedUrl(key: string, expiresIn: number): Promise<string> {
     const max = this.options.s3?.signedUrlMaxTtl ?? 86_400;
     const clamped = Math.min(Math.max(1, expiresIn), max);
@@ -92,15 +65,6 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Open a readable stream for an S3 object. */
-  /**
-   * Runs get read stream.
-   *
-   * @param key - key value.
-   *
-   * @returns The s3 storage driver get read stream result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async getReadStream(key: string): Promise<Readable> {
     const s3 = await this.aws();
     const response = await this.getClient().send(new s3.GetObjectCommand({ Bucket: this.bucket(), Key: key }));
@@ -109,15 +73,6 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Return whether an S3 object exists. */
-  /**
-   * Runs exists.
-   *
-   * @param key - key value.
-   *
-   * @returns The s3 storage driver exists result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async exists(key: string): Promise<boolean> {
     const s3 = await this.aws();
     try {
@@ -132,17 +87,6 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Create an S3 multipart upload and return its upload id. */
-  /**
-   * Runs create multipart upload.
-   *
-   * @param key - key value.
-   *
-   * @param meta - meta value.
-   *
-   * @returns The s3 storage driver create multipart upload result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async createMultipartUpload(key: string, meta: UploadMeta): Promise<string> {
     const s3 = await this.aws();
     const result = await this.getClient().send(
@@ -159,21 +103,6 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Upload one S3 multipart chunk. */
-  /**
-   * Runs upload part.
-   *
-   * @param uploadId - upload id value.
-   *
-   * @param key - key value.
-   *
-   * @param partNumber - part number value.
-   *
-   * @param chunk - chunk value.
-   *
-   * @returns The s3 storage driver upload part result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async uploadPart(uploadId: string, key: string, partNumber: number, chunk: Buffer): Promise<string> {
     const s3 = await this.aws();
     const result = await this.getClient().send(
@@ -190,15 +119,6 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Complete an S3 multipart upload from the supplied parts. */
-  /**
-   * Runs complete multipart upload.
-   *
-   * @param uploadId - upload id value.
-   *
-   * @param key - key value.
-   *
-   * @param parts - parts value.
-   */
   async completeMultipartUpload(uploadId: string, key: string, parts: Part[]): Promise<void> {
     const s3 = await this.aws();
     this.logger.debug(`Completing multipart upload ${uploadId} for s3://${this.bucket()}/${key}`);
@@ -218,13 +138,6 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Abort an S3 multipart upload. */
-  /**
-   * Runs abort multipart upload.
-   *
-   * @param uploadId - upload id value.
-   *
-   * @param key - key value.
-   */
   async abortMultipartUpload(uploadId: string, key: string): Promise<void> {
     const s3 = await this.aws();
     this.logger.debug(`Aborting multipart upload ${uploadId} for s3://${this.bucket()}/${key}`);

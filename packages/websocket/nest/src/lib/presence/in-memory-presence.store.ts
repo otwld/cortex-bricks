@@ -15,15 +15,7 @@ export class InMemoryPresenceStore extends PresenceStore {
   private readonly rooms = new Map<RoomId, Map<string, UserContext>>();
   private readonly sockets = new Map<string, SocketRecord>();
 
-  /**
-   * Runs add member.
-   *
-   * @param room - room value.
-   *
-   * @param socketId - socket id value.
-   *
-   * @param user - user value.
-   */
+  /** Add a socket/user pair to a room and track the socket's room membership. */
   public async addMember(room: RoomId, socketId: string, user: UserContext): Promise<void> {
     let bucket = this.rooms.get(room);
     if (!bucket) {
@@ -40,15 +32,7 @@ export class InMemoryPresenceStore extends PresenceStore {
     record.rooms.add(room);
   }
 
-  /**
-   * Runs remove member.
-   *
-   * @param room - room value.
-   *
-   * @param socketId - socket id value.
-   *
-   * @returns The in memory presence store remove member result.
-   */
+  /** Remove one socket from a room and return the departing user, if present. */
   public async removeMember(room: RoomId, socketId: string): Promise<UserContext | undefined> {
     const bucket = this.rooms.get(room);
     const user = bucket?.get(socketId);
@@ -63,13 +47,7 @@ export class InMemoryPresenceStore extends PresenceStore {
     return user;
   }
 
-  /**
-   * Runs remove socket.
-   *
-   * @param socketId - socket id value.
-   *
-   * @returns The in memory presence store remove socket result.
-   */
+  /** Remove all room memberships for a socket and return affected rooms. */
   public async removeSocket(socketId: string): Promise<readonly RoomId[]> {
     const record = this.sockets.get(socketId);
     if (!record) return [];
@@ -83,13 +61,7 @@ export class InMemoryPresenceStore extends PresenceStore {
     return rooms;
   }
 
-  /**
-   * Runs members.
-   *
-   * @param room - room value.
-   *
-   * @returns The in memory presence store members result.
-   */
+  /** Return distinct users currently present in a room. */
   public async members(room: RoomId): Promise<readonly UserContext[]> {
     const bucket = this.rooms.get(room);
     if (!bucket) return [];
@@ -100,13 +72,7 @@ export class InMemoryPresenceStore extends PresenceStore {
     return [...seen.values()];
   }
 
-  /**
-   * Runs rooms of.
-   *
-   * @param userId - user id value.
-   *
-   * @returns The in memory presence store rooms of result.
-   */
+  /** Return all rooms joined by any socket for a user id. */
   public async roomsOf(userId: string): Promise<readonly RoomId[]> {
     const result = new Set<RoomId>();
     for (const record of this.sockets.values()) {
@@ -117,13 +83,7 @@ export class InMemoryPresenceStore extends PresenceStore {
     return [...result];
   }
 
-  /**
-   * Runs is online.
-   *
-   * @param userId - user id value.
-   *
-   * @returns The in memory presence store is online result.
-   */
+  /** Return whether any socket is connected for a user id. */
   public async isOnline(userId: string): Promise<boolean> {
     for (const record of this.sockets.values()) {
       if (record.user.id === userId) return true;
@@ -131,11 +91,7 @@ export class InMemoryPresenceStore extends PresenceStore {
     return false;
   }
 
-  /**
-   * Runs online.
-   *
-   * @returns The in memory presence store online result.
-   */
+  /** Return every distinct user with at least one connected socket. */
   public async online(): Promise<readonly UserContext[]> {
     const seen = new Map<string, UserContext>();
     for (const record of this.sockets.values()) {

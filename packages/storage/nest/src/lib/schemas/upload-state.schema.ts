@@ -5,12 +5,12 @@ import { HydratedDocument } from 'mongoose';
 /** Hydrated Mongoose document for a resumable upload state record. */
 export type UploadStateDocument = HydratedDocument<UploadState>;
 
+/** MongoDB record tracking in-progress TUS multipart uploads. */
 @Schema({
   collection: 'storage_upload_states',
   timestamps: true,
   versionKey: false,
 })
-/** MongoDB record tracking in-progress TUS multipart uploads. */
 export class UploadState {
   /** Driver multipart upload id. */
   @Prop({ required: true, unique: true, index: true })

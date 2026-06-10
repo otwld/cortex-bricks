@@ -19,6 +19,9 @@ import { provideStorage } from '@otwld/ng-storage';
 import { provideAi } from '@otwld/ng-ai';
 import { provideUsers } from '@otwld/ng-users/core';
 
+/**
+ * Browser application configuration for the Cortex Bricks frontend shell.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideClientHydration(withEventReplay()),

@@ -29,6 +29,9 @@ interface Comment {
     `
 })
 export class Detail {
+    /**
+     * Author comments shown below the article content.
+     */
     comments: Comment[] = [
         {
             image: '/demo/images/cms/avatars/avatar-emma.jpg',

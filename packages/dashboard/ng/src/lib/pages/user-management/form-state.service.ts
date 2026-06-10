@@ -65,14 +65,16 @@ const initialFormState: FormState = {
 /** Shared reactive state for the multi-step user creation wizard. */
 @Injectable()
 export class FormStateService {
+  /**
+   * Reactive form state shared across all user creation wizard steps.
+   */
   readonly formState = signal<FormState>({ ...initialFormState, roles: [...initialFormState.roles], permissions: [] });
 
   /**
-   * Runs update field.
+   * Updates one field in the shared wizard form state.
    *
-   * @param field - field value.
-   *
-   * @param value - value value.
+   * @param field - Form state field to update.
+   * @param value - New field value.
    */
   updateField<K extends keyof FormState>(field: K, value: FormState[K]): void {
     this.formState.update((state) => ({
@@ -82,9 +84,9 @@ export class FormStateService {
   }
 
   /**
-   * Runs to create user request.
+   * Converts wizard form state into a create-user API request.
    *
-   * @returns The form state service to create user request result.
+   * @returns Request payload with optional strings removed and display name inferred when needed.
    */
   toCreateUserRequest(): CreateUserRequest {
     const state = this.formState();
@@ -123,7 +125,7 @@ export class FormStateService {
   }
 
   /**
-   * Runs reset.
+   * Resets the wizard form to its initial state.
    */
   reset(): void {
     this.formState.set({ ...initialFormState, roles: [...initialFormState.roles], permissions: [] });

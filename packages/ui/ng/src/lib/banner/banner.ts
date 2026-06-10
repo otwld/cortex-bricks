@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+
 /**
- * BannerTone type used across libs/ng/kit.
+ * Visual tone used by `BannerComponent` to communicate message severity.
  */
-
-
 export type BannerTone = 'neutral' | 'positive' | 'info' | 'warning' | 'negative';
 
+/**
+ * Callout surface with projected title, body, and action slots.
+ */
 @Component({
   selector: 'kit-banner',
   template: `
@@ -110,7 +112,10 @@ export type BannerTone = 'neutral' | 'positive' | 'info' | 'warning' | 'negative
   },
 })
 export class BannerComponent {
+  /** Visual tone applied to the banner surface. */
   readonly tone = input<BannerTone>('neutral');
+
+  /** Optional accessible label when projected text is not descriptive enough. */
   readonly ariaLabel = input<string | null>(null);
 
   protected readonly hostClass = computed(() => `kit-banner kit-banner--tone-${this.tone()}`);

@@ -9,6 +9,9 @@ export interface FeatureFlagsContext {
   getUserContext: () => Promise<FeatureFlagUserContext>;
 }
 
+/**
+ * Injection token for resolving app and user feature-flag contexts.
+ */
 export const FEATURE_FLAGS_CONTEXT_TOKEN = new InjectionToken<FeatureFlagsContext>('FEATURE_FLAGS_CONTEXT_TOKEN');
 
 /**

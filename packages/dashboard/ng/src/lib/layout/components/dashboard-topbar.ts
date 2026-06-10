@@ -9,6 +9,9 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { DashboardLayoutService } from '@otwld/ng-dashboard/core';
 
+/**
+ * Dashboard topbar with menu toggle, breadcrumb, search, theme, and profile actions.
+ */
 @Component({
   selector: 'dashboard-topbar',
   imports: [RouterModule, StyleClassModule, DashboardBreadcrumb, InputTextModule, ButtonModule, IconFieldModule, InputIconModule],

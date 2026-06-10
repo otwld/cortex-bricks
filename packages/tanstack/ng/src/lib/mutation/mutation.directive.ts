@@ -148,6 +148,10 @@ export class MutationDirective<TVariables, TData = unknown, TError = unknown> {
   }
 }
 
+/**
+ * Extracts a user-readable mutation error message from Angular HTTP errors,
+ * Error instances, strings, or plain thrown objects.
+ */
 export function extractMutationErrorMessage(error: unknown): string {
   // Prefer Angular HTTP errors when available.
   if (error instanceof HttpErrorResponse) {

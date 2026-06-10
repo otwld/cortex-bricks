@@ -19,23 +19,13 @@ import { AiQuotaBucketDocument, AiQuotaBucketRecord } from './mongoose-ai-quota.
 @Injectable()
 export class MongooseAiQuotaStorage implements AiQuotaStorage {
   /**
-   * Creates a mongoose ai quota storage instance.
+   * Create Mongoose-backed AI quota storage.
    *
-   * @param buckets - buckets value.
+   * @param buckets - Mongoose model storing quota bucket counters.
    */
   constructor(@InjectModel(AiQuotaBucketRecord.name) private readonly buckets: Model<AiQuotaBucketDocument>) {}
 
-  /**
-   * Runs get usage.
-   *
-   * @param subject - subject value.
-   *
-   * @param limits - limits value.
-   *
-   * @param now - now value.
-   *
-   * @returns The mongoose ai quota storage get usage result.
-   */
+  /** Read usage buckets for a subject across the supplied quota limits. */
   async getUsage(subject: AiQuotaSubject, limits: AiQuotaLimit[], now: Date): Promise<AiQuotaUsageBucket[]> {
     return Promise.all(
       limits.map(async (limit) => {
@@ -58,15 +48,7 @@ export class MongooseAiQuotaStorage implements AiQuotaStorage {
     );
   }
 
-  /**
-   * Runs reserve.
-   *
-   * @param request - request value.
-   *
-   * @returns The mongoose ai quota storage reserve result.
-   *
-   * @throws When the operation cannot be completed.
-   */
+  /** Atomically reserve tokens in every configured bucket for a request. */
   async reserve(request: AiQuotaReservationRequest): Promise<AiQuotaReservation> {
     const entries: AiQuotaReservation['entries'] = [];
 
@@ -119,13 +101,7 @@ export class MongooseAiQuotaStorage implements AiQuotaStorage {
     return { id: randomUUID(), subject: request.subject, requestedTokens: request.requestedTokens, entries };
   }
 
-  /**
-   * Runs commit.
-   *
-   * @param reservation - reservation value.
-   *
-   * @param usage - usage value.
-   */
+  /** Move reserved tokens into used-token counters after provider usage resolves. */
   async commit(reservation: AiQuotaReservation, usage: AiUsage): Promise<void> {
     const totalTokens = usage.totalTokens ?? (usage.inputTokens ?? 0) + (usage.outputTokens ?? 0);
     await Promise.all(
@@ -140,11 +116,7 @@ export class MongooseAiQuotaStorage implements AiQuotaStorage {
     );
   }
 
-  /**
-   * Runs release.
-   *
-   * @param reservation - reservation value.
-   */
+  /** Release reserved tokens when a provider call fails or usage is unavailable. */
   async release(reservation: AiQuotaReservation): Promise<void> {
     await Promise.all(
       reservation.entries.map((entry) =>

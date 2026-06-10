@@ -40,18 +40,33 @@ export const FeatureFlagsJson = new GraphQLScalarType({
   },
 });
 
+/**
+ * Nest GraphQL scalar wrapper for arbitrary JSON feature-flag values.
+ */
 @Scalar('FeatureFlagsJson', () => FeatureFlagsJson)
 export class FeatureFlagsJsonScalar implements CustomScalar<unknown, unknown> {
+  /**
+   * GraphQL schema description shown for the arbitrary JSON scalar.
+   */
   description = 'Arbitrary JSON value';
 
+  /**
+   * Accepts variable input without coercion so feature payloads keep their JSON shape.
+   */
   parseValue(value: unknown): unknown {
     return value;
   }
 
+  /**
+   * Returns resolver output without coercion so clients receive stored JSON values.
+   */
   serialize(value: unknown): unknown {
     return value;
   }
 
+  /**
+   * Converts inline GraphQL literals into equivalent JSON-compatible values.
+   */
   parseLiteral(ast: ValueNode): unknown {
     return parseLiteralNode(ast);
   }

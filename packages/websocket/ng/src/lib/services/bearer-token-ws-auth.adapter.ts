@@ -13,24 +13,13 @@ export class BearerTokenWsAuthAdapter extends WsAuthAdapter {
    *
    * @param resolver Token resolver.
    */
-  /**
-   * Runs from.
-   *
-   * @param resolver - resolver value.
-   *
-   * @returns The bearer token ws auth adapter from result.
-   */
   public static from(
     resolver: () => string | null | Promise<string | null>,
   ): BearerTokenWsAuthAdapter {
     return new BearerTokenWsAuthAdapter(resolver);
   }
 
-  /**
-   * Runs get token.
-   *
-   * @returns The bearer token ws auth adapter get token result.
-   */
+  /** Resolve the bearer token through the configured resolver. */
   public getToken(): string | null | Promise<string | null> {
     return this.resolver();
   }

@@ -36,9 +36,7 @@ interface OutputSubscription {
   unsubscribe(): void;
 }
 
-/**
- * Provides ai assist directive behavior.
- */
+/** Adds a floating AI assist trigger to editable host elements. */
 @Directive({
   selector: '[aiAssist]',
 })
@@ -50,19 +48,43 @@ export class AiAssistDirective implements AfterViewInit, OnDestroy {
   private readonly environmentInjector = inject(EnvironmentInjector);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
+  /** Prompt configuration used when the assist action runs. */
   readonly aiAssist = input<AiAssistPrompt | undefined>(undefined);
+
+  /** How generated text should be applied to the host control. */
   readonly aiAssistApplyMode = input<AiAssistApplyMode>('replace');
+
+  /** Disables assist interactions for the host control. */
   readonly aiAssistDisabled = input(false, { transform: booleanAttribute });
+
+  /** Accessible label passed to the floating assist trigger. */
   readonly aiAssistLabel = input('Run AI assist');
+
+  /** Optional maximum output token limit for the completion request. */
   readonly aiAssistMaxOutputTokens = input<number | undefined, unknown>(undefined, { transform: optionalNumberAttribute });
+
+  /** Optional metadata sent with the completion request. */
   readonly aiAssistMetadata = input<Record<string, unknown> | undefined>(undefined);
+
+  /** Optional model override for the completion request. */
   readonly aiAssistModel = input<string | undefined>(undefined);
+
+  /** Optional system prompt sent with the completion request. */
   readonly aiAssistSystem = input<string | undefined>(undefined);
+
+  /** Optional temperature override for the completion request. */
   readonly aiAssistTemperature = input<number | undefined, unknown>(undefined, { transform: optionalNumberAttribute });
 
+  /** Emitted after a generated suggestion is applied. */
   readonly aiAssistAccepted = output<AiAssistAcceptedEvent>();
+
+  /** Emitted when the assist session is cancelled. */
   readonly aiAssistCanceled = output<AiAssistCanceledEvent>();
+
+  /** Emitted when completion generation fails. */
   readonly aiAssistError = output<AiAssistErrorEvent>();
+
+  /** Emitted when a suggestion finishes generating. */
   readonly aiAssistGenerated = output<AiAssistGeneratedEvent>();
 
   private activeCompletion: CompletionInstance | null = null;
@@ -82,9 +104,7 @@ export class AiAssistDirective implements AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * Runs ng after view init.
-   */
+  /** Creates the overlay once browser DOM APIs are available. */
   ngAfterViewInit(): void {
     if (!this.isBrowser) return;
 
@@ -93,9 +113,7 @@ export class AiAssistDirective implements AfterViewInit, OnDestroy {
     this.updateOverlayPosition();
   }
 
-  /**
-   * Runs ng on destroy.
-   */
+  /** Aborts in-flight generation and removes overlay DOM resources. */
   ngOnDestroy(): void {
     this.generationId += 1;
     this.abortActiveCompletion();

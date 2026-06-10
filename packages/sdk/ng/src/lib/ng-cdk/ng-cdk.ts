@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 
-/**
- * Provides ng cdk behavior.
- */
+/** Placeholder Angular CDK component exported by the SDK brick. */
 @Component({
   selector: 'lib-ng-cdk',
   imports: [],

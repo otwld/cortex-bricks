@@ -32,6 +32,9 @@ interface RecommendedProduct {
     templateUrl: './shopping-cart.page.html',
 })
 export class ShoppingCartPage {
+    /**
+     * Editable shopping cart items and their quantities.
+     */
     cartItems = signal<CartItem[]>([
         {
             id: 1,
@@ -68,6 +71,9 @@ export class ShoppingCartPage {
         }
     ]);
 
+    /**
+     * Recommended products displayed below the cart.
+     */
     recommendedProducts: RecommendedProduct[] = [
         {
             id: 1,
@@ -92,28 +98,42 @@ export class ShoppingCartPage {
         }
     ];
 
+    /**
+     * Promo code typed into the cart summary form.
+     */
     promoCode = '';
 
+    /**
+     * Cart subtotal computed from item prices and quantities.
+     */
     subtotal = computed(() => {
         return this.cartItems().reduce((sum, item) => sum + item.currentPrice * item.quantity, 0);
     });
 
+    /**
+     * Total savings computed from item earnings and quantities.
+     */
     totalEarnings = computed(() => {
         return this.cartItems().reduce((sum, item) => sum + item.earnings * item.quantity, 0);
     });
 
+    /**
+     * VAT amount applied to the cart.
+     */
     vat = computed(() => 20.0);
 
+    /**
+     * Final cart total including VAT.
+     */
     total = computed(() => {
         return this.subtotal() + this.vat();
     });
 
     /**
-     * Runs update quantity.
+     * Updates the quantity for one cart item when the value is positive.
      *
-     * @param itemId - item id value.
-     *
-     * @param newQuantity - new quantity value.
+     * @param itemId - Cart item id to update.
+     * @param newQuantity - New positive quantity.
      */
     updateQuantity(itemId: number, newQuantity: number) {
         const items = this.cartItems();
@@ -125,9 +145,9 @@ export class ShoppingCartPage {
     }
 
     /**
-     * Runs remove item.
+     * Removes one item from the cart.
      *
-     * @param itemId - item id value.
+     * @param itemId - Cart item id to remove.
      */
     removeItem(itemId: number) {
         const items = this.cartItems();
@@ -139,14 +159,14 @@ export class ShoppingCartPage {
     }
 
     /**
-     * Runs apply promo code.
+     * Handles promo code submission for host integration.
      */
     applyPromoCode() {
         return;
     }
 
     /**
-     * Runs checkout.
+     * Handles checkout submission for host integration.
      */
     checkout() {
         return;

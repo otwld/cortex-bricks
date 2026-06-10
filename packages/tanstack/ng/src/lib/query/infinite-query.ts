@@ -44,10 +44,10 @@ export function getNextPageParam<T>({ pagination }: BackendPaginatedResult<T>): 
  * );
  */
 
-// Overload: no mapper → items: T[]
+/** Flattens paginated infinite data without changing the item type. */
 export function selectPaginatedResponse<T>(input: InfiniteData<BackendPaginatedResult<T>>): PaginatedResult<T>;
 
-// Overload: with mapper → items: O[]
+/** Flattens paginated infinite data and maps each item before returning it. */
 export function selectPaginatedResponse<T, O>(
   input: InfiniteData<BackendPaginatedResult<T>>,
   mapper: (item: T) => O,

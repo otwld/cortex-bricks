@@ -5,10 +5,19 @@ import { ButtonModule } from 'primeng/button';
 import { KnobModule } from 'primeng/knob';
 import { Subject } from 'rxjs';
 
+/**
+ * Direction used by metric change indicators.
+ */
 export type StatsChangeDirection = 'up' | 'down' | 'flat';
 
+/**
+ * Visual tone used by ecommerce metric cards.
+ */
 export type StatsTone = 'primary' | 'green' | 'pink' | 'cyan' | 'orange' | 'gray';
 
+/**
+ * Sparkline visual configuration for a metric card.
+ */
 export interface StatsSparklineVisual {
   readonly type: 'sparkline';
   readonly path: string;
@@ -17,6 +26,9 @@ export interface StatsSparklineVisual {
   readonly strokeWidth?: number;
 }
 
+/**
+ * Knob visual configuration for a metric card.
+ */
 export interface StatsKnobVisual {
   readonly type: 'knob';
   readonly value: number;
@@ -28,6 +40,9 @@ export interface StatsKnobVisual {
   readonly ariaLabel?: string;
 }
 
+/**
+ * Supported visual configuration for a metric card.
+ */
 export type StatsMetricVisual = StatsSparklineVisual | StatsKnobVisual;
 
 /**
@@ -50,6 +65,9 @@ export interface StatsMetricSelectEvent {
   readonly metric: StatsMetric;
 }
 
+/**
+ * Union of events emitted by the ecommerce stats widget event stream.
+ */
 export type StatsWidgetEvent = { readonly type: 'metric' } & StatsMetricSelectEvent;
 
 interface StatsMetricViewModel extends StatsMetric {
@@ -137,6 +155,9 @@ const CHANGE_ICONS: Record<StatsChangeDirection, string> = {
   flat: 'pi pi-minus',
 };
 
+/**
+ * Ecommerce widget that renders KPI cards with sparklines or knob visuals.
+ */
 @Component({
   standalone: true,
   selector: 'app-stats-widget',

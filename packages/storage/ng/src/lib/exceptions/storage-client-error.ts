@@ -12,15 +12,12 @@ export enum StorageClientErrorCode {
 
 /** Error thrown by Angular storage client services. */
 export class StorageClientError extends Error {
-  /** Create a client-side storage error. */
   /**
-   * Creates a storage client error instance.
+   * Create a client-side storage error.
    *
-   * @param code - code value.
-   *
-   * @param message - message value.
-   *
-   * @param cause - cause value.
+   * @param code - Stable client error code.
+   * @param message - Human-readable failure message.
+   * @param cause - Lower-level error that triggered this failure.
    */
   constructor(
     readonly code: StorageClientErrorCode,

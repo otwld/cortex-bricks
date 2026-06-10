@@ -2,15 +2,12 @@ import { UploadStatus } from '@otwld/ts-storage';
 import { StorageClientError, StorageClientErrorCode } from '../exceptions/storage-client-error';
 import { UploadTask } from '../models/upload-task';
 
-/** Format bytes using binary units from B through TB. */
 /**
- * Runs format bytes.
+ * Formats bytes using binary units from B through TB.
  *
- * @param bytes - bytes value.
- *
- * @param decimals - decimals value.
- *
- * @returns The format bytes result.
+ * @param bytes - Byte count to format.
+ * @param decimals - Decimal precision to preserve.
+ * @returns Human-readable byte count.
  */
 export function formatBytes(bytes: number, decimals = 1): string {
   if (!Number.isFinite(bytes) || bytes <= 0) return '0 B';
@@ -20,15 +17,12 @@ export function formatBytes(bytes: number, decimals = 1): string {
   return `${Number(value.toFixed(decimals))} ${units[unitIndex]}`;
 }
 
-/** Return whether a file matches an accept string. */
 /**
- * Runs is mime type allowed.
+ * Returns whether a file matches an accept string.
  *
- * @param file - file value.
- *
- * @param accept - accept value.
- *
- * @returns The is mime type allowed result.
+ * @param file - File selected by the user.
+ * @param accept - Comma-separated extension or MIME accept rules.
+ * @returns True when the file satisfies at least one accept rule.
  */
 export function isMimeTypeAllowed(file: File, accept: string): boolean {
   if (!accept.trim()) return true;
@@ -42,25 +36,21 @@ export function isMimeTypeAllowed(file: File, accept: string): boolean {
   });
 }
 
-/** Calculate average progress across upload tasks. */
 /**
- * Runs get upload progress.
+ * Calculates average progress across upload tasks.
  *
- * @param tasks - tasks value.
- *
- * @returns The get upload progress result.
+ * @param tasks - Upload tasks to aggregate.
+ * @returns Average progress percentage, or zero for an empty list.
  */
 export function getUploadProgress(tasks: UploadTask[]): number {
   return tasks.length ? tasks.reduce((total, task) => total + task.progress(), 0) / tasks.length : 0;
 }
 
-/** Group upload tasks by their current status signal value. */
 /**
- * Runs group by status.
+ * Groups upload tasks by their current status signal value.
  *
- * @param tasks - tasks value.
- *
- * @returns The group by status result.
+ * @param tasks - Upload tasks to group.
+ * @returns Record keyed by upload status.
  */
 export function groupByStatus(tasks: UploadTask[]): Record<UploadStatus, UploadTask[]> {
   const grouped: Record<UploadStatus, UploadTask[]> = {
@@ -74,15 +64,12 @@ export function groupByStatus(tasks: UploadTask[]): Record<UploadStatus, UploadT
   return grouped;
 }
 
-/** Create a SHA-256 hash for the bytes in a browser `File`. */
 /**
- * Runs create file hash.
+ * Creates a SHA-256 hash for the bytes in a browser `File`.
  *
- * @param file - file value.
- *
- * @returns The create file hash result.
- *
- * @throws When the operation cannot be completed.
+ * @param file - Browser file to hash.
+ * @returns Hex-encoded SHA-256 digest.
+ * @throws StorageClientError when SubtleCrypto is unavailable.
  */
 export async function createFileHash(file: File): Promise<string> {
   if (!globalThis.crypto?.subtle) {

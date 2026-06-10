@@ -5,23 +5,18 @@ import { MultipartStorageDriver } from '../drivers/multipart-storage-driver';
 import { UploadState } from '../schemas/upload-state.schema';
 import { TUS_MODULE_OPTIONS, TusModuleOptions } from '../tus/tus.tokens';
 
-/**
- * Provides upload cleanup service behavior.
- */
-@Injectable()
 /** Periodically aborts expired multipart uploads and removes their state records. */
+@Injectable()
 export class UploadCleanupService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(UploadCleanupService.name);
   private timer?: NodeJS.Timeout;
 
   /**
-   * Creates a upload cleanup service instance.
+   * Create the expired-upload cleanup service.
    *
-   * @param driver - driver value.
-   *
-   * @param uploadStateModel - upload state model value.
-   *
-   * @param options - options value.
+   * @param driver - Multipart driver used to abort staged uploads.
+   * @param uploadStateModel - Mongoose model for resumable upload state records.
+   * @param options - TUS module timing options.
    */
   constructor(
     private readonly driver: MultipartStorageDriver,

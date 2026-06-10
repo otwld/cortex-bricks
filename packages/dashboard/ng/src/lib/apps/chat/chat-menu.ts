@@ -68,22 +68,49 @@ interface OnlineUser {
     templateUrl: './chat-menu.html',
 })
 export class ChatMenu implements OnInit {
-    chatRooms = input<ChatRoom[]>([]);
-    activeChatId = input<number | null>(null);
     /**
-     * Runs select chat event.
+     * Chat rooms available to the menu for filtering and selection.
+     */
+    chatRooms = input<ChatRoom[]>([]);
+
+    /**
+     * Currently active chat room id used to highlight the selected conversation.
+     */
+    activeChatId = input<number | null>(null);
+
+    /**
+     * Emits when the user selects an existing chat room from the menu.
      */
     @Output() selectChatEvent = new EventEmitter<number>();
+
     /**
-     * Runs new chat event.
+     * Emits when the user selects a contact that does not yet have a chat room.
      */
     @Output() newChatEvent = new EventEmitter<Contact>();
 
+    /**
+     * Active tab index for the chat menu category tabs.
+     */
     activeTabIndex = 0;
+
+    /**
+     * Whether the new chat contact dialog is visible.
+     */
     showNewChatDialog = false;
+
+    /**
+     * Search query applied to all chat category lists.
+     */
     searchQuery = model('');
+
+    /**
+     * Contact records loaded from the demo chat data file.
+     */
     userData = signal<Record<number, Contact>>({});
 
+    /**
+     * Online user carousel entries shown above the chat list.
+     */
     onlineUsers: OnlineUser[] = [
         { id: 1, name: 'Amy Elsner', avatar: 'amyelsner.png', isViewed: false },
         { id: 2, name: 'Anna Fali', avatar: 'annafali.png', isViewed: false },
@@ -95,7 +122,7 @@ export class ChatMenu implements OnInit {
     ];
 
     /**
-     * Runs ng on init.
+     * Loads demo contact data used by the new chat dialog.
      */
     async ngOnInit() {
         const response = await fetch('/demo/data/chatData.json');
@@ -104,11 +131,10 @@ export class ChatMenu implements OnInit {
     }
 
     /**
-     * Runs get avatar initials.
+     * Builds uppercase initials for a chat or contact avatar fallback.
      *
-     * @param name - name value.
-     *
-     * @returns The chat menu get avatar initials result.
+     * @param name - Display name to abbreviate.
+     * @returns Initials derived from each word in the name.
      */
     getAvatarInitials(name: string): string {
         return name
@@ -119,25 +145,25 @@ export class ChatMenu implements OnInit {
     }
 
     /**
-     * Runs select chat.
+     * Emits the selected chat id to the parent chat page.
      *
-     * @param chat - chat value.
+     * @param chat - Chat room selected by the user.
      */
     selectChat(chat: ChatRoom) {
         this.selectChatEvent.emit(chat.id);
     }
 
     /**
-     * Runs open new chat dialog.
+     * Opens the contact picker for starting a chat.
      */
     openNewChatDialog() {
         this.showNewChatDialog = true;
     }
 
     /**
-     * Runs select contact.
+     * Selects an existing individual chat for the contact or emits a new-chat request.
      *
-     * @param contact - contact value.
+     * @param contact - Contact selected in the new chat dialog.
      */
     selectContact(contact: Contact) {
         const existingChat = this.chatRooms().find((chat) => chat.type === 'individual' && chat.name === contact.name);
@@ -152,11 +178,10 @@ export class ChatMenu implements OnInit {
     }
 
     /**
-     * Runs filter chats by search.
+     * Applies the current search query to a chat list.
      *
-     * @param chats - chats value.
-     *
-     * @returns The chat menu filter chats by search result.
+     * @param chats - Chat rooms to filter.
+     * @returns Matching chat rooms, or the original list when search is empty.
      */
     filterChatsBySearch(chats: ChatRoom[]): ChatRoom[] {
         if (!this.searchQuery().trim()) return chats;
@@ -164,43 +189,63 @@ export class ChatMenu implements OnInit {
         return chats.filter((chat) => chat.name.toLowerCase().includes(query));
     }
 
+    /**
+     * Pinned, non-archived chats after applying search.
+     */
     pinnedChats = computed(() => {
         const pinnedChatsList = this.chatRooms().filter((chat) => chat.pinned && !chat.archived);
         return this.filterChatsBySearch(pinnedChatsList);
     });
 
+    /**
+     * Non-archived chats after applying search.
+     */
     allChats = computed(() => {
         const nonArchivedChats = this.chatRooms().filter((chat) => !chat.archived);
         return this.filterChatsBySearch(nonArchivedChats);
     });
 
+    /**
+     * Non-archived group chats after applying search.
+     */
     groupChats = computed(() => {
         const nonArchivedGroupChats = this.chatRooms().filter((chat) => chat.type === 'group' && !chat.archived);
         return this.filterChatsBySearch(nonArchivedGroupChats);
     });
 
+    /**
+     * Non-archived chats with unread messages after applying search.
+     */
     unreadChats = computed(() => {
         const nonArchivedUnreadChats = this.chatRooms().filter((chat) => (chat.unreadCount ?? 0) > 0 && !chat.archived);
         return this.filterChatsBySearch(nonArchivedUnreadChats);
     });
 
+    /**
+     * Archived chats after applying search.
+     */
     archivedChats = computed(() => {
         const archivedChatList = this.chatRooms().filter((chat) => chat.archived);
         return this.filterChatsBySearch(archivedChatList);
     });
 
+    /**
+     * Whether the archive tab should be available.
+     */
     hasArchivedChats = computed(() => this.archivedChats().length > 0);
 
+    /**
+     * Contacts available for starting new one-on-one chats.
+     */
     availableContacts = computed(() => {
         return Object.values(this.userData());
     });
 
     /**
-     * Runs get last message.
+     * Returns the preview text for the latest message in a chat.
      *
-     * @param chat - chat value.
-     *
-     * @returns The chat menu get last message result.
+     * @param chat - Chat room to inspect.
+     * @returns Latest message text, or a start prompt for empty chats.
      */
     getLastMessage(chat: ChatRoom): string {
         if (!chat.messages || chat.messages.length === 0) {
@@ -211,11 +256,10 @@ export class ChatMenu implements OnInit {
     }
 
     /**
-     * Runs get last message sender.
+     * Returns the display sender for a chat's latest message.
      *
-     * @param chat - chat value.
-     *
-     * @returns The chat menu get last message sender result.
+     * @param chat - Chat room to inspect.
+     * @returns "You" for messages from the current user, otherwise the sender name.
      */
     getLastMessageSender(chat: ChatRoom): string {
         if (!chat.messages || chat.messages.length === 0) {
@@ -226,11 +270,10 @@ export class ChatMenu implements OnInit {
     }
 
     /**
-     * Runs get last message time.
+     * Returns the display time for a chat's latest message.
      *
-     * @param chat - chat value.
-     *
-     * @returns The chat menu get last message time result.
+     * @param chat - Chat room to inspect.
+     * @returns Latest message time, or an empty string for empty chats.
      */
     getLastMessageTime(chat: ChatRoom): string {
         if (!chat.messages || chat.messages.length === 0) {
@@ -241,11 +284,10 @@ export class ChatMenu implements OnInit {
     }
 
     /**
-     * Runs encode uricomponent.
+     * Exposes URL encoding to the template for avatar image paths.
      *
-     * @param str - str value.
-     *
-     * @returns The chat menu encode uricomponent result.
+     * @param str - Raw string to encode.
+     * @returns URI component encoded string.
      */
     encodeURIComponent(str: string): string {
         return encodeURIComponent(str);

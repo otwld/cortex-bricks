@@ -16,9 +16,7 @@ export class FaqPage implements OnInit {
   /** Index of the currently active category. */
   activeIndex = 0;
 
-  /**
-   * Runs ng on init.
-   */
+  /** Populate the static FAQ category list when the page initializes. */
   ngOnInit(): void {
     this.items = [
       { label: 'General',  icon: 'pi pi-fw pi-info-circle',    questions: ['Is there a trial period?', 'Do I need to sign up with credit card?', 'Is the subscription monthly or annual?', 'How many tiers are there?'], value: '0' },

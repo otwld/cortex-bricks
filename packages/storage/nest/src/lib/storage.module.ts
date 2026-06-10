@@ -76,20 +76,10 @@ function createAsyncOptionsClassProvider(asyncOptions: ManualStorageModuleAsyncO
   return [{ provide: asyncOptions.useClass, useClass: asyncOptions.useClass }];
 }
 
-/**
- * Provides storage module behavior.
- */
-@Module({})
 /** Nest module that wires storage drivers, hooks, services, and filesystem file routes. */
+@Module({})
 export class StorageModule {
   /** Configure storage with synchronous options. */
-  /**
-   * Runs for root.
-   *
-   * @param options - options value.
-   *
-   * @returns The storage module for root result.
-   */
   static forRoot(options: StorageModuleOptions): DynamicModule {
     const validated = validateStorageModuleOptions(options);
     return {
@@ -103,13 +93,6 @@ export class StorageModule {
   }
 
   /** Configure storage with an async factory or options factory class. */
-  /**
-   * Runs for root async.
-   *
-   * @param asyncOptions - async options value.
-   *
-   * @returns The storage module for root async result.
-   */
   static forRootAsync(asyncOptions: ManualStorageModuleAsyncOptions): DynamicModule {
     return {
       module: StorageModule,

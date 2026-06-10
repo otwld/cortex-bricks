@@ -38,12 +38,34 @@ export interface CandidateSearchResponse {
   templateUrl: './http-client-search-example.component.html',
 })
 export class HttpClientSearchExampleComponent implements OnInit {
+  /**
+   * Search API endpoint used by the example component.
+   */
   readonly apiUrl = input('/api/recruitment/candidates/search');
+
+  /**
+   * Query executed when the example initializes.
+   */
   readonly initialQuery = input('engineer');
 
+  /**
+   * Whether the example is waiting for an HTTP response.
+   */
   readonly isLoading = signal(false);
+
+  /**
+   * User-facing error message from the latest failed search.
+   */
   readonly error = signal<string | null>(null);
+
+  /**
+   * Last candidate search response returned by the API.
+   */
   readonly response = signal<CandidateSearchResponse | null>(null);
+
+  /**
+   * Query currently represented by the visible response state.
+   */
   readonly activeQuery = signal('');
 
   private readonly httpClient = inject(HttpClient);
@@ -52,6 +74,9 @@ export class HttpClientSearchExampleComponent implements OnInit {
     await this.runSearch(this.initialQuery());
   }
 
+  /**
+   * Executes a candidate search request and updates loading, error, and response state.
+   */
   async runSearch(query: string): Promise<void> {
     this.activeQuery.set(query);
     this.error.set(null);

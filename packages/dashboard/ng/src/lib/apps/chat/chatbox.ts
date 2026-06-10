@@ -57,29 +57,38 @@ interface CurrentUser {
 })
 export class ChatBox implements AfterViewChecked {
     /**
-     * Runs active chat.
+     * Chat room whose messages are rendered in the thread.
      */
     @Input() activeChat: ChatRoom | null = null;
+
     /**
-     * Runs current user.
+     * Current user metadata used when creating outgoing messages.
      */
     @Input() currentUser: CurrentUser = { id: 'me', name: 'You' };
+
     /**
-     * Runs open user profile event.
+     * Emits when a participant avatar or sender should open a profile sidebar.
      */
     @Output() openUserProfileEvent = new EventEmitter<string | number>();
+
     /**
-     * Runs send message event.
+     * Emits newly composed text messages to the parent chat page.
      */
     @Output() sendMessageEvent = new EventEmitter<Message>();
 
+    /**
+     * Scrollable message list container used for automatic bottom scrolling.
+     */
     @ViewChild('messagesContainer') messagesContainer!: ElementRef;
 
+    /**
+     * Draft message text bound to the composer input.
+     */
     newMessage = model('');
     private shouldScrollToBottom = false;
 
     /**
-     * Runs ng after view checked.
+     * Scrolls to the newest message after Angular renders an outgoing message.
      */
     ngAfterViewChecked() {
         if (this.shouldScrollToBottom) {
@@ -89,7 +98,7 @@ export class ChatBox implements AfterViewChecked {
     }
 
     /**
-     * Runs scroll to bottom.
+     * Moves the message list to its latest rendered message.
      */
     scrollToBottom() {
         if (this.messagesContainer?.nativeElement) {
@@ -98,7 +107,7 @@ export class ChatBox implements AfterViewChecked {
     }
 
     /**
-     * Runs send message.
+     * Emits a text message from the composer when the draft is not empty.
      */
     sendMessage() {
         if (!this.newMessage().trim()) return;
@@ -119,11 +128,10 @@ export class ChatBox implements AfterViewChecked {
     }
 
     /**
-     * Runs get avatar initials.
+     * Builds uppercase initials for a sender avatar fallback.
      *
-     * @param name - name value.
-     *
-     * @returns The chat box get avatar initials result.
+     * @param name - Sender display name.
+     * @returns Initials derived from each word in the name.
      */
     getAvatarInitials(name: string): string {
         return name
@@ -134,9 +142,9 @@ export class ChatBox implements AfterViewChecked {
     }
 
     /**
-     * Runs open user profile.
+     * Requests that the parent component open a participant profile.
      *
-     * @param userId - user id value.
+     * @param userId - Participant id selected from the message thread.
      */
     openUserProfile(userId: string | number) {
         this.openUserProfileEvent.emit(userId);

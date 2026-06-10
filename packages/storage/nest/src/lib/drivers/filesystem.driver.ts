@@ -11,21 +11,17 @@ import { StorageException } from '../exceptions/storage.exception';
 import { createFilesystemSignedToken } from './filesystem-signed-url';
 import { MultipartStorageDriver } from './multipart-storage-driver';
 
-/**
- * Provides filesystem storage driver behavior.
- */
-@Injectable()
 /** Filesystem-backed storage driver rooted at a configured directory. */
+@Injectable()
 export class FilesystemStorageDriver extends MultipartStorageDriver {
   private readonly options: NormalizedStorageModuleOptions;
   private readonly logger = new Logger(FilesystemStorageDriver.name);
   private readonly rootPath: string;
 
   /**
-   * Creates a filesystem storage driver instance.
+   * Create a filesystem storage driver from validated module options.
    *
-   * @param options - options value.
-   *
+   * @param options - Raw storage module options supplied through Nest DI.
    * @throws When the operation cannot be completed.
    */
   constructor(@Inject(STORAGE_MODULE_OPTIONS) options: StorageModuleOptions) {
@@ -38,15 +34,6 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Store a stream atomically at a relative filesystem key. */
-  /**
-   * Runs put.
-   *
-   * @param key - key value.
-   *
-   * @param stream - stream value.
-   *
-   * @param meta - meta value.
-   */
   async put(key: string, stream: Readable, meta: UploadMeta): Promise<void> {
     void meta;
     const target = this.resolveKey(key);
@@ -57,13 +44,6 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Delete a file if it exists. */
-  /**
-   * Runs delete.
-   *
-   * @param key - key value.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async delete(key: string): Promise<void> {
     try {
       await unlink(this.resolveKey(key));
@@ -73,17 +53,6 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Generate a signed filesystem read URL. */
-  /**
-   * Runs get signed url.
-   *
-   * @param key - key value.
-   *
-   * @param expiresIn - expires in value.
-   *
-   * @returns The filesystem storage driver get signed url result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async getSignedUrl(key: string, expiresIn: number): Promise<string> {
     const filesystem = this.options.filesystem;
     if (!filesystem) throw StorageException.misconfigured('Filesystem storage options are missing');
@@ -93,15 +62,6 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Open a readable stream for a stored file. */
-  /**
-   * Runs get read stream.
-   *
-   * @param key - key value.
-   *
-   * @returns The filesystem storage driver get read stream result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async getReadStream(key: string): Promise<Readable> {
     const target = this.resolveKey(key);
     if (!(await this.exists(key))) throw StorageException.fileNotFound();
@@ -109,15 +69,6 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Return whether a stored file exists. */
-  /**
-   * Runs exists.
-   *
-   * @param key - key value.
-   *
-   * @returns The filesystem storage driver exists result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async exists(key: string): Promise<boolean> {
     try {
       const result = await stat(this.resolveKey(key));
@@ -129,15 +80,6 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Create a local multipart staging directory and return its upload id. */
-  /**
-   * Runs create multipart upload.
-   *
-   * @param key - key value.
-   *
-   * @param meta - meta value.
-   *
-   * @returns The filesystem storage driver create multipart upload result.
-   */
   async createMultipartUpload(key: string, meta: UploadMeta): Promise<string> {
     void key;
     void meta;
@@ -148,19 +90,6 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Store one multipart chunk in the upload staging directory. */
-  /**
-   * Runs upload part.
-   *
-   * @param uploadId - upload id value.
-   *
-   * @param _key - key value.
-   *
-   * @param partNumber - part number value.
-   *
-   * @param chunk - chunk value.
-   *
-   * @returns The filesystem storage driver upload part result.
-   */
   async uploadPart(uploadId: string, _key: string, partNumber: number, chunk: Buffer): Promise<string> {
     const directory = this.multipartDir(uploadId);
     await mkdir(directory, { recursive: true });
@@ -170,15 +99,6 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Assemble staged multipart chunks into the final file. */
-  /**
-   * Runs complete multipart upload.
-   *
-   * @param uploadId - upload id value.
-   *
-   * @param key - key value.
-   *
-   * @param parts - parts value.
-   */
   async completeMultipartUpload(uploadId: string, key: string, parts: Part[]): Promise<void> {
     this.logger.debug(`Completing multipart upload ${uploadId} for ${key}`);
     const target = this.resolveKey(key);
@@ -203,13 +123,6 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Remove local multipart staging data. */
-  /**
-   * Runs abort multipart upload.
-   *
-   * @param uploadId - upload id value.
-   *
-   * @param key - key value.
-   */
   async abortMultipartUpload(uploadId: string, key: string): Promise<void> {
     void key;
     this.logger.debug(`Aborting multipart upload ${uploadId}`);

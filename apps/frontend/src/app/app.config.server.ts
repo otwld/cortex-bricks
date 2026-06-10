@@ -7,4 +7,7 @@ const serverConfig: ApplicationConfig = {
   providers: [provideServerRendering(withRoutes(serverRoutes))],
 };
 
+/**
+ * Server-side Angular application configuration for SSR requests.
+ */
 export const config = mergeApplicationConfig(appConfig, serverConfig);

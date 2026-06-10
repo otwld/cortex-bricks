@@ -27,11 +27,6 @@ export class WsConnectedDirective {
   public readonly wsConnectedClient = input<WsClient<Contract> | null>(null);
 
   /** Optional state to match. Defaults to connected. */
-  /**
-   * Runs ws connected.
-   *
-   * @param value - value value.
-   */
   @Input()
   public set wsConnected(value: ConnectionState | '' | undefined | null) {
     this.targetState.set(value ? value : 'connected');

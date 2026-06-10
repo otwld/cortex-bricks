@@ -17,6 +17,9 @@ export class FeatureFlagsGuard implements CanActivate {
     @Optional() @Inject(FEATURE_FLAGS_CONTEXT_RESOLVER_TOKEN) private readonly contextResolver?: FeatureFlagsContextResolver,
   ) {}
 
+  /**
+   * Allows unannotated routes and evaluates annotated routes against the resolved request context.
+   */
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requirement = this.reflector.getAllAndOverride<FeatureFlagRequirement>(FEATURE_FLAG_REQUIREMENT_KEY, [
       context.getHandler(),

@@ -9,13 +9,6 @@ const cache = new WeakMap<Contract, InjectionToken<PresenceService>>();
  *
  * @param contract Contract associated with the presence stream.
  */
-/**
- * Runs ws presence.
- *
- * @param contract - contract value.
- *
- * @returns The ws presence result.
- */
 export function WS_PRESENCE<TContract extends Contract>(
   contract: TContract,
 ): InjectionToken<PresenceService> {

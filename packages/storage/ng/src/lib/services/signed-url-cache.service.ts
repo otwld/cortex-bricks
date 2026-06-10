@@ -9,26 +9,14 @@ interface CacheEntry {
   pending?: Observable<string>;
 }
 
-/**
- * Provides signed url cache service behavior.
- */
-@Injectable({ providedIn: 'root' })
 /** Caches signed read URLs until their configured refresh threshold. */
+@Injectable({ providedIn: 'root' })
 export class SignedUrlCacheService {
   private readonly config = inject(STORAGE_CONFIG);
   private readonly http = inject(HttpClient);
   private readonly cache = new Map<string, CacheEntry>();
 
-  /** Return a cached or freshly requested signed URL for a storage key. */
-  /**
-   * Runs get.
-   *
-   * @param key - key value.
-   *
-   * @param ttl - ttl value.
-   *
-   * @returns The signed url cache service get result.
-   */
+  /** Returns a cached or freshly requested signed URL for a storage key. */
   get(key: string, ttl = this.config.defaultExpiresIn): Observable<string> {
     const cacheKey = `${key}:${ttl}`;
     const cached = this.cache.get(cacheKey);

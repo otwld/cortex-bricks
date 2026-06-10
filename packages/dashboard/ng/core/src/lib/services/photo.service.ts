@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 
-/**
- * Provides photo service behavior.
- */
+/** Supplies gallery image fixtures for dashboard demos. */
 @Injectable()
 export class PhotoService {
-  /**
-   * Runs get data.
-   *
-   * @returns The photo service get data result.
-   */
+  /** Return the static gallery image dataset. */
   getData() {
     return [
       {
@@ -105,11 +99,7 @@ export class PhotoService {
     ];
   }
 
-  /**
-   * Runs get images.
-   *
-   * @returns The photo service get images result.
-   */
+  /** Resolve gallery fixtures through the async service API used by demos. */
   getImages() {
     return Promise.resolve(this.getData());
   }

@@ -5,8 +5,14 @@ import { $dt } from '@primeuix/themes';
 import { ChartModule } from 'primeng/chart';
 import { Subject } from 'rxjs';
 
+/**
+ * Semantic color tone for revenue stream chart series.
+ */
 export type RevenueStreamTone = 'primary-400' | 'primary-300' | 'primary-200' | 'cyan' | 'orange' | 'gray';
 
+/**
+ * Color scheme used when resolving PrimeNG design tokens for the chart.
+ */
 export type RevenueStreamColorScheme = 'light' | 'dark';
 
 /**
@@ -41,6 +47,9 @@ export interface RevenueStreamDataSelectEvent {
   readonly event: unknown;
 }
 
+/**
+ * Union of events emitted by the revenue stream widget event stream.
+ */
 export type RevenueStreamWidgetEvent = { readonly type: 'data'; readonly event: unknown };
 
 interface RevenueStreamThemeToken {
@@ -84,6 +93,9 @@ const TEXT_MUTED_COLOR_TOKEN: RevenueStreamThemeToken = { tokenPath: 'text.muted
 
 const CONTENT_BORDER_COLOR_TOKEN: RevenueStreamThemeToken = { tokenPath: 'content.border.color', fallback: '#e2e8f0' };
 
+/**
+ * Ecommerce widget that charts stacked revenue streams across series.
+ */
 @Component({
   standalone: true,
   selector: 'app-revenue-stream-widget',

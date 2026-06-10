@@ -51,29 +51,21 @@ export interface TusUploadState {
   file?: StorageFile;
 }
 
-/**
- * Provides tus service behavior.
- */
-@Injectable()
 /** Coordinates TUS upload state, multipart drivers, checksum verification, and final file records. */
+@Injectable()
 export class TusService {
   private readonly storageOptions: NormalizedStorageModuleOptions;
   private readonly logger = new Logger(TusService.name);
 
   /**
-   * Creates a tus service instance.
+   * Create the TUS upload coordination service.
    *
-   * @param driver - driver value.
-   *
-   * @param uploadStateModel - upload state model value.
-   *
-   * @param storageFileModel - storage file model value.
-   *
-   * @param hookRunner - hook runner value.
-   *
-   * @param options - options value.
-   *
-   * @param rawStorageOptions - raw storage options value.
+   * @param driver - Multipart storage driver used for staged chunk uploads.
+   * @param uploadStateModel - Persistence model for resumable upload state.
+   * @param storageFileModel - Persistence model for completed file records.
+   * @param hookRunner - Lifecycle hook runner for upload policies.
+   * @param options - TUS module limits and timing configuration.
+   * @param rawStorageOptions - Raw storage module options supplied through Nest DI.
    */
   constructor(
     private readonly driver: MultipartStorageDriver,
@@ -263,13 +255,6 @@ type StorageFileRecordLike = Partial<StorageFileRecord> & {
 };
 
 /** Convert Mongoose or in-memory file records into the shared wire contract. */
-/**
- * Runs to storage file.
- *
- * @param record - record value.
- *
- * @returns The to storage file result.
- */
 export function toStorageFile(record: StorageFileRecordLike): StorageFile {
   const raw = record.toJSON ? record.toJSON({ flattenMaps: true }) : record;
   const metadata = raw.metadata instanceof Map ? Object.fromEntries(raw.metadata) : raw.metadata;

@@ -31,6 +31,9 @@ export interface BankingHeaderActionEvent {
   readonly action: BankingHeaderAction;
 }
 
+/**
+ * Union of events emitted by the banking header widget event stream.
+ */
 export type BankingHeaderWidgetEvent = { readonly type: 'action' } & BankingHeaderActionEvent;
 
 interface BankingHeaderProfileViewModel extends BankingHeaderProfile {
@@ -51,6 +54,9 @@ const DEFAULT_ACTIONS: readonly BankingHeaderAction[] = [
   { id: 'send', label: 'Send', icon: 'pi pi-send' },
 ];
 
+/**
+ * Banking dashboard header with profile summary and quick actions.
+ */
 @Component({
   standalone: true,
   selector: 'app-header-widget',

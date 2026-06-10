@@ -7,7 +7,7 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 
 /**
- * Provides ai completion page behavior.
+ * Demonstrates one-shot AI text completion with model selection and cancellation.
  */
 @Component({
   selector: 'app-ai-completion-page',
@@ -16,11 +16,30 @@ import { TextareaModule } from 'primeng/textarea';
 })
 export class AiCompletionPage implements OnInit {
   private readonly modelsService = inject(AiModelsService);
+
+  /**
+   * Completion request state and actions shared with the template.
+   */
   readonly completion = inject(AiCompletionService);
 
+  /**
+   * Available AI model aliases loaded from the shared AI models service.
+   */
   readonly models = signal<AiModelAlias[]>([]);
+
+  /**
+   * Prompt text sent to the completion service.
+   */
   readonly prompt = signal('Write a concise changelog entry for adding AI support.');
+
+  /**
+   * Model alias currently selected for completion requests.
+   */
   readonly selectedModel = signal('fast');
+
+  /**
+   * Select options for models that support completion requests.
+   */
   readonly modelOptions = computed(() =>
     this.models()
       .filter((model) => model.capabilities.includes('completion'))
@@ -28,14 +47,14 @@ export class AiCompletionPage implements OnInit {
   );
 
   /**
-   * Runs ng on init.
+   * Loads available AI model metadata for the model selector.
    */
   async ngOnInit(): Promise<void> {
     this.models.set(await this.modelsService.list());
   }
 
   /**
-   * Runs submit.
+   * Sends the current prompt to the completion service.
    */
   async submit(): Promise<void> {
     const prompt = this.prompt().trim();
@@ -45,7 +64,7 @@ export class AiCompletionPage implements OnInit {
   }
 
   /**
-   * Runs abort.
+   * Cancels the active completion request when one is in flight.
    */
   abort(): void {
     this.completion.abort();

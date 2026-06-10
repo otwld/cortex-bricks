@@ -11,8 +11,14 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
+/**
+ * Supported table cell renderer type for recent sales columns.
+ */
 export type RecentSaleColumnType = 'text' | 'currency' | 'status';
 
+/**
+ * PrimeNG tag severity used for recent-sale inventory status.
+ */
 export type RecentSaleStatusSeverity = 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast';
 
 /**
@@ -55,6 +61,9 @@ export interface RecentSalesExportEvent {
   readonly columns: readonly RecentSaleColumn[];
 }
 
+/**
+ * Union of events emitted by the recent sales widget event stream.
+ */
 export type RecentSalesWidgetEvent =
   | ({ readonly type: 'export' } & RecentSalesExportEvent)
   | { readonly type: 'search'; readonly query: string }
@@ -92,6 +101,9 @@ const DEFAULT_COLUMNS: readonly RecentSaleColumn[] = [
   { field: 'status', header: 'Status', type: 'status', sortable: true, exportHeader: 'Inventory Status', minWidthClass: 'min-w-32' },
 ];
 
+/**
+ * Ecommerce widget with searchable, pageable recent-sales table data.
+ */
 @Component({
   selector: 'app-recent-sales-widget',
   imports: [ButtonModule, CurrencyPipe, IconFieldModule, InputIconModule, InputTextModule, TableModule, TagModule, TooltipModule],

@@ -32,6 +32,10 @@ type FeatureFlagAdminForm = FormGroup<{
   enabled: FormControl<boolean>;
 }>;
 
+/**
+ * Standalone admin surface for creating, listing, toggling, and deleting
+ * feature flags through the injected `FeatureFlagsApi` contract.
+ */
 @Component({
   selector: 'feature-flags-admin',
   standalone: true,
@@ -211,6 +215,9 @@ export class FeatureFlagsAdminComponent {
     void this.reload();
   }
 
+  /**
+   * Reloads feature flags from the admin API and updates table state.
+   */
   async reload(): Promise<void> {
     this.isLoading.set(true);
     this.message.set(null);
@@ -224,6 +231,9 @@ export class FeatureFlagsAdminComponent {
     }
   }
 
+  /**
+   * Creates or replaces a feature flag from the admin form values.
+   */
   async create(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -244,6 +254,9 @@ export class FeatureFlagsAdminComponent {
     this.form.reset({ name: '', scope: 'app', enabled: false });
   }
 
+  /**
+   * Toggles a feature flag's enabled state through the admin API.
+   */
   async toggle(feature: FeatureFlagDto): Promise<void> {
     await this.save(
       () => this.api.toggle(feature.name, !feature.enabled),
@@ -251,6 +264,9 @@ export class FeatureFlagsAdminComponent {
     );
   }
 
+  /**
+   * Deletes a feature flag through the admin API.
+   */
   async remove(feature: FeatureFlagDto): Promise<void> {
     await this.save(() => this.api.remove(feature.name), `Deleted "${feature.name}".`);
   }

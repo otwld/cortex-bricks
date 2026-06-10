@@ -5,6 +5,9 @@ import { StorageHook } from '../hooks/storage-hook';
 import { MODULE_OPTIONS_TOKEN } from './storage.module-definition';
 import { StorageException } from '../exceptions/storage.exception';
 
+/**
+ * Injection token that stores normalized Nest storage module options.
+ */
 export const STORAGE_MODULE_OPTIONS = MODULE_OPTIONS_TOKEN;
 
 /** S3-compatible storage backend configuration. */
@@ -137,15 +140,12 @@ const optionsSchema = z
     }
   });
 
-/** Validate and normalize storage module options. */
 /**
- * Runs validate storage module options.
+ * Validate and normalize storage module options.
  *
- * @param options - options value.
- *
- * @returns The validate storage module options result.
- *
- * @throws When the operation cannot be completed.
+ * @param options - Raw options supplied to `StorageModule`.
+ * @returns Parsed options with defaults applied.
+ * @throws StorageException When the options are incomplete for the selected driver.
  */
 export function validateStorageModuleOptions(options: StorageModuleOptions): NormalizedStorageModuleOptions {
   const parsed = optionsSchema.safeParse(options);

@@ -1,5 +1,12 @@
 import { CreateQueryOptions, QueryKey, queryOptions } from '@tanstack/angular-query-experimental';
 
+/**
+ * Converts plain array data or existing query options into TanStack query
+ * options.
+ *
+ * Plain arrays are wrapped in a disabled query by default so components can
+ * consume static data through the same shape as live query options.
+ */
 export function coerceQueryOptions<TItem>(
   value: CoercibleQueryInput<TItem>,
   config?: {
@@ -26,18 +33,20 @@ export function coerceQueryOptions<TItem>(
     queryFn: async () => value,
   });
 }
-/** QueryOptions. */
 
-
+/**
+ * Query-options shape accepted by coercion helpers.
+ */
 export type QueryOptions<TItem, TQueryKey extends QueryKey> = CreateQueryOptions<
   TItem[] | TItem,
   Error,
   TItem[] | TItem,
   TQueryKey
 >;
-/** CoercibleQueryInput. */
 
-
+/**
+ * Input accepted by `coerceQueryOptions`.
+ */
 export type CoercibleQueryInput<TItem> =
   | TItem[]
   | CreateQueryOptions<TItem[] | TItem, Error, TItem[] | TItem, QueryKey>;

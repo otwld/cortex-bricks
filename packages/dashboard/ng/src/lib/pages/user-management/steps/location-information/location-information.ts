@@ -14,40 +14,42 @@ import { FormStateService } from '../../form-state.service';
     templateUrl: './location-information.html',
 })
 export class LocationInformation {
+    /**
+     * Country options shown in the location information step.
+     */
     countryOptions = ['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan', 'China', 'India', 'Brazil'];
 
     private readonly router = inject(Router);
     private readonly formStateService = inject(FormStateService);
 
     /**
-     * Runs form state.
+     * Shared wizard form state.
      *
-     * @returns The location information form state result.
+     * @returns Writable signal managed by the form state service.
      */
     get formState() {
         return this.formStateService.formState;
     }
 
     /**
-     * Runs update field.
+     * Updates one field in the shared wizard form state.
      *
-     * @param field - field value.
-     *
-     * @param value - value value.
+     * @param field - Form state field to update.
+     * @param value - New field value.
      */
     updateField<K extends keyof ReturnType<typeof this.formState>>(field: K, value: ReturnType<typeof this.formState>[K]) {
         this.formStateService.updateField(field, value);
     }
 
     /**
-     * Runs cancel.
+     * Cancels user creation and returns to the user list.
      */
     cancel() {
         this.router.navigate(['/dashboard/profile/list']);
     }
 
     /**
-     * Runs next.
+     * Advances to the authorization step.
      */
     next() {
         this.router.navigate(['/dashboard/profile/create/authorization']);

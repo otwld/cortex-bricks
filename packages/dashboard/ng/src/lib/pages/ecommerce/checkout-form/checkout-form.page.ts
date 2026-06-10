@@ -27,6 +27,9 @@ interface Country {
     templateUrl: './checkout-form.page.html',
 })
 export class CheckoutFormPage {
+    /**
+     * Shipping, payment, and discount fields bound to the checkout form.
+     */
     formData = {
         email: '',
         cardNumber: '',
@@ -38,6 +41,9 @@ export class CheckoutFormPage {
         discountCode: ''
     };
 
+    /**
+     * Country options shown in the billing country selector.
+     */
     countries: Country[] = [
         { label: 'United States', value: 'us' },
         { label: 'Canada', value: 'ca' },
@@ -50,6 +56,9 @@ export class CheckoutFormPage {
         { label: 'Australia', value: 'au' }
     ];
 
+    /**
+     * Cart line items shown in the order summary.
+     */
     cartItems: CartItem[] = [
         {
             id: 1,
@@ -80,14 +89,33 @@ export class CheckoutFormPage {
         }
     ];
 
+    /**
+     * Cart subtotal before discounts, shipping, and tax.
+     */
     subtotal = 1001.47;
+
+    /**
+     * Discount amount applied across the cart.
+     */
     totalSavings = 111.5;
+
+    /**
+     * Original shipping price displayed before free or discounted shipping.
+     */
     shippingOriginal = 18.0;
+
+    /**
+     * VAT amount included in the order total.
+     */
     vat = 20.0;
+
+    /**
+     * Final order total shown by the checkout summary.
+     */
     total = 909.97;
 
     /**
-     * Runs process payment.
+     * Handles the checkout submit action for host integration.
      */
     processPayment() {
         return;

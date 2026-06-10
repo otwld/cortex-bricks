@@ -14,73 +14,76 @@ import { FormStateService } from '../../form-state.service';
     templateUrl: './authorization.html',
 })
 export class Authorization {
+    /**
+     * Role presets available for the new user.
+     */
     roleOptions: UserRole[] = [
         { name: 'member', permissions: [] },
         { name: 'manager', permissions: ['read:Dashboard', 'read:User'] },
         { name: 'admin', permissions: ['manage:User'] },
     ];
+
+    /**
+     * Permission options that can be assigned directly to the new user.
+     */
     permissionOptions: UserPermission[] = ['read:Dashboard', 'read:User', 'manage:User', 'read:Finance', 'use:Api'];
 
     private readonly router = inject(Router);
     private readonly formStateService = inject(FormStateService);
 
     /**
-     * Runs form state.
+     * Shared wizard form state.
      *
-     * @returns The authorization form state result.
+     * @returns Writable signal managed by the form state service.
      */
     get formState() {
         return this.formStateService.formState;
     }
 
     /**
-     * Runs update field.
+     * Updates one field in the shared wizard form state.
      *
-     * @param field - field value.
-     *
-     * @param value - value value.
+     * @param field - Form state field to update.
+     * @param value - New field value.
      */
     updateField<K extends keyof ReturnType<typeof this.formState>>(field: K, value: ReturnType<typeof this.formState>[K]) {
         this.formStateService.updateField(field, value);
     }
 
     /**
-     * Runs set role.
+     * Replaces the selected role list with one role preset.
      *
-     * @param role - role value.
+     * @param role - Role preset to select.
      */
     setRole(role: UserRole) {
         this.formStateService.updateField('roles', [role]);
     }
 
     /**
-     * Runs is role selected.
+     * Checks whether a role preset is selected.
      *
-     * @param role - role value.
-     *
-     * @returns The authorization is role selected result.
+     * @param role - Role preset to inspect.
+     * @returns True when the role name is selected.
      */
     isRoleSelected(role: UserRole): boolean {
         return this.formState().roles.some((selected) => selected.name === role.name);
     }
 
     /**
-     * Runs has permission.
+     * Checks whether a direct permission is selected.
      *
-     * @param permission - permission value.
-     *
-     * @returns The authorization has permission result.
+     * @param permission - Permission to inspect.
+     * @returns True when the permission is selected.
      */
     hasPermission(permission: UserPermission): boolean {
         return this.formState().permissions.includes(permission);
     }
 
     /**
-     * Runs set permission.
+     * Adds or removes one direct permission from the wizard state.
      *
-     * @param permission - permission value.
-     *
-     * @param enabled - enabled value.
+     * @param permission - Permission to update.
+     * @param enabled - Whether the permission should be selected.
      */
     setPermission(permission: UserPermission, enabled: boolean) {
         const permissions = this.formState().permissions;
@@ -88,14 +91,14 @@ export class Authorization {
     }
 
     /**
-     * Runs cancel.
+     * Cancels user creation and returns to the user list.
      */
     cancel() {
         this.router.navigate(['/dashboard/profile/list']);
     }
 
     /**
-     * Runs next.
+     * Advances to the account status step.
      */
     next() {
         this.router.navigate(['/dashboard/profile/create/account-status']);

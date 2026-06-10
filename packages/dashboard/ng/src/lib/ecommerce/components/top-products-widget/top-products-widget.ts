@@ -25,6 +25,9 @@ export interface TopProductSelectEvent {
   readonly product: TopProduct;
 }
 
+/**
+ * Union of events emitted by the top products widget event stream.
+ */
 export type TopProductsWidgetEvent = { readonly type: 'product' } & TopProductSelectEvent;
 
 interface TopProductViewModel extends TopProduct {
@@ -43,6 +46,9 @@ const DEFAULT_PRODUCTS: readonly TopProduct[] = [
   { id: 'brown-purse', name: 'Brown Purse', image: 'brown-purse.jpg', price: 120, rating: 4 },
 ];
 
+/**
+ * Ecommerce widget that renders ranked products with price and rating.
+ */
 @Component({
   standalone: true,
   selector: 'app-top-products-widget',

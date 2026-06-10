@@ -3,6 +3,9 @@ import { dirname, resolve } from 'node:path';
 import type { Plugin } from 'vite';
 import { createStorybookSourceLoaderPlugin } from './source-loader.plugin.ts';
 
+/**
+ * Options for the Node-backed Storybook source-loader Vite plugin.
+ */
 export interface StorybookNodeSourceLoaderPluginOptions {
   importPrefix?: string;
   pluginName?: string;

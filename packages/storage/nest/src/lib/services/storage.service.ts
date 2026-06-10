@@ -21,22 +21,17 @@ export interface ListFilesOptions {
   includeDeleted?: boolean;
 }
 
-/**
- * Provides storage service behavior.
- */
-@Injectable()
 /** High-level service for storing, listing, signing, and deleting files. */
+@Injectable()
 export class StorageService {
   private readonly logger = new Logger(StorageService.name);
 
   /**
-   * Creates a storage service instance.
+   * Create the high-level storage service.
    *
-   * @param driver - driver value.
-   *
-   * @param hookRunner - hook runner value.
-   *
-   * @param storageFileModel - storage file model value.
+   * @param driver - Active storage driver selected by module options.
+   * @param hookRunner - Lifecycle hook runner for upload and delete policies.
+   * @param storageFileModel - Mongoose model for persisted file records.
    */
   constructor(
     private readonly driver: StorageDriver,
@@ -45,21 +40,6 @@ export class StorageService {
   ) {}
 
   /** Store a readable stream and create its file record. */
-  /**
-   * Runs put file.
-   *
-   * @param key - key value.
-   *
-   * @param stream - stream value.
-   *
-   * @param meta - meta value.
-   *
-   * @param options - options value.
-   *
-   * @returns The storage service put file result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async putFile(
     key: string,
     stream: Readable,
@@ -97,21 +77,6 @@ export class StorageService {
   }
 
   /** Create only the database record for an already-stored object. */
-  /**
-   * Runs create file record.
-   *
-   * @param key - key value.
-   *
-   * @param meta - meta value.
-   *
-   * @param checksum - checksum value.
-   *
-   * @param driver - driver value.
-   *
-   * @param ownerId - owner id value.
-   *
-   * @returns The storage service create file record result.
-   */
   async createFileRecord(key: string, meta: UploadMeta, checksum: string, driver: StorageDriverKind, ownerId?: string): Promise<StorageFileDocument> {
     return this.storageFileModel.create({
       key,
@@ -126,15 +91,6 @@ export class StorageService {
   }
 
   /** Load an active file by id or throw when it is missing or soft-deleted. */
-  /**
-   * Runs get file.
-   *
-   * @param id - id value.
-   *
-   * @returns The storage service get file result.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async getFile(id: string): Promise<StorageFileDocument> {
     const file = await this.storageFileModel.findById(id).exec();
     if (!file || file.deletedAt) throw StorageException.fileNotFound();
@@ -142,15 +98,6 @@ export class StorageService {
   }
 
   /** Soft- or hard-delete a file and invoke delete hooks. */
-  /**
-   * Runs delete file.
-   *
-   * @param id - id value.
-   *
-   * @param options - options value.
-   *
-   * @throws When the operation cannot be completed.
-   */
   async deleteFile(id: string, options: DeleteFileOptions = {}): Promise<void> {
     try {
       const file = await this.getFile(id);
@@ -171,29 +118,11 @@ export class StorageService {
   }
 
   /** Generate a signed read URL for a storage key. */
-  /**
-   * Runs get signed url.
-   *
-   * @param key - key value.
-   *
-   * @param expiresIn - expires in value.
-   *
-   * @returns The storage service get signed url result.
-   */
   async getSignedUrl(key: string, expiresIn = 3600): Promise<string> {
     return this.driver.getSignedUrl(key, expiresIn);
   }
 
   /** List files matching a filter, excluding soft-deleted rows by default. */
-  /**
-   * Runs list files.
-   *
-   * @param filter - filter value.
-   *
-   * @param options - options value.
-   *
-   * @returns The storage service list files result.
-   */
   async listFiles(filter: Partial<StorageFile> = {}, options: ListFilesOptions = {}): Promise<StorageFileDocument[]> {
     const query: Record<string, unknown> = { ...filter };
     if (!options.includeDeleted) Object.assign(query, NOT_SOFT_DELETED);
@@ -202,13 +131,6 @@ export class StorageService {
   }
 
   /** Return the stored SHA-256 checksum for a file. */
-  /**
-   * Runs get checksum.
-   *
-   * @param id - id value.
-   *
-   * @returns The storage service get checksum result.
-   */
   async getChecksum(id: string): Promise<string> {
     return (await this.getFile(id)).checksum;
   }

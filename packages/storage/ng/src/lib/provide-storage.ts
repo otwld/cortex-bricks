@@ -4,13 +4,11 @@ import { normalizeStorageConfig, STORAGE_CONFIG, StorageConfig } from './tokens/
 /** Fully normalized storage configuration injected into services. */
 export type RequiredStorageConfig = Required<StorageConfig>;
 
-/** Provide Angular storage configuration to directives, pipes, and services. */
 /**
- * Runs provide storage.
+ * Provides Angular storage configuration to directives, pipes, and services.
  *
- * @param config - config value.
- *
- * @returns The provide storage result.
+ * @param config - Storage client configuration supplied by the host app.
+ * @returns Environment providers for the Angular storage client.
  */
 export function provideStorage(config: StorageConfig): EnvironmentProviders {
   return makeEnvironmentProviders([

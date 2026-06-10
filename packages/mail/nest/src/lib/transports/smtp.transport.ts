@@ -10,18 +10,18 @@ export class SmtpTransport implements MailTransport {
   private readonly transporter: nodemailer.Transporter;
 
   /**
-   * Creates a smtp transport instance.
+   * Create an SMTP transport.
    *
-   * @param options - options value.
+   * @param options - Nodemailer SMTP transport options.
    */
   constructor(options: SmtpTransportOptions) {
     this.transporter = nodemailer.createTransport(options);
   }
 
   /**
-   * Runs send.
+   * Sends one mail message through the configured SMTP transporter.
    *
-   * @param message - message value.
+   * @param message - Raw mail message to deliver.
    */
   async send(message: RawMailMessage): Promise<void> {
     await this.transporter.sendMail({

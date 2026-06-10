@@ -28,9 +28,9 @@ export class PostalTransport implements MailTransport {
   private readonly apiKey: string;
 
   /**
-   * Creates a postal transport instance.
+   * Create a Postal HTTP transport.
    *
-   * @param options - options value.
+   * @param options - Postal API connection options.
    */
   constructor(options: PostalTransportOptions) {
     this.apiUrl = `${options.serverUrl.replace(/\/$/, '')}/api/v1/send/message`;
@@ -38,11 +38,10 @@ export class PostalTransport implements MailTransport {
   }
 
   /**
-   * Runs send.
+   * Sends one mail message through the Postal HTTP API.
    *
-   * @param message - message value.
-   *
-   * @throws When the operation cannot be completed.
+   * @param message - Raw mail message to deliver.
+   * @throws When Postal returns a non-success HTTP or API response.
    */
   async send(message: RawMailMessage): Promise<void> {
     const body: Record<string, unknown> = {

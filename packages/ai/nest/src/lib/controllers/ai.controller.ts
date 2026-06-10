@@ -14,22 +14,18 @@ import { AiEndpointGuard } from '../guards/ai-endpoint.guard';
 import { AiQuotaService } from '../quota/ai-quota.service';
 import { AiService } from '../services/ai.service';
 
-/**
- * Provides ai controller behavior.
- */
+/** HTTP controller exposing configured AI model, tool, quota, and generation endpoints. */
 @Controller()
 @UseGuards(AiEndpointGuard)
 export class AiController {
   private readonly requestSchemas: ReturnType<typeof createAiRequestSchemas>;
 
   /**
-   * Creates a ai controller instance.
+   * Create the AI HTTP controller.
    *
-   * @param ai - ai value.
-   *
-   * @param quota - quota value.
-   *
-   * @param endpoints - endpoints value.
+   * @param ai - AI orchestration service.
+   * @param quota - Quota service used to reserve and commit token usage.
+   * @param endpoints - Endpoint limits used to build request validators.
    */
   constructor(
     private readonly ai: AiService,
@@ -39,62 +35,25 @@ export class AiController {
     this.requestSchemas = createAiRequestSchemas(endpoints.limits);
   }
 
-  /**
-   * Runs models.
-   *
-   * @returns The ai controller models result.
-   */
+  /** Return model aliases visible to clients. */
   @Get('models')
   models() {
     return this.ai.listModels();
   }
 
-  /**
-   * Runs tools.
-   *
-   * @returns The ai controller tools result.
-   */
+  /** Return tool descriptors visible to clients. */
   @Get('tools')
   tools() {
     return this.ai.listTools();
   }
 
-  /**
-   * Runs usage.
-   *
-   * @param request - request value.
-   *
-   * @returns The ai controller usage result.
-   */
+  /** Return quota usage for the authenticated request subject. */
   @Get('usage')
   usage(@Req() request: Request) {
     return this.quota.snapshotForRequest(request);
   }
 
-  /**
-   * Runs chat.
-   *
-   * @param body - body value.
-   *
-   * @param req - req value.
-   *
-   * @param response - response value.
-   *
-   * @returns The ai controller chat result.
-   */
-  /**
-   * Runs chat.
-   *
-   * @param body - body value.
-   *
-   * @param req - req value.
-   *
-   * @param response - response value.
-   *
-   * @returns The ai controller chat result.
-   *
-   * @throws When the operation cannot be completed.
-   */
+  /** Stream a chat response after request validation and quota reservation. */
   @Post('chat')
   async chat(@Body() body: AiChatRequest, @Req() req: Request, @Res() response: ServerResponse<IncomingMessage>) {
     const request = this.parseRequest(this.requestSchemas.aiChatRequestSchema, body) as AiChatRequest;
@@ -110,30 +69,7 @@ export class AiController {
     }
   }
 
-  /**
-   * Runs completion.
-   *
-   * @param body - body value.
-   *
-   * @param req - req value.
-   *
-   * @param response - response value.
-   *
-   * @returns The ai controller completion result.
-   */
-  /**
-   * Runs completion.
-   *
-   * @param body - body value.
-   *
-   * @param req - req value.
-   *
-   * @param response - response value.
-   *
-   * @returns The ai controller completion result.
-   *
-   * @throws When the operation cannot be completed.
-   */
+  /** Stream a text completion after request validation and quota reservation. */
   @Post('completion')
   async completion(@Body() body: AiCompletionRequest, @Req() req: Request, @Res() response: ServerResponse<IncomingMessage>) {
     const request = this.parseRequest(this.requestSchemas.aiCompletionRequestSchema, body) as AiCompletionRequest;
@@ -149,30 +85,7 @@ export class AiController {
     }
   }
 
-  /**
-   * Runs object.
-   *
-   * @param schemaKey - schema key value.
-   *
-   * @param body - body value.
-   *
-   * @param req - req value.
-   *
-   * @returns The ai controller object result.
-   */
-  /**
-   * Runs object.
-   *
-   * @param schemaKey - schema key value.
-   *
-   * @param body - body value.
-   *
-   * @param req - req value.
-   *
-   * @returns The ai controller object result.
-   *
-   * @throws When the operation cannot be completed.
-   */
+  /** Generate a structured object with a registered schema key. */
   @Post('object/:schemaKey')
   async object(@Param('schemaKey') schemaKey: string, @Body() body: AiObjectRequest, @Req() req: Request) {
     const request = this.parseRequest(this.requestSchemas.aiObjectRequestSchema, body) as AiObjectRequest;

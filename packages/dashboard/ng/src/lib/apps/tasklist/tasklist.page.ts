@@ -41,13 +41,39 @@ type TaskSaveData = Omit<Task, 'id'> & { id: number | null };
     templateUrl: './tasklist.page.html',
 })
 export class TaskListPage {
+    /**
+     * Active task status filter selected in the task list toolbar.
+     */
     activeFilter = signal<string>('All Tasks');
+
+    /**
+     * Search query applied to task titles before status filtering.
+     */
     searchQuery = model<string>('');
+
+    /**
+     * Accordion panel keys expanded for the grouped task sections.
+     */
     openPanels = ['0', '1', '2'];
+
+    /**
+     * Whether the create/edit task drawer is visible.
+     */
     isDrawerVisible = false;
+
+    /**
+     * Task currently loaded into the drawer while editing.
+     */
     selectedTask: Task | null = null;
+
+    /**
+     * Drawer mode controlling whether save creates or updates a task.
+     */
     drawerMode: 'create' | 'edit' = 'create';
 
+    /**
+     * Filter tabs with labels, icons, and count keys for the task toolbar.
+     */
     filterOptions = [
         { key: 'All Tasks', label: 'All', fullLabel: 'All Tasks', icon: 'pi pi-list', countKey: 'all' as const },
         { key: 'Pending', label: 'Pending', fullLabel: 'Pending', icon: 'pi pi-inbox', countKey: 'inbox' as const },
@@ -55,6 +81,9 @@ export class TaskListPage {
         { key: 'Completed', label: 'Completed', fullLabel: 'Completed', icon: 'pi pi-check-circle', countKey: 'completed' as const }
     ];
 
+    /**
+     * Editable task collection backing the grouped task sections.
+     */
     taskData = signal<Task[]>([
         { id: 1, title: 'Design a SaaS Platform UI', description: null, status: 'pending', completed: false, startDate: '12.01.2025', endDate: '24.01.2025', members: [{ image: 'amyelsner.png' }, { image: 'annafali.png' }] },
         { id: 2, title: 'Create an E-Commerce Landing Page', description: null, status: 'pending', completed: false, startDate: '02.01.2025', endDate: '28.01.2025', members: [{ image: 'amyelsner.png' }, { image: 'annafali.png' }] },
@@ -86,6 +115,9 @@ export class TaskListPage {
         { id: 10, title: 'Design a Personal Blog Landing Page', description: null, status: 'completed', completed: true, startDate: '12.01.2025', endDate: '24.01.2025', members: [{ image: 'amyelsner.png' }, { image: 'annafali.png' }] }
     ]);
 
+    /**
+     * Tasks after applying the current title search and status filter.
+     */
     filteredTasks = computed(() => {
         let tasks = this.taskData();
 
@@ -105,6 +137,9 @@ export class TaskListPage {
         }
     });
 
+    /**
+     * Task totals shown in the filter tabs.
+     */
     taskCounts = computed(() => ({
         all: this.taskData().length,
         inbox: this.taskData().filter((task) => task.status === 'pending').length,
@@ -112,17 +147,27 @@ export class TaskListPage {
         completed: this.taskData().filter((task) => task.status === 'completed').length
     }));
 
+    /**
+     * Pending task group after search and filter processing.
+     */
     pendingTasks = computed(() => this.filteredTasks().filter((task) => task.status === 'pending'));
+
+    /**
+     * In-progress task group after search and filter processing.
+     */
     inProgressTasks = computed(() => this.filteredTasks().filter((task) => task.status === 'in-progress'));
+
+    /**
+     * Completed task group after search and filter processing.
+     */
     completedTasks = computed(() => this.filteredTasks().filter((task) => task.status === 'completed'));
     private readonly confirmationService = inject(ConfirmationService);
 
     /**
-     * Runs toggle task completion.
+     * Delays and applies a task completion status change so the checkbox transition can finish.
      *
-     * @param task - task value.
-     *
-     * @param completed - completed value.
+     * @param task - Task whose completion state changed.
+     * @param completed - New completion state from the checkbox.
      */
     toggleTaskCompletion(task: Task, completed: boolean) {
         setTimeout(() => {
@@ -137,9 +182,9 @@ export class TaskListPage {
     }
 
     /**
-     * Runs delete task.
+     * Opens a confirmation dialog before removing a task from the list.
      *
-     * @param taskId - task id value.
+     * @param taskId - Task id selected for deletion.
      */
     deleteTask(taskId: number) {
         this.confirmationService.confirm({
@@ -163,7 +208,7 @@ export class TaskListPage {
     }
 
     /**
-     * Runs open new task drawer.
+     * Opens the drawer with an empty draft for task creation.
      */
     openNewTaskDrawer() {
         this.selectedTask = null;
@@ -172,9 +217,9 @@ export class TaskListPage {
     }
 
     /**
-     * Runs open edit task drawer.
+     * Opens the drawer with an existing task for editing.
      *
-     * @param task - task value.
+     * @param task - Task selected for editing.
      */
     openEditTaskDrawer(task: Task) {
         this.selectedTask = task;
@@ -183,9 +228,9 @@ export class TaskListPage {
     }
 
     /**
-     * Runs handle drawer save.
+     * Creates or updates a task from drawer form data, then closes the drawer.
      *
-     * @param newTaskData - new task data value.
+     * @param newTaskData - Draft task data emitted by the drawer.
      */
     handleDrawerSave(newTaskData: TaskSaveData) {
         if (this.drawerMode === 'create') {
@@ -218,7 +263,7 @@ export class TaskListPage {
     }
 
     /**
-     * Runs handle drawer cancel.
+     * Closes the drawer and clears the selected task.
      */
     handleDrawerCancel() {
         this.isDrawerVisible = false;

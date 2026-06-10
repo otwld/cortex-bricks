@@ -45,10 +45,24 @@ interface Order {
     templateUrl: './order-history.page.html',
 })
 export class OrderHistoryPage {
+    /**
+     * Search text applied to order number, product, and variant values.
+     */
     searchQuery = model('');
+
+    /**
+     * Active order status filter selected in the toolbar.
+     */
     activeFilter = signal<'all' | 'ongoing' | 'returns' | 'cancelled' | 'completed'>('all');
+
+    /**
+     * Expansion state keyed by order id for detail panels.
+     */
     expandedOrders: { [key: number]: boolean } = {};
 
+    /**
+     * Demo order records shown in the order history list.
+     */
     orders: Order[] = [
         {
             id: 1,
@@ -220,6 +234,9 @@ export class OrderHistoryPage {
         }
     ];
 
+    /**
+     * Orders after applying status and search filters.
+     */
     filteredOrders = computed(() => {
         let filtered = this.orders;
 
@@ -249,20 +266,19 @@ export class OrderHistoryPage {
     });
 
     /**
-     * Runs toggle order.
+     * Toggles the expanded details panel for an order.
      *
-     * @param orderId - order id value.
+     * @param orderId - Order id whose detail panel should change.
      */
     toggleOrder(orderId: number) {
         this.expandedOrders[orderId] = !this.expandedOrders[orderId];
     }
 
     /**
-     * Runs get delivery progress.
+     * Maps delivery status to the current progress step.
      *
-     * @param status - status value.
-     *
-     * @returns The order history page get delivery progress result.
+     * @param status - Delivery status value from the order.
+     * @returns One-based progress step for the delivery timeline.
      */
     getDeliveryProgress(status: string): number {
         switch (status) {

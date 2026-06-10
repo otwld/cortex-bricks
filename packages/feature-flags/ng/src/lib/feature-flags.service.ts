@@ -18,6 +18,9 @@ export class FeatureFlagsService {
   private readonly app = signal<FeatureFlagState>({});
   private readonly user = signal<FeatureFlagState>({});
 
+  /**
+   * Load-completion subjects for app and user feature snapshots.
+   */
   public readonly loaded = {
     app: new BehaviorSubject(false),
     user: new BehaviorSubject(false),

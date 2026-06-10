@@ -8,7 +8,7 @@ import { DashboardProfileSidebar } from './components/dashboard-profile-sidebar'
 import { DashboardLayoutService } from '@otwld/ng-dashboard/core';
 
 /**
- * Provides dashboard layout behavior.
+ * Application dashboard shell that composes topbar, sidebar, profile, and configurator regions.
  */
 @Component({
   selector: 'app-layout',
@@ -19,6 +19,9 @@ import { DashboardLayoutService } from '@otwld/ng-dashboard/core';
   encapsulation: ViewEncapsulation.None,
 })
 export class DashboardLayout {
+  /**
+   * Shared layout service that drives menu state and theme classes.
+   */
   layoutService = inject(DashboardLayoutService);
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
@@ -32,6 +35,9 @@ export class DashboardLayout {
     });
   }
 
+  /**
+   * CSS class map applied to the dashboard shell for menu mode and theme state.
+   */
   containerClass = computed(() => {
     const layoutConfig = this.layoutService.layoutConfig();
     const layoutState = this.layoutService.layoutState();

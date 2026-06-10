@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
+/**
+ * Text labels rendered by the reusable confirmation dialog.
+ */
 export interface ConfirmDialogData {
   title?: string;
   body?: string;
@@ -7,6 +10,9 @@ export interface ConfirmDialogData {
   cancelLabel?: string;
 }
 
+/**
+ * Small confirmation dialog that emits explicit confirm and cancel events.
+ */
 @Component({
   selector: 'kit-confirm-dialog',
   standalone: true,
@@ -72,10 +78,21 @@ export interface ConfirmDialogData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmDialogComponent {
+  /** Dialog title text. */
   readonly title = input<string | null>(null);
+
+  /** Dialog body text. */
   readonly body = input<string | null>(null);
+
+  /** Label for the destructive or primary confirmation action. */
   readonly confirmLabel = input<string | null>(null);
+
+  /** Label for the cancellation action. */
   readonly cancelLabel = input<string | null>(null);
+
+  /** Emitted when the user confirms the action. */
   readonly confirm = output<void>();
+
+  /** Emitted when the user cancels the action. */
   readonly cancel = output<void>();
 }

@@ -11,13 +11,22 @@ import {
   Validators,
 } from '@angular/forms';
 
+/**
+ * Reactive form group used for one editable key/value row.
+ */
 export type KeyValueFormGroup = FormGroup<{
   key: FormControl<string>;
   value: FormControl<string | number>;
 }>;
 
+/**
+ * Reactive form array used by `KeyValueEditorComponent`.
+ */
 export type KeyValueFormArray = FormArray<KeyValueFormGroup>;
 
+/**
+ * Converts a plain string/number object into key/value form groups.
+ */
 export function objectToKeyValueFormGroup(
   object: Record<string, string | number>,
 ): KeyValueFormGroup[] {
@@ -35,6 +44,9 @@ export function objectToKeyValueFormGroup(
   });
 }
 
+/**
+ * Validates that key/value rows do not reuse the same normalized key.
+ */
 export function uniqueKeyValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const formArray = control as KeyValueFormArray;
@@ -54,6 +66,9 @@ export function uniqueKeyValidator(): ValidatorFn {
   };
 }
 
+/**
+ * Converts key/value rows back into a plain object.
+ */
 export function keyValueArrayToObject(
   keyValueArray: readonly { key: string; value: string | number }[],
 ): Record<string, string | number> {
@@ -66,6 +81,9 @@ export function keyValueArrayToObject(
   return result;
 }
 
+/**
+ * Reusable editor for dynamic string/number metadata maps.
+ */
 @Component({
   selector: 'kit-key-value-editor',
   standalone: true,
@@ -114,6 +132,7 @@ export function keyValueArrayToObject(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeyValueEditorComponent {
+  /** Form array owned by the caller and rendered by the editor. */
   readonly formArray = input.required<KeyValueFormArray>();
 
   protected readonly formGroup = new FormGroup({
@@ -132,6 +151,9 @@ export class KeyValueEditorComponent {
     });
   }
 
+  /**
+   * Adds a new key/value row after validating existing rows.
+   */
   addKeyValuePair(): void {
     const formArray = this.formArray();
 
@@ -145,6 +167,9 @@ export class KeyValueEditorComponent {
     formArray.updateValueAndValidity();
   }
 
+  /**
+   * Removes a key/value row by index.
+   */
   removeKeyValuePair(index: number): void {
     this.formArray().removeAt(index);
   }

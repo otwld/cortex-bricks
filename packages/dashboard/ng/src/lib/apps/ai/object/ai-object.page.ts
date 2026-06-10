@@ -14,7 +14,7 @@ interface SummaryObject {
 }
 
 /**
- * Provides ai object page behavior.
+ * Demonstrates structured object generation from dashboard text input.
  */
 @Component({
   selector: 'app-ai-object-page',
@@ -25,13 +25,44 @@ export class AiObjectPage implements OnInit {
   private readonly modelsService = inject(AiModelsService);
   private readonly objectService = inject(AiObjectService);
 
+  /**
+   * Available AI model aliases loaded from the shared AI models service.
+   */
   readonly models = signal<AiModelAlias[]>([]);
+
+  /**
+   * Instruction prompt sent to the object generation service.
+   */
   readonly prompt = signal('Extract a structured summary from this customer note.');
+
+  /**
+   * Source text wrapped into the object generation request input.
+   */
   readonly input = signal('Customer likes the new upload flow but wants clearer progress labels.');
+
+  /**
+   * Model alias currently selected for structured object generation.
+   */
   readonly selectedModel = signal('structured');
+
+  /**
+   * Whether an object generation request is currently in flight.
+   */
   readonly loading = signal(false);
+
+  /**
+   * Last object generation error message shown by the demo.
+   */
   readonly error = signal<string | null>(null);
+
+  /**
+   * Last structured summary object returned by the AI service.
+   */
   readonly result = signal<SummaryObject | null>(null);
+
+  /**
+   * Select options for models that support object generation.
+   */
   readonly modelOptions = computed(() =>
     this.models()
       .filter((model) => model.capabilities.includes('object'))
@@ -39,14 +70,14 @@ export class AiObjectPage implements OnInit {
   );
 
   /**
-   * Runs ng on init.
+   * Loads available AI model metadata for the model selector.
    */
   async ngOnInit(): Promise<void> {
     this.models.set(await this.modelsService.list());
   }
 
   /**
-   * Runs submit.
+   * Sends the prompt and input text to the object generation service.
    */
   async submit(): Promise<void> {
     const prompt = this.prompt().trim();

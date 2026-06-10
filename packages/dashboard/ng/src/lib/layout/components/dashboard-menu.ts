@@ -6,6 +6,9 @@ import { MenuItem } from 'primeng/api';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { filter, map } from 'rxjs';
 
+/**
+ * Sidebar navigation menu for dashboard and application sections.
+ */
 @Component({
   selector: 'dashboard-menu',
   imports: [PanelMenuModule],

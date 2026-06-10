@@ -1,3 +1,6 @@
+/**
+ * Mail item used by dashboard mail demos.
+ */
 export interface Mail {
   id?: number | string;
   from?: string;

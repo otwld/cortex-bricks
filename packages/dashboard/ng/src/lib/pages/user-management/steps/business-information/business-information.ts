@@ -17,9 +17,19 @@ import { FormStateService } from '../../form-state.service';
     templateUrl: './business-information.html',
 })
 export class BusinessInformation {
+    /**
+     * Department options shown in the business information step.
+     */
     departmentOptions = ['Sales', 'HR', 'Marketing', 'Engineering', 'Finance'];
 
+    /**
+     * Position options shown in the business information step.
+     */
     positionOptions = ['Admin', 'Manager', 'Employee'];
+
+    /**
+     * Employment type options shown in the business information step.
+     */
     employmentTypeOptions: { label: string; value: UserEmploymentType }[] = [
         { label: 'Full-time', value: 'full-time' },
         { label: 'Part-time', value: 'part-time' },
@@ -32,34 +42,33 @@ export class BusinessInformation {
     private readonly formStateService = inject(FormStateService);
 
     /**
-     * Runs form state.
+     * Shared wizard form state.
      *
-     * @returns The business information form state result.
+     * @returns Writable signal managed by the form state service.
      */
     get formState() {
         return this.formStateService.formState;
     }
 
     /**
-     * Runs update field.
+     * Updates one field in the shared wizard form state.
      *
-     * @param field - field value.
-     *
-     * @param value - value value.
+     * @param field - Form state field to update.
+     * @param value - New field value.
      */
     updateField<K extends keyof ReturnType<typeof this.formState>>(field: K, value: ReturnType<typeof this.formState>[K]) {
         this.formStateService.updateField(field, value);
     }
 
     /**
-     * Runs cancel.
+     * Cancels user creation and returns to the user list.
      */
     cancel() {
         this.router.navigate(['/dashboard/profile/list']);
     }
 
     /**
-     * Runs next.
+     * Advances to the location information step.
      */
     next() {
         this.router.navigate(['/dashboard/profile/create/location-information']);

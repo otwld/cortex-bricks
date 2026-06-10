@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import type { Shortcut } from '@otwld/ts-sdk';
 
+/**
+ * Responsive keyboard-shortcut reference list.
+ */
 @Component({
   selector: 'kit-shortcuts',
   standalone: true,
@@ -56,6 +59,7 @@ import type { Shortcut } from '@otwld/ts-sdk';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShortcutsComponent {
+  /** Shortcuts to render, split into one or two columns. */
   readonly shortcuts = input<readonly Shortcut[]>([]);
 
   protected readonly columns = computed(() => {

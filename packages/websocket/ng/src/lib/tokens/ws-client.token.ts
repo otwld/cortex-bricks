@@ -9,13 +9,6 @@ const cache = new WeakMap<Contract, InjectionToken<WsClient<Contract>>>();
  *
  * @param contract Contract whose client should be injected.
  */
-/**
- * Runs ws client.
- *
- * @param contract - contract value.
- *
- * @returns The ws client result.
- */
 export function WS_CLIENT<TContract extends Contract>(
   contract: TContract,
 ): InjectionToken<WsClient<TContract>> {

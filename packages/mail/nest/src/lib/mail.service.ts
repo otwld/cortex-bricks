@@ -15,13 +15,11 @@ export interface MailTemplateMap {}
 @Injectable()
 export class MailService {
   /**
-   * Creates a mail service instance.
+   * Create the mail service.
    *
-   * @param options - options value.
-   *
-   * @param loader - loader value.
-   *
-   * @param interpolator - interpolator value.
+   * @param options - Resolved mail module configuration.
+   * @param loader - Template loader used for named template sends.
+   * @param interpolator - Template interpolator used to render context values.
    */
   constructor(
     @Inject(MAIL_MODULE_OPTIONS) private readonly options: MailModuleOptions,

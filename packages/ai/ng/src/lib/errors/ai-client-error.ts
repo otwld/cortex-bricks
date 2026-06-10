@@ -1,17 +1,13 @@
 import { AiErrorCode } from '@otwld/ts-ai';
 
-/**
- * Provides ai client error behavior.
- */
+/** Client-side AI error carrying a stable shared error code. */
 export class AiClientError extends Error {
   /**
-   * Creates a ai client error instance.
+   * Create a client-side AI error.
    *
-   * @param code - code value.
-   *
-   * @param message - message value.
-   *
-   * @param cause - cause value.
+   * @param code - Stable shared AI error code.
+   * @param message - Human-readable failure message.
+   * @param cause - Lower-level error that triggered this failure.
    */
   constructor(
     readonly code: AiErrorCode,

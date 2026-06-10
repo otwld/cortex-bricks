@@ -11,13 +11,6 @@ export const ON_EVENT_DEF = Symbol.for('@otwld/nest-websocket:on-event-def');
  *
  * @param def Event definition this handler serves.
  */
-/**
- * Runs on event.
- *
- * @param def - def value.
- *
- * @returns The on event result.
- */
 export function OnEvent(def: AnyEventDef): MethodDecorator {
   const decorators = [
     SubscribeMessage(def.pattern),
@@ -36,13 +29,6 @@ export function OnEvent(def: AnyEventDef): MethodDecorator {
  * Read the event def attached to a handler method by `@OnEvent`.
  *
  * @param target Method reference.
- */
-/**
- * Runs get on event def.
- *
- * @param target - target value.
- *
- * @returns The get on event def result.
  */
 export function getOnEventDef(target: unknown): AnyEventDef | undefined {
   if (typeof target !== 'function' && typeof target !== 'object') return undefined;

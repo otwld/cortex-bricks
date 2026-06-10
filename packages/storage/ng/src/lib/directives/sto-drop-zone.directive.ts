@@ -2,9 +2,7 @@ import { Directive, inject, input, output, signal } from '@angular/core';
 import { DropZoneOptions } from '../models/upload-options';
 import { StorageService } from '../services/storage.service';
 
-/**
- * Provides sto drop zone directive behavior.
- */
+/** Drop-zone directive that emits dropped files and creates upload tasks. */
 @Directive({
   selector: '[stoDropZone]',
   host: {
@@ -14,7 +12,6 @@ import { StorageService } from '../services/storage.service';
     '[class.sto-dragover]': 'isDragging()',
   },
 })
-/** Drop-zone directive that emits dropped files and creates upload tasks. */
 export class StoDropZoneDirective {
   /** Drop-zone and upload options read from the `stoDropZone` input. */
   readonly options = input<DropZoneOptions>({}, { alias: 'stoDropZone' });
@@ -26,12 +23,7 @@ export class StoDropZoneDirective {
   /** Read-only signal indicating whether a drag is active over the host. */
   readonly isDragging = this._isDragging.asReadonly();
 
-  /** Mark the zone active for valid drag-over events. */
-  /**
-   * Runs on drag over.
-   *
-   * @param event - event value.
-   */
+  /** Marks the zone active for valid drag-over events. */
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     if (!this.options().disabled) this._isDragging.set(true);
@@ -42,12 +34,7 @@ export class StoDropZoneDirective {
     this._isDragging.set(false);
   }
 
-  /** Accept dropped files, emit them, and create upload tasks. */
-  /**
-   * Runs on drop.
-   *
-   * @param event - event value.
-   */
+  /** Accepts dropped files, emits them, and creates upload tasks. */
   onDrop(event: DragEvent): void {
     event.preventDefault();
     this._isDragging.set(false);

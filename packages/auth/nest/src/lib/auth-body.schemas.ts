@@ -50,8 +50,27 @@ export const verifyEmailBodySchema = z
   })
   .strict();
 
+/**
+ * Validated request body for credentials account registration.
+ */
 export type RegisterBody = RegisterDto;
+
+/**
+ * Validated request body for the development-only login endpoint.
+ */
 export type DevLoginBody = DevLoginDto;
+
+/**
+ * Validated request body for password-reset email requests.
+ */
 export type ForgotPasswordBody = z.infer<typeof forgotPasswordBodySchema>;
+
+/**
+ * Validated request body for setting a new password from a reset token.
+ */
 export type ResetPasswordBody = z.infer<typeof resetPasswordBodySchema>;
+
+/**
+ * Validated request body for six-digit email verification codes.
+ */
 export type VerifyEmailBody = z.infer<typeof verifyEmailBodySchema>;

@@ -11,11 +11,18 @@ import {
 import { AiException } from '../exceptions/ai.exception';
 import { MODULE_OPTIONS_TOKEN } from './ai.module-definition';
 
+/**
+ * Injection token for normalized AI module options.
+ */
 export const AI_MODULE_OPTIONS = MODULE_OPTIONS_TOKEN;
+
+/**
+ * Injection token for normalized AI endpoint options.
+ */
 export const AI_ENDPOINT_OPTIONS = Symbol('AI_ENDPOINT_OPTIONS');
 
 /**
- * Describes open ai provider options values.
+ * OpenAI-compatible provider configuration.
  */
 export interface OpenAiProviderOptions {
   apiKey?: string;
@@ -23,14 +30,14 @@ export interface OpenAiProviderOptions {
 }
 
 /**
- * Describes ai provider options values.
+ * Provider configuration map supported by the Nest AI module.
  */
 export interface AiProviderOptions {
   openai?: OpenAiProviderOptions;
 }
 
 /**
- * Describes ai model options values.
+ * Model alias configuration for a provider-backed model.
  */
 export interface AiModelOptions {
   providerModel: string;
@@ -39,7 +46,7 @@ export interface AiModelOptions {
 }
 
 /**
- * Describes normalized ai model options values.
+ * Model alias configuration after validation and capability inference.
  */
 export interface NormalizedAiModelOptions {
   providerModel: string;
@@ -48,7 +55,7 @@ export interface NormalizedAiModelOptions {
 }
 
 /**
- * Represents ai model entry.
+ * Compact or expanded model entry accepted in `AiModuleOptions.models`.
  */
 export type AiModelEntry = string | AiModelOptions;
 
@@ -87,7 +94,7 @@ export type AiQuotaOptions = AiQuotaPolicy & {
 };
 
 /**
- * Describes ai endpoint options values.
+ * AI endpoint controller, guard, validation, and quota configuration.
  */
 export interface AiEndpointOptions {
   controller?: boolean;
@@ -98,7 +105,7 @@ export interface AiEndpointOptions {
 }
 
 /**
- * Describes ai module options values.
+ * Root configuration accepted by the Nest AI module.
  */
 export interface AiModuleOptions {
   providers: AiProviderOptions;
@@ -107,7 +114,7 @@ export interface AiModuleOptions {
 }
 
 /**
- * Describes normalized ai endpoint options values.
+ * Endpoint options after defaults and request limits have been applied.
  */
 export interface NormalizedAiEndpointOptions {
   controller: boolean;
@@ -118,7 +125,7 @@ export interface NormalizedAiEndpointOptions {
 }
 
 /**
- * Represents normalized ai module options.
+ * Root AI module options after validation and model normalization.
  */
 export type NormalizedAiModuleOptions = Omit<AiModuleOptions, 'endpoints' | 'models'> & {
   endpoints: NormalizedAiEndpointOptions;
@@ -128,14 +135,14 @@ export type NormalizedAiModuleOptions = Omit<AiModuleOptions, 'endpoints' | 'mod
 export type { ASYNC_OPTIONS_TYPE as AiModuleAsyncOptions, OPTIONS_TYPE as AiModuleSyncOptions } from './ai.module-definition';
 
 /**
- * Describes ai module options factory values.
+ * Factory contract for classes that produce AI module options.
  */
 export interface AiModuleOptionsFactory {
   createAiOptions(): Promise<AiModuleOptions> | AiModuleOptions;
 }
 
 /**
- * Describes manual ai module async options values.
+ * Manual async configuration shape accepted by `AiModule.forRootAsync`.
  */
 export interface ManualAiModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
   endpoints?: AiEndpointOptions;
@@ -203,13 +210,13 @@ const optionsSchema = z.object({
 });
 
 /**
- * Runs normalize ai endpoint options.
+ * Validates and defaults endpoint-level AI module options.
  *
- * @param options - options value.
+ * @param options - Partial endpoint options from module configuration.
  *
- * @returns The normalize ai endpoint options result.
+ * @returns Normalized endpoint options.
  *
- * @throws When the operation cannot be completed.
+ * @throws `AiException` when endpoint configuration is invalid.
  */
 export function normalizeAiEndpointOptions(options: AiEndpointOptions = {}): NormalizedAiEndpointOptions {
   const parsed = endpointOptionsSchema.safeParse(options);
@@ -252,13 +259,13 @@ function normalizeModel(alias: string, entry: AiModelEntry): NormalizedAiModelOp
 }
 
 /**
- * Runs validate ai module options.
+ * Validates AI module options and resolves model aliases to normalized entries.
  *
- * @param options - options value.
+ * @param options - Raw module options provided by the application.
  *
- * @returns The validate ai module options result.
+ * @returns Normalized module options ready for Nest providers.
  *
- * @throws When the operation cannot be completed.
+ * @throws `AiException` when provider, model, endpoint, or quota options are invalid.
  */
 export function validateAiModuleOptions(options: AiModuleOptions): NormalizedAiModuleOptions {
   const parsed = optionsSchema.safeParse(options);

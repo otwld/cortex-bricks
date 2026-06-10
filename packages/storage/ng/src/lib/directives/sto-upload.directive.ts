@@ -5,14 +5,11 @@ import { UploadOptions } from '../models/upload-options';
 import { UploadTask } from '../models/upload-task';
 import { StorageService } from '../services/storage.service';
 
-/**
- * Provides sto upload directive behavior.
- */
+/** File input directive that creates uploads and emits task lifecycle events. */
 @Directive({
   selector: '[stoUpload]',
   host: { '(change)': 'onFileChange($event)' },
 })
-/** File input directive that creates uploads and emits task lifecycle events. */
 export class StoUploadDirective {
   /** Upload options read from the `stoUpload` input. */
   readonly options = input<UploadOptions>({}, { alias: 'stoUpload' });
@@ -26,12 +23,7 @@ export class StoUploadDirective {
   private readonly storage = inject(StorageService);
   private readonly injector = inject(Injector);
 
-  /** Handle native file input changes and create upload tasks. */
-  /**
-   * Runs on file change.
-   *
-   * @param event - event value.
-   */
+  /** Handles native file input changes and creates upload tasks. */
   onFileChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const files = Array.from(inputElement.files ?? []);

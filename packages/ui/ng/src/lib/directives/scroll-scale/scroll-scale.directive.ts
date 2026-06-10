@@ -17,13 +17,25 @@ import {
 export class ScrollScaleDirective {
   private readonly el = inject(ElementRef);
   private readonly renderer = inject(Renderer2);
-  // How much to scale per 100px of scroll (default is 0.1)
+
+  /**
+   * Scale increment applied for each 100px of window scroll.
+   */
   public readonly scaleFactor = input(0.05);
-  // Maximum scale value (default is 1.5)
+
+  /**
+   * Maximum scale applied to the host element.
+   */
   public readonly maxScale = input(1.2);
-  // Minimum scale value (default is 0.5)
+
+  /**
+   * Minimum scale applied to the host element.
+   */
   public readonly minScale = input(1);
 
+  /**
+   * Recomputes and applies the host transform whenever the window scrolls.
+   */
   @HostListener('window:scroll')
   onWindowScroll() {
     const scrollPosition = window.scrollY;

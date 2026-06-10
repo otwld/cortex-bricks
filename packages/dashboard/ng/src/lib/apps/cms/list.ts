@@ -33,9 +33,15 @@ interface BlogPost {
     templateUrl: './list.html',
 })
 export class List implements OnInit, OnDestroy {
+    /**
+     * Index of the hero slide currently displayed.
+     */
     currentSlide = signal(0);
     private slideInterval: ReturnType<typeof setInterval> | null = null;
 
+    /**
+     * Hero carousel slides shown at the top of the CMS listing.
+     */
     slides: Slide[] = [
         {
             id: 1,
@@ -72,6 +78,9 @@ export class List implements OnInit, OnDestroy {
         }
     ];
 
+    /**
+     * Blog post columns shown below the hero carousel.
+     */
     blogPosts: BlogPost[][] = [
         [
             {
@@ -171,35 +180,35 @@ export class List implements OnInit, OnDestroy {
     ];
 
     /**
-     * Runs ng on init.
+     * Starts automatic hero slide rotation.
      */
     ngOnInit() {
         this.startAutoSlide();
     }
 
     /**
-     * Runs ng on destroy.
+     * Stops automatic hero slide rotation.
      */
     ngOnDestroy() {
         this.stopAutoSlide();
     }
 
     /**
-     * Runs next slide.
+     * Advances the hero carousel to the next slide.
      */
     nextSlide() {
         this.currentSlide.set((this.currentSlide() + 1) % this.slides.length);
     }
 
     /**
-     * Runs prev slide.
+     * Moves the hero carousel to the previous slide.
      */
     prevSlide() {
         this.currentSlide.set(this.currentSlide() === 0 ? this.slides.length - 1 : this.currentSlide() - 1);
     }
 
     /**
-     * Runs start auto slide.
+     * Starts the recurring hero carousel timer.
      */
     startAutoSlide() {
         this.slideInterval = setInterval(() => {
@@ -208,7 +217,7 @@ export class List implements OnInit, OnDestroy {
     }
 
     /**
-     * Runs stop auto slide.
+     * Clears the recurring hero carousel timer when active.
      */
     stopAutoSlide() {
         if (this.slideInterval) {

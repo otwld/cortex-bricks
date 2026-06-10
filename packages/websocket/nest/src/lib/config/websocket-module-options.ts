@@ -88,15 +88,6 @@ export type ResolvedWebsocketModuleOptions = z.output<typeof websocketModuleOpti
  *
  * @param options Raw user options.
  */
-/**
- * Runs resolve websocket module options.
- *
- * @param options - options value.
- *
- * @returns The resolve websocket module options result.
- *
- * @throws When the operation cannot be completed.
- */
 export function resolveWebsocketModuleOptions(
   options: WebsocketModuleOptions,
 ): ResolvedWebsocketModuleOptions {

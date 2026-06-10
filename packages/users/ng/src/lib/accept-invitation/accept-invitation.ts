@@ -74,6 +74,9 @@ export class AcceptInvitationPage implements OnInit {
   private readonly usersService = inject(UsersService);
   private readonly token = this.route.snapshot.paramMap.get('token') ?? this.route.snapshot.queryParamMap.get('token') ?? '';
 
+  /**
+   * Local credential form used when accepting an invitation with username and password.
+   */
   readonly form = new FormGroup({
     username: new FormControl('', { nonNullable: true }),
     password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
@@ -87,7 +90,7 @@ export class AcceptInvitationPage implements OnInit {
   protected readonly error = signal<string | null>(null);
 
   /**
-   * Runs ng on init.
+   * Loads invitation details and normalizes query-token URLs to the canonical route.
    */
   ngOnInit(): void {
     this.meta.updateTag({ name: 'referrer', content: 'no-referrer' });
@@ -115,7 +118,7 @@ export class AcceptInvitationPage implements OnInit {
   }
 
   /**
-   * Runs accept credentials.
+   * Accepts the invitation with local credentials when the form is valid.
    */
   acceptCredentials(): void {
     if (this.form.invalid || !this.token) {
@@ -138,14 +141,14 @@ export class AcceptInvitationPage implements OnInit {
   }
 
   /**
-   * Runs start google.
+   * Starts Google OAuth acceptance for the invitation token.
    */
   startGoogle(): void {
     this.usersService.startOAuth(this.token, UserOAuthProvider.Google);
   }
 
   /**
-   * Runs start github.
+   * Starts GitHub OAuth acceptance for the invitation token.
    */
   startGithub(): void {
     this.usersService.startOAuth(this.token, UserOAuthProvider.Github);

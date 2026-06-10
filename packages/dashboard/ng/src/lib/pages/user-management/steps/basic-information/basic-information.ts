@@ -22,15 +22,37 @@ import { FormStateService } from '../../form-state.service';
     templateUrl: './basic-information.html',
 })
 export class BasicInformation {
+    /**
+     * Maximum accepted avatar upload size in bytes.
+     */
     readonly avatarMaxSize = 1_000_000;
+
+    /**
+     * Upload status enum exposed for template comparisons.
+     */
     readonly uploadStatus = UploadStatus;
+
+    /**
+     * Active avatar upload task, when an upload is in progress or completed.
+     */
     readonly avatarTask = signal<UploadTask | null>(null);
+
+    /**
+     * User-facing avatar upload error message.
+     */
     readonly avatarUploadError = signal<string | null>(null);
+
+    /**
+     * Whether the active avatar task is pending or uploading.
+     */
     readonly avatarUploading = computed(() => {
         const task = this.avatarTask();
         return task?.status() === UploadStatus.Pending || task?.status() === UploadStatus.Active;
     });
 
+    /**
+     * Gender options shown in the basic information step.
+     */
     genderOptions = [
         { label: 'Female', value: UserGender.Female },
         { label: 'Male', value: UserGender.Male },
@@ -45,29 +67,28 @@ export class BasicInformation {
     private avatarUploadEffect?: EffectRef;
 
     /**
-     * Runs form state.
+     * Shared wizard form state.
      *
-     * @returns The basic information form state result.
+     * @returns Writable signal managed by the form state service.
      */
     get formState() {
         return this.formStateService.formState;
     }
 
     /**
-     * Runs update field.
+     * Updates one field in the shared wizard form state.
      *
-     * @param field - field value.
-     *
-     * @param value - value value.
+     * @param field - Form state field to update.
+     * @param value - New field value.
      */
     updateField<K extends keyof ReturnType<typeof this.formState>>(field: K, value: ReturnType<typeof this.formState>[K]) {
         this.formStateService.updateField(field, value);
     }
 
     /**
-     * Runs upload avatar.
+     * Starts an avatar image upload and syncs the completed storage key into form state.
      *
-     * @param event - event value.
+     * @param event - PrimeNG file upload event containing selected files.
      */
     uploadAvatar(event: Pick<FileUploadHandlerEvent, 'files'>) {
         const file = event.files[0];
@@ -95,7 +116,7 @@ export class BasicInformation {
     }
 
     /**
-     * Runs clear avatar.
+     * Clears the avatar upload task, error state, and form avatar value.
      */
     clearAvatar() {
         this.avatarUploadEffect?.destroy();
@@ -105,25 +126,24 @@ export class BasicInformation {
     }
 
     /**
-     * Runs is storage avatar.
+     * Determines whether an avatar value should be resolved through storage.
      *
-     * @param value - value value.
-     *
-     * @returns The basic information is storage avatar result.
+     * @param value - Avatar URL or storage key.
+     * @returns True when the value is a storage key rather than an absolute or root-relative URL.
      */
     isStorageAvatar(value: string | undefined | null): boolean {
         return Boolean(value && !/^(https?:|data:|blob:|\/)/i.test(value));
     }
 
     /**
-     * Runs cancel.
+     * Cancels user creation and returns to the user list.
      */
     cancel() {
         this.router.navigate(['/dashboard/profile/list']);
     }
 
     /**
-     * Runs next.
+     * Advances to the business information step.
      */
     next() {
         this.router.navigate(['/dashboard/profile/create/business-information']);

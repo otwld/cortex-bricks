@@ -9,14 +9,17 @@ const DASHBOARD_LAYOUT_CONFIG_DEFAULT: DashboardLayoutConfig = {
   menuTheme: 'colorScheme',
 };
 
+/**
+ * Injection token for the mutable dashboard layout configuration signal.
+ */
 export const DASHBOARD_LAYOUT_CONFIG = new InjectionToken<WritableSignal<DashboardLayoutConfig>>('dashboardLayoutConfig');
 
 /**
- * Runs provide dashboard layout config.
+ * Provides dashboard layout configuration with package defaults applied.
  *
- * @param options - options value.
+ * @param options - Initial layout configuration overrides.
  *
- * @returns The provide dashboard layout config result.
+ * @returns Environment providers for the layout config signal.
  */
 export function provideDashboardLayoutConfig(options: DashboardLayoutConfig = DASHBOARD_LAYOUT_CONFIG_DEFAULT): EnvironmentProviders {
   return makeEnvironmentProviders([

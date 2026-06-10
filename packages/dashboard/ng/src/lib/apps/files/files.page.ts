@@ -67,15 +67,39 @@ interface Document {
     templateUrl: './files.page.html',
 })
 export class FilesPage {
+    /**
+     * Hidden native file input used by the upload trigger in the editor drawer.
+     */
     @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
+    /**
+     * Active document table filter selected from the file dashboard controls.
+     */
     activeFilter = signal<string>('All Files');
 
+    /**
+     * Filter labels supported by the document table.
+     */
     filterOptions = ['All Files', 'Recently Uploaded', 'Large Files', 'Uploaded by Me'];
 
+    /**
+     * Whether the add/edit document drawer is visible.
+     */
     showEditDrawer = false;
+
+    /**
+     * Document currently being edited, or null while creating a new document.
+     */
     editingItem: Document | null = null;
+
+    /**
+     * Whether the editor drawer is creating a new document instead of editing one.
+     */
     isAddMode = false;
+
+    /**
+     * Draft document fields bound to the add/edit drawer form.
+     */
     editForm: Partial<Document> = {
         fileName: '',
         owner: '',
@@ -85,9 +109,20 @@ export class FilesPage {
         uploadDate: '',
         editDate: ''
     };
+
+    /**
+     * Pending comment text for the document currently open in the editor drawer.
+     */
     newComment = '';
+
+    /**
+     * Number of documents shown per table page.
+     */
     rows = 5;
 
+    /**
+     * Recent file activity entries shown in the activity timeline.
+     */
     activityFeed: ActivityFeed[] = [
         {
             id: 1,
@@ -151,6 +186,9 @@ export class FilesPage {
         }
     ];
 
+    /**
+     * Storage utilization rows used by the file-type summary visualization.
+     */
     storageData: StorageData[] = [
         { id: 1, type: 'PNG', count: 12762, color: 'bg-green-500', shadowColor: 'rgba(34,197,94,0.16)', flexValue: 12762 },
         { id: 2, type: 'CSS', count: 10824, color: 'bg-orange-500', shadowColor: 'rgba(249,115,22,0.16)', flexValue: 10824 },
@@ -161,8 +199,14 @@ export class FilesPage {
         { id: 7, type: 'XLS', count: 5240, color: 'bg-rose-500', shadowColor: 'rgba(244,63,94,0.16)', flexValue: 5240 }
     ];
 
+    /**
+     * Total file count across all storage summary types.
+     */
     totalFiles = computed(() => this.storageData.reduce((sum, item) => sum + item.count, 0));
 
+    /**
+     * Pinned file shortcuts shown above the document table.
+     */
     pinnedItems: PinnedItem[] = [
         { id: 1, name: 'Genesis', type: 'DOCX', size: '17.4 MB', icon: 'pi-file-word' },
         { id: 2, name: 'Avalon', type: 'XLS', size: '24 MB', icon: 'pi-file-excel' },
@@ -172,6 +216,9 @@ export class FilesPage {
         { id: 6, name: 'Diamond', type: 'PDF', size: '24 MB', icon: 'pi-file-pdf' }
     ];
 
+    /**
+     * Editable document collection backing the table and drawer views.
+     */
     documents = signal<Document[]>([
         {
             id: 1,
@@ -224,6 +271,9 @@ export class FilesPage {
         { id: 13, fileName: 'Report', type: 'DOCX', fileSize: '3.2 MB', size: '-', uploadDate: 'Jan 28, 2025', editDate: 'Jan 29, 2025', owner: 'Lisa Chen', icon: 'pi-file-word', comments: [] }
     ]);
 
+    /**
+     * Document table rows after applying the active dashboard filter.
+     */
     filteredDocuments = computed(() => {
         const docs = this.documents();
         switch (this.activeFilter()) {
@@ -238,6 +288,9 @@ export class FilesPage {
         }
     });
 
+    /**
+     * Static action menu shown for activity feed entries.
+     */
     feedMenuItems: MenuItem[] = [
         { label: 'Open', icon: 'pi pi-external-link' },
         { label: 'Share', icon: 'pi pi-share-alt' },
@@ -245,6 +298,9 @@ export class FilesPage {
         { label: 'Delete', icon: 'pi pi-trash' }
     ];
 
+    /**
+     * Static action menu shown for pinned file shortcuts.
+     */
     pinnedMenuItems: MenuItem[] = [
         { label: 'Open', icon: 'pi pi-external-link' },
         { label: 'Unpin', icon: 'pi pi-times' },
@@ -255,11 +311,10 @@ export class FilesPage {
     private readonly confirmationService = inject(ConfirmationService);
 
     /**
-     * Runs create table menu items.
+     * Creates row action menu items for a document table entry.
      *
-     * @param document - document value.
-     *
-     * @returns The files page create table menu items result.
+     * @param document - Document represented by the table row.
+     * @returns PrimeNG menu items wired to edit and delete actions for the document.
      */
     createTableMenuItems(document: Document): MenuItem[] {
         return [
@@ -271,11 +326,10 @@ export class FilesPage {
     }
 
     /**
-     * Runs create comment menu items.
+     * Creates action menu items for one document comment.
      *
-     * @param commentId - comment id value.
-     *
-     * @returns The files page create comment menu items result.
+     * @param commentId - Comment id used by the remove action.
+     * @returns PrimeNG menu items for comment-level actions.
      */
     createCommentMenuItems(commentId: number): MenuItem[] {
         return [
@@ -288,11 +342,10 @@ export class FilesPage {
     }
 
     /**
-     * Runs get tag severity.
+     * Maps a file type to the PrimeNG tag severity used in the table.
      *
-     * @param type - type value.
-     *
-     * @returns The files page get tag severity result.
+     * @param type - File extension or document type.
+     * @returns PrimeNG tag severity for the file type.
      */
     getTagSeverity(type: string): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | undefined {
         const severityMap: Record<string, 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast'> = {
@@ -311,9 +364,9 @@ export class FilesPage {
     }
 
     /**
-     * Runs edit document.
+     * Opens the editor drawer with a copy of an existing document.
      *
-     * @param document - document value.
+     * @param document - Document selected from the table.
      */
     editDocument(document: Document) {
         this.editingItem = document;
@@ -323,7 +376,7 @@ export class FilesPage {
     }
 
     /**
-     * Runs add document.
+     * Opens the editor drawer with an empty document draft.
      */
     addDocument() {
         this.editingItem = null;
@@ -341,7 +394,7 @@ export class FilesPage {
     }
 
     /**
-     * Runs update document.
+     * Persists the editor drawer draft by creating a new document or updating the selected one.
      */
     updateDocument() {
         if (this.isAddMode) {
@@ -374,7 +427,7 @@ export class FilesPage {
     }
 
     /**
-     * Runs add comment.
+     * Adds the pending comment to the document currently open in the editor drawer.
      */
     addComment() {
         if (this.newComment.trim() && this.editingItem) {
@@ -390,9 +443,9 @@ export class FilesPage {
     }
 
     /**
-     * Runs remove comment.
+     * Removes a comment from the document currently open in the editor drawer.
      *
-     * @param commentId - comment id value.
+     * @param commentId - Comment id to remove.
      */
     removeComment(commentId: number) {
         if (this.editingItem?.comments) {
@@ -404,11 +457,10 @@ export class FilesPage {
     }
 
     /**
-     * Runs get icon by type.
+     * Maps a file type to the PrimeIcons class used by file rows and cards.
      *
-     * @param type - type value.
-     *
-     * @returns The files page get icon by type result.
+     * @param type - File extension or document type.
+     * @returns PrimeIcons class for the file type, falling back to a generic file icon.
      */
     getIconByType(type: string): string {
         const iconMap: Record<string, string> = {
@@ -428,16 +480,16 @@ export class FilesPage {
     }
 
     /**
-     * Runs trigger file upload.
+     * Opens the hidden native file picker for document uploads.
      */
     triggerFileUpload() {
         this.fileInput?.nativeElement?.click();
     }
 
     /**
-     * Runs handle file upload.
+     * Copies selected file metadata into the add/edit form.
      *
-     * @param event - event value.
+     * @param event - Native change event from the hidden file input.
      */
     handleFileUpload(event: Event) {
         const input = event.target as HTMLInputElement;
@@ -466,7 +518,7 @@ export class FilesPage {
     }
 
     /**
-     * Runs remove uploaded file.
+     * Clears uploaded file metadata from the editor form and resets the native input.
      */
     removeUploadedFile() {
         this.editForm.fileName = '';
@@ -486,9 +538,9 @@ export class FilesPage {
     }
 
     /**
-     * Runs confirm delete document.
+     * Opens a confirmation dialog before deleting one document.
      *
-     * @param document - document value.
+     * @param document - Document selected for deletion.
      */
     confirmDeleteDocument(document: Document) {
         this.confirmationService.confirm({
@@ -511,9 +563,9 @@ export class FilesPage {
     }
 
     /**
-     * Runs delete document.
+     * Removes a document from the table and closes the drawer if that document is open.
      *
-     * @param documentId - document id value.
+     * @param documentId - Document id to remove.
      */
     deleteDocument(documentId: number) {
         const docs = this.documents();
@@ -528,7 +580,7 @@ export class FilesPage {
     }
 
     /**
-     * Runs confirm move to trash.
+     * Opens a confirmation dialog before deleting the document currently open in the drawer.
      */
     confirmMoveToTrash() {
         const editingItem = this.editingItem;

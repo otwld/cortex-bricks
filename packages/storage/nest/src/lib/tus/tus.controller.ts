@@ -9,37 +9,29 @@ const TUS_EXTENSION = 'creation,creation-with-upload,termination,checksum,expira
 const ALLOW_HEADERS = 'Tus-Resumable,Upload-Length,Upload-Offset,Upload-Metadata,Upload-Defer-Length,Upload-Concat,Upload-Checksum,Content-Type';
 const EXPOSE_HEADERS = 'Tus-Resumable,Upload-Offset,Upload-Length,Location,Upload-Expires,Tus-Version,Tus-Extension,Storage-File';
 
-/**
- * Provides tus controller behavior.
- */
-@Controller('storage/tus')
 /** HTTP controller implementing the TUS resumable upload protocol. */
+@Controller('storage/tus')
 export class TusController {
   private readonly logger = new Logger(TusController.name);
 
   /**
-   * Creates a tus controller instance.
+   * Create the TUS HTTP controller.
    *
-   * @param tusService - tus service value.
-   *
-   * @param options - options value.
+   * @param tusService - Service that owns resumable upload state transitions.
+   * @param options - TUS module limits, path, and CORS settings.
    */
   constructor(
     private readonly tusService: TusService,
     @Inject(TUS_MODULE_OPTIONS) private readonly options: TusModuleOptions,
   ) {}
 
+  /** Advertise supported TUS protocol features and CORS headers. */
   /**
-   * Runs advertise.
-   *
-   * @param response - response value.
-   *
-   * @param request - request value.
-   *
+   * @param response - Response used to emit TUS discovery headers.
+   * @param request - Optional Express request for structured logging.
    * @throws When the operation cannot be completed.
    */
   @Options()
-  /** Advertise supported TUS protocol features and CORS headers. */
   advertise(@Res() response: Response, @Req() request?: Request): void {
     this.logRequest('OPTIONS', request, '/storage/tus');
     try {
@@ -53,25 +45,17 @@ export class TusController {
     }
   }
 
+  /** Create a new TUS upload and return its upload location. */
   /**
-   * Runs create.
-   *
-   * @param uploadLength - upload length value.
-   *
-   * @param uploadMetadata - upload metadata value.
-   *
-   * @param uploadChecksum - upload checksum value.
-   *
-   * @param request - request value.
-   *
-   * @param response - response value.
-   *
-   * @param uploadDeferLength - upload defer length value.
-   *
+   * @param uploadLength - Declared total upload length from `Upload-Length`.
+   * @param uploadMetadata - Base64-encoded TUS metadata header.
+   * @param uploadChecksum - Optional checksum for creation-with-upload bytes.
+   * @param request - Express request containing any initial upload bytes.
+   * @param response - Response used to emit `Location` and upload state headers.
+   * @param uploadDeferLength - Deferred-length indicator accepted by the TUS protocol.
    * @throws When the operation cannot be completed.
    */
   @Post()
-  /** Create a new TUS upload and return its upload location. */
   async create(
     @Headers('upload-length') uploadLength: string | undefined,
     @Headers('upload-metadata') uploadMetadata: string | undefined,
@@ -110,19 +94,14 @@ export class TusController {
     }
   }
 
+  /** Return offset and expiration metadata for an upload. */
   /**
-   * Runs head.
-   *
-   * @param id - id value.
-   *
-   * @param response - response value.
-   *
-   * @param request - request value.
-   *
+   * @param id - Driver upload id encoded in the upload location.
+   * @param response - Response used to emit current TUS state headers.
+   * @param request - Optional Express request for structured logging.
    * @throws When the operation cannot be completed.
    */
   @Head(':id')
-  /** Return offset and expiration metadata for an upload. */
   async head(@Param('id') id: string, @Res() response: Response, @Req() request?: Request): Promise<void> {
     this.logRequest('HEAD', request, `/storage/tus/${id}`);
     try {
@@ -138,23 +117,16 @@ export class TusController {
     }
   }
 
+  /** Append bytes to an upload at the requested offset. */
   /**
-   * Runs patch.
-   *
-   * @param id - id value.
-   *
-   * @param uploadOffset - upload offset value.
-   *
-   * @param uploadChecksum - upload checksum value.
-   *
-   * @param request - request value.
-   *
-   * @param response - response value.
-   *
+   * @param id - Driver upload id encoded in the upload location.
+   * @param uploadOffset - Client-provided offset that must match server state.
+   * @param uploadChecksum - Optional TUS checksum header for the appended chunk.
+   * @param request - Express request stream carrying chunk bytes.
+   * @param response - Response used to emit updated upload state headers.
    * @throws When the operation cannot be completed.
    */
   @Patch(':id')
-  /** Append bytes to an upload at the requested offset. */
   async patch(
     @Param('id') id: string,
     @Headers('upload-offset') uploadOffset: string,
@@ -178,20 +150,15 @@ export class TusController {
     }
   }
 
+  /** Abort an upload and remove its server-side state. */
   /**
-   * Runs delete.
-   *
-   * @param id - id value.
-   *
-   * @param response - response value.
-   *
-   * @param request - request value.
-   *
+   * @param id - Driver upload id encoded in the upload location.
+   * @param response - Response used to emit TUS headers after termination.
+   * @param request - Optional Express request for structured logging.
    * @throws When the operation cannot be completed.
    */
   @Delete(':id')
   @HttpCode(204)
-  /** Abort an upload and remove its server-side state. */
   async delete(@Param('id') id: string, @Res() response: Response, @Req() request?: Request): Promise<void> {
     this.logRequest('DELETE', request, `/storage/tus/${id}`);
     try {

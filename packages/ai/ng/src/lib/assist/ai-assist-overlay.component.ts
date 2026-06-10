@@ -5,6 +5,13 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 type AiAssistOverlayStatus = 'idle' | 'loading' | 'generated' | 'error';
 
+/**
+ * Floating assist popover controlled by `AiAssistDirective`.
+ *
+ * The overlay owns presentation state only; callers drive generation,
+ * acceptance, retry, and cancellation through inputs, outputs, and imperative
+ * state methods.
+ */
 @Component({
   selector: 'ai-assist-overlay',
   imports: [ButtonModule, PopoverModule, ProgressSpinnerModule],
@@ -196,24 +203,58 @@ type AiAssistOverlayStatus = 'idle' | 'loading' | 'generated' | 'error';
   `,
 })
 export class AiAssistOverlay {
+  /** Accessible label for the trigger and popover dialog. */
   readonly label = input('Run AI assist');
+
+  /** Disables user-triggered opening while an owning directive is unavailable. */
   readonly disabled = input(false);
 
+  /** Emitted when the generated suggestion should be applied. */
   readonly acceptRequested = output<void>();
+
+  /** Emitted when the current assist session should be cancelled. */
   readonly cancelRequested = output<void>();
+
+  /** Emitted when the owning directive should request a new suggestion. */
   readonly retryRequested = output<void>();
+
+  /** Emitted the first time the overlay opens in the idle state. */
   readonly runRequested = output<void>();
 
+  /**
+   * Whether the fixed trigger should be visible near the active target.
+   */
   readonly visible = signal(false);
+
+  /**
+   * Whether the assist popover menu is currently open.
+   */
   readonly menuVisible = signal(false);
+
+  /**
+   * Fixed trigger position in viewport pixels.
+   */
   readonly position = signal({ left: 0, top: 0 });
+
+  /**
+   * Current generation lifecycle state rendered by the popover.
+   */
   readonly status = signal<AiAssistOverlayStatus>('idle');
+
+  /**
+   * Streaming or final suggestion text shown in the preview.
+   */
   readonly suggestion = signal('');
+
+  /**
+   * Recoverable generation error shown in the popover.
+   */
   readonly errorMessage = signal<string | null>(null);
 
   @ViewChild('popover') private popover?: Popover;
   @ViewChild('trigger') private trigger?: ElementRef<HTMLButtonElement>;
 
+  /** Opens the popover and starts generation when the overlay is idle. */
   open(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
@@ -226,41 +267,49 @@ export class AiAssistOverlay {
     if (this.status() === 'idle') this.runRequested.emit();
   }
 
+  /** Hides the popover without mutating generated or error state. */
   hide(): void {
     this.menuVisible.set(false);
     this.popover?.hide();
   }
 
+  /** Synchronizes state after the PrimeNG popover closes itself. */
   onPopoverHide(): void {
     this.menuVisible.set(false);
   }
 
+  /** Positions the fixed trigger next to the active text selection or control. */
   setPosition(left: number, top: number, visible: boolean): void {
     this.position.set({ left, top });
     this.visible.set(visible);
   }
 
+  /** Shows the loading state and clears stale output. */
   setLoading(): void {
     this.errorMessage.set(null);
     this.suggestion.set('');
     this.status.set('loading');
   }
 
+  /** Updates the preview while a streamed suggestion is still in progress. */
   setStreamingText(text: string): void {
     this.suggestion.set(text);
   }
 
+  /** Shows the final generated suggestion. */
   setGenerated(text: string): void {
     this.errorMessage.set(null);
     this.suggestion.set(text);
     this.status.set('generated');
   }
 
+  /** Shows a recoverable generation error. */
   setError(message: string): void {
     this.errorMessage.set(message);
     this.status.set('error');
   }
 
+  /** Returns the overlay to the idle state for a future assist session. */
   reset(): void {
     this.errorMessage.set(null);
     this.suggestion.set('');

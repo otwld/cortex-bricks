@@ -6,9 +6,7 @@ import { OverviewWidget } from './components/overview-widget/overview-widget';
 import { RecentTransactionsTwoWidget } from './components/recent-transactions-two-widget/recent-transactions-two-widget';
 import { MonthlyPaymentsWidget } from './components/monthly-payments-widget/monthly-payments-widget';
 
-/**
- * Provides dashboard banking page behavior.
- */
+/** Banking dashboard page composed from account and transaction widgets. */
 @Component({
   selector: 'app-banking-dashboard',
   standalone: true,

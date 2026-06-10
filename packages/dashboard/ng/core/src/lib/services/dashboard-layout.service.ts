@@ -6,7 +6,7 @@ import { DASHBOARD_LAYOUT_CONFIG } from '../tokens/dashboard-layout-config-token
 import { DASHBOARD_LAYOUT_STATE } from '../tokens/dashboard-layout-state-token';
 
 /**
- * Provides dashboard layout service behavior.
+ * Coordinates dashboard layout configuration, transient menu state, and color-scheme controls.
  */
 @Injectable()
 export class DashboardLayoutService {
@@ -14,36 +14,70 @@ export class DashboardLayoutService {
   private readonly darkMode = inject(DarkModeService);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
+  /**
+   * Writable layout configuration shared by configurator, sidebar, and topbar components.
+   */
   readonly layoutConfig = inject(DASHBOARD_LAYOUT_CONFIG);
+
+  /**
+   * Writable transient layout state for overlays, mobile menus, and active menu paths.
+   */
   readonly layoutState = inject(DASHBOARD_LAYOUT_STATE);
 
+  /**
+   * Whether the global dark-mode service currently reports a dark color scheme.
+   */
   readonly isDarkTheme = computed(() => this.darkMode.isDarkMode());
 
+  /**
+   * Whether the active menu mode is the compact slim sidebar.
+   */
   readonly isSlim = computed(() => this.layoutConfig().menuMode === 'slim');
 
+  /**
+   * Whether the active menu mode is the expanded slim-plus sidebar.
+   */
   readonly isSlimPlus = computed(() => this.layoutConfig().menuMode === 'slim-plus');
 
+  /**
+   * Whether the active menu mode renders root items horizontally.
+   */
   readonly isHorizontal = computed(() => this.layoutConfig().menuMode === 'horizontal');
 
+  /**
+   * Whether the active menu mode uses an overlay sidebar.
+   */
   readonly isOverlay = computed(() => this.layoutConfig().menuMode === 'overlay');
 
+  /**
+   * Whether the active menu mode opens submenu panels as overlays.
+   */
   readonly hasOverlaySubmenu = computed(() => this.isSlim() || this.isSlimPlus() || this.isHorizontal());
 
+  /**
+   * Whether any overlay menu surface is currently open.
+   */
   readonly hasOpenOverlay = computed(() => this.layoutState().overlayMenuActive || this.hasOpenOverlaySubmenu());
 
+  /**
+   * Whether an overlay submenu is open for the active menu path.
+   */
   readonly hasOpenOverlaySubmenu = computed(() => {
     return this.hasOverlaySubmenu() && !!this.layoutState().activePath;
   });
 
+  /**
+   * Whether the active menu mode requires sidebar state to be recalculated.
+   */
   readonly isSidebarStateChanged = computed(() => {
     const layoutConfig = this.layoutConfig();
     return layoutConfig.menuMode === 'horizontal' || layoutConfig.menuMode === 'slim' || layoutConfig.menuMode === 'slim-plus';
   });
 
   /**
-   * Runs change menu mode.
+   * Changes menu mode and clears transient state that is incompatible with the new mode.
    *
-   * @param mode - mode value.
+   * @param mode - Menu mode to persist in layout configuration.
    */
   changeMenuMode(mode: string) {
     this.layoutConfig.update((prev) => ({ ...prev, menuMode: mode }));
@@ -101,14 +135,14 @@ export class DashboardLayoutService {
   }
 
   /**
-   * Runs toggle dark mode.
+   * Toggles the global dark color scheme.
    */
   toggleDarkMode(): void {
     this.darkMode.toggleDarkMode();
   }
 
   /**
-   * Runs toggle menu.
+   * Toggles the appropriate desktop or mobile menu state for the current layout mode.
    */
   toggleMenu() {
     if (this.isDesktop()) {
@@ -134,7 +168,7 @@ export class DashboardLayoutService {
   }
 
   /**
-   * Runs toggle profile sidebar.
+   * Toggles the profile sidebar visibility flag.
    */
   toggleProfileSidebar() {
     this.layoutState.update((prev) => ({
@@ -144,7 +178,7 @@ export class DashboardLayoutService {
   }
 
   /**
-   * Runs toggle config sidebar.
+   * Toggles the layout configurator sidebar visibility flag.
    */
   toggleConfigSidebar() {
     this.layoutState.update((prev) => ({
@@ -154,9 +188,9 @@ export class DashboardLayoutService {
   }
 
   /**
-   * Runs is desktop.
+   * Returns whether browser viewport width is above the dashboard desktop breakpoint.
    *
-   * @returns The dashboard layout service is desktop result.
+   * @returns True in browser contexts wider than 991px.
    */
   isDesktop() {
     return this.isBrowser && window.innerWidth > 991;

@@ -17,18 +17,18 @@ export class PreviewTransport implements MailTransport {
   private readonly mailpitOptions?: PreviewTransportOptions;
 
   /**
-   * Creates a preview transport instance.
+   * Create a preview transport.
    *
-   * @param mailpit - mailpit value.
+   * @param mailpit - Optional Mailpit SMTP connection options.
    */
   constructor(mailpit?: PreviewTransportOptions) {
     this.mailpitOptions = mailpit;
   }
 
   /**
-   * Runs send.
+   * Logs a message to the console or delivers it to Mailpit when configured.
    *
-   * @param message - message value.
+   * @param message - Raw mail message to preview.
    */
   async send(message: RawMailMessage): Promise<void> {
     if (!this.mailpitOptions) {

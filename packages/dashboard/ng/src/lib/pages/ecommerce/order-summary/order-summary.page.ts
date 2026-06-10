@@ -34,6 +34,9 @@ interface ShippingAddress {
     templateUrl: './order-summary.page.html',
 })
 export class OrderSummaryPage {
+    /**
+     * Purchased order items shown in the confirmation summary.
+     */
     orderItems: OrderItem[] = [
         {
             id: 1,
@@ -61,6 +64,9 @@ export class OrderSummaryPage {
         }
     ];
 
+    /**
+     * Masked payment method displayed for the completed order.
+     */
     paymentMethod: PaymentMethod = {
         type: 'Credit Card',
         last4: '1089',
@@ -68,6 +74,9 @@ export class OrderSummaryPage {
         brand: 'Visa'
     };
 
+    /**
+     * Shipping destination displayed for the completed order.
+     */
     shippingAddress: ShippingAddress = {
         name: 'Robert Fox',
         phone: '+1 (123) 456-7890',
@@ -78,8 +87,23 @@ export class OrderSummaryPage {
         country: 'USA'
     };
 
+    /**
+     * Shipping charge applied to the order.
+     */
     shipping = 18.0;
+
+    /**
+     * Discount amount applied to the order.
+     */
     discount = 111.5;
+
+    /**
+     * VAT amount included in the order.
+     */
     vat = 20.0;
+
+    /**
+     * Final order total displayed in the summary.
+     */
     total = 909.97;
 }
