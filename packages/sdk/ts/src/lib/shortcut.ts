@@ -1,3 +1,11 @@
+/**
+ * Keyboard shortcut configuration consumed by reusable shortcut UI and input
+ * handlers.
+ *
+ * Repeating shortcuts opt in by setting `initialDelay`, `repeatInterval`, or
+ * both. Without repeat settings, the callback is expected to run once for a
+ * key release.
+ */
 export interface Shortcut {
   readonly key: string;
   readonly icon?: string;

@@ -30,12 +30,21 @@ function dayKeyFromDate(date: Date, tz: 'utc' | 'local'): ISODate {
   return `${date.getFullYear()}-${padDatePart(date.getMonth() + 1)}-${padDatePart(date.getDate())}` as ISODate;
 }
 
+/**
+ * Collection of entities that share the same calendar-day key.
+ *
+ * `key` is always formatted as `YYYY-MM-DD`; `date` is the representative day
+ * value after optional start-of-day normalization has been applied.
+ */
 export interface DayBucket<T> {
-  key: ISODate; // 'YYYY-MM-DD'
-  date: Date; // normalized day Date
+  key: ISODate;
+  date: Date;
   items: T[];
 }
 
+/**
+ * Controls how `groupByDateKey` coerces, normalizes, and sorts bucket keys.
+ */
 export interface GroupByDateOptions {
   /** Normalize each item to start-of-day; default true */
   normalize?: boolean;
