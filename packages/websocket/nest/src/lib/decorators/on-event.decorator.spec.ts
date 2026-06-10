@@ -32,8 +32,7 @@ class EchoGateway {
 
 describe('@OnEvent', () => {
   it('attaches @SubscribeMessage metadata for the def.pattern', () => {
-    const proto = EchoGateway.prototype as unknown as Record<string, unknown>;
-    const message = Reflect.getMetadata('message', proto['handleEcho'] as object) as
+    const message = Reflect.getMetadata('message', EchoGateway.prototype.handleEcho) as
       | string
       | undefined;
     expect(message).toBe('echo');

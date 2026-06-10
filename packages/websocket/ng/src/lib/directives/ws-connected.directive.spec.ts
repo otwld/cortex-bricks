@@ -1,8 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ConnectionState, type Contract } from '@otwld/ts-websocket';
-import type { WsClient } from '../services/ws-client.service';
-import { WsConnectedDirective } from './ws-connected.directive';
+import { ConnectionState } from '@otwld/ts-websocket';
+import { WsConnectedDirective, type WsConnectionStateClient } from './ws-connected.directive';
 
 @Component({
   imports: [WsConnectedDirective],
@@ -10,7 +9,7 @@ import { WsConnectedDirective } from './ws-connected.directive';
 })
 class HostComponent {
   public readonly state = signal(ConnectionState.Disconnected);
-  public readonly client = { state: this.state.asReadonly() } as unknown as WsClient<Contract>;
+  public readonly client = { state: this.state.asReadonly() } satisfies WsConnectionStateClient;
   public target: ConnectionState | '' = '';
 }
 

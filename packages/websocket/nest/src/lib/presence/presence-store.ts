@@ -16,7 +16,7 @@ export abstract class PresenceStore {
   /** All distinct members currently in `room`. */
   public abstract members(room: RoomId): Promise<readonly UserContext[]>;
 
-  /** Rooms `userId` currently has any socket in. */
+  /** Rooms containing at least one socket for `userId`. */
   public abstract roomsOf(userId: string): Promise<readonly RoomId[]>;
 
   /** Online status for a single user id. */

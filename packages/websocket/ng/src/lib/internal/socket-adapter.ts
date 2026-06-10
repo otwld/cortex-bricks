@@ -1,4 +1,8 @@
 import { fromEvent, Observable, share } from 'rxjs';
+import type { ManagerOptions, SocketOptions } from 'socket.io-client';
+
+/** Socket.IO client options used by the websocket adapter. */
+export type SocketIoOptions = Partial<ManagerOptions & SocketOptions>;
 
 /**
  * Subset of the Socket.IO client API used by the adapter.
@@ -15,7 +19,7 @@ export interface SocketIoLike {
   /** Connect the socket. */
   connect(): void;
   /** Optional auth payload. */
-  auth?: Record<string, unknown>;
+  auth?: Record<string, unknown> | ((callback: (data: object) => void) => void);
   /** Socket.IO manager metadata. */
   io: { engine?: { transport?: { name?: string } } };
 }
@@ -23,7 +27,7 @@ export interface SocketIoLike {
 /**
  * Factory that creates a Socket.IO client.
  */
-export type SocketIoFactory = (url: string, opts: Record<string, unknown>) => SocketIoLike;
+export type SocketIoFactory = (url: string, opts: SocketIoOptions) => SocketIoLike;
 
 /**
  * Thin wrapper around `socket.io-client` exposing RxJS observables.
@@ -45,7 +49,7 @@ export class SocketAdapter {
    */
   public constructor(
     url: string,
-    options: Record<string, unknown>,
+    options: SocketIoOptions,
     factory: SocketIoFactory,
   ) {
     this.socket = factory(url, options);

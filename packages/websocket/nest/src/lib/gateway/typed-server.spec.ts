@@ -1,11 +1,12 @@
 import {
+  type Contract,
   defineContract,
   serverEvent,
 } from '@otwld/ts-websocket';
 import { z } from 'zod';
 import { WsValidationException } from '../exceptions/ws-validation.exception';
 import { TypedServer } from './typed-server';
-import { TypedServerRegistry } from './typed-server-registry';
+import { TypedServerNamespace, TypedServerRegistry } from './typed-server-registry';
 
 const contract = defineContract({
   namespace: '/test',
@@ -20,8 +21,7 @@ const contract = defineContract({
 const fakeIo = () => {
   const calls: Array<{ event: string; payload: unknown; rooms: string[] }> = [];
   let currentRooms: string[] = [];
-  const namespace = {
-    of: () => namespace,
+  const namespace: TypedServerNamespace = {
     to(rooms: string | string[]) {
       currentRooms = Array.isArray(rooms) ? rooms : [rooms];
       return namespace;
@@ -37,20 +37,20 @@ const fakeIo = () => {
     fetchSockets: vi.fn(async () => []),
   };
   const registry = new TypedServerRegistry();
-  registry.register(contract.namespace, namespace as never);
+  registry.register(contract.namespace, namespace);
   return { registry, calls };
 };
 
 describe('TypedServer', () => {
   it('uses a registered namespace from the registry', async () => {
-    const namespace = {
-      emit: vi.fn(),
-      to: vi.fn(() => ({ emit: vi.fn() })),
-      except: vi.fn(() => ({ emit: vi.fn() })),
+    const namespace: TypedServerNamespace = {
+      emit: vi.fn(() => true),
+      to: vi.fn(() => ({ emit: vi.fn(() => true) })),
+      except: vi.fn(() => ({ emit: vi.fn(() => true) })),
       fetchSockets: vi.fn(async () => []),
     };
     const registry = new TypedServerRegistry();
-    registry.register(contract.namespace, namespace as never);
+    registry.register(contract.namespace, namespace);
 
     const server = new TypedServer(contract, registry, {
       validateOutgoing: true,
@@ -75,22 +75,22 @@ describe('TypedServer', () => {
 
   it('throws on invalid payload when validation enabled', async () => {
     const { registry } = fakeIo();
-    const server = new TypedServer(contract, registry, {
+    const server = new TypedServer<Contract>(contract, registry, {
       validateOutgoing: true,
     });
 
     await expect(
-      server.emit(contract.s2c.ping, { tick: 'oops' } as never),
+      server.emit(contract.s2c.ping, { tick: 'oops' }),
     ).rejects.toBeInstanceOf(WsValidationException);
   });
 
   it('skips validation when disabled', async () => {
     const { registry, calls } = fakeIo();
-    const server = new TypedServer(contract, registry, {
+    const server = new TypedServer<Contract>(contract, registry, {
       validateOutgoing: false,
     });
 
-    await server.emit(contract.s2c.ping, { tick: 'oops' } as never);
+    await server.emit(contract.s2c.ping, { tick: 'oops' });
     expect(calls).toEqual([
       { event: 'test.ping', payload: { tick: 'oops' }, rooms: [] },
     ]);

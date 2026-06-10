@@ -7,11 +7,11 @@ interface PendingAck {
 }
 
 /** Result of `AckRegistry.register`. */
-export interface AckHandle {
+export interface AckHandle<TResponse = unknown> {
   /** Internal correlation id. */
   readonly id: string;
   /** Awaitable ack promise. */
-  readonly promise: Promise<unknown>;
+  readonly promise: Promise<TResponse>;
 }
 
 /**
@@ -27,7 +27,7 @@ export class AckRegistry {
    * @param pattern Event pattern.
    * @param timeoutMs Timeout in ms.
    */
-  public register(pattern: string, timeoutMs: number): AckHandle {
+  public register<TResponse = unknown>(pattern: string, timeoutMs: number): AckHandle<TResponse> {
     const id = `ack-${this.nextId++}`;
     let resolveFn: (value: unknown) => void = () => undefined;
     let rejectFn: (reason: unknown) => void = () => undefined;
@@ -40,7 +40,7 @@ export class AckRegistry {
       rejectFn(new WsAckTimeoutError({ pattern, timeoutMs }));
     }, timeoutMs);
     this.pending.set(id, { resolve: resolveFn, reject: rejectFn, timer });
-    return { id, promise };
+    return { id, promise: promise as Promise<TResponse> };
   }
 
   /** Resolve a pending ack by id. */

@@ -46,7 +46,7 @@ function createRoomManagement(overrides?: {
  */
 export const withRoomManagement = Object.assign(createRoomManagement, {
   /** Stable pattern for the default join event: read by lib internals. */
-  JOIN_PATTERN: 'room.join',
+  JOIN_PATTERN: 'room.join' as const,
   /** Stable pattern for the default leave event: read by lib internals. */
-  LEAVE_PATTERN: 'room.leave',
+  LEAVE_PATTERN: 'room.leave' as const,
 });

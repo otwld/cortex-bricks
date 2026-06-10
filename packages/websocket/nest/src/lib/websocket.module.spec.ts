@@ -15,7 +15,7 @@ import {
   io as createClient,
   type Socket as ClientSocket,
 } from 'socket.io-client';
-import type { Namespace, Server, Socket as ServerSocket } from 'socket.io';
+import type { Socket as ServerSocket } from 'socket.io';
 import { z } from 'zod';
 import { WsAuthAdapter } from './adapters/ws-auth-adapter';
 import { WsScalingAdapter } from './adapters/ws-scaling-adapter';
@@ -589,9 +589,9 @@ describe('WebsocketModule (integration)', () => {
       scaling,
     );
     const namespace = {
-      server: {} as Server,
+      server: {},
       use: vi.fn(),
-    } as unknown as Namespace;
+    };
 
     const first = lifecycle.handleInit(namespace);
     const second = lifecycle.handleInit(namespace);

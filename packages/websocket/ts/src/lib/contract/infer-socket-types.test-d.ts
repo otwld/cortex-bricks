@@ -24,19 +24,28 @@ const ChatContract = defineContract({
   },
 });
 
+expectType<string>(ChatContract.namespace);
+
 type ChatContractT = typeof ChatContract;
 
 type C2S = InferClientToServer<ChatContractT>;
+declare const sendHandler: C2S['chat.send'];
+declare const typingHandler: C2S['chat.typing'];
 expectType<(payload: { text: string }, ack: (response: { id: string }) => void) => void>(
-  null as unknown as C2S['chat.send'],
+  sendHandler,
 );
-expectType<(payload: { roomId: string }) => void>(null as unknown as C2S['chat.typing']);
+expectType<(payload: { roomId: string }) => void>(typingHandler);
 
 type S2C = InferServerToClient<ChatContractT>;
-expectType<(payload: { id: string }) => void>(null as unknown as S2C['chat.new_message']);
+declare const newMessageHandler: S2C['chat.new_message'];
+expectType<(payload: { id: string }) => void>(newMessageHandler);
 
-expectAssignable<'send'>(null as unknown as C2sAckKeys<ChatContractT>);
-expectError<'typing'>(null as unknown as C2sAckKeys<ChatContractT>);
+declare const c2sAckKey: C2sAckKeys<ChatContractT>;
+declare const c2sKey: C2sKeys<ChatContractT>;
+declare const s2cKey: S2cKeys<ChatContractT>;
 
-expectAssignable<'send' | 'typing'>(null as unknown as C2sKeys<ChatContractT>);
-expectAssignable<'newMessage'>(null as unknown as S2cKeys<ChatContractT>);
+expectAssignable<'send'>(c2sAckKey);
+expectError(expectAssignable<'typing'>(c2sAckKey));
+
+expectAssignable<'send' | 'typing'>(c2sKey);
+expectAssignable<'newMessage'>(s2cKey);

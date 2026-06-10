@@ -12,6 +12,8 @@ import {
 import { ConnectionState, type Contract } from '@otwld/ts-websocket';
 import { WsClient } from '../services/ws-client.service';
 
+export type WsConnectionStateClient = Pick<WsClient<Contract>, 'state'>;
+
 /**
  * Structural directive that renders only while the client state matches.
  */
@@ -24,7 +26,7 @@ export class WsConnectedDirective {
   private rendered = false;
 
   /** Explicit contract-scoped client. */
-  public readonly wsConnectedClient = input<WsClient<Contract> | null>(null);
+  public readonly wsConnectedClient = input<WsConnectionStateClient | null>(null);
 
   /** Optional state to match. Defaults to connected. */
   @Input()

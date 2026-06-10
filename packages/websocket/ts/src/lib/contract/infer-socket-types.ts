@@ -12,7 +12,7 @@ import type { ClientEventDef, ServerEventDef } from './event-def';
  */
 export type InferClientToServer<TContract extends Contract> = {
   [K in keyof TContract['c2s'] as TContract['c2s'][K]['pattern']]: TContract['c2s'][K] extends ClientEventDef<
-    infer _P,
+    string,
     infer Payload,
     infer Response
   >
@@ -30,7 +30,7 @@ export type InferClientToServer<TContract extends Contract> = {
  */
 export type InferServerToClient<TContract extends Contract> = {
   [K in keyof TContract['s2c'] as TContract['s2c'][K]['pattern']]: TContract['s2c'][K] extends ServerEventDef<
-    infer _P,
+    string,
     infer Payload
   >
     ? (payload: Payload) => void

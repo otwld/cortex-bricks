@@ -1,10 +1,12 @@
 import { clientEvent } from '@otwld/ts-websocket';
+import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 import { lastValueFrom, of, throwError } from 'rxjs';
 import { z } from 'zod';
 import { WsValidationException } from '../exceptions/ws-validation.exception';
 import { ZodResponseInterceptor } from './zod-response.interceptor';
 
-const fakeContext = {} as never;
+const fakeContext = new ExecutionContextHost([]);
+fakeContext.setType('ws');
 const handlerFor = (value: unknown) => ({ handle: () => of(value) });
 
 describe('ZodResponseInterceptor', () => {

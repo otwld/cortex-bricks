@@ -6,10 +6,13 @@ import {
   type C2sAckKeys,
   type C2sKeys,
   type Contract,
+  type DefaultJoinRoomDef,
+  type DefaultLeaveRoomDef,
   type PayloadOf,
   type ResponseOf,
   type RoomId,
   type S2cKeys,
+  withRoomManagement,
 } from '@otwld/ts-websocket';
 import { filter, Subject, Subscription, type Observable } from 'rxjs';
 import type { EmitOptions } from '../models/emit-options.model';
@@ -21,6 +24,10 @@ import { EventMultiplexer } from '../internal/event-multiplexer';
 import { PresenceTracker, type PresenceUpdatePayload } from '../internal/presence-tracker';
 import { ReconnectController } from '../internal/reconnect-controller';
 import { SocketAdapter, type SocketIoFactory } from '../internal/socket-adapter';
+
+type RoomManagementDef = DefaultJoinRoomDef | DefaultLeaveRoomDef;
+type RoomManagementPattern = RoomManagementDef['pattern'];
+type RoomManagementResponse = ResponseOf<RoomManagementDef>;
 
 /**
  * Public websocket client. Signal-first API over a Socket.IO connection.
@@ -69,7 +76,7 @@ export class WsClient<TContract extends Contract> {
     this.adapter = new SocketAdapter(
       this.urlFor(contract),
       {
-        transports: config.transports ?? ['websocket'],
+        transports: [...(config.transports ?? ['websocket'])],
         autoConnect: false,
       },
       factory,
@@ -189,7 +196,7 @@ export class WsClient<TContract extends Contract> {
     options?: EmitOptions,
   ): Promise<ResponseOf<TContract['c2s'][K]>> {
     const timeoutMs = options?.timeoutMs ?? this.config.defaultAckTimeoutMs ?? 10_000;
-    const handle = this.acks.register(event.pattern, timeoutMs);
+    const handle = this.acks.register<ResponseOf<TContract['c2s'][K]>>(event.pattern, timeoutMs);
     this.adapter.emitWithAckRaw(event.pattern, payload).then((response) => {
       try {
         this.acks.resolve(handle.id, event.parseResponse(response));
@@ -197,7 +204,7 @@ export class WsClient<TContract extends Contract> {
         this.acks.reject(handle.id, err);
       }
     });
-    return handle.promise as Promise<ResponseOf<TContract['c2s'][K]>>;
+    return handle.promise;
   }
 
   /**
@@ -242,13 +249,11 @@ export class WsClient<TContract extends Contract> {
       memberCount,
       _contract: this.contract,
       join: async () => {
-        const def = this.findRoomDef('room.join');
-        await this.emitWithAck(def, { roomId: id } as never);
+        await this.emitRoomManagement(this.findRoomDef(withRoomManagement.JOIN_PATTERN), id);
         joined.set(true);
       },
       leave: async () => {
-        const def = this.findRoomDef('room.leave');
-        await this.emitWithAck(def, { roomId: id } as never);
+        await this.emitRoomManagement(this.findRoomDef(withRoomManagement.LEAVE_PATTERN), id);
         joined.set(false);
       },
     };
@@ -268,9 +273,22 @@ export class WsClient<TContract extends Contract> {
     return `${base}${namespace}`;
   }
 
-  private findRoomDef(pattern: 'room.join' | 'room.leave'): TContract['c2s'][C2sAckKeys<TContract>] {
+  private emitRoomManagement(def: RoomManagementDef, id: RoomId): Promise<RoomManagementResponse> {
+    const timeoutMs = this.config.defaultAckTimeoutMs ?? 10_000;
+    const handle = this.acks.register<RoomManagementResponse>(def.pattern, timeoutMs);
+    this.adapter.emitWithAckRaw(def.pattern, { roomId: id }).then((response) => {
+      try {
+        this.acks.resolve(handle.id, def.parseResponse(response));
+      } catch (err) {
+        this.acks.reject(handle.id, err);
+      }
+    });
+    return handle.promise;
+  }
+
+  private findRoomDef(pattern: RoomManagementPattern): RoomManagementDef {
     for (const def of Object.values(this.contract.c2s)) {
-      if (def.pattern === pattern) return def as TContract['c2s'][C2sAckKeys<TContract>];
+      if (isRoomManagementDef(def, pattern)) return def;
     }
     throw new WsError({
       kind: WsErrorKind.PatternMismatch,
@@ -287,5 +305,18 @@ function isPresenceUpdate(value: unknown): value is PresenceUpdatePayload {
     'room' in value &&
     'members' in value &&
     Array.isArray((value as { members: unknown }).members)
+  );
+}
+
+function isRoomManagementDef(def: unknown, pattern: RoomManagementPattern): def is RoomManagementDef {
+  return (
+    typeof def === 'object' &&
+    def !== null &&
+    'direction' in def &&
+    'pattern' in def &&
+    'parseResponse' in def &&
+    def.direction === 'c2s' &&
+    def.pattern === pattern &&
+    typeof def.parseResponse === 'function'
   );
 }

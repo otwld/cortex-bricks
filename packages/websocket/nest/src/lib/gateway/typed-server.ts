@@ -1,4 +1,3 @@
-import type { Namespace, Socket } from 'socket.io';
 import {
   WsErrorKind,
   type Contract,
@@ -8,7 +7,7 @@ import {
   type ServerEventDef,
 } from '@otwld/ts-websocket';
 import { WsValidationException } from '../exceptions/ws-validation.exception';
-import { TypedServerRegistry } from './typed-server-registry';
+import { TypedFetchedSocket, TypedServerNamespace, TypedServerRegistry } from './typed-server-registry';
 
 /**
  * Typed emitter scoped to a set of rooms.
@@ -98,12 +97,11 @@ export class TypedServer<TContract extends Contract> {
   }
 
   /** Fetch every connected socket in the namespace. */
-  public async fetchSockets(): Promise<readonly Socket[]> {
-    const sockets = await this.namespace.fetchSockets();
-    return sockets as unknown as readonly Socket[];
+  public async fetchSockets(): Promise<readonly TypedFetchedSocket[]> {
+    return this.namespace.fetchSockets();
   }
 
-  private get namespace(): Namespace {
+  private get namespace(): TypedServerNamespace {
     return this.registry.get(this.contract.namespace);
   }
 

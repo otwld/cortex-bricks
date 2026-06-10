@@ -1,7 +1,7 @@
 import { makeEnvironmentProviders, type EnvironmentProviders, type Provider } from '@angular/core';
 import { io as ioFactory } from 'socket.io-client';
 import type { Contract } from '@otwld/ts-websocket';
-import type { SocketIoFactory, SocketIoLike } from './internal/socket-adapter';
+import type { SocketIoFactory } from './internal/socket-adapter';
 import type { WsConfig } from './models/ws-config.model';
 import { PresenceService } from './services/presence.service';
 import { WsClient } from './services/ws-client.service';
@@ -10,7 +10,7 @@ import { WS_CONFIG } from './tokens/ws-config.token';
 import { WS_CONTRACT } from './tokens/ws-contract.token';
 import { WS_PRESENCE } from './tokens/ws-presence.token';
 
-const defaultFactory: SocketIoFactory = (url, opts) => ioFactory(url, opts) as unknown as SocketIoLike;
+const defaultFactory: SocketIoFactory = (url, opts) => ioFactory(url, opts);
 
 /**
  * Register a `WsClient<TContract>` for a contract.
