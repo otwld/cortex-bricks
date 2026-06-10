@@ -3,7 +3,6 @@ import { User } from '@otwld/nest-auth';
 
 function makeUser(overrides: Partial<User> = {}): User {
   return {
-    _id: 'user-id' as any,
     email: 'test@example.com',
     emailVerified: false,
     roles: [],
@@ -51,7 +50,7 @@ describe('AppCaslAbilityFactory', () => {
   });
 
   it('grants manage:all to configured bootstrap admin emails', () => {
-    const bootstrapFactory = new (AppCaslAbilityFactory as any)({
+    const bootstrapFactory = new AppCaslAbilityFactory({
       get: (key: string) => (key === 'adminEmails' ? ['ntrehout@otwld.com'] : undefined),
     });
     const user = makeUser({ email: 'NTREHOUT@otwld.com', permissions: [], roles: [] });

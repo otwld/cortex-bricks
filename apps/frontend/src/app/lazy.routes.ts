@@ -7,9 +7,14 @@ import { authRoutes } from '@otwld/ng-auth';
 import { authGuard } from '@otwld/ng-auth/core';
 import { provideDashboardLayoutConfig, provideDashboardLayoutState } from '@otwld/ng-dashboard/core';
 
+const auraPrimitive = Aura.primitive;
+if (auraPrimitive === undefined) {
+  throw new Error('PrimeNG Aura preset is missing primitive color tokens.');
+}
+
 const BlueAura = definePreset(Aura, {
   semantic: {
-    primary: Aura.primitive!.blue,
+    primary: auraPrimitive.blue,
     colorScheme: {
       light: {
         primary: {

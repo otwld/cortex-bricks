@@ -13,18 +13,21 @@ type HttpResponseInit = Parameters<typeof HttpResponse.json>[1];
  * Msw Search Get Handler Options definition used across Cortex libraries.
  * For example, search candidates by skill and paginate results for recruiter dashboards.
  */
-export interface MswSearchGetHandlerOptions<
-  TEntity,
-  TResponse extends JsonBodyType = GeneticsSearchResult<TEntity>
-> {
+export interface MswSearchGetHandlerOptions<TEntity> {
   search?: GeneticsSearchOptions<TEntity>;
   parseRequest?: (url: URL) => GeneticsSearchRequest;
-  mapResponse?: (
+  responseInit?: HttpResponseInit;
+}
+
+/** Options for MSW search handlers that transform the default search result body. */
+export interface MswMappedSearchGetHandlerOptions<TEntity, TResponse extends JsonBodyType>
+  extends MswSearchGetHandlerOptions<TEntity> {
+  /** Convert the default genetics search result into the HTTP response body. */
+  mapResponse: (
     result: GeneticsSearchResult<TEntity>,
     request: GeneticsSearchRequest,
     url: URL
   ) => TResponse;
-  responseInit?: HttpResponseInit;
 }
 
 /**
@@ -71,21 +74,35 @@ function defaultParseSearchRequest(url: URL): GeneticsSearchRequest {
  * Suitable for list/search endpoints consumed by HttpClient in stories.
  */
 export function createMswSearchGetHandler<
-  TEntity,
-  TResponse extends JsonBodyType = GeneticsSearchResult<TEntity>
+  TEntity
 >(
   genetics: Pick<FakerGeneticsRuntime, 'search'>,
   path: Parameters<typeof http.get>[0],
   items: readonly TEntity[],
-  options: MswSearchGetHandlerOptions<TEntity, TResponse> = {}
+  options?: MswSearchGetHandlerOptions<TEntity>
+): RequestHandler;
+export function createMswSearchGetHandler<
+  TEntity,
+  TResponse extends JsonBodyType
+>(
+  genetics: Pick<FakerGeneticsRuntime, 'search'>,
+  path: Parameters<typeof http.get>[0],
+  items: readonly TEntity[],
+  options: MswMappedSearchGetHandlerOptions<TEntity, TResponse>
+): RequestHandler;
+export function createMswSearchGetHandler<TEntity, TResponse extends JsonBodyType>(
+  genetics: Pick<FakerGeneticsRuntime, 'search'>,
+  path: Parameters<typeof http.get>[0],
+  items: readonly TEntity[],
+  options: MswSearchGetHandlerOptions<TEntity> | MswMappedSearchGetHandlerOptions<TEntity, TResponse> = {}
 ): RequestHandler {
   return http.get(path, ({ request }) => {
     const url = new URL(request.url);
     const parsedRequest = (options.parseRequest ?? defaultParseSearchRequest)(url);
     const result = genetics.search(items, parsedRequest, options.search);
-    const responseBody = options.mapResponse
+    const responseBody = 'mapResponse' in options
       ? options.mapResponse(result, parsedRequest, url)
-      : (result as unknown as TResponse);
+      : result;
 
     return HttpResponse.json(responseBody, options.responseInit);
   });

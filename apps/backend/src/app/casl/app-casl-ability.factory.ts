@@ -1,4 +1,4 @@
-import { Injectable, Optional } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AbilityBuilder, AnyAbility, createMongoAbility } from '@casl/ability';
 import { CaslAbilityFactory, User } from '@otwld/nest-auth';
@@ -19,7 +19,7 @@ import { CaslAbilityFactory, User } from '@otwld/nest-auth';
  */
 @Injectable()
 export class AppCaslAbilityFactory extends CaslAbilityFactory {
-  constructor(@Optional() private readonly config?: ConfigService) {
+  constructor(@Optional() @Inject(ConfigService) private readonly config?: Pick<ConfigService, 'get'>) {
     super();
   }
 

@@ -1,4 +1,5 @@
-import type { Model, PipelineStage } from 'mongoose';
+import { randomUUID } from 'node:crypto';
+import { model as createModel, Schema, type Model, type PipelineStage } from 'mongoose';
 
 import { AbstractRepository } from './abstract-repository';
 import type { MatchRule } from '../types';
@@ -35,10 +36,13 @@ describe(AbstractRepository.name, () => {
       ownerId: 'owner-1',
       owner: { _id: 'owner-1' },
     };
-    const exec = vi.fn().mockResolvedValue([expected]);
-    const model = {
-      aggregate: vi.fn().mockReturnValue({ exec }),
-    } as unknown as Model<TestEntity>;
+    const model = createModel<TestEntity>(
+      `AbstractRepositorySpecEntity_${randomUUID()}`,
+      new Schema<TestEntity>(),
+    );
+    const aggregate = model.aggregate<TestEntityWithRelations>();
+    vi.spyOn(aggregate, 'exec').mockResolvedValue([expected]);
+    vi.spyOn(model, 'aggregate').mockReturnValue(aggregate);
     const repository = new TestRepository(model);
 
     await expect(repository.aggregateOneWithRelation({})).resolves.toEqual(expected);

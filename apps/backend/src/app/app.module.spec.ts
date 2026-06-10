@@ -1,6 +1,6 @@
 import { DynamicModule } from '@nestjs/common';
 import { MODULE_METADATA } from '@nestjs/common/constants';
-import { JwtAuthGuard } from '@otwld/nest-auth';
+import { AUTH_MODULE_OPTIONS, JwtAuthGuard } from '@otwld/nest-auth';
 import { AI_ENDPOINT_OPTIONS } from '@otwld/nest-ai';
 import { MailModule } from '@otwld/nest-mail';
 import { USERS_MODULE_OPTIONS } from '@otwld/nest-users';
@@ -103,7 +103,7 @@ describe('AppModule', () => {
           onForgotPassword: (params: { email: string; name: string; resetToken: string }) => Promise<void>;
         };
       };
-    }>(authOptionsModule?.providers, 'AUTH_MODULE_OPTIONS');
+    }>(authOptionsModule?.providers, AUTH_MODULE_OPTIONS);
     const mailService = { send: vi.fn().mockResolvedValue(undefined) };
 
     const options = optionsProvider?.useFactory(createConfigStub(), mailService);
