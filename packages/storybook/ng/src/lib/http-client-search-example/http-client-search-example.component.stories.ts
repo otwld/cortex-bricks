@@ -72,7 +72,7 @@ const candidateSearchHandler = createMswSearchGetHandler(
 
 const meta: Meta<HttpClientSearchExampleComponent> = {
   component: HttpClientSearchExampleComponent,
-  title: 'ng/storybook/http-client-search-example',
+  title: 'storybook/ng/http-client-search-example',
   decorators: [
     applicationConfig({
       providers: [provideHttpClient()],
