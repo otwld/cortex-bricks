@@ -1,7 +1,14 @@
 import { RawMailMessage } from './mail-transport.interface';
 import { SmtpTransport, SmtpTransportOptions } from './smtp.transport';
 
-const createTransportMock = vi.hoisted(() => vi.fn());
+type SendMailMock = (message: unknown) => Promise<unknown>;
+type MockTransporter = {
+  sendMail: SendMailMock;
+};
+
+const createTransportMock = vi.hoisted(() =>
+  vi.fn<(options?: unknown) => MockTransporter>(),
+);
 
 vi.mock('nodemailer', () => ({
   createTransport: createTransportMock,
@@ -19,10 +26,10 @@ describe(SmtpTransport.name, () => {
   afterEach(() => createTransportMock.mockReset());
 
   it('creates a nodemailer transporter with the provided SMTP options', async () => {
-    const sendMailMock = vi.fn().mockResolvedValue({});
+    const sendMailMock = vi.fn<SendMailMock>().mockResolvedValue({});
     createTransportMock.mockReturnValue({
       sendMail: sendMailMock,
-    } as never);
+    });
 
     const options: SmtpTransportOptions = {
       host: 'smtp.zoho.com',
@@ -37,8 +44,8 @@ describe(SmtpTransport.name, () => {
   });
 
   it('calls sendMail with mapped message fields', async () => {
-    const sendMailMock = vi.fn().mockResolvedValue({});
-    createTransportMock.mockReturnValue({ sendMail: sendMailMock } as never);
+    const sendMailMock = vi.fn<SendMailMock>().mockResolvedValue({});
+    createTransportMock.mockReturnValue({ sendMail: sendMailMock });
 
     const transport = new SmtpTransport({ host: 'localhost', port: 25 });
     await transport.send({ ...message, replyTo: 'reply@example.com' });

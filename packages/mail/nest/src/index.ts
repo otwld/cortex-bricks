@@ -1,5 +1,5 @@
 export { MailModule } from './lib/mail.module';
-export { MailService, MailTemplateMap } from './lib/mail.service';
+export { MailService, MailTemplateMap, MailTemplateRegistry } from './lib/mail.service';
 export {
   MAIL_MODULE_OPTIONS,
   MailModuleAsyncOptions,

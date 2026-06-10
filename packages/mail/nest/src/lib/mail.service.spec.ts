@@ -7,11 +7,21 @@ import { TemplateInterpolator } from './templates/template-interpolator';
 import { TemplateLoader } from './templates/template-loader';
 import { MailTransport } from './transports/mail-transport.interface';
 
+declare module './mail.service' {
+  interface MailTemplateRegistry {
+    welcome: { name?: string };
+  }
+}
+
 function makeOptions(
   overrides: Partial<MailModuleOptions> = {},
 ): MailModuleOptions {
+  const transport: MailTransport = {
+    send: vi.fn().mockResolvedValue(undefined),
+  };
+
   return {
-    transport: { send: vi.fn().mockResolvedValue(undefined) } as MailTransport,
+    transport,
     defaults: { from: 'noreply@example.com' },
     templates: { dir: '/templates' },
     ...overrides,
@@ -47,8 +57,8 @@ describe(MailService.name, () => {
     await service.send({
       to: 'user@example.com',
       subject: 'Hi',
-      template: 'welcome' as never,
-      context: { name: 'Alice' } as never,
+      template: 'welcome',
+      context: { name: 'Alice' },
     });
 
     expect(loadMock).toHaveBeenCalledWith('/templates', 'welcome');
@@ -70,8 +80,8 @@ describe(MailService.name, () => {
     await service.send({
       to: 'u@e.com',
       subject: 'S',
-      template: 'welcome' as never,
-      context: { name: 'x' } as never,
+      template: 'welcome',
+      context: { name: 'x' },
     });
 
     expect(options.transport.send).toHaveBeenCalledWith(
@@ -87,8 +97,8 @@ describe(MailService.name, () => {
     await service.send({
       to: 'u@e.com',
       subject: 'S',
-      template: 'welcome' as never,
-      context: {} as never,
+      template: 'welcome',
+      context: {},
       from: 'custom@example.com',
     });
 
@@ -124,8 +134,8 @@ describe(MailService.name, () => {
     await service.send({
       to: 'u@e.com',
       subject: 'S',
-      template: 'welcome' as never,
-      context: {} as never,
+      template: 'welcome',
+      context: {},
     });
 
     expect(options.transport.send).toHaveBeenCalledWith(

@@ -1,7 +1,6 @@
-import type { Mock, MockedFunction } from 'vitest';
+import * as fs from 'fs/promises';
 import { RawMailMessage } from './mail-transport.interface';
 import { PostalTransport } from './postal.transport';
-import * as fs from 'fs/promises';
 
 vi.mock('fs/promises');
 
@@ -14,20 +13,37 @@ const message: RawMailMessage = {
 };
 
 describe(PostalTransport.name, () => {
-  const readFileMock = fs.readFile as MockedFunction<typeof fs.readFile>;
+  const readFileMock = vi.mocked(fs.readFile);
 
   beforeEach(() => {
-    global.fetch = vi.fn();
     readFileMock.mockReset();
   });
 
   afterEach(() => vi.restoreAllMocks());
 
+  const postalResponse = (body: unknown, status = 200): Response =>
+    new Response(JSON.stringify(body), { status });
+
+  const successfulPostalResponse = () =>
+    postalResponse({ status: 'success', data: {} });
+
+  const requestInit = (
+    fetchMock: ReturnType<typeof vi.spyOn<typeof globalThis, 'fetch'>>,
+  ): RequestInit => {
+    const init = fetchMock.mock.calls[0]?.[1];
+    if (!init) throw new Error('Expected fetch to receive request options');
+    return init;
+  };
+
+  const jsonBody = <TBody>(init: RequestInit): TBody => {
+    if (typeof init.body !== 'string') {
+      throw new Error('Expected Postal request body to be JSON text');
+    }
+    return JSON.parse(init.body) as TBody;
+  };
+
   it('POSTs to the correct Postal API endpoint', async () => {
-    (global.fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ status: 'success', data: {} }),
-    });
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(successfulPostalResponse());
     const transport = new PostalTransport({
       serverUrl: 'https://postal.example.com',
       apiKey: 'key-123',
@@ -35,17 +51,14 @@ describe(PostalTransport.name, () => {
 
     await transport.send(message);
 
-    expect(global.fetch).toHaveBeenCalledWith(
+    expect(fetchMock).toHaveBeenCalledWith(
       'https://postal.example.com/api/v1/send/message',
       expect.objectContaining({ method: 'POST' }),
     );
   });
 
   it('sets the X-Server-API-Key header', async () => {
-    (global.fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ status: 'success', data: {} }),
-    });
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(successfulPostalResponse());
     const transport = new PostalTransport({
       serverUrl: 'https://postal.example.com',
       apiKey: 'key-123',
@@ -53,20 +66,12 @@ describe(PostalTransport.name, () => {
 
     await transport.send(message);
 
-    const [, init] = (global.fetch as Mock).mock.calls[0] as [
-      string,
-      RequestInit,
-    ];
-    expect((init.headers as Record<string, string>)['X-Server-API-Key']).toBe(
-      'key-123',
-    );
+    const headers = new Headers(requestInit(fetchMock).headers);
+    expect(headers.get('X-Server-API-Key')).toBe('key-123');
   });
 
   it('sends recipient, subject, and html_body in the request body', async () => {
-    (global.fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ status: 'success', data: {} }),
-    });
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(successfulPostalResponse());
     const transport = new PostalTransport({
       serverUrl: 'https://postal.example.com',
       apiKey: 'key-123',
@@ -74,11 +79,7 @@ describe(PostalTransport.name, () => {
 
     await transport.send(message);
 
-    const [, init] = (global.fetch as Mock).mock.calls[0] as [
-      string,
-      RequestInit,
-    ];
-    const body = JSON.parse(init.body as string) as Record<string, unknown>;
+    const body = jsonBody<Record<string, unknown>>(requestInit(fetchMock));
     expect(body).toMatchObject({
       to: ['user@example.com'],
       from: 'noreply@example.com',
@@ -89,13 +90,12 @@ describe(PostalTransport.name, () => {
   });
 
   it('throws when the Postal API returns an error status', async () => {
-    (global.fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      postalResponse({
         status: 'error',
         data: { code: 'InvalidApiKey', message: 'Bad key' },
       }),
-    });
+    );
     const transport = new PostalTransport({
       serverUrl: 'https://postal.example.com',
       apiKey: 'bad',
@@ -107,7 +107,7 @@ describe(PostalTransport.name, () => {
   });
 
   it('throws when the HTTP response is not ok', async () => {
-    (global.fetch as Mock).mockResolvedValue({ ok: false, status: 500 });
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status: 500 }));
     const transport = new PostalTransport({
       serverUrl: 'https://postal.example.com',
       apiKey: 'key',
@@ -119,11 +119,8 @@ describe(PostalTransport.name, () => {
   });
 
   it('reads path-based attachments before sending them to Postal', async () => {
-    readFileMock.mockResolvedValue(Buffer.from('pdf bytes') as never);
-    (global.fetch as Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ status: 'success', data: {} }),
-    });
+    readFileMock.mockResolvedValue(Buffer.from('pdf bytes'));
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(successfulPostalResponse());
     const transport = new PostalTransport({
       serverUrl: 'https://postal.example.com',
       apiKey: 'key-123',
@@ -140,13 +137,9 @@ describe(PostalTransport.name, () => {
       ],
     });
 
-    const [, init] = (global.fetch as Mock).mock.calls[0] as [
-      string,
-      RequestInit,
-    ];
-    const body = JSON.parse(init.body as string) as {
+    const body = jsonBody<{
       attachments: Array<{ data: string }>;
-    };
+    }>(requestInit(fetchMock));
     expect(readFileMock).toHaveBeenCalledWith('/tmp/invoice.pdf');
     expect(body.attachments[0]).toMatchObject({
       data: Buffer.from('pdf bytes').toString('base64'),

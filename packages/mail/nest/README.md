@@ -32,7 +32,7 @@ An AI agent should look here when a task mentions sending email, transactional m
 import { MailModule, MailService, PostalTransport, PreviewTransport, SmtpTransport } from '@otwld/nest-mail';
 ```
 
-Use `MailTemplateMap` module augmentation in consuming apps to make template contexts type-safe.
+Use `MailTemplateRegistry` module augmentation in consuming apps to make template contexts type-safe.
 
 ## Development
 

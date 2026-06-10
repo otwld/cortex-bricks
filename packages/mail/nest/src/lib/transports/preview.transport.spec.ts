@@ -1,7 +1,14 @@
 import { RawMailMessage } from './mail-transport.interface';
 import { PreviewTransport } from './preview.transport';
 
-const createTransportMock = vi.hoisted(() => vi.fn());
+type SendMailMock = (message: unknown) => Promise<unknown>;
+type MockTransporter = {
+  sendMail: SendMailMock;
+};
+
+const createTransportMock = vi.hoisted(() =>
+  vi.fn<(options?: unknown) => MockTransporter>(),
+);
 
 vi.mock('nodemailer', () => ({
   createTransport: createTransportMock,
@@ -41,10 +48,10 @@ describe(PreviewTransport.name, () => {
   });
 
   it('creates nodemailer transport when mailpit config is provided', async () => {
-    const sendMailMock = vi.fn().mockResolvedValue({});
+    const sendMailMock = vi.fn<SendMailMock>().mockResolvedValue({});
     createTransportMock.mockReturnValue({
       sendMail: sendMailMock,
-    } as never);
+    });
 
     const transport = new PreviewTransport({ host: 'localhost', port: 1025 });
     await transport.send(message);

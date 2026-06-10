@@ -1,16 +1,15 @@
-import type { MockedFunction } from 'vitest';
 import * as fs from 'fs/promises';
 import { TemplateLoader } from './template-loader';
 
 vi.mock('fs/promises');
 
 describe(TemplateLoader.name, () => {
-  const readFileMock = fs.readFile as MockedFunction<typeof fs.readFile>;
+  const readFileMock = vi.mocked(fs.readFile);
 
   beforeEach(() => vi.clearAllMocks());
 
   it('reads the correct file path', async () => {
-    readFileMock.mockResolvedValue('<p>Hello</p>' as never);
+    readFileMock.mockResolvedValue('<p>Hello</p>');
     const loader = new TemplateLoader();
 
     await loader.load('/templates', 'welcome');
@@ -22,7 +21,7 @@ describe(TemplateLoader.name, () => {
   });
 
   it('returns the file contents', async () => {
-    readFileMock.mockResolvedValue('<p>content</p>' as never);
+    readFileMock.mockResolvedValue('<p>content</p>');
     const loader = new TemplateLoader();
 
     const result = await loader.load('/templates', 'welcome');
@@ -31,7 +30,7 @@ describe(TemplateLoader.name, () => {
   });
 
   it('returns cached content on second call without reading disk again', async () => {
-    readFileMock.mockResolvedValue('<p>cached</p>' as never);
+    readFileMock.mockResolvedValue('<p>cached</p>');
     const loader = new TemplateLoader();
 
     await loader.load('/templates', 'welcome');
@@ -41,7 +40,7 @@ describe(TemplateLoader.name, () => {
   });
 
   it('throws a descriptive error when the template file does not exist', async () => {
-    readFileMock.mockRejectedValue(new Error('ENOENT') as never);
+    readFileMock.mockRejectedValue(new Error('ENOENT'));
     const loader = new TemplateLoader();
 
     await expect(loader.load('/templates', 'missing')).rejects.toThrow(

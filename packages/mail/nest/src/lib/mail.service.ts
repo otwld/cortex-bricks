@@ -4,12 +4,17 @@ import { TemplateInterpolator } from './templates/template-interpolator';
 import { TemplateLoader } from './templates/template-loader';
 import { MailAttachment } from './transports/mail-transport.interface';
 
-// Empty by design: consumers add template names through TypeScript module augmentation.
-/**
- * Describes mail template map values.
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-empty-interface
-export interface MailTemplateMap {}
+declare const mailTemplateRegistryBrand: unique symbol;
+
+/** Registry consumers augment with their named template contexts. */
+export interface MailTemplateRegistry {
+  readonly [mailTemplateRegistryBrand]?: never;
+}
+
+/** Map of configured template names to the context each template accepts. */
+export type MailTemplateMap = Omit<MailTemplateRegistry, typeof mailTemplateRegistryBrand>;
+
+type MailTemplateName = Extract<keyof MailTemplateMap, string>;
 
 /** Main service for sending templated and raw emails. */
 @Injectable()
@@ -33,7 +38,7 @@ export class MailService {
    * @param sendOptions - Templated email options.
    * @returns Resolves when the transport confirms delivery.
    */
-  async send<K extends keyof MailTemplateMap>(sendOptions: {
+  async send<K extends MailTemplateName>(sendOptions: {
     to: string | string[];
     subject: string;
     template: K;
@@ -42,7 +47,7 @@ export class MailService {
     replyTo?: string;
     attachments?: MailAttachment[];
   }): Promise<void> {
-    const html = await this.loader.load(this.options.templates.dir, sendOptions.template as string);
+    const html = await this.loader.load(this.options.templates.dir, sendOptions.template);
     const rendered = this.interpolator.interpolate(html, sendOptions.context as Record<string, unknown>);
 
     await this.options.transport.send({
