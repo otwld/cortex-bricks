@@ -11,7 +11,9 @@ export default [
                 "error",
                 {
                     ignoredFiles: [
-                        "{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}"
+                        "{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}",
+                        "{projectRoot}/vitest.config.{js,cjs,mjs,ts,cts,mts}",
+                        "{projectRoot}/src/**/*.spec.ts"
                     ]
                 }
             ]

@@ -1,5 +1,6 @@
 export * from './lib/config/storage-module-options';
 export * from './lib/config/storage.module-definition';
+export * from './lib/config/minio-storage-options';
 export * from './lib/drivers/filesystem.driver';
 export * from './lib/drivers/multipart-storage-driver';
 export * from './lib/drivers/s3.driver';
