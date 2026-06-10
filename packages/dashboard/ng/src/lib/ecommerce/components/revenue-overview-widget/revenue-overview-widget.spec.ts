@@ -15,7 +15,7 @@ describe(RevenueOverviewWidget.name, () => {
     fixture.detectChanges();
 
     const element: HTMLElement = fixture.nativeElement;
-    const selectedPeriod = (fixture.componentInstance as unknown as { selectedPeriod: () => RevenueOverviewPeriod | null }).selectedPeriod();
+    const selectedPeriod = fixture.componentInstance.selectedPeriod();
 
     expect(element.textContent).toContain('Revenue Overview');
     expect(selectedPeriod?.label).toBe('Last Week');
@@ -36,7 +36,7 @@ describe(RevenueOverviewWidget.name, () => {
     fixture.componentRef.setInput('periods', periods);
     fixture.detectChanges();
 
-    const chartData = (fixture.componentInstance as unknown as { chartData: () => { labels?: unknown; datasets: Array<{ data: number[] }> } }).chartData();
+    const chartData = fixture.componentInstance.chartData();
 
     expect(fixture.nativeElement.textContent).toContain('Net Revenue');
     expect(chartData.labels).toEqual(['Jan', 'Feb', 'Mar']);
@@ -54,7 +54,7 @@ describe(RevenueOverviewWidget.name, () => {
     fixture.componentRef.setInput('selectedPeriodId', 'current');
     fixture.detectChanges();
 
-    const selectedPeriod = (fixture.componentInstance as unknown as { selectedPeriod: () => RevenueOverviewPeriod | null }).selectedPeriod();
+    const selectedPeriod = fixture.componentInstance.selectedPeriod();
 
     expect(selectedPeriod).toBe(periods[1]);
   });
@@ -69,7 +69,7 @@ describe(RevenueOverviewWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    (fixture.componentInstance as unknown as { selectPeriod(period: RevenueOverviewPeriod): void }).selectPeriod(period);
+    fixture.componentInstance.selectPeriod(period);
 
     expect(selections).toEqual([{ period }]);
     expect(events).toEqual([{ type: 'period', period }]);
@@ -85,7 +85,7 @@ describe(RevenueOverviewWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    (fixture.componentInstance as unknown as { selectChartData(event: unknown): void }).selectChartData(chartEvent);
+    fixture.componentInstance.selectChartData(chartEvent);
 
     expect(selections[0].event).toBe(chartEvent);
     expect(selections[0].period?.id).toBe('last-week');

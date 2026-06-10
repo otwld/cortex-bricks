@@ -31,9 +31,7 @@ describe(RecentTransactionsWidget.name, () => {
     fixture.componentRef.setInput('maxTransactions', 1);
     fixture.detectChanges();
 
-    const viewModels = (
-      fixture.componentInstance as unknown as { transactionViewModels: () => Array<{ id: string; amount: number; imageAlt: string }> }
-    ).transactionViewModels();
+    const viewModels = fixture.componentInstance.transactionViewModels();
 
     expect(fixture.nativeElement.textContent).toContain('One');
     expect(fixture.nativeElement.textContent).not.toContain('Two');
@@ -50,9 +48,9 @@ describe(RecentTransactionsWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    const transaction = (fixture.componentInstance as unknown as { transactionViewModels: () => BankingTransaction[] }).transactionViewModels()[0];
+    const transaction = fixture.componentInstance.transactionViewModels()[0];
     if (!transaction) throw new Error('Expected a demo transaction view model.');
-    (fixture.componentInstance as unknown as { selectTransaction(transaction: BankingTransaction): void }).selectTransaction(transaction);
+    fixture.componentInstance.selectTransaction(transaction);
 
     expect(selections).toEqual([{ transaction }]);
     expect(events).toEqual([{ type: 'transaction', transaction }]);

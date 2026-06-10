@@ -128,7 +128,7 @@ export class SalesByCategoryWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly chartData: Signal<ChartData<'pie'>> = computed<ChartData<'pie'>>(() => {
+  public readonly chartData: Signal<ChartData<'pie'>> = computed<ChartData<'pie'>>(() => {
     const categories = this.categories();
     this.themeKey();
 
@@ -142,7 +142,7 @@ export class SalesByCategoryWidget {
     };
   });
 
-  protected readonly resolvedChartOptions: Signal<ChartOptions<'pie'>> = computed<ChartOptions<'pie'>>(() => {
+  public readonly resolvedChartOptions: Signal<ChartOptions<'pie'>> = computed<ChartOptions<'pie'>>(() => {
     this.themeKey();
 
     return this.options() ?? this.defaultChartOptions();
@@ -152,7 +152,7 @@ export class SalesByCategoryWidget {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectChartData(event: unknown): void {
+  public selectChartData(event: unknown): void {
     const payload = {
       event,
       category: this.getSelectedCategory(event),

@@ -192,14 +192,14 @@ export class RevenueOverviewWidget {
 
   protected readonly periodOptions = computed(() => this.periods().filter((period) => period.series.length > 0));
 
-  protected readonly selectedPeriod = computed<RevenueOverviewPeriod | null>(() => {
+  public readonly selectedPeriod = computed<RevenueOverviewPeriod | null>(() => {
     const periods = this.periodOptions();
     const selectedId = this.selectedPeriodId() ?? this.localSelectedPeriodId();
 
     return periods.find((period) => period.id === selectedId) ?? periods[0] ?? null;
   });
 
-  protected readonly chartData: Signal<ChartData<'bar'>> = computed<ChartData<'bar'>>(() => {
+  public readonly chartData: Signal<ChartData<'bar'>> = computed<ChartData<'bar'>>(() => {
     const period = this.selectedPeriod();
     this.themeKey();
 
@@ -213,7 +213,7 @@ export class RevenueOverviewWidget {
     };
   });
 
-  protected readonly resolvedChartOptions: Signal<ChartOptions<'bar'>> = computed<ChartOptions<'bar'>>(() => {
+  public readonly resolvedChartOptions: Signal<ChartOptions<'bar'>> = computed<ChartOptions<'bar'>>(() => {
     this.themeKey();
 
     return this.options() ?? this.defaultChartOptions();
@@ -223,7 +223,7 @@ export class RevenueOverviewWidget {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectPeriod(period: RevenueOverviewPeriod | null | undefined): void {
+  public selectPeriod(period: RevenueOverviewPeriod | null | undefined): void {
     if (!period) {
       return;
     }
@@ -235,7 +235,7 @@ export class RevenueOverviewWidget {
     this.eventsSubject.next({ type: 'period', ...event });
   }
 
-  protected selectChartData(event: unknown): void {
+  public selectChartData(event: unknown): void {
     const payload = { period: this.selectedPeriod(), event };
 
     this.dataSelected.emit(payload);

@@ -97,9 +97,9 @@ export class BestSellingWidget {
    */
   readonly actionSelected = output<BestSellingActionEvent>();
 
-  protected readonly productViewModels = computed(() => this.products().map((product) => this.toProductViewModel(product)));
+  public readonly productViewModels = computed(() => this.products().map((product) => this.toProductViewModel(product)));
 
-  protected readonly menuItems = computed<MenuItem[]>(() =>
+  public readonly menuItems = computed<MenuItem[]>(() =>
     this.actions().map((action) => ({
       label: action.label,
       icon: action.icon,

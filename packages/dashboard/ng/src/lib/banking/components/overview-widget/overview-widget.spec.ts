@@ -26,9 +26,7 @@ describe(OverviewWidget.name, () => {
     fixture.componentRef.setInput('series', series);
     fixture.detectChanges();
 
-    const chartData = (
-      fixture.componentInstance as unknown as { chartData: () => { labels?: unknown; datasets: Array<{ data: number[]; borderColor: string }> } }
-    ).chartData();
+    const chartData = fixture.componentInstance.chartData();
 
     expect(fixture.nativeElement.textContent).toContain('Cash Flow');
     expect(chartData.labels).toEqual(['Jan', 'Feb', 'Mar']);
@@ -43,7 +41,7 @@ describe(OverviewWidget.name, () => {
     fixture.componentRef.setInput('options', options);
     fixture.detectChanges();
 
-    const resolvedOptions = (fixture.componentInstance as unknown as { resolvedChartOptions: () => unknown }).resolvedChartOptions();
+    const resolvedOptions = fixture.componentInstance.resolvedChartOptions();
 
     expect(resolvedOptions).toBe(options);
   });
@@ -58,7 +56,7 @@ describe(OverviewWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    (fixture.componentInstance as unknown as { selectChartData(event: unknown): void }).selectChartData(chartEvent);
+    fixture.componentInstance.selectChartData(chartEvent);
 
     expect(selections).toEqual([{ event: chartEvent }]);
     expect(events).toEqual([{ type: 'data', event: chartEvent }]);

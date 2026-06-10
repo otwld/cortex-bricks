@@ -74,7 +74,7 @@ describe(AccountStatus.name, () => {
 
     fixture.componentInstance.save();
 
-    expect((fixture.componentInstance as unknown as { error: () => string | null }).error()).toBe('A user with this email already exists.');
+    expect(fixture.componentInstance.error()).toBe('A user with this email already exists.');
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
@@ -83,7 +83,7 @@ describe(AccountStatus.name, () => {
 
     fixture.componentInstance.save();
 
-    expect((fixture.componentInstance as unknown as { error: () => string | null }).error()).toBe('Email is required to create a user.');
+    expect(fixture.componentInstance.error()).toBe('Email is required to create a user.');
     expect(usersService.create).not.toHaveBeenCalled();
   });
 });

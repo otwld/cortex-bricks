@@ -35,7 +35,7 @@ export class FileDemo {
   /**
    * Starts resumable uploads for files selected by PrimeNG's custom upload flow.
    */
-  protected uploadWithStorage(event: FileUploadHandlerEvent, mode: FileUploadMode): void {
+  public uploadWithStorage(event: FileUploadHandlerEvent, mode: FileUploadMode): void {
     const files = [...event.files];
     if (!files.length) return;
 

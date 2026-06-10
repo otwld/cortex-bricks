@@ -147,9 +147,9 @@ export class RecentTransactionsTwoWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly recipientViewModels = computed(() => this.recipients().map((recipient) => this.toRecipientViewModel(recipient)));
+  public readonly recipientViewModels = computed(() => this.recipients().map((recipient) => this.toRecipientViewModel(recipient)));
 
-  protected readonly recipientRows = computed(() => this.chunkRecipients(this.recipientViewModels(), 2));
+  public readonly recipientRows = computed(() => this.chunkRecipients(this.recipientViewModels(), 2));
 
   protected readonly selectedRecipient = computed(() => this.recipientViewModels().find((recipient) => recipient.id === this.selectedRecipientId()) ?? null);
 
@@ -157,14 +157,14 @@ export class RecentTransactionsTwoWidget {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectRecipient(recipient: BankingRecipient): void {
+  public selectRecipient(recipient: BankingRecipient): void {
     const event = { recipient };
 
     this.recipientSelected.emit(event);
     this.eventsSubject.next({ type: 'recipient', ...event });
   }
 
-  protected changeAmount(amount: number | string | null): void {
+  public changeAmount(amount: number | string | null): void {
     const normalizedAmount = this.normalizeAmount(amount);
     const event = { amount: normalizedAmount };
 
@@ -172,12 +172,12 @@ export class RecentTransactionsTwoWidget {
     this.eventsSubject.next({ type: 'amount', ...event });
   }
 
-  protected requestAdd(): void {
+  public requestAdd(): void {
     this.addRequested.emit();
     this.eventsSubject.next({ type: 'add' });
   }
 
-  protected sendPayment(): void {
+  public sendPayment(): void {
     const event = {
       amount: this.normalizeAmount(this.amount()),
       recipient: this.selectedRecipient(),

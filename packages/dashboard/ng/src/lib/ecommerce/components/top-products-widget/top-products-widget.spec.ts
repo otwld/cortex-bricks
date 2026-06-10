@@ -32,11 +32,7 @@ describe(TopProductsWidget.name, () => {
     fixture.componentRef.setInput('imageBaseUrl', '/products/');
     fixture.detectChanges();
 
-    const viewModels = (
-      fixture.componentInstance as unknown as {
-        productViewModels: () => Array<{ id: string; imageSrc: string; price: number; rating: number }>;
-      }
-    ).productViewModels();
+    const viewModels = fixture.componentInstance.productViewModels();
 
     expect(fixture.nativeElement.textContent).toContain('Desk');
     expect(fixture.nativeElement.textContent).not.toContain('Chair');
@@ -56,14 +52,10 @@ describe(TopProductsWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    const product = (
-      fixture.componentInstance as unknown as {
-        productViewModels: () => TopProduct[];
-      }
-    ).productViewModels()[0];
+    const product = fixture.componentInstance.productViewModels()[0];
     if (!product) throw new Error('Expected a demo top product view model.');
 
-    (fixture.componentInstance as unknown as { selectProduct(product: TopProduct): void }).selectProduct(product);
+    fixture.componentInstance.selectProduct(product);
 
     expect(selections).toEqual([{ product }]);
     expect(events).toEqual([{ type: 'product', product }]);

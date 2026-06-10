@@ -117,13 +117,13 @@ export class StatsBankingWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly cardViewModels = computed(() => this.cards().map((card) => this.toCardViewModel(card)));
+  public readonly cardViewModels = computed(() => this.cards().map((card) => this.toCardViewModel(card)));
 
   constructor() {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectCard(card: BankingStatCard): void {
+  public selectCard(card: BankingStatCard): void {
     const event = { card };
 
     this.cardSelected.emit(event);

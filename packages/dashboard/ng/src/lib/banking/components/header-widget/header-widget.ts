@@ -87,7 +87,7 @@ export class HeaderWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly profileViewModel = computed<BankingHeaderProfileViewModel>(() => {
+  public readonly profileViewModel = computed<BankingHeaderProfileViewModel>(() => {
     const profile = this.profile();
 
     return {
@@ -101,7 +101,7 @@ export class HeaderWidget {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectAction(action: BankingHeaderAction): void {
+  public selectAction(action: BankingHeaderAction): void {
     const event = { action };
 
     this.actionSelected.emit(event);

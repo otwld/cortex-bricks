@@ -22,7 +22,7 @@ describe(FileDemo.name, () => {
     });
     const component = TestBed.runInInjectionContext(() => new FileDemo());
 
-    (component as unknown as { uploadWithStorage(event: { files: File[] }, mode: 'advanced' | 'basic'): void }).uploadWithStorage({ files }, 'advanced');
+    component.uploadWithStorage({ files }, 'advanced');
 
     expect(storage.uploadGroup).toHaveBeenCalledWith(files, {
       accept: 'image/*',

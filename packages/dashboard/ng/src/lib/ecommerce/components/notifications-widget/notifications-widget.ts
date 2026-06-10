@@ -236,7 +236,7 @@ export class NotificationsWidget {
       .filter((group) => group.notifications.length > 0),
   );
 
-  protected readonly menuItems = computed<MenuItem[]>(() =>
+  public readonly menuItems = computed<MenuItem[]>(() =>
     this.actions().map((action) => ({
       label: action.label,
       icon: action.icon,

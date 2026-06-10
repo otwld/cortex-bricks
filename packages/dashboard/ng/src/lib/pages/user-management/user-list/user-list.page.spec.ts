@@ -63,7 +63,7 @@ describe(UserListPage.name, () => {
   it('shows loading before users load', async () => {
     await createComponent();
 
-    expect((fixture.componentInstance as unknown as { loading: () => boolean }).loading()).toBe(true);
+    expect(fixture.componentInstance.loading()).toBe(true);
   });
 
   it('renders an empty state', async () => {

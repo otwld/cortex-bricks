@@ -54,11 +54,9 @@ describe(RecentSalesWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    const component = fixture.componentInstance as unknown as {
-      saleViewModels: () => unknown[];
-      selectSale(sale: unknown): void;
-    };
-    component.selectSale(component.saleViewModels()[0]);
+    const saleViewModel = fixture.componentInstance.saleViewModels()[0];
+    if (!saleViewModel) throw new Error('Expected a recent sale view model.');
+    fixture.componentInstance.selectSale(saleViewModel);
 
     expect(selections).toEqual([{ sale }]);
     expect(events).toEqual([{ type: 'select', sale }]);
@@ -75,11 +73,7 @@ describe(RecentSalesWidget.name, () => {
     fixture.componentInstance.salesExported.subscribe((event) => exports.push(event));
     fixture.detectChanges();
 
-    const table = (fixture.componentInstance as unknown as { salesTable: () => { exportCSV: () => void } | undefined }).salesTable();
-    if (!table) throw new Error('Expected the sales table to be available.');
-    vi.spyOn(table, 'exportCSV').mockImplementation(() => undefined);
-
-    (fixture.componentInstance as unknown as { exportSales(): void }).exportSales();
+    fixture.componentInstance.exportSales();
 
     expect(exports).toEqual([{ rows: [sale], columns }]);
   });
@@ -94,9 +88,11 @@ describe(RecentSalesWidget.name, () => {
       fixture.componentInstance.events$.subscribe((event) => events.push(event));
       fixture.detectChanges();
 
-      (fixture.componentInstance as unknown as { queueGlobalFilter(event: Event): void }).queueGlobalFilter({
-        target: { value: 'watch' },
-      } as unknown as Event);
+      const input = document.createElement('input');
+      input.value = 'watch';
+      const event = new Event('input');
+      Object.defineProperty(event, 'target', { value: input });
+      fixture.componentInstance.queueGlobalFilter(event);
       vi.advanceTimersByTime(119);
       expect(events).toEqual([]);
 

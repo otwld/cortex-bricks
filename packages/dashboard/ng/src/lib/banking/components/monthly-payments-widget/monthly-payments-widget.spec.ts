@@ -27,9 +27,7 @@ describe(MonthlyPaymentsWidget.name, () => {
     fixture.componentRef.setInput('payments', payments);
     fixture.detectChanges();
 
-    const viewModels = (
-      fixture.componentInstance as unknown as { paymentViewModels: () => Array<{ id: string; amount: number; statusLabel: string; severity: string }> }
-    ).paymentViewModels();
+    const viewModels = fixture.componentInstance.paymentViewModels();
 
     expect(fixture.nativeElement.textContent).toContain('Insurance');
     expect(viewModels[0].id).toBe('insurance');
@@ -47,9 +45,9 @@ describe(MonthlyPaymentsWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    const payment = (fixture.componentInstance as unknown as { paymentViewModels: () => MonthlyPayment[] }).paymentViewModels()[0];
+    const payment = fixture.componentInstance.paymentViewModels()[0];
     if (!payment) throw new Error('Expected a demo payment view model.');
-    (fixture.componentInstance as unknown as { selectPayment(payment: MonthlyPayment): void }).selectPayment(payment);
+    fixture.componentInstance.selectPayment(payment);
 
     expect(selections).toEqual([{ payment }]);
     expect(events).toEqual([{ type: 'payment', payment }]);

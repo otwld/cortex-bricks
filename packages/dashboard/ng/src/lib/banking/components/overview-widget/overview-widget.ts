@@ -148,7 +148,7 @@ export class OverviewWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly chartData: Signal<ChartData<'line'>> = computed<ChartData<'line'>>(() => {
+  public readonly chartData: Signal<ChartData<'line'>> = computed<ChartData<'line'>>(() => {
     this.themeKey();
 
     return {
@@ -157,7 +157,7 @@ export class OverviewWidget {
     };
   });
 
-  protected readonly resolvedChartOptions: Signal<ChartOptions<'line'>> = computed<ChartOptions<'line'>>(() => {
+  public readonly resolvedChartOptions: Signal<ChartOptions<'line'>> = computed<ChartOptions<'line'>>(() => {
     this.themeKey();
 
     return this.options() ?? this.defaultChartOptions();
@@ -167,7 +167,7 @@ export class OverviewWidget {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectChartData(event: unknown): void {
+  public selectChartData(event: unknown): void {
     const payload = { event };
 
     this.dataSelected.emit(payload);

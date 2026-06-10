@@ -25,6 +25,12 @@ interface Product {
     cargoCompany: string[] | null;
 }
 
+interface ProductSubmission extends Product {
+    colors: string[];
+    coverImage: string | null;
+    additionalImages: string[];
+}
+
 interface SelectOption {
     label: string;
     value: string;
@@ -85,6 +91,11 @@ export class NewProductPage {
         sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
         cargoCompany: null
     };
+
+    /**
+     * Last product payload emitted by the Add Product action for host integrations.
+     */
+    submittedProduct = signal<ProductSubmission | null>(null);
 
     /**
      * Product category options shown in the category selector.
@@ -300,7 +311,15 @@ export class NewProductPage {
     }
 
     /**
-     * Handles the product form submit action for host integration.
+     * Captures the current draft and media selections for host integration.
      */
-    addProduct() {}
+    addProduct() {
+        this.submittedProduct.set({
+            ...this.product,
+            sizes: [...this.selectedSizes()],
+            colors: [...this.selectedColors()],
+            coverImage: this.coverImage(),
+            additionalImages: this.additionalImages().filter((image): image is string => image !== null)
+        });
+    }
 }

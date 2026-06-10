@@ -29,20 +29,17 @@ describe(SalesByCategoryWidget.name, () => {
     fixture.componentRef.setInput('categories', categories);
     fixture.detectChanges();
 
-    const chartData = (
-      fixture.componentInstance as unknown as {
-        chartData: () => {
-          labels?: unknown;
-          datasets: Array<{ data: number[]; backgroundColor: string[]; hoverBackgroundColor: string[] }>;
-        };
-      }
-    ).chartData();
+    const chartData = fixture.componentInstance.chartData();
 
     expect(fixture.nativeElement.textContent).toContain('Category Mix');
     expect(chartData.labels).toEqual(['Hardware', 'Services']);
     expect(chartData.datasets[0].data).toEqual([1200, 0]);
-    expect(chartData.datasets[0].backgroundColor[0]).toBe('#123456');
-    expect(chartData.datasets[0].hoverBackgroundColor[0]).toBe('#234567');
+    const dataset = chartData.datasets[0];
+    if (!dataset || !Array.isArray(dataset.backgroundColor) || !Array.isArray(dataset.hoverBackgroundColor)) {
+      throw new Error('Expected category chart colors to be arrays.');
+    }
+    expect(dataset.backgroundColor[0]).toBe('#123456');
+    expect(dataset.hoverBackgroundColor[0]).toBe('#234567');
   });
 
   it('uses provided Chart.js options when supplied', () => {
@@ -52,7 +49,7 @@ describe(SalesByCategoryWidget.name, () => {
     fixture.componentRef.setInput('options', options);
     fixture.detectChanges();
 
-    const resolvedOptions = (fixture.componentInstance as unknown as { resolvedChartOptions: () => unknown }).resolvedChartOptions();
+    const resolvedOptions = fixture.componentInstance.resolvedChartOptions();
 
     expect(resolvedOptions).toBe(options);
   });
@@ -67,7 +64,7 @@ describe(SalesByCategoryWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    (fixture.componentInstance as unknown as { selectChartData(event: unknown): void }).selectChartData(chartEvent);
+    fixture.componentInstance.selectChartData(chartEvent);
 
     const selection = selections[0];
     if (!selection) throw new Error('Expected a category selection event.');

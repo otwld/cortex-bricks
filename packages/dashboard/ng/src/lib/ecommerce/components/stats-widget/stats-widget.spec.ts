@@ -45,11 +45,7 @@ describe(StatsWidget.name, () => {
     fixture.componentRef.setInput('metrics', metrics);
     fixture.detectChanges();
 
-    const viewModels = (
-      fixture.componentInstance as unknown as {
-        metricViewModels: () => Array<{ id: string; changeIcon: string; sparklineClass?: string; knobValue?: number }>;
-      }
-    ).metricViewModels();
+    const viewModels = fixture.componentInstance.metricViewModels();
 
     expect(fixture.nativeElement.textContent).toContain('Returns');
     expect(viewModels[0].id).toBe('returns');
@@ -67,14 +63,10 @@ describe(StatsWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    const metric = (
-      fixture.componentInstance as unknown as {
-        metricViewModels: () => StatsMetric[];
-      }
-    ).metricViewModels()[0];
+    const metric = fixture.componentInstance.metricViewModels()[0];
     if (!metric) throw new Error('Expected a demo metric view model.');
 
-    (fixture.componentInstance as unknown as { selectMetric(metric: StatsMetric): void }).selectMetric(metric);
+    fixture.componentInstance.selectMetric(metric);
 
     expect(selections).toEqual([{ metric }]);
     expect(events).toEqual([{ type: 'metric', metric }]);

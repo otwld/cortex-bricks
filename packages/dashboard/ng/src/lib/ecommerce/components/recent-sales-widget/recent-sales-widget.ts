@@ -217,7 +217,7 @@ export class RecentSalesWidget {
 
   protected readonly columnViewModels = computed<RecentSaleColumnViewModel[]>(() => this.columns().map((column) => this.toColumnViewModel(column)));
 
-  protected readonly saleViewModels = computed<RecentSaleViewModel[]>(() => this.sales().map((sale) => this.toSaleViewModel(sale)));
+  public readonly saleViewModels = computed<RecentSaleViewModel[]>(() => this.sales().map((sale) => this.toSaleViewModel(sale)));
 
   protected readonly emptyStateColumnSpan = computed(() => this.columnViewModels().length + (this.showViewAction() ? 1 : 0));
 
@@ -234,13 +234,13 @@ export class RecentSalesWidget {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected queueGlobalFilter(event: Event): void {
+  public queueGlobalFilter(event: Event): void {
     const target = event.target as HTMLInputElement | null;
 
     this.filterRequests.next(target?.value ?? '');
   }
 
-  protected exportSales(): void {
+  public exportSales(): void {
     this.salesTable()?.exportCSV();
 
     const event = { rows: this.sales(), columns: this.columns() };
@@ -248,7 +248,7 @@ export class RecentSalesWidget {
     this.eventsSubject.next({ type: 'export', ...event });
   }
 
-  protected selectSale(sale: RecentSaleViewModel): void {
+  public selectSale(sale: RecentSaleViewModel): void {
     const event = { sale: sale.source };
 
     this.saleSelected.emit(event);

@@ -109,7 +109,7 @@ export class TopProductsWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly productViewModels = computed(() =>
+  public readonly productViewModels = computed(() =>
     this.products()
       .slice(0, this.limit())
       .map((product) => this.toProductViewModel(product)),
@@ -119,7 +119,7 @@ export class TopProductsWidget {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectProduct(product: TopProduct): void {
+  public selectProduct(product: TopProduct): void {
     const event = { product };
 
     this.productSelected.emit(event);

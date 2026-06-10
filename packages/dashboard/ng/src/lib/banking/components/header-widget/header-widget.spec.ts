@@ -29,7 +29,7 @@ describe(HeaderWidget.name, () => {
     });
     fixture.detectChanges();
 
-    const viewModel = (fixture.componentInstance as unknown as { profileViewModel: () => { title: string; avatarAlt: string } }).profileViewModel();
+    const viewModel = fixture.componentInstance.profileViewModel();
 
     expect(viewModel.title).toBe('Welcome Maya');
     expect(viewModel.avatarAlt).toBe('Maya avatar');
@@ -46,7 +46,7 @@ describe(HeaderWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    (fixture.componentInstance as unknown as { selectAction(action: BankingHeaderAction): void }).selectAction(action);
+    fixture.componentInstance.selectAction(action);
 
     expect(selections).toEqual([{ action }]);
     expect(events).toEqual([{ type: 'action', action }]);

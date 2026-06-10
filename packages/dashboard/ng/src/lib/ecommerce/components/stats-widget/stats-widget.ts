@@ -191,13 +191,13 @@ export class StatsWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly metricViewModels = computed(() => this.metrics().map((metric) => this.toMetricViewModel(metric)));
+  public readonly metricViewModels = computed(() => this.metrics().map((metric) => this.toMetricViewModel(metric)));
 
   constructor() {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectMetric(metric: StatsMetric): void {
+  public selectMetric(metric: StatsMetric): void {
     const event = { metric };
 
     this.metricSelected.emit(event);

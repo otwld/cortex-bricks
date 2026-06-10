@@ -31,9 +31,7 @@ describe(StatsBankingWidget.name, () => {
     fixture.componentRef.setInput('cards', cards);
     fixture.detectChanges();
 
-    const viewModels = (
-      fixture.componentInstance as unknown as { cardViewModels: () => Array<{ id: string; wrapperClass: string; logoAlt: string }> }
-    ).cardViewModels();
+    const viewModels = fixture.componentInstance.cardViewModels();
 
     expect(fixture.nativeElement.textContent).toContain('Wallet');
     expect(viewModels[0].wrapperClass).toContain('xl:col-span-2');
@@ -49,9 +47,9 @@ describe(StatsBankingWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    const card = (fixture.componentInstance as unknown as { cardViewModels: () => BankingStatCard[] }).cardViewModels()[0];
+    const card = fixture.componentInstance.cardViewModels()[0];
     if (!card) throw new Error('Expected a demo banking stat view model.');
-    (fixture.componentInstance as unknown as { selectCard(card: BankingStatCard): void }).selectCard(card);
+    fixture.componentInstance.selectCard(card);
 
     expect(selections).toEqual([{ card }]);
     expect(events).toEqual([{ type: 'card', card }]);

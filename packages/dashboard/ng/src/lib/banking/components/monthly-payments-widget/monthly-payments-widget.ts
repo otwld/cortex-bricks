@@ -112,13 +112,13 @@ export class MonthlyPaymentsWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly paymentViewModels = computed(() => this.payments().map((payment) => this.toPaymentViewModel(payment)));
+  public readonly paymentViewModels = computed(() => this.payments().map((payment) => this.toPaymentViewModel(payment)));
 
   constructor() {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectPayment(payment: MonthlyPayment): void {
+  public selectPayment(payment: MonthlyPayment): void {
     const event = { payment };
 
     this.paymentSelected.emit(event);

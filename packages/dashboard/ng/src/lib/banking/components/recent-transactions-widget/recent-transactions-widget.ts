@@ -106,7 +106,7 @@ export class RecentTransactionsWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly transactionViewModels = computed(() =>
+  public readonly transactionViewModels = computed(() =>
     this.transactions()
       .slice(0, this.limit())
       .map((transaction) => this.toTransactionViewModel(transaction)),
@@ -116,7 +116,7 @@ export class RecentTransactionsWidget {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectTransaction(transaction: BankingTransaction): void {
+  public selectTransaction(transaction: BankingTransaction): void {
     const event = { transaction };
 
     this.transactionSelected.emit(event);

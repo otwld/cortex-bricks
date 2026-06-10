@@ -156,7 +156,7 @@ export class RevenueStreamWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly chartData: Signal<ChartData<'bar'>> = computed<ChartData<'bar'>>(() => {
+  public readonly chartData: Signal<ChartData<'bar'>> = computed<ChartData<'bar'>>(() => {
     this.themeKey();
 
     return {
@@ -165,7 +165,7 @@ export class RevenueStreamWidget {
     };
   });
 
-  protected readonly resolvedChartOptions: Signal<ChartOptions<'bar'>> = computed<ChartOptions<'bar'>>(() => {
+  public readonly resolvedChartOptions: Signal<ChartOptions<'bar'>> = computed<ChartOptions<'bar'>>(() => {
     this.themeKey();
 
     return this.options() ?? this.defaultChartOptions();
@@ -175,7 +175,7 @@ export class RevenueStreamWidget {
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }
 
-  protected selectChartData(event: unknown): void {
+  public selectChartData(event: unknown): void {
     this.dataSelected.emit({ event });
     this.eventsSubject.next({ type: 'data', event });
   }

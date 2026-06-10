@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { MenuItem } from 'primeng/api';
 
 import {
   EcommerceNotification,
@@ -71,7 +70,7 @@ describe(NotificationsWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => streamEvents.push(event));
     fixture.detectChanges();
 
-    const menuItems = (fixture.componentInstance as unknown as { menuItems: () => MenuItem[] }).menuItems();
+    const menuItems = fixture.componentInstance.menuItems();
     menuItems[0].command?.({ originalEvent: new Event('click'), item: menuItems[0] });
 
     expect(actionEvents).toEqual([{ action }]);

@@ -37,7 +37,7 @@ describe(RecentTransactionsTwoWidget.name, () => {
     fixture.componentRef.setInput('recipients', recipients);
     fixture.detectChanges();
 
-    const rows = (fixture.componentInstance as unknown as { recipientRows: () => BankingRecipient[][] }).recipientRows();
+    const rows = fixture.componentInstance.recipientRows();
 
     expect(rows.length).toBe(2);
     expect(rows[0].map((recipient) => recipient.id)).toEqual(['one', 'two']);
@@ -61,19 +61,12 @@ describe(RecentTransactionsTwoWidget.name, () => {
     fixture.componentInstance.events$.subscribe((event) => events.push(event));
     fixture.detectChanges();
 
-    const recipient = (fixture.componentInstance as unknown as { recipientViewModels: () => BankingRecipient[] }).recipientViewModels()[0];
+    const recipient = fixture.componentInstance.recipientViewModels()[0];
     if (!recipient) throw new Error('Expected a demo recipient view model.');
-    const component = fixture.componentInstance as unknown as {
-      selectRecipient(recipient: BankingRecipient): void;
-      changeAmount(amount: number): void;
-      requestAdd(): void;
-      sendPayment(): void;
-    };
-
-    component.selectRecipient(recipient);
-    component.changeAmount(250);
-    component.requestAdd();
-    component.sendPayment();
+    fixture.componentInstance.selectRecipient(recipient);
+    fixture.componentInstance.changeAmount(250);
+    fixture.componentInstance.requestAdd();
+    fixture.componentInstance.sendPayment();
 
     expect(recipientSelections).toEqual([{ recipient }]);
     expect(amountChanges).toEqual([{ amount: 250 }]);
