@@ -2,12 +2,10 @@
   "name": "@otwld/ng-websocket",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "~21.2.0",
     "@angular/core": "~21.2.0",
     "@otwld/ts-websocket": "workspace:0.0.1",
     "rxjs": "~7.8.0",
-    "socket.io-client": "^4.8.3",
-    "zod": "^3.24.0"
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~21.2.0",
@@ -23,7 +21,8 @@
     "ng-packagr": "~21.2.0",
     "nx": "22.7.0",
     "typescript": "~5.9.2",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "zod": "^3.24.0"
   },
   "sideEffects": false,
   "nx": {

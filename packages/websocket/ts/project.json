@@ -29,8 +29,12 @@
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx tsd packages/websocket/ts"
+        "command": "tsc -p packages/websocket/ts/tsconfig.lib.json --noEmit && tsd packages/websocket/ts",
+        "forwardAllArgs": false
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

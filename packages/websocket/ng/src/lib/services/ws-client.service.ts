@@ -11,7 +11,7 @@ import {
   type RoomId,
   type S2cKeys,
 } from '@otwld/ts-websocket';
-import { Subject, type Observable } from 'rxjs';
+import { filter, Subject, Subscription, type Observable } from 'rxjs';
 import type { EmitOptions } from '../models/emit-options.model';
 import type { RoomHandle } from '../models/room-handle.model';
 import { DEFAULT_RECONNECT_STRATEGY, type WsConfig } from '../models/ws-config.model';
@@ -36,6 +36,7 @@ export class WsClient<TContract extends Contract> {
   private readonly errors = new Subject<WsError>();
   private readonly stateWritable = signal(ConnectionState.Disconnected);
   private readonly closed$ = new Subject<void>();
+  private readonly subscriptions = new Subscription();
 
   /** Internal presence tracker exposed for `PresenceService` provider factory. */
   public readonly presenceTracker: PresenceTracker;
@@ -77,30 +78,36 @@ export class WsClient<TContract extends Contract> {
     const connect$ = new Subject<void>();
     const disconnect$ = new Subject<string>();
     const reconnectAttempt$ = new Subject<number>();
-    this.adapter.connect$.subscribe(() => {
-      this.reconnect.stop();
-      this.reconnectAttempt.set(0);
-      connect$.next();
-    });
-    this.adapter.disconnect$.subscribe((reason) => {
-      disconnect$.next(reason);
-      if (this.machine.current !== ConnectionState.Closed) {
-        this.reconnect.start();
-      }
-    });
-    this.adapter.error$.subscribe((err) => {
-      this.connectionError.set(err);
-      this.errors.next(new WsError({ kind: WsErrorKind.Transport, message: err.message }));
+    this.subscriptions.add(
+      this.adapter.connect$.subscribe(() => {
+        this.reconnect.stop();
+        this.reconnectAttempt.set(0);
+        connect$.next();
+      }),
+    );
+    this.subscriptions.add(
+      this.adapter.disconnect$.subscribe((reason) => {
+        disconnect$.next(reason);
+        if (this.machine.current !== ConnectionState.Closed) {
+          this.reconnect.start();
+        }
+      }),
+    );
+    this.subscriptions.add(
+      this.adapter.error$.subscribe((err) => {
+        this.connectionError.set(err);
+        this.errors.next(new WsError({ kind: WsErrorKind.Transport, message: err.message }));
 
-      const authAdapter = this.config.auth?.adapter;
-      const decision =
-        authAdapter?.onConnectError?.(err) ??
-        (this.config.auth?.reauthOnConnectError ? 'retry' : 'silent');
+        const authAdapter = this.config.auth?.adapter;
+        const decision =
+          authAdapter?.onConnectError?.(err) ??
+          (this.config.auth?.reauthOnConnectError ? 'retry' : 'silent');
 
-      if (decision === 'retry') {
-        void this.refreshTokenAndConnect();
-      }
-    });
+        if (decision === 'retry') {
+          void this.refreshTokenAndConnect();
+        }
+      }),
+    );
 
     this.machine = new ConnectionStateMachine({
       connect$,
@@ -108,19 +115,16 @@ export class WsClient<TContract extends Contract> {
       reconnectAttempt$,
       closed$: this.closed$,
     });
-    this.machine.state$.subscribe((state) => this.stateWritable.set(state));
+    this.subscriptions.add(this.machine.state$.subscribe((state) => this.stateWritable.set(state)));
+    this.subscriptions.add(() => this.machine.destroy());
     this.transport = computed(() =>
       this.state() === ConnectionState.Connected
         ? (this.adapter.transportName as 'websocket' | 'polling' | null)
         : null,
     );
 
-    this.multiplexer = new EventMultiplexer<TContract>(contract, (pattern) => {
-      const subject = new Subject<unknown>();
-      this.adapter.event$(pattern).subscribe((value) => subject.next(value));
-      return subject;
-    });
-    this.multiplexer.errors$.subscribe((err) => this.errors.next(err));
+    this.multiplexer = new EventMultiplexer<TContract>(contract, (pattern) => this.adapter.event$(pattern));
+    this.subscriptions.add(this.multiplexer.errors$.subscribe((err) => this.errors.next(err)));
 
     this.reconnect = new ReconnectController(
       config.reconnect ?? DEFAULT_RECONNECT_STRATEGY,
@@ -131,11 +135,10 @@ export class WsClient<TContract extends Contract> {
       },
     );
 
-    const presence$ = new Subject<PresenceUpdatePayload>();
-    this.adapter.event$('presence:update').subscribe((value) => {
-      if (isPresenceUpdate(value)) presence$.next(value);
-    });
-    this.presenceTracker = new PresenceTracker(presence$);
+    this.presenceTracker = new PresenceTracker(
+      this.adapter.event$('presence:update').pipe(filter(isPresenceUpdate)),
+    );
+    this.subscriptions.add(() => this.presenceTracker.destroy());
 
     if (config.autoConnect ?? true) {
       this.machine.beginConnecting();
@@ -155,6 +158,9 @@ export class WsClient<TContract extends Contract> {
     this.reconnect.stop();
     this.acks.flushAll(new WsError({ kind: WsErrorKind.Transport, message: 'Client closed' }));
     this.adapter.close();
+    this.subscriptions.unsubscribe();
+    this.errors.complete();
+    this.closed$.complete();
   }
 
   /**
@@ -176,17 +182,6 @@ export class WsClient<TContract extends Contract> {
    * @param event Ack-able client event definition.
    * @param payload Payload to send.
    * @param options Emit options.
-   */
-  /**
-   * Runs emit with ack.
-   *
-   * @param event - event value.
-   *
-   * @param payload - payload value.
-   *
-   * @param options - options value.
-   *
-   * @returns The ws client emit with ack result.
    */
   public emitWithAck<K extends C2sAckKeys<TContract>>(
     event: TContract['c2s'][K],
@@ -210,13 +205,6 @@ export class WsClient<TContract extends Contract> {
    *
    * @param event Server event definition.
    */
-  /**
-   * Runs on.
-   *
-   * @param event - event value.
-   *
-   * @returns The ws client on result.
-   */
   public on<K extends S2cKeys<TContract>>(
     event: TContract['s2c'][K],
   ): Observable<PayloadOf<TContract['s2c'][K]>> {
@@ -229,21 +217,12 @@ export class WsClient<TContract extends Contract> {
    * @param event Server event definition.
    * @param initialValue Initial value.
    */
-  /**
-   * Runs signal.
-   *
-   * @param event - event value.
-   *
-   * @param initialValue - initial value value.
-   *
-   * @returns The ws client signal result.
-   */
   public signal<K extends S2cKeys<TContract>>(
     event: TContract['s2c'][K],
     initialValue: PayloadOf<TContract['s2c'][K]>,
   ): Signal<PayloadOf<TContract['s2c'][K]>> {
     const current = signal(initialValue);
-    this.on(event).subscribe((value) => current.set(value));
+    this.subscriptions.add(this.on(event).subscribe((value) => current.set(value)));
     return current.asReadonly();
   }
 
@@ -251,13 +230,6 @@ export class WsClient<TContract extends Contract> {
    * Build a room handle.
    *
    * @param id Room id.
-   */
-  /**
-   * Runs room.
-   *
-   * @param id - id value.
-   *
-   * @returns The ws client room result.
    */
   public room(id: RoomId): RoomHandle<TContract> {
     const joined = signal(false);

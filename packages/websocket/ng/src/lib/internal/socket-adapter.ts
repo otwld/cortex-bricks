@@ -1,4 +1,4 @@
-import { fromEvent, Observable, share, Subject } from 'rxjs';
+import { fromEvent, Observable, share } from 'rxjs';
 
 /**
  * Subset of the Socket.IO client API used by the adapter.
@@ -36,7 +36,7 @@ export class SocketAdapter {
   /** Stream that emits transport errors. */
   public readonly error$: Observable<Error>;
 
-  private readonly perPattern = new Map<string, Subject<unknown>>();
+  private readonly perPattern = new Map<string, Observable<unknown>>();
 
   /**
    * @param url Server URL.
@@ -63,13 +63,12 @@ export class SocketAdapter {
    * @param pattern Event pattern.
    */
   public event$<T = unknown>(pattern: string): Observable<T> {
-    let subject = this.perPattern.get(pattern);
-    if (!subject) {
-      subject = new Subject<unknown>();
-      this.perPattern.set(pattern, subject);
-      this.socket.on(pattern, (...args: unknown[]) => subject?.next(args[0]));
+    let stream$ = this.perPattern.get(pattern);
+    if (!stream$) {
+      stream$ = fromEvent<unknown>(asEmitter(this.socket), pattern).pipe(share());
+      this.perPattern.set(pattern, stream$);
     }
-    return subject.asObservable() as Observable<T>;
+    return stream$ as Observable<T>;
   }
 
   /** Emit fire-and-forget. */

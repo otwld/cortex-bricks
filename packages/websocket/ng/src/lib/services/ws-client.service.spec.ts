@@ -42,7 +42,19 @@ function fakeSocketFactory(): {
     on: vi.fn((event: string, listener: Listener) => {
       handlers.set(event, [...(handlers.get(event) ?? []), listener]);
     }),
-    off: vi.fn(),
+    off: vi.fn((event: string, listener?: Listener) => {
+      if (!listener) {
+        handlers.delete(event);
+        return;
+      }
+
+      const nextHandlers = (handlers.get(event) ?? []).filter((handler) => handler !== listener);
+      if (nextHandlers.length === 0) {
+        handlers.delete(event);
+      } else {
+        handlers.set(event, nextHandlers);
+      }
+    }),
     emit: vi.fn((event: string, ...args: unknown[]) => {
       emitted.push({ event, args });
     }),
@@ -212,6 +224,26 @@ describe('WsClient', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it('tears down socket subscriptions after disconnect', async () => {
+    const fake = fakeSocketFactory();
+    const client = new WsClient(contract, { url: 'http://api', autoConnect: false }, fake.factory);
+    const latestMessage = client.signal(contract.s2c.msg, { id: 'initial', text: 'initial' });
+    const room = client.room('r1');
+
+    fake.trigger('chat.message', { id: 'before-disconnect', text: 'hello' });
+    expect(latestMessage()).toEqual({ id: 'before-disconnect', text: 'hello' });
+
+    await client.disconnect();
+    fake.trigger('connect');
+    fake.trigger('chat.message', { id: 'after-disconnect', text: 'ignored' });
+    fake.trigger('presence:update', { room: 'r1', members: [{ id: 'u1' }] });
+
+    expect(client.state()).toBe(ConnectionState.Closed);
+    expect(latestMessage()).toEqual({ id: 'before-disconnect', text: 'hello' });
+    expect(room.members()).toEqual([]);
+    expect(fake.socket.off).toHaveBeenCalled();
   });
 
   it('uses auth onConnectError retry hook', async () => {

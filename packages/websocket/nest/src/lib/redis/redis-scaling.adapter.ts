@@ -29,13 +29,6 @@ export class RedisScalingAdapter extends WsScalingAdapter {
    *
    * @param options Redis adapter options.
    */
-  /**
-   * Runs create.
-   *
-   * @param options - options value.
-   *
-   * @returns The redis scaling adapter create result.
-   */
   public static create(
     options: RedisScalingAdapterOptions,
   ): RedisScalingAdapter {

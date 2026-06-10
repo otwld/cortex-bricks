@@ -14,6 +14,7 @@ export default [
           ignoredDependencies: ['@nestjs/core', '@nestjs/platform-socket.io'],
           ignoredFiles: [
             '{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}',
+            '{projectRoot}/vitest.config.{js,cjs,mjs,ts,cts,mts}',
             '{projectRoot}/src/**/*.spec.ts',
           ],
         },

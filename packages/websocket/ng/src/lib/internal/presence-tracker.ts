@@ -1,6 +1,6 @@
 import { signal, type Signal, type WritableSignal } from '@angular/core';
 import type { RoomId } from '@otwld/ts-websocket';
-import type { Observable } from 'rxjs';
+import { type Observable, type Subscription } from 'rxjs';
 import type { UserContextSnapshot } from '../models/user-context-snapshot.model';
 
 /** Shape of the `presence:update` broadcast payload. */
@@ -16,12 +16,13 @@ export interface PresenceUpdatePayload {
  */
 export class PresenceTracker {
   private readonly perRoom = new Map<RoomId, WritableSignal<readonly UserContextSnapshot[]>>();
+  private readonly subscription: Subscription;
 
   /**
    * @param stream$ Observable of presence updates.
    */
   public constructor(stream$: Observable<PresenceUpdatePayload>) {
-    stream$.subscribe(({ room, members }) => this.ensure(room).set([...members]));
+    this.subscription = stream$.subscribe(({ room, members }) => this.ensure(room).set([...members]));
   }
 
   /**
@@ -31,6 +32,11 @@ export class PresenceTracker {
    */
   public signalFor(room: RoomId): Signal<readonly UserContextSnapshot[]> {
     return this.ensure(room).asReadonly();
+  }
+
+  /** Release the presence update subscription. */
+  public destroy(): void {
+    this.subscription.unsubscribe();
   }
 
   private ensure(room: RoomId): WritableSignal<readonly UserContextSnapshot[]> {

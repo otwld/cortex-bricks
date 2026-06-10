@@ -9,7 +9,7 @@ import {
 import { Observable, Subject, type Observer } from 'rxjs';
 
 /** Source factory for raw event streams keyed by pattern. */
-export type RawEventSource = (pattern: string) => Subject<unknown>;
+export type RawEventSource = (pattern: string) => Observable<unknown>;
 
 /**
  * Multiplexes raw socket events into validated per-event observables.

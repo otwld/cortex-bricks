@@ -18,10 +18,12 @@
   },
   "devDependencies": {
     "@nestjs/testing": "^11.0.0",
+    "@nx/eslint": "22.7.0",
     "@nx/js": "22.7.0",
     "@nx/vite": "22.7.0",
     "@nx/vitest": "22.7.0",
     "@types/node": "20.19.9",
+    "eslint": "^9.8.0",
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "22.7.0",
     "socket.io-client": "^4.8.3",
