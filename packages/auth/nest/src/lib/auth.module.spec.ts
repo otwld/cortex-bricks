@@ -1,3 +1,4 @@
+import { createMongoAbility } from '@casl/ability';
 import { DynamicModule, Provider } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Schema } from 'mongoose';
@@ -11,7 +12,7 @@ import { User } from './user/user.schema';
 
 class TestAbilityFactory extends CaslAbilityFactory {
   createForUser() {
-    return {} as never;
+    return createMongoAbility();
   }
 }
 

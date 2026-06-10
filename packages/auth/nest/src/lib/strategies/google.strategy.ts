@@ -5,6 +5,19 @@ import { AUTH_MODULE_OPTIONS, AuthModuleOptions } from '../config/auth-module-op
 import { UserService } from '../user/user.service';
 
 /**
+ * Resolves Google OAuth options or fails before Passport strategy setup.
+ *
+ * @param options - Auth module options that should include Google OAuth settings.
+ * @returns Google OAuth configuration for Passport.
+ */
+function requireGoogleOptions(options: AuthModuleOptions): NonNullable<AuthModuleOptions['google']> {
+  if (!options.google) {
+    throw new Error('Google OAuth strategy requires AuthModuleOptions.google.');
+  }
+  return options.google;
+}
+
+/**
  * Passport strategy that authenticates users with Google OAuth.
  *
  * @example
@@ -28,10 +41,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     @Inject(AUTH_MODULE_OPTIONS) options: AuthModuleOptions,
     private readonly userService: UserService,
   ) {
+    const google = requireGoogleOptions(options);
     super({
-      clientID: options.google!.clientId,
-      clientSecret: options.google!.clientSecret,
-      callbackURL: options.google!.callbackUrl,
+      clientID: google.clientId,
+      clientSecret: google.clientSecret,
+      callbackURL: google.callbackUrl,
       scope: ['email', 'profile'],
     });
   }

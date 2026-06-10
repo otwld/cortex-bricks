@@ -12,7 +12,7 @@ describe('authInterceptor', () => {
     const refresh = vi.fn(() => refreshResult.asObservable());
     const clearUser = vi.fn();
     const navigateByUrl = vi.fn().mockResolvedValue(true);
-    const backend: HttpHandlerFn = vi.fn(() => throwError(() => initialUnauthorized)) as unknown as HttpHandlerFn;
+    const backend = vi.fn<HttpHandlerFn>(() => throwError(() => initialUnauthorized));
 
     TestBed.configureTestingModule({
       providers: [

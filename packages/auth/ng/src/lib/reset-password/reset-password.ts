@@ -96,14 +96,14 @@ export class ResetPasswordPage implements OnInit {
    *
    * Expected values are a non-empty message string when reset fails or `null` when no error is shown.
    */
-  protected readonly error = signal<string | null>(null);
+  readonly error = signal<string | null>(null);
 
   /**
    * Password replacement form.
    *
    * The `password` control accepts strings of at least eight characters and `confirm` must match it.
    */
-  protected readonly form = new FormGroup({
+  readonly form = new FormGroup({
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     confirm: new FormControl('', [Validators.required]),
   });
@@ -125,7 +125,7 @@ export class ResetPasswordPage implements OnInit {
    * </form>
    * ```
    */
-  protected submit(): void {
+  submit(): void {
     const { password, confirm } = this.form.value;
     if (password !== confirm) { this.error.set('Passwords do not match'); return; }
 

@@ -3,10 +3,32 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { createMongoAbility } from '@casl/ability';
+import { Types } from 'mongoose';
 import { AuthService } from './auth.service';
+import { CaslAbilityFactory } from './casl/casl-ability.factory';
 import { AuthModuleOptions } from './config/auth-module-options';
+import type { AuthRedirectResponse } from './tokens/token.service';
 import { UserDocument } from './user/user.schema';
+
+class TestAbilityFactory extends CaslAbilityFactory {
+  createForUser() {
+    return createMongoAbility();
+  }
+}
+
+type AuthUserServiceMock = ConstructorParameters<typeof AuthService>[0];
+type AuthTokenServiceMock = ConstructorParameters<typeof AuthService>[1];
+type AuthRefreshTokenRepositoryMock = ConstructorParameters<typeof AuthService>[2];
+
+const USER_ID = '000000000000000000000001';
+const REGISTERED_USER_ID = '000000000000000000000002';
+
+class AuthResponseMock implements AuthRedirectResponse {
+  public readonly redirect = vi.fn(() => undefined);
+  public readonly cookie = vi.fn(() => this);
+  public readonly clearCookie = vi.fn(() => this);
+}
 
 describe(AuthService.name, () => {
   const originalNodeEnv = process.env['NODE_ENV'];
@@ -18,13 +40,17 @@ describe(AuthService.name, () => {
 
   function createUser(overrides: Partial<UserDocument> = {}) {
     return {
-      _id: 'user-1',
+      _id: new Types.ObjectId(USER_ID),
       email: 'dev@example.com',
       emailVerified: true,
       roles: [],
       permissions: ['*'],
       ...overrides,
     } as UserDocument;
+  }
+
+  function createResponse(): AuthResponseMock {
+    return new AuthResponseMock();
   }
 
   function createService(options: Partial<AuthModuleOptions> = {}) {
@@ -40,30 +66,31 @@ describe(AuthService.name, () => {
       setPassword: vi.fn(),
       setEmailVerified: vi.fn(),
       setEmailVerificationToken: vi.fn(),
-    };
+    } satisfies AuthUserServiceMock;
     const tokenService = {
       signAccessToken: vi.fn().mockReturnValue('access-jwt'),
       signRefreshToken: vi.fn().mockReturnValue('refresh-jwt'),
       verifyRefreshToken: vi
         .fn()
-        .mockReturnValue({ sub: 'user-1', email: 'dev@example.com' }),
+        .mockReturnValue({ sub: USER_ID, email: 'dev@example.com' }),
       hashToken: vi.fn((token: string) => `hash:${token}`),
       setAuthCookies: vi.fn(),
-    };
+      clearAuthCookies: vi.fn(),
+    } satisfies AuthTokenServiceMock;
     const refreshTokenRepository = {
       create: vi.fn(),
       findByHash: vi.fn(),
       revokeById: vi.fn(),
       revokeAllForUser: vi.fn(),
-    };
+    } satisfies AuthRefreshTokenRepositoryMock;
     const service = new AuthService(
-      userService as any,
-      tokenService as any,
-      refreshTokenRepository as any,
+      userService,
+      tokenService,
+      refreshTokenRepository,
       {
         jwtSecret: 'access-secret',
         jwtRefreshSecret: 'refresh-secret',
-        abilityFactory: class {} as any,
+        abilityFactory: TestAbilityFactory,
         ...options,
       },
     );
@@ -85,17 +112,17 @@ describe(AuthService.name, () => {
     } as Partial<AuthModuleOptions>);
     const user = createUser();
     userService.findByEmail.mockResolvedValue(user);
-    const res = {} as Response;
+    const res = createResponse();
 
     await expect(
-      (service as any).devLogin(
+      service.devLogin(
         { email: 'dev@example.com', password: 'password' },
         res,
       ),
     ).resolves.toBe(user);
 
     expect(userService.create).not.toHaveBeenCalled();
-    expect(userService.setLastLogin).toHaveBeenCalledWith('user-1');
+    expect(userService.setLastLogin).toHaveBeenCalledWith(USER_ID);
     expect(tokenService.setAuthCookies).toHaveBeenCalledWith(
       res,
       'access-jwt',
@@ -122,9 +149,9 @@ describe(AuthService.name, () => {
     userService.findByEmail.mockResolvedValue(null);
     userService.create.mockResolvedValue(created);
 
-    await (service as any).devLogin(
+    await service.devLogin(
       { email: 'dev@example.com', password: 'password' },
-      {} as Response,
+      createResponse(),
     );
 
     expect(userService.create).toHaveBeenCalledWith({
@@ -148,9 +175,9 @@ describe(AuthService.name, () => {
     } as Partial<AuthModuleOptions>);
 
     await expect(
-      (service as any).devLogin(
+      service.devLogin(
         { email: 'dev@example.com', password: 'password' },
-        {} as Response,
+        createResponse(),
       ),
     ).rejects.toBeInstanceOf(ForbiddenException);
   });
@@ -166,9 +193,9 @@ describe(AuthService.name, () => {
     } as Partial<AuthModuleOptions>);
 
     await expect(
-      (service as any).devLogin(
+      service.devLogin(
         { email: 'dev@example.com', password: 'wrong' },
-        {} as Response,
+        createResponse(),
       ),
     ).rejects.toBeInstanceOf(UnauthorizedException);
   });
@@ -177,17 +204,17 @@ describe(AuthService.name, () => {
     const { service, tokenService, refreshTokenRepository } = createService();
     const user = createUser();
 
-    await service.login(user, {} as Response);
+    await service.login(user, createResponse());
 
     expect(tokenService.signRefreshToken).toHaveBeenCalledWith(
       expect.objectContaining({
-        sub: 'user-1',
+        sub: USER_ID,
         email: 'dev@example.com',
         jti: expect.any(String),
       }),
     );
     expect(refreshTokenRepository.create).toHaveBeenCalledWith(
-      'user-1',
+      USER_ID,
       'hash:refresh-jwt',
       expect.any(Date),
       undefined,
@@ -205,7 +232,7 @@ describe(AuthService.name, () => {
 
   it('uses configured refreshTokenTtl for the refresh cookie maxAge', async () => {
     const { service, tokenService } = createService({ refreshTokenTtl: '2h' });
-    const res = {} as Response;
+    const res = createResponse();
 
     await service.login(createUser(), res);
 
@@ -224,18 +251,18 @@ describe(AuthService.name, () => {
     );
     const user = createUser();
 
-    await service.login(user, {} as Response);
-    await service.login(user, {} as Response);
+    await service.login(user, createResponse());
+    await service.login(user, createResponse());
 
     const firstPayload = tokenService.signRefreshToken.mock.calls[0][0];
     const secondPayload = tokenService.signRefreshToken.mock.calls[1][0];
     expect(firstPayload).toMatchObject({
-      sub: 'user-1',
+      sub: USER_ID,
       email: 'dev@example.com',
       jti: expect.any(String),
     });
     expect(secondPayload).toMatchObject({
-      sub: 'user-1',
+      sub: USER_ID,
       email: 'dev@example.com',
       jti: expect.any(String),
     });
@@ -265,11 +292,11 @@ describe(AuthService.name, () => {
     const { service, userService } = createService({ mail: { onRegistered } });
     userService.findByEmail.mockResolvedValue(null);
     userService.hashPassword.mockResolvedValue('hashed');
-    userService.create.mockResolvedValue({
-      _id: 'u1',
+    userService.create.mockResolvedValue(createUser({
+      _id: new Types.ObjectId(REGISTERED_USER_ID),
       email: 'user@example.com',
       firstName: 'Alice',
-    } as any);
+    }));
 
     await service.register({ email: 'user@example.com', password: 'pass' });
 
@@ -287,11 +314,11 @@ describe(AuthService.name, () => {
     const { service, userService } = createService({ mail: { onRegistered } });
     userService.findByEmail.mockResolvedValue(null);
     userService.hashPassword.mockResolvedValue('hashed');
-    userService.create.mockResolvedValue({
-      _id: 'u1',
+    userService.create.mockResolvedValue(createUser({
+      _id: new Types.ObjectId(REGISTERED_USER_ID),
       email: 'user@example.com',
       firstName: 'Alice',
-    } as any);
+    }));
 
     await service.register({
       email: 'user@example.com',
@@ -314,11 +341,11 @@ describe(AuthService.name, () => {
       .spyOn(Logger.prototype, 'warn')
       .mockImplementation(() => undefined);
     const { service, userService } = createService({ mail: { onRegistered } });
-    const user = {
-      _id: 'u1',
+    const user = createUser({
+      _id: new Types.ObjectId(REGISTERED_USER_ID),
       email: 'user@example.com',
       firstName: 'Alice',
-    } as any;
+    });
     userService.findByEmail.mockResolvedValue(null);
     userService.hashPassword.mockResolvedValue('hashed');
     userService.create.mockResolvedValue(user);
@@ -336,10 +363,10 @@ describe(AuthService.name, () => {
     const { service, userService } = createService();
     userService.findByEmail.mockResolvedValue(null);
     userService.hashPassword.mockResolvedValue('hashed');
-    userService.create.mockResolvedValue({
-      _id: 'u1',
+    userService.create.mockResolvedValue(createUser({
+      _id: new Types.ObjectId(REGISTERED_USER_ID),
       email: 'user@example.com',
-    } as any);
+    }));
 
     await expect(
       service.register({ email: 'user@example.com', password: 'pass' }),
@@ -378,10 +405,10 @@ describe(AuthService.name, () => {
       'hash:raw-reset-token',
     );
     expect(userService.setPassword).toHaveBeenCalledWith(
-      'user-1',
+      USER_ID,
       'new-password-hash',
     );
-    expect(userService.clearPasswordResetToken).toHaveBeenCalledWith('user-1');
+    expect(userService.clearPasswordResetToken).toHaveBeenCalledWith(USER_ID);
     expect(tokenService.hashToken).toHaveBeenCalledWith('raw-reset-token');
   });
 
@@ -417,10 +444,10 @@ describe(AuthService.name, () => {
       }),
     );
 
-    await service.verifyEmail('user-1', '123456');
+    await service.verifyEmail(USER_ID, '123456');
 
     expect(tokenService.hashToken).toHaveBeenCalledWith('123456');
-    expect(userService.setEmailVerified).toHaveBeenCalledWith('user-1');
+    expect(userService.setEmailVerified).toHaveBeenCalledWith(USER_ID);
   });
 
   it('calls onVerificationResent callback after generating new verification code', async () => {
@@ -432,12 +459,12 @@ describe(AuthService.name, () => {
       createUser({ email: 'dev@example.com', firstName: 'Dev' }),
     );
 
-    await service.resendVerification('user-1');
+    await service.resendVerification(USER_ID);
 
     const mailed = onVerificationResent.mock.calls[0][0];
     expect(mailed.verificationToken).toMatch(/^\d{6}$/);
     expect(userService.setEmailVerificationToken).toHaveBeenCalledWith(
-      'user-1',
+      USER_ID,
       `hash:${mailed.verificationToken}`,
       expect.any(Date),
     );
@@ -454,11 +481,7 @@ describe(AuthService.name, () => {
       invitationOAuthRedirect: '/accept-invitation/oauth-complete',
     });
     const user = createUser();
-    const res = {
-      redirect: vi.fn(),
-      cookie: vi.fn(),
-      clearCookie: vi.fn(),
-    } as any;
+    const res = createResponse();
 
     await service.oauthCallback(user, res, undefined, undefined, 'oauth-state');
 
@@ -471,7 +494,7 @@ describe(AuthService.name, () => {
   it('uses the default OAuth redirect when no invitation cookie is present', async () => {
     const { service } = createService({ afterOAuthRedirect: '/dashboard' });
     const user = createUser();
-    const res = { redirect: vi.fn() } as any;
+    const res = createResponse();
 
     await service.oauthCallback(user, res);
 

@@ -8,7 +8,7 @@ describe(LocalStrategy.name, () => {
       findByEmailOrUsernameWithPassword: vi.fn().mockResolvedValue(user),
       validatePassword: vi.fn().mockResolvedValue(true),
     };
-    const strategy = new LocalStrategy(userService as any);
+    const strategy = new LocalStrategy(userService);
 
     await expect(strategy.validate('ada', 'secret')).resolves.toBe(user);
 
@@ -22,7 +22,7 @@ describe(LocalStrategy.name, () => {
       findByEmailOrUsernameWithPassword: vi.fn().mockResolvedValue(null),
       validatePassword: vi.fn(),
     };
-    const strategy = new LocalStrategy(userService as any);
+    const strategy = new LocalStrategy(userService);
 
     await expect(strategy.validate('missing', 'secret')).rejects.toBeInstanceOf(
       UnauthorizedException,

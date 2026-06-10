@@ -1,4 +1,6 @@
-import { InjectionToken, ModuleMetadata, Type } from '@nestjs/common';
+import { ModuleMetadata, Type } from '@nestjs/common';
+import type { FactoryProvider } from '@nestjs/common';
+import type { JwtSignOptions } from '@nestjs/jwt';
 import { Schema } from 'mongoose';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 
@@ -10,7 +12,7 @@ import { CaslAbilityFactory } from '../casl/casl-ability.factory';
  * providers: [{ provide: AUTH_MODULE_OPTIONS, useValue: options }]
  * ```
  */
-export const AUTH_MODULE_OPTIONS = 'AUTH_MODULE_OPTIONS' as unknown as InjectionToken;
+export const AUTH_MODULE_OPTIONS = Symbol('AUTH_MODULE_OPTIONS');
 
 /** Parameters passed to the `onRegistered` mail callback. */
 export interface AuthMailRegisteredParams {
@@ -202,24 +204,24 @@ export interface AuthModuleOptions {
   strategies?: string[];
 
   /**
-   * Access token time-to-live string.
+   * Access token time-to-live accepted by the underlying JWT signer.
    *
    * @example
    * ```ts
    * options.accessTokenTtl = '15m';
    * ```
    */
-  accessTokenTtl?: string;
+  accessTokenTtl?: JwtSignOptions['expiresIn'];
 
   /**
-   * Refresh token time-to-live string.
+   * Refresh token time-to-live accepted by the underlying JWT signer.
    *
    * @example
    * ```ts
    * options.refreshTokenTtl = '7d';
    * ```
    */
-  refreshTokenTtl?: string;
+  refreshTokenTtl?: JwtSignOptions['expiresIn'];
 
   /**
    * Redirect target used after successful OAuth callbacks.
@@ -288,7 +290,7 @@ export interface AuthModuleOptionsFactory {
 /** Options accepted by `AuthModule.forRootAsync`. */
 export interface AuthModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
   useFactory?: (...args: unknown[]) => Promise<AuthModuleOptions> | AuthModuleOptions;
-  inject?: unknown[];
+  inject?: FactoryProvider['inject'];
   useClass?: Type<AuthModuleOptionsFactory>;
   useExisting?: Type<AuthModuleOptionsFactory>;
 }

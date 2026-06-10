@@ -5,6 +5,19 @@ import { AUTH_MODULE_OPTIONS, AuthModuleOptions } from '../config/auth-module-op
 import { UserService } from '../user/user.service';
 
 /**
+ * Resolves GitHub OAuth options or fails before Passport strategy setup.
+ *
+ * @param options - Auth module options that should include GitHub OAuth settings.
+ * @returns GitHub OAuth configuration for Passport.
+ */
+function requireGithubOptions(options: AuthModuleOptions): NonNullable<AuthModuleOptions['github']> {
+  if (!options.github) {
+    throw new Error('GitHub OAuth strategy requires AuthModuleOptions.github.');
+  }
+  return options.github;
+}
+
+/**
  * Passport strategy that authenticates users with GitHub OAuth.
  *
  * @example
@@ -28,10 +41,11 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     @Inject(AUTH_MODULE_OPTIONS) options: AuthModuleOptions,
     private readonly userService: UserService,
   ) {
+    const github = requireGithubOptions(options);
     super({
-      clientID: options.github!.clientId,
-      clientSecret: options.github!.clientSecret,
-      callbackURL: options.github!.callbackUrl,
+      clientID: github.clientId,
+      clientSecret: github.clientSecret,
+      callbackURL: github.callbackUrl,
       scope: ['user:email'],
     });
   }

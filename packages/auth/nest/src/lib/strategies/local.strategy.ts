@@ -1,7 +1,13 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { UserService } from '../user/user.service';
+
+/** Minimal user-service surface required by local credential validation. */
+type LocalCredentialsUserService = Pick<
+  UserService,
+  'findByEmailOrUsernameWithPassword' | 'validatePassword'
+>;
 
 /**
  * Passport local strategy that validates email/username and password credentials.
@@ -22,7 +28,9 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
    * const strategy = new LocalStrategy(userService);
    * ```
    */
-  constructor(private readonly userService: UserService) {
+  constructor(
+    @Inject(UserService) private readonly userService: LocalCredentialsUserService,
+  ) {
     super({ usernameField: 'email' });
   }
 

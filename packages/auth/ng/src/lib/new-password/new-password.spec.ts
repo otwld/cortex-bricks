@@ -41,11 +41,7 @@ describe(NewPasswordPage.name, () => {
   });
 
   it('requires matching passwords before reset', () => {
-    const component = fixture.componentInstance as unknown as {
-      form: { setValue(value: { password: string; confirm: string }): void };
-      submit: () => void;
-      error: () => string | null;
-    };
+    const component = fixture.componentInstance;
     component.form.setValue({ password: 'new-password', confirm: 'other-password' });
 
     component.submit();
@@ -55,10 +51,7 @@ describe(NewPasswordPage.name, () => {
   });
 
   it('resets the password and returns to login without creating a session', () => {
-    const component = fixture.componentInstance as unknown as {
-      form: { setValue(value: { password: string; confirm: string }): void };
-      submit: () => void;
-    };
+    const component = fixture.componentInstance;
     component.form.setValue({ password: 'new-password', confirm: 'new-password' });
 
     component.submit();

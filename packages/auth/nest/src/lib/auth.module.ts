@@ -1,6 +1,7 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
+import type { JwtSignOptions } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
@@ -25,12 +26,22 @@ import { UserRepository } from './user/user.repository';
 import { User, UserSchema } from './user/user.schema';
 import { UserService } from './user/user.service';
 
+/**
+ * Creates JWT sign options while preserving the library-supported TTL type.
+ *
+ * @param expiresIn - Access or refresh token time-to-live accepted by jsonwebtoken.
+ * @returns Sign options for Nest JWT providers.
+ */
+function createJwtSignOptions(expiresIn: JwtSignOptions['expiresIn']): JwtSignOptions {
+  return { expiresIn };
+}
+
 function createAsyncOptionsProvider(asyncOptions: AuthModuleAsyncOptions): Provider {
   if (asyncOptions.useFactory) {
     return {
       provide: AUTH_MODULE_OPTIONS,
       useFactory: asyncOptions.useFactory,
-      inject: (asyncOptions.inject ?? []) as never[],
+      inject: asyncOptions.inject ?? [],
     };
   }
 
@@ -102,7 +113,7 @@ export class AuthModule {
           { name: User.name, schema: userSchema },
           { name: RefreshToken.name, schema: RefreshTokenSchema },
         ]),
-        JwtModule.register({ secret: options.jwtSecret, signOptions: { expiresIn: accessTtl as any } }),
+        JwtModule.register({ secret: options.jwtSecret, signOptions: createJwtSignOptions(accessTtl) }),
       ],
       controllers: [AuthController],
       providers: [
@@ -110,12 +121,12 @@ export class AuthModule {
         {
           provide: ACCESS_JWT_SERVICE,
           useFactory: () =>
-            new JwtService({ secret: options.jwtSecret, signOptions: { expiresIn: accessTtl as any } }),
+            new JwtService({ secret: options.jwtSecret, signOptions: createJwtSignOptions(accessTtl) }),
         },
         {
           provide: REFRESH_JWT_SERVICE,
           useFactory: () =>
-            new JwtService({ secret: options.jwtRefreshSecret, signOptions: { expiresIn: refreshTtl as any } }),
+            new JwtService({ secret: options.jwtRefreshSecret, signOptions: createJwtSignOptions(refreshTtl) }),
         },
         TokenService,
         UserRepository,
@@ -164,7 +175,7 @@ export class AuthModule {
           useFactory: (options: AuthModuleOptions) =>
             new JwtService({
               secret: options.jwtSecret,
-              signOptions: { expiresIn: (options.accessTokenTtl ?? '15m') as never },
+              signOptions: createJwtSignOptions(options.accessTokenTtl ?? '15m'),
             }),
           inject: [AUTH_MODULE_OPTIONS],
         },
@@ -173,7 +184,7 @@ export class AuthModule {
           useFactory: (options: AuthModuleOptions) =>
             new JwtService({
               secret: options.jwtRefreshSecret,
-              signOptions: { expiresIn: (options.refreshTokenTtl ?? '7d') as never },
+              signOptions: createJwtSignOptions(options.refreshTokenTtl ?? '7d'),
             }),
           inject: [AUTH_MODULE_OPTIONS],
         },

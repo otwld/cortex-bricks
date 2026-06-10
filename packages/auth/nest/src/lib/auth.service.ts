@@ -1,11 +1,44 @@
 import { BadRequestException, ForbiddenException, Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import type { JwtSignOptions } from '@nestjs/jwt';
 import { randomBytes, randomInt } from 'crypto';
-import { Response } from 'express';
 import { AUTH_MODULE_OPTIONS, AuthModuleOptions } from './config/auth-module-options';
 import { RefreshTokenRepository } from './tokens/refresh-token.repository';
-import { TokenService } from './tokens/token.service';
+import { AuthCookieResponse, AuthRedirectResponse, TokenService } from './tokens/token.service';
 import { UserDocument } from './user/user.schema';
 import { UserService } from './user/user.service';
+
+/** User operations required by auth workflows. */
+type AuthUserService = Pick<
+  UserService,
+  | 'findByEmail'
+  | 'create'
+  | 'setLastLogin'
+  | 'findById'
+  | 'hashPassword'
+  | 'setPasswordResetToken'
+  | 'clearPasswordResetToken'
+  | 'findByPasswordResetTokenHash'
+  | 'setPassword'
+  | 'setEmailVerified'
+  | 'setEmailVerificationToken'
+>;
+
+/** Token operations required by auth workflows. */
+type AuthTokenService = Pick<
+  TokenService,
+  | 'signAccessToken'
+  | 'signRefreshToken'
+  | 'verifyRefreshToken'
+  | 'hashToken'
+  | 'setAuthCookies'
+  | 'clearAuthCookies'
+>;
+
+/** Refresh-token persistence operations required by auth workflows. */
+type AuthRefreshTokenRepository = Pick<
+  RefreshTokenRepository,
+  'create' | 'findByHash' | 'revokeById' | 'revokeAllForUser'
+>;
 
 /**
  * Payload accepted when creating a local email/password account.
@@ -132,9 +165,9 @@ export class AuthService {
    * ```
    */
   constructor(
-    private readonly userService: UserService,
-    private readonly tokenService: TokenService,
-    private readonly refreshTokenRepository: RefreshTokenRepository,
+    @Inject(UserService) private readonly userService: AuthUserService,
+    @Inject(TokenService) private readonly tokenService: AuthTokenService,
+    @Inject(RefreshTokenRepository) private readonly refreshTokenRepository: AuthRefreshTokenRepository,
     @Inject(AUTH_MODULE_OPTIONS) private readonly options: AuthModuleOptions,
   ) {}
 
@@ -180,7 +213,7 @@ export class AuthService {
    * Starts an authenticated session for an already validated user.
    *
    * @param user - Authenticated user document.
-   * @param res - Express response used to write auth cookies.
+   * @param res - HTTP response used to write auth cookies.
    * @param userAgent - Optional user-agent captured with the refresh token.
    * @param ip - Optional source IP captured with the refresh token.
    * @returns The authenticated user document.
@@ -189,7 +222,7 @@ export class AuthService {
    * const user = await authService.login(currentUser, response, request.headers['user-agent'], request.ip);
    * ```
    */
-  async login(user: UserDocument, res: Response, userAgent?: string, ip?: string) {
+  async login(user: UserDocument, res: AuthCookieResponse, userAgent?: string, ip?: string) {
     await this.userService.setLastLogin(String(user._id));
 
     const payload = { sub: String(user._id), email: user.email };
@@ -209,7 +242,7 @@ export class AuthService {
    * Creates or resolves a configured development user and starts a normal auth session.
    *
    * @param dto - Development credentials supplied by the login form.
-   * @param res - Express response used to write auth cookies.
+   * @param res - HTTP response used to write auth cookies.
    * @param userAgent - Optional user-agent captured with the refresh token.
    * @param ip - Optional source IP captured with the refresh token.
    * @returns The authenticated development user.
@@ -220,7 +253,7 @@ export class AuthService {
    * await authService.devLogin({ email: 'dev@example.com', password: 'local-only' }, response);
    * ```
    */
-  async devLogin(dto: DevLoginDto, res: Response, userAgent?: string, ip?: string) {
+  async devLogin(dto: DevLoginDto, res: AuthCookieResponse, userAgent?: string, ip?: string) {
     const config = this.options.devLogin;
     if (process.env['NODE_ENV'] === 'production' || !config?.enabled) {
       throw new ForbiddenException('Development login is disabled');
@@ -250,14 +283,14 @@ export class AuthService {
    *
    * @param userId - Identifier for the user ending the session.
    * @param refreshTokenRaw - Optional raw refresh token read from the request cookie.
-   * @param res - Express response used to clear auth cookies.
+   * @param res - HTTP response used to clear auth cookies.
    * @returns Resolves after token revocation and cookie clearing finish.
    * @example
    * ```ts
    * await authService.logout(userId, request.cookies.refresh_token, response);
    * ```
    */
-  async logout(userId: string, refreshTokenRaw: string | undefined, res: Response) {
+  async logout(userId: string, refreshTokenRaw: string | undefined, res: AuthCookieResponse) {
     if (refreshTokenRaw) {
       const hash = this.tokenService.hashToken(refreshTokenRaw);
       const token = await this.refreshTokenRepository.findByHash(hash);
@@ -270,7 +303,7 @@ export class AuthService {
    * Rotates a refresh token and issues replacement auth cookies.
    *
    * @param rawRefreshToken - Raw refresh token from the request cookie.
-   * @param res - Express response used to write replacement auth cookies.
+   * @param res - HTTP response used to write replacement auth cookies.
    * @param userAgent - Optional user-agent captured with the new refresh token.
    * @param ip - Optional source IP captured with the new refresh token.
    * @returns The user document associated with the verified refresh token.
@@ -280,7 +313,7 @@ export class AuthService {
    * const user = await authService.refresh(request.cookies.refresh_token, response);
    * ```
    */
-  async refresh(rawRefreshToken: string, res: Response, userAgent?: string, ip?: string) {
+  async refresh(rawRefreshToken: string, res: AuthCookieResponse, userAgent?: string, ip?: string) {
     let payload;
     try {
       payload = this.tokenService.verifyRefreshToken(rawRefreshToken);
@@ -340,7 +373,7 @@ export class AuthService {
    * Completes an OAuth login by creating the session and redirecting the response.
    *
    * @param user - OAuth-authenticated user document.
-   * @param res - Express response used for cookies and redirect.
+   * @param res - HTTP response used for cookies and redirect.
    * @param userAgent - Optional user-agent captured with the refresh token.
    * @param ip - Optional source IP captured with the refresh token.
    * @param invitationState - Optional invitation OAuth state captured before OAuth started.
@@ -350,7 +383,7 @@ export class AuthService {
    * await authService.oauthCallback(user, response, request.headers['user-agent'], request.ip);
    * ```
    */
-  async oauthCallback(user: UserDocument, res: Response, userAgent?: string, ip?: string, invitationState?: string) {
+  async oauthCallback(user: UserDocument, res: AuthRedirectResponse, userAgent?: string, ip?: string, invitationState?: string) {
     await this.login(user, res, userAgent, ip);
 
     if (invitationState) {
@@ -473,14 +506,16 @@ export class AuthService {
   /**
    * Converts a compact ttl value into milliseconds.
    *
-   * @param ttl - Duration string using s, m, h, or d units.
+   * @param ttl - JWT duration as seconds or a compact s, m, h, or d string.
    * @returns The parsed millisecond duration, or seven days for invalid input.
    * @example
    * ```ts
    * const ttlMs = this.parseTtlMs('7d');
    * ```
    */
-  private parseTtlMs(ttl: string): number {
+  private parseTtlMs(ttl: NonNullable<JwtSignOptions['expiresIn']>): number {
+    if (typeof ttl === 'number') return ttl * 1000;
+
     const match = ttl.match(/^(\d+)([smhd])$/);
     if (!match) return 7 * 24 * 60 * 60 * 1000;
     const val = parseInt(match[1], 10);

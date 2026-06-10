@@ -4,6 +4,7 @@ export { CaslAbilityFactory } from './lib/casl/casl-ability.factory';
 export { CheckPolicies } from './lib/casl/check-policies.decorator';
 export { AnyPolicyHandler, PolicyHandler, PolicyHandlerFn } from './lib/casl/policy-handler';
 export {
+  AUTH_MODULE_OPTIONS,
   AuthMailForgotPasswordParams,
   AuthMailPasswordResetParams,
   AuthMailRegisteredParams,

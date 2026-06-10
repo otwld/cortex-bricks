@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { createHash, randomBytes } from 'crypto';
-import { Response } from 'express';
+import type { CookieOptions } from 'express';
 
 /**
  * Injection token for the JWT service configured to sign access tokens.
@@ -81,6 +81,20 @@ export interface AuthCookieOptions {
    * Refresh-token cookie max age in milliseconds.
    */
   refreshMaxAgeMs?: number;
+}
+
+/** Response surface needed to write and clear auth cookies. */
+export interface AuthCookieResponse {
+  /** Write one cookie. */
+  cookie(name: string, value: string, options: CookieOptions): this;
+  /** Clear one cookie. */
+  clearCookie(name: string, options?: CookieOptions): this;
+}
+
+/** Response surface needed by OAuth callbacks after cookies are written. */
+export interface AuthRedirectResponse extends AuthCookieResponse {
+  /** Redirect the client to a completed-auth route. */
+  redirect(url: string): void;
 }
 
 /**
@@ -181,7 +195,7 @@ export class TokenService {
   /**
    * Writes access and refresh tokens to HTTP-only cookies.
    *
-   * @param res - Express response receiving the cookies.
+   * @param res - HTTP response receiving the cookies.
    * @param accessToken - Signed access token value.
    * @param refreshToken - Raw refresh token value.
    * @returns Nothing.
@@ -190,7 +204,7 @@ export class TokenService {
    * tokenService.setAuthCookies(response, accessToken, rawRefreshToken, { refreshMaxAgeMs });
    * ```
    */
-  setAuthCookies(res: Response, accessToken: string, refreshToken: string, options: AuthCookieOptions = {}): void {
+  setAuthCookies(res: AuthCookieResponse, accessToken: string, refreshToken: string, options: AuthCookieOptions = {}): void {
     const secure = process.env['NODE_ENV'] === 'production';
     const cookieOpts = { httpOnly: true, secure, sameSite: 'strict' as const, path: '/' };
     res.cookie('access_token', accessToken, { ...cookieOpts, maxAge: options.accessMaxAgeMs ?? 15 * 60 * 1000 });
@@ -200,14 +214,14 @@ export class TokenService {
   /**
    * Clears the access and refresh token cookies.
    *
-   * @param res - Express response whose cookies should be cleared.
+   * @param res - HTTP response whose cookies should be cleared.
    * @returns Nothing.
    * @example
    * ```ts
    * tokenService.clearAuthCookies(response);
    * ```
    */
-  clearAuthCookies(res: Response): void {
+  clearAuthCookies(res: AuthCookieResponse): void {
     res.clearCookie('access_token', { path: '/' });
     res.clearCookie('refresh_token', { path: '/' });
   }
