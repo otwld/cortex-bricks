@@ -6,6 +6,10 @@ import type {
   NestFeatureModuleImportsSource,
 } from './module-register.types';
 
+/**
+ * Creates a Nest provider backed by an options factory and optional dependency
+ * injection tokens.
+ */
 export function createNestFeatureProvider<T>(
   token: InjectionToken,
   factory: (...args: unknown[]) => Promise<T> | T,
@@ -18,6 +22,9 @@ export function createNestFeatureProvider<T>(
   };
 }
 
+/**
+ * Creates a Nest value provider for already-normalized feature options.
+ */
 export function createNestFeatureValueProvider<T>(
   token: InjectionToken,
   value: T,
@@ -28,6 +35,9 @@ export function createNestFeatureValueProvider<T>(
   };
 }
 
+/**
+ * Creates the options provider used by `registerAsync` feature-module helpers.
+ */
 export function createNestFeatureOptionsProvider<T>(
   token: InjectionToken,
   options: NestFeatureModuleAsyncOptions<T>,
@@ -35,6 +45,12 @@ export function createNestFeatureOptionsProvider<T>(
   return createNestFeatureProvider(token, options.useFactory, options.inject);
 }
 
+/**
+ * Collects unique Nest module imports from array and metadata sources.
+ *
+ * Import identity is reference-based and preserves the first-seen order, which
+ * matches Nest module metadata behavior for dynamic module objects.
+ */
 export function collectNestFeatureModuleImports(
   ...sources: NestFeatureModuleImportsSource[]
 ): NestFeatureModuleImport[] {
