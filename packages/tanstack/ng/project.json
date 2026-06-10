@@ -1,0 +1,41 @@
+{
+  "name": "ng-tanstack",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/tanstack/ng/src",
+  "prefix": "tanstack",
+  "projectType": "library",
+  "tags": [
+    "scope:tanstack",
+    "type:lib",
+    "framework:ng",
+    "type:brick"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": [
+        "{workspaceRoot}/dist/{projectRoot}"
+      ],
+      "options": {
+        "project": "packages/tanstack/ng/ng-package.json",
+        "tsConfig": "packages/tanstack/ng/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/tanstack/ng/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/angular:unit-test",
+      "options": {
+        "watch": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

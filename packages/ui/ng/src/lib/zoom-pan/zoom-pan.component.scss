@@ -1,0 +1,18 @@
+.zoom-wrapper {
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+.zoom-content {
+  will-change: transform;
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
