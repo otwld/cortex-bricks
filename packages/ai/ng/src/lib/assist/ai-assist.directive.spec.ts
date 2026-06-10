@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { AiCompletionService } from '../services/ai-completion.service';
+import { AiCompletionService, AiCompletionSession } from '../services/ai-completion.service';
 import { AiAssistDirective } from './ai-assist.directive';
 import {
   AiAssistAcceptedEvent,
@@ -12,14 +12,10 @@ import {
   AiAssistPrompt,
 } from './ai-assist.types';
 
-type AssistDirectiveTestApi = {
-  acceptSuggestion(): void;
-  runPrompt(): Promise<void>;
-};
-
-class FakeCompletion {
+class FakeCompletion implements AiCompletionSession {
   completion = '';
   error: Error | undefined;
+  loading = false;
   readonly complete = vi.fn(async () => {
     if (nextError) throw nextError;
     this.completion = nextText;
@@ -66,7 +62,7 @@ describe(AiAssistDirective.name, () => {
       createCompletion: vi.fn(() => {
         const completion = new FakeCompletion();
         completions.push(completion);
-        return completion as unknown as ReturnType<AiCompletionService['createCompletion']>;
+        return completion;
       }),
     };
 
@@ -143,8 +139,8 @@ describe(AiAssistDirective.name, () => {
   });
 });
 
-function getAssist(fixture: ComponentFixture<Host>): AssistDirectiveTestApi {
-  return fixture.debugElement.query(By.directive(AiAssistDirective)).injector.get(AiAssistDirective) as unknown as AssistDirectiveTestApi;
+function getAssist(fixture: ComponentFixture<Host>): AiAssistDirective {
+  return fixture.debugElement.query(By.directive(AiAssistDirective)).injector.get(AiAssistDirective);
 }
 
 function getTextArea(fixture: ComponentFixture<Host>): HTMLTextAreaElement {

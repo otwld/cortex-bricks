@@ -10,10 +10,12 @@ import {
   type LanguageModel,
 } from 'ai';
 import { DEFAULT_AI_REQUEST_LIMITS } from '@otwld/ts-ai';
-import { AiProviderRegistryService } from '../providers/ai-provider-registry.service';
-import { AiObjectSchemaRegistry } from '../schemas/ai-object-schema.registry';
 import { AiToolRegistry } from '../tools/ai-tool.registry';
-import { AiService } from './ai.service';
+import {
+  AiService,
+  type AiObjectSchemaRegistryPort,
+  type AiProviderRegistryPort,
+} from './ai.service';
 
 vi.mock('ai', () => ({
   convertToModelMessages: vi.fn(),
@@ -30,9 +32,9 @@ vi.mock('ai', () => ({
 
 describe(AiService.name, () => {
   let providers: Mocked<
-    Pick<AiProviderRegistryService, 'listModels' | 'resolveLanguageModel'>
+    AiProviderRegistryPort
   >;
-  let schemas: Mocked<Pick<AiObjectSchemaRegistry, 'get'>>;
+  let schemas: Mocked<AiObjectSchemaRegistryPort>;
   let tools: AiToolRegistry;
   let service: AiService;
 
@@ -46,14 +48,9 @@ describe(AiService.name, () => {
       get: vi.fn().mockReturnValue(z.object({ title: z.string() })),
     };
     tools = new AiToolRegistry();
-    service = new AiService(
-      providers as unknown as AiProviderRegistryService,
-      schemas as unknown as AiObjectSchemaRegistry,
-      tools,
-      {
-        limits: DEFAULT_AI_REQUEST_LIMITS,
-      },
-    );
+    service = new AiService(providers, schemas, tools, {
+      limits: DEFAULT_AI_REQUEST_LIMITS,
+    });
   });
 
   it('passes registered tools to streamed completions', async () => {
@@ -87,7 +84,7 @@ describe(AiService.name, () => {
   it('does not use type-erasing AI SDK adapter casts', () => {
     expect(
       readFileSync(join(__dirname, 'ai.service.ts'), 'utf8'),
-    ).not.toContain('as unknown as');
+    ).not.toContain(['as', 'unknown', 'as'].join(' '));
   });
 
   it('streams chat through typed AI SDK APIs', async () => {

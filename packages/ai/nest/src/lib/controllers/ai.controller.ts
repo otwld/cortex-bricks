@@ -1,5 +1,4 @@
 import { Body, Controller, Get, Inject, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
-import type { Request } from 'express';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { z } from 'zod';
 import {
@@ -49,13 +48,13 @@ export class AiController {
 
   /** Return quota usage for the authenticated request subject. */
   @Get('usage')
-  usage(@Req() request: Request) {
+  usage(@Req() request: unknown) {
     return this.quota.snapshotForRequest(request);
   }
 
   /** Stream a chat response after request validation and quota reservation. */
   @Post('chat')
-  async chat(@Body() body: AiChatRequest, @Req() req: Request, @Res() response: ServerResponse<IncomingMessage>) {
+  async chat(@Body() body: AiChatRequest, @Req() req: unknown, @Res() response: ServerResponse<IncomingMessage>) {
     const request = this.parseRequest(this.requestSchemas.aiChatRequestSchema, body) as AiChatRequest;
     const reservation = await this.quota.reserveForRequest(req, 'chat', request);
 
@@ -71,7 +70,7 @@ export class AiController {
 
   /** Stream a text completion after request validation and quota reservation. */
   @Post('completion')
-  async completion(@Body() body: AiCompletionRequest, @Req() req: Request, @Res() response: ServerResponse<IncomingMessage>) {
+  async completion(@Body() body: AiCompletionRequest, @Req() req: unknown, @Res() response: ServerResponse<IncomingMessage>) {
     const request = this.parseRequest(this.requestSchemas.aiCompletionRequestSchema, body) as AiCompletionRequest;
     const reservation = await this.quota.reserveForRequest(req, 'completion', request);
 
@@ -87,7 +86,7 @@ export class AiController {
 
   /** Generate a structured object with a registered schema key. */
   @Post('object/:schemaKey')
-  async object(@Param('schemaKey') schemaKey: string, @Body() body: AiObjectRequest, @Req() req: Request) {
+  async object(@Param('schemaKey') schemaKey: string, @Body() body: AiObjectRequest, @Req() req: unknown) {
     const request = this.parseRequest(this.requestSchemas.aiObjectRequestSchema, body) as AiObjectRequest;
     const reservation = await this.quota.reserveForRequest(req, 'object', request);
 

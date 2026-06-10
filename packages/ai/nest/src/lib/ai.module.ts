@@ -29,11 +29,11 @@ function createAsyncOptionsProvider(asyncOptions: ManualAiModuleAsyncOptions, en
   if (factory) {
     return {
       provide: AI_MODULE_OPTIONS,
-      useFactory: async (...args: never[]) => ({
+      useFactory: async (...args: unknown[]) => ({
         ...validateAiModuleOptions(await factory(...args)),
         endpoints,
       }),
-      inject: (asyncOptions.inject ?? []) as never[],
+      inject: asyncOptions.inject ?? [],
     };
   }
 

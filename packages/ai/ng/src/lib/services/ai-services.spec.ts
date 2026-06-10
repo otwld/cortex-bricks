@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import type { UIMessage } from 'ai';
 import { AiErrorCode } from '@otwld/ts-ai';
 import { provideAi } from '../provide-ai';
 import { AiChatService } from './ai-chat.service';
@@ -69,10 +70,7 @@ describe('AI Angular services', () => {
 
   it('sends raw Vercel UI message parts through the chat transport', async () => {
     const service = TestBed.inject(AiChatService);
-    const chat = service.createChat({ model: 'chat' });
-    const transport = (chat as unknown as { transport: { prepareSendMessagesRequest: (options: Record<string, unknown>) => Promise<{ body: unknown }> } })
-      .transport;
-    const message = {
+    const message: UIMessage = {
       id: 'message-1',
       role: 'user',
       parts: [
@@ -82,16 +80,12 @@ describe('AI Angular services', () => {
       metadata: { source: 'sandbox' },
     };
 
-    const request = await transport.prepareSendMessagesRequest({
+    const request = service.prepareSendMessagesRequest({ model: 'chat' }, {
       api: '/api/ai/chat',
       body: { traceId: 'trace-1' },
       credentials: undefined,
       headers: {},
-      id: 'chat-1',
-      messageId: 'message-1',
       messages: [message],
-      requestMetadata: undefined,
-      trigger: 'submit-message',
     });
 
     expect(request.body).toEqual({

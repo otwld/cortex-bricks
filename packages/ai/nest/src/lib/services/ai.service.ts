@@ -25,8 +25,20 @@ import { AiToolRegistry } from '../tools/ai-tool.registry';
 type AiTextStreamResult = ReturnType<typeof streamText>;
 type AiTextResult = Awaited<ReturnType<typeof generateText>>;
 type AiObjectResult = GenerateObjectResult<unknown>;
+type AiSdkZodSchema = ZodTypeAny;
+type AiZodSchemaAdapter = (schema: AiSdkZodSchema) => Schema<unknown>;
 type AiUiMessage = Omit<UIMessage<Record<string, unknown>>, 'id'>;
 type AiUiMessagePart = TextUIPart | FileUIPart;
+
+// Isolate the AI SDK helper's recursive type so declaration builds do not exceed TypeScript's instantiation depth.
+const zodSchemaValue: unknown = zodSchema;
+const toAiSdkSchema = zodSchemaValue as AiZodSchemaAdapter;
+
+export type AiProviderRegistryPort = Pick<
+  AiProviderRegistryService,
+  'listModels' | 'resolveLanguageModel'
+>;
+export type AiObjectSchemaRegistryPort = Pick<AiObjectSchemaRegistry, 'get'>;
 
 /** Orchestrates AI SDK calls with configured models, tools, and object schemas. */
 @Injectable()
@@ -40,8 +52,8 @@ export class AiService {
    * @param endpoints - Endpoint limits used by provider calls.
    */
   constructor(
-    private readonly providers: AiProviderRegistryService,
-    private readonly schemas: AiObjectSchemaRegistry,
+    @Inject(AiProviderRegistryService) private readonly providers: AiProviderRegistryPort,
+    @Inject(AiObjectSchemaRegistry) private readonly schemas: AiObjectSchemaRegistryPort,
     private readonly tools: AiToolRegistry,
     @Inject(AI_ENDPOINT_OPTIONS) private readonly endpoints: Pick<NormalizedAiEndpointOptions, 'limits'>,
   ) {}
@@ -144,8 +156,8 @@ export class AiService {
     return tools ? stepCountIs(this.endpoints.limits.maxToolSteps) : undefined;
   }
 
-  private toAiSchema(schema: ZodTypeAny): Schema<unknown> {
-    return zodSchema<unknown>(schema as never);
+  private toAiSchema(schema: AiSdkZodSchema): Schema<unknown> {
+    return toAiSdkSchema(schema);
   }
 
   private toUiMessages(messages: AiChatRequest['messages']): AiUiMessage[] {

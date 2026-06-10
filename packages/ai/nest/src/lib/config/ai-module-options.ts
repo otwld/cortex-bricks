@@ -1,4 +1,5 @@
 import { CanActivate, ModuleMetadata, Type } from '@nestjs/common';
+import type { FactoryProvider } from '@nestjs/common';
 import { z } from 'zod';
 import {
   AiModelCapability,
@@ -146,8 +147,8 @@ export interface AiModuleOptionsFactory {
  */
 export interface ManualAiModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
   endpoints?: AiEndpointOptions;
-  useFactory?: (...args: never[]) => Promise<AiModuleOptions> | AiModuleOptions;
-  inject?: unknown[];
+  useFactory?: (...args: unknown[]) => Promise<AiModuleOptions> | AiModuleOptions;
+  inject?: FactoryProvider['inject'];
   useClass?: Type<AiModuleOptionsFactory>;
   useExisting?: Type<AiModuleOptionsFactory>;
 }

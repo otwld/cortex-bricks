@@ -17,7 +17,7 @@ import {
   output,
 } from '@angular/core';
 import { AiCompletionRequest } from '@otwld/ts-ai';
-import { AiCompletionService } from '../services/ai-completion.service';
+import { AiCompletionService, AiCompletionSession } from '../services/ai-completion.service';
 import { AiAssistOverlay } from './ai-assist-overlay.component';
 import {
   AiAssistAcceptedEvent,
@@ -29,8 +29,6 @@ import {
   AiAssistPrompt,
   AiAssistPromptResult,
 } from './ai-assist.types';
-
-type CompletionInstance = ReturnType<AiCompletionService['createCompletion']>;
 
 interface OutputSubscription {
   unsubscribe(): void;
@@ -87,7 +85,7 @@ export class AiAssistDirective implements AfterViewInit, OnDestroy {
   /** Emitted when a suggestion finishes generating. */
   readonly aiAssistGenerated = output<AiAssistGeneratedEvent>();
 
-  private activeCompletion: CompletionInstance | null = null;
+  private activeCompletion: AiCompletionSession | null = null;
   private componentRef: ComponentRef<AiAssistOverlay> | null = null;
   private generationId = 0;
   private lastGenerated: AiAssistGeneratedEvent | null = null;
@@ -220,7 +218,8 @@ export class AiAssistDirective implements AfterViewInit, OnDestroy {
     await this.runPrompt();
   }
 
-  private async runPrompt(): Promise<void> {
+  /** Run the configured prompt for the current host element value. */
+  public async runPrompt(): Promise<void> {
     if (this.aiAssistDisabled()) return;
 
     const component = this.componentRef?.instance;
@@ -286,7 +285,8 @@ export class AiAssistDirective implements AfterViewInit, OnDestroy {
     this.aiAssistCanceled.emit({ context, generatedText });
   }
 
-  private acceptSuggestion(): void {
+  /** Accept the latest generated suggestion and apply it to the host control. */
+  public acceptSuggestion(): void {
     const generated = this.lastGenerated;
     const component = this.componentRef?.instance;
     if (!generated || !component || component.status() !== 'generated') return;

@@ -4,11 +4,25 @@ import { AiCompletionRequest, AiErrorCode } from '@otwld/ts-ai';
 import { AiClientError } from '../errors/ai-client-error';
 import { AI_CONFIG } from '../tokens/ai-config.token';
 
+/** Completion session surface used by AI completion consumers. */
+export interface AiCompletionSession {
+  /** Current streamed text. */
+  completion: string;
+  /** Most recent completion error from the provider SDK. */
+  readonly error: Error | undefined;
+  /** Whether a completion request is currently active. */
+  readonly loading: boolean;
+  /** Send a prompt and resolve with the final generated text when available. */
+  complete(prompt: string): Promise<string | null | undefined>;
+  /** Abort the active completion request. */
+  stop(): void;
+}
+
 /** Angular client for streamed AI text completions. */
 @Injectable({ providedIn: 'root' })
 export class AiCompletionService {
   private readonly config = inject(AI_CONFIG);
-  private completion: Completion | null = null;
+  private completion: AiCompletionSession | null = null;
 
   /** Current streamed completion text. */
   readonly text = signal('');
@@ -20,7 +34,7 @@ export class AiCompletionService {
   readonly error = signal<AiClientError | null>(null);
 
   /** Create a low-level completion instance with shared request defaults. */
-  createCompletion(initialRequest: Partial<Omit<AiCompletionRequest, 'prompt'>> = {}): Completion {
+  createCompletion(initialRequest: Partial<Omit<AiCompletionRequest, 'prompt'>> = {}): AiCompletionSession {
     return new Completion({
       api: `${this.config.apiBaseUrl}/completion`,
       credentials: this.config.credentials,
@@ -62,7 +76,7 @@ export class AiCompletionService {
     this.loading.set(false);
   }
 
-  private sync(completion: Completion): void {
+  private sync(completion: AiCompletionSession): void {
     this.text.set(completion.completion);
     this.loading.set(completion.loading);
     this.error.set(completion.error ? new AiClientError(AiErrorCode.STREAM_FAILED, completion.error.message, completion.error) : null);

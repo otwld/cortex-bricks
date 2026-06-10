@@ -1,7 +1,6 @@
 import type { Mocked } from 'vitest';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Request } from 'express';
 import { AiErrorCode } from '@otwld/ts-ai';
 import { AI_ENDPOINT_OPTIONS } from '../config/ai-module-options';
 import { AiQuotaService } from '../quota/ai-quota.service';
@@ -103,7 +102,7 @@ describe('AiController', () => {
   });
 
   it('returns generated objects', async () => {
-    const request = { user: { id: 'user-1' } } as unknown as Request;
+    const request = { user: { id: 'user-1' } };
     const result = await controller.object(
       'summary',
       { prompt: 'Summarize' },
@@ -129,7 +128,7 @@ describe('AiController', () => {
       maxPromptTokens: 8_000,
       buckets: [],
     });
-    const request = { user: { id: 'user-1' } } as unknown as Request;
+    const request = { user: { id: 'user-1' } };
 
     await expect(controller.usage(request)).resolves.toEqual({
       subject: { type: 'user', id: 'user-1', roles: ['member'] },
@@ -145,7 +144,7 @@ describe('AiController', () => {
     try {
       await controller.object('summary', { prompt: '' }, {
         user: { id: 'user-1' },
-      } as unknown as Request);
+      });
     } catch (error) {
       expect(error).toBeInstanceOf(HttpException);
       expect((error as HttpException).getStatus()).toBe(HttpStatus.BAD_REQUEST);
