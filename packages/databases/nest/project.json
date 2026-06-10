@@ -3,13 +3,33 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/databases/nest/src",
   "projectType": "library",
-  "tags": ["scope:database", "type:lib", "framework:nest", "type:brick"],
+  "tags": [
+    "scope:database",
+    "type:lib",
+    "framework:nest",
+    "type:brick"
+  ],
   "targets": {
     "build": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
-        "command": "tsc -p packages/databases/nest/tsconfig.lib.json"
+        "outputPath": "dist/packages/databases/nest",
+        "tsConfig": "packages/databases/nest/tsconfig.lib.json",
+        "packageJson": "packages/databases/nest/package.json",
+        "main": "packages/databases/nest/src/index.ts",
+        "format": [
+          "esm"
+        ],
+        "assets": [
+          "packages/databases/nest/*.md"
+        ]
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

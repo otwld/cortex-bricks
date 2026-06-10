@@ -1,1 +1,2 @@
-export * from './lib/nest-mongoose.module';
+export * from './lib';
+export * from './contracts';
