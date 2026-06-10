@@ -45,7 +45,7 @@
     "@tailwindcss/postcss": "^4.2.4",
     "@tanstack/angular-query-experimental": "5.96.2",
     "ai": "6.0.175",
-    "axios": "^1.16.1",
+    "axios": "^1.17.0",
     "bcrypt": "^6.0.0",
     "chart.js": "^4.5.1",
     "class-transformer": "^0.5.1",
