@@ -1,0 +1,17 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Toolkit/TS SDK/References/Deep Required" name="deepRequired"   />
+
+# DeepRequired
+
+Recursive required type for nested object structures.
+
+```ts
+type DeepRequired<T> = /* recursive required */;
+```
+
+## Example
+
+```ts
+type JobOfferRequired = DeepRequired<JobOffer>;
+```

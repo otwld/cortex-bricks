@@ -1,0 +1,29 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Toolkit/TS SDK/References/Shortcut" name="shortcut"   />
+
+# Shortcut
+
+Keyboard shortcut descriptor used by UI layers.
+
+```ts
+interface Shortcut {
+  key: string;
+  icon?: string;
+  wordI18n?: string;
+  labelI18n: string;
+  callback: () => void;
+  initialDelay?: number;
+  repeatInterval?: number;
+}
+```
+
+## Example
+
+```ts
+const openJobOfferShortcut: Shortcut = {
+  key: 'j',
+  labelI18n: 'JOB_OFFER.OPEN',
+  callback: () => openJobOffer(),
+};
+```

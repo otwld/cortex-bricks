@@ -1,0 +1,17 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Toolkit/TS SDK/References/Deep Partial" name="deepPartial"   />
+
+# DeepPartial
+
+Recursive partial type for nested object structures.
+
+```ts
+type DeepPartial<T> = T extends object ? { [P in keyof T]?: DeepPartial<T[P]> } : T;
+```
+
+## Example
+
+```ts
+type JobOfferPatch = DeepPartial<JobOffer>;
+```
