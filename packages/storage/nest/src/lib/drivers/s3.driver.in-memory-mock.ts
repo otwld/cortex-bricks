@@ -2,6 +2,23 @@ import { Readable } from 'node:stream';
 
 type Storage = Map<string, Buffer>;
 type Multiparts = Map<string, { key: string; parts: Map<number, Buffer> }>;
+type MockS3CommandInput = {
+  Key?: string;
+  Body?: unknown;
+  UploadId?: string;
+  PartNumber?: number;
+};
+type MockS3Command = { constructor: { name: string }; input: MockS3CommandInput };
+
+const requireStringInput = (value: string | undefined, field: string): string => {
+  if (value === undefined) throw new Error(`Mock S3 command missing ${field}`);
+  return value;
+};
+
+const requireNumberInput = (value: number | undefined, field: string): number => {
+  if (value === undefined) throw new Error(`Mock S3 command missing ${field}`);
+  return value;
+};
 
 const toBuffer = async (body: unknown): Promise<Buffer> => {
   if (Buffer.isBuffer(body)) return body;
@@ -27,52 +44,55 @@ export function createMockS3({
   multiparts = new Map<string, { key: string; parts: Map<number, Buffer> }>(),
 }: { storage?: Storage; multiparts?: Multiparts } = {}) {
   let nextUploadId = 1;
-  const send = vi.fn(async (cmd: any) => {
+  const send = vi.fn(async (cmd: MockS3Command) => {
     const name = cmd.constructor.name;
     if (name === 'PutObjectCommand') {
-      storage.set(cmd.input.Key, await toBuffer(cmd.input.Body));
+      storage.set(requireStringInput(cmd.input.Key, 'Key'), await toBuffer(cmd.input.Body));
       return {};
     }
     if (name === 'GetObjectCommand') {
-      const body = storage.get(cmd.input.Key);
+      const body = storage.get(requireStringInput(cmd.input.Key, 'Key'));
       if (!body)
         throw Object.assign(new Error('NotFound'), { name: 'NotFound' });
       return { Body: Readable.from(body) };
     }
     if (name === 'DeleteObjectCommand') {
-      storage.delete(cmd.input.Key);
+      storage.delete(requireStringInput(cmd.input.Key, 'Key'));
       return {};
     }
     if (name === 'HeadObjectCommand') {
-      if (!storage.has(cmd.input.Key))
+      if (!storage.has(requireStringInput(cmd.input.Key, 'Key')))
         throw Object.assign(new Error('NotFound'), { name: 'NotFound' });
       return {};
     }
     if (name === 'CreateMultipartUploadCommand') {
       const uploadId = `mp-${nextUploadId++}`;
-      multiparts.set(uploadId, { key: cmd.input.Key, parts: new Map() });
+      multiparts.set(uploadId, { key: requireStringInput(cmd.input.Key, 'Key'), parts: new Map() });
       return { UploadId: uploadId };
     }
     if (name === 'UploadPartCommand') {
-      const multipart = multiparts.get(cmd.input.UploadId);
+      const uploadId = requireStringInput(cmd.input.UploadId, 'UploadId');
+      const partNumber = requireNumberInput(cmd.input.PartNumber, 'PartNumber');
+      const multipart = multiparts.get(uploadId);
       if (!multipart)
-        throw new Error(`Unknown multipart upload ${cmd.input.UploadId}`);
-      multipart.parts.set(cmd.input.PartNumber, await toBuffer(cmd.input.Body));
-      return { ETag: `"etag-${cmd.input.PartNumber}"` };
+        throw new Error(`Unknown multipart upload ${uploadId}`);
+      multipart.parts.set(partNumber, await toBuffer(cmd.input.Body));
+      return { ETag: `"etag-${partNumber}"` };
     }
     if (name === 'CompleteMultipartUploadCommand') {
-      const multipart = multiparts.get(cmd.input.UploadId);
+      const uploadId = requireStringInput(cmd.input.UploadId, 'UploadId');
+      const multipart = multiparts.get(uploadId);
       if (!multipart)
-        throw new Error(`Unknown multipart upload ${cmd.input.UploadId}`);
+        throw new Error(`Unknown multipart upload ${uploadId}`);
       const sorted = [...multipart.parts.entries()]
         .sort(([a], [b]) => a - b)
         .map(([, buffer]) => buffer);
       storage.set(multipart.key, Buffer.concat(sorted));
-      multiparts.delete(cmd.input.UploadId);
+      multiparts.delete(uploadId);
       return {};
     }
     if (name === 'AbortMultipartUploadCommand') {
-      multiparts.delete(cmd.input.UploadId);
+      multiparts.delete(requireStringInput(cmd.input.UploadId, 'UploadId'));
       return {};
     }
     throw new Error(`Unhandled ${name}`);

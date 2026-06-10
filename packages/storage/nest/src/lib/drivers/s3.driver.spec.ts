@@ -5,6 +5,7 @@ import {
   describeMultipartStorageDriver,
   describeStorageDriver,
 } from './driver-contract.spec-helper';
+import { StorageModuleOptions } from '../config/storage-module-options';
 import { S3StorageDriver } from './s3.driver';
 
 vi.mock('@aws-sdk/s3-request-presigner', () => ({
@@ -58,11 +59,11 @@ describe('S3StorageDriver.getSignedUrl', () => {
   const baseOptions = {
     driver: StorageDriverKind.S3 as const,
     s3: { bucket: 'b', region: 'us-east-1', signedUrlMaxTtl: 3600 },
-  };
+  } satisfies StorageModuleOptions;
 
   it('clamps requested TTL to configured max', async () => {
     const presigner = await import('@aws-sdk/s3-request-presigner');
-    const driver = new S3StorageDriver(baseOptions as never);
+    const driver = new S3StorageDriver(baseOptions);
     await driver.getSignedUrl('key', 999_999);
     const call = (presigner.getSignedUrl as Mock).mock.calls[0];
     expect(call[2].expiresIn).toBe(3600);
@@ -72,7 +73,7 @@ describe('S3StorageDriver.getSignedUrl', () => {
     const driver = new S3StorageDriver({
       driver: StorageDriverKind.S3,
       s3: { bucket: 'b', region: 'us-east-1' },
-    } as never);
+    } satisfies StorageModuleOptions);
     const huge = { big: 'x'.repeat(3000) };
     await expect(
       driver.put('k', Readable.from(Buffer.alloc(1)), {
@@ -90,7 +91,7 @@ describe('S3StorageDriver - contract', () => {
     new S3StorageDriver({
       driver: StorageDriverKind.S3,
       s3: { bucket: 'b', region: 'us-east-1' },
-    } as never);
+    } satisfies StorageModuleOptions);
 
   describeStorageDriver(() => factory());
   describeMultipartStorageDriver(() => factory());

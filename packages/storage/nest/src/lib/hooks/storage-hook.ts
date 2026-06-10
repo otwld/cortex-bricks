@@ -1,5 +1,13 @@
 import { UploadMeta } from '@otwld/ts-storage';
-import { StorageFileDocument } from '../schemas/storage-file.schema';
+import { StorageFileRecord } from '../schemas/storage-file.schema';
+
+/** Persisted file record shape exposed to storage lifecycle hooks. */
+export type StorageHookFile = StorageFileRecord & {
+  /** Mongoose virtual id when the hook receives a hydrated document. */
+  id?: string;
+  /** Persist hook-side mutations when the underlying record supports it. */
+  save(): Promise<unknown>;
+};
 
 /** Lifecycle hook base class for upload and delete policy extensions. */
 export abstract class StorageHook {
@@ -7,13 +15,13 @@ export abstract class StorageHook {
   beforeUpload?(meta: UploadMeta): Promise<void>;
 
   /** Called after an upload record is persisted. */
-  afterUpload?(file: StorageFileDocument): Promise<void>;
+  afterUpload?(file: StorageHookFile): Promise<void>;
 
   /** Called before a file is soft- or hard-deleted. Throw to reject deletion. */
-  beforeDelete?(file: StorageFileDocument): Promise<void>;
+  beforeDelete?(file: StorageHookFile): Promise<void>;
 
   /** Called after a file delete operation completes. */
-  afterDelete?(file: StorageFileDocument): Promise<void>;
+  afterDelete?(file: StorageHookFile): Promise<void>;
 }
 
 /** Injection token used to register storage lifecycle hooks. */

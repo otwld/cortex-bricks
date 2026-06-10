@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { SignedUrlRequestDto } from '@otwld/ts-storage';
 import { SignedUrlService } from '@otwld/nest-storage';
 
@@ -7,7 +7,7 @@ import { SignedUrlService } from '@otwld/nest-storage';
  */
 @Controller('storage')
 export class StorageController {
-  constructor(private readonly signedUrls: SignedUrlService) {}
+  constructor(@Inject(SignedUrlService) private readonly signedUrls: Pick<SignedUrlService, 'generate'>) {}
 
   /**
    * Creates a signed read URL for a storage object key.

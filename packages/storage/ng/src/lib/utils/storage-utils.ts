@@ -42,7 +42,7 @@ export function isMimeTypeAllowed(file: File, accept: string): boolean {
  * @param tasks - Upload tasks to aggregate.
  * @returns Average progress percentage, or zero for an empty list.
  */
-export function getUploadProgress(tasks: UploadTask[]): number {
+export function getUploadProgress(tasks: readonly Pick<UploadTask, 'progress'>[]): number {
   return tasks.length ? tasks.reduce((total, task) => total + task.progress(), 0) / tasks.length : 0;
 }
 
@@ -52,8 +52,8 @@ export function getUploadProgress(tasks: UploadTask[]): number {
  * @param tasks - Upload tasks to group.
  * @returns Record keyed by upload status.
  */
-export function groupByStatus(tasks: UploadTask[]): Record<UploadStatus, UploadTask[]> {
-  const grouped: Record<UploadStatus, UploadTask[]> = {
+export function groupByStatus<TTask extends Pick<UploadTask, 'status'>>(tasks: readonly TTask[]): Record<UploadStatus, TTask[]> {
+  const grouped: Record<UploadStatus, TTask[]> = {
     [UploadStatus.Pending]: [],
     [UploadStatus.Active]: [],
     [UploadStatus.Paused]: [],

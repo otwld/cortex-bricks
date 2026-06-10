@@ -123,7 +123,11 @@ describe(StorageService.name, () => {
     const service = TestBed.inject(StorageService);
     const file = new File([new Uint8Array([1, 2, 3])], 'a.bin');
     const task = service.upload(file, { autoStart: false });
-    const spy = vi.spyOn(task as unknown as { dispose: () => void }, 'dispose');
+    expect(task).toBeInstanceOf(UploadTaskImpl);
+    if (!(task instanceof UploadTaskImpl)) {
+      throw new Error('StorageService.upload should create UploadTaskImpl instances.');
+    }
+    const spy = vi.spyOn(task, 'dispose');
 
     TestBed.resetTestingModule();
 

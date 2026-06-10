@@ -1,7 +1,6 @@
 import { signal } from '@angular/core';
 import { UploadStatus } from '@otwld/ts-storage';
 import { createFileHash, formatBytes, getUploadProgress, groupByStatus, isMimeTypeAllowed } from './storage-utils';
-import { UploadTask } from '../models';
 
 describe('storage utils', () => {
   it('formats byte counts with binary units', () => {
@@ -22,7 +21,7 @@ describe('storage utils', () => {
     const tasks = [
       { progress: signal(25), status: signal(UploadStatus.Active) },
       { progress: signal(75), status: signal(UploadStatus.Completed) },
-    ] as unknown as UploadTask[];
+    ];
 
     expect(getUploadProgress(tasks)).toBe(50);
     expect(groupByStatus(tasks)[UploadStatus.Active]).toEqual([tasks[0]]);

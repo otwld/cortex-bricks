@@ -1,4 +1,5 @@
 import { ModuleMetadata, Type } from '@nestjs/common';
+import type { FactoryProvider } from '@nestjs/common';
 import { StorageDriver as StorageDriverKind } from '@otwld/ts-storage';
 import { z } from 'zod';
 import { StorageHook } from '../hooks/storage-hook';
@@ -84,9 +85,9 @@ export interface StorageModuleOptionsFactory {
 /** Manual async configuration options accepted by `StorageModule.forRootAsync`. */
 export interface ManualStorageModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
   /** Factory function used to create storage options. */
-  useFactory?: (...args: never[]) => Promise<StorageModuleOptions> | StorageModuleOptions;
+  useFactory?: (...args: unknown[]) => Promise<StorageModuleOptions> | StorageModuleOptions;
   /** Providers injected into `useFactory`. */
-  inject?: unknown[];
+  inject?: FactoryProvider['inject'];
   /** Class provider that implements `StorageModuleOptionsFactory`. */
   useClass?: Type<StorageModuleOptionsFactory>;
   /** Existing provider that implements `StorageModuleOptionsFactory`. */

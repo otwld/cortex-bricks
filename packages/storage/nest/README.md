@@ -74,7 +74,7 @@ StorageModule.forRootAsync({
 ```ts
 @Injectable()
 class AuditHook extends StorageHook {
-  async afterUpload(file: StorageFileDocument) {
+  async afterUpload(file: StorageHookFile) {
     console.log('uploaded', file.key);
   }
 }
@@ -119,7 +119,7 @@ await driver.put('legacy/avatar.png', createReadStream('/legacy/avatar.png'), { 
 import { Readable } from 'node:stream';
 import { Injectable } from '@nestjs/common';
 import sharp from 'sharp';
-import { StorageDriver, StorageFileDocument, StorageHook, StorageService } from '@otwld/nest-storage';
+import { StorageDriver, StorageHook, StorageHookFile, StorageService } from '@otwld/nest-storage';
 
 @Injectable()
 export class ThumbnailHook extends StorageHook {
@@ -130,7 +130,7 @@ export class ThumbnailHook extends StorageHook {
     super();
   }
 
-  async afterUpload(file: StorageFileDocument): Promise<void> {
+  async afterUpload(file: StorageHookFile): Promise<void> {
     if (!file.mimetype.startsWith('image/')) return;
     const stream = await this.driver.getReadStream(file.key);
     const thumb = await sharp(await streamToBuffer(stream)).resize(256, 256, { fit: 'cover' }).webp().toBuffer();
@@ -147,17 +147,17 @@ export class ThumbnailHook extends StorageHook {
 
 ```ts
 import { Injectable, Logger } from '@nestjs/common';
-import { StorageFileDocument, StorageHook } from '@otwld/nest-storage';
+import { StorageHook, StorageHookFile } from '@otwld/nest-storage';
 
 @Injectable()
 export class AuditHook extends StorageHook {
   private readonly logger = new Logger(AuditHook.name);
 
-  async afterUpload(file: StorageFileDocument): Promise<void> {
+  async afterUpload(file: StorageHookFile): Promise<void> {
     this.logger.log(`Uploaded ${file.id} by ${file.ownerId ?? 'system'}`);
   }
 
-  async afterDelete(file: StorageFileDocument): Promise<void> {
+  async afterDelete(file: StorageHookFile): Promise<void> {
     this.logger.warn(`Deleted ${file.id}`);
   }
 }

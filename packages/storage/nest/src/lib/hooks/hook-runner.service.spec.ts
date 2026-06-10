@@ -4,7 +4,7 @@ import {
   StorageExceptionCode,
 } from '../exceptions/storage.exception';
 import { HookRunnerService } from './hook-runner.service';
-import { StorageHook } from './storage-hook';
+import { StorageHook, StorageHookFile } from './storage-hook';
 
 describe(HookRunnerService.name, () => {
   it('runs registered hooks in declaration order for each lifecycle phase', async () => {
@@ -28,7 +28,7 @@ describe(HookRunnerService.name, () => {
     ];
     const runner = new HookRunnerService(hooks);
 
-    await runner.run('beforeUpload', {
+    await runner.runBeforeUpload({
       filename: 'image.png',
       mimetype: 'image/png',
       size: 1,
@@ -40,7 +40,7 @@ describe(HookRunnerService.name, () => {
   it('passes uploaded file documents through afterUpload hooks', async () => {
     const hook = { afterUpload: vi.fn() } satisfies StorageHook;
     const runner = new HookRunnerService([hook]);
-    const file = {
+    const file: StorageHookFile = {
       id: 'file-1',
       key: 'a.txt',
       filename: 'a.txt',
@@ -50,22 +50,23 @@ describe(HookRunnerService.name, () => {
       checksum: 'hash',
       createdAt: new Date(),
       updatedAt: new Date(),
+      save: vi.fn().mockResolvedValue(undefined),
     };
 
-    await runner.run('afterUpload', file as never);
+    await runner.runAfterUpload(file);
 
     expect(hook.afterUpload).toHaveBeenCalledWith(file);
   });
 
   it('wraps thrown errors from hooks as HOOK_REJECTED', async () => {
-    const failing: any = {
-      beforeUpload: () => {
+    const failing = {
+      beforeUpload: async () => {
         throw new Error('virus');
       },
-    };
+    } satisfies StorageHook;
     const runner = new HookRunnerService([failing]);
     await expect(
-      runner.run('beforeUpload', {
+      runner.runBeforeUpload({
         filename: 'f',
         mimetype: 'application/octet-stream',
         size: 1,
@@ -76,14 +77,14 @@ describe(HookRunnerService.name, () => {
   });
 
   it('preserves a hook-thrown StorageException unchanged', async () => {
-    const explicit: any = {
-      beforeUpload: () => {
+    const explicit = {
+      beforeUpload: async () => {
         throw StorageException.fileNotFound();
       },
-    };
+    } satisfies StorageHook;
     const runner = new HookRunnerService([explicit]);
     await expect(
-      runner.run('beforeUpload', {
+      runner.runBeforeUpload({
         filename: 'f',
         mimetype: 'application/octet-stream',
         size: 1,

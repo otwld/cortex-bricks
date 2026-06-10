@@ -9,6 +9,9 @@ import { StorageException } from '../exceptions/storage.exception';
 import { HookRunnerService } from '../hooks/hook-runner.service';
 import { NOT_SOFT_DELETED, StorageFileDocument, StorageFileRecord } from '../schemas/storage-file.schema';
 
+/** Mongoose model operations required by the storage service. */
+type StorageFileModel = Pick<Model<StorageFileRecord>, 'create' | 'findById' | 'deleteOne' | 'find'>;
+
 /** Options controlling file deletion behavior. */
 export interface DeleteFileOptions {
   /** Delete bytes and database record instead of setting `deletedAt`. */
@@ -36,7 +39,7 @@ export class StorageService {
   constructor(
     private readonly driver: StorageDriver,
     private readonly hookRunner: HookRunnerService,
-    @InjectModel(StorageFileRecord.name) private readonly storageFileModel: Model<StorageFileRecord>,
+    @InjectModel(StorageFileRecord.name) private readonly storageFileModel: StorageFileModel,
   ) {}
 
   /** Store a readable stream and create its file record. */
@@ -47,7 +50,7 @@ export class StorageService {
     options: { ownerId?: string; driver: StorageDriverKind; maxSize?: number },
   ): Promise<StorageFileDocument> {
     try {
-      await this.hookRunner.run('beforeUpload', meta);
+      await this.hookRunner.runBeforeUpload(meta);
 
       const hash = createHash('sha256');
       let bytesSeen = 0;
@@ -68,7 +71,7 @@ export class StorageService {
       const checksum = hash.digest('hex');
       const file = await this.createFileRecord(key, meta, checksum, options.driver, options.ownerId);
       this.logger.log(`Stored file ${file.id} (${meta.size} bytes) at ${key}`);
-      await this.hookRunner.run('afterUpload', file);
+      await this.hookRunner.runAfterUpload(file);
       return file;
     } catch (error) {
       this.logger.error(`Failed to store file at ${key}`, error instanceof Error ? error.stack : String(error));
@@ -101,7 +104,7 @@ export class StorageService {
   async deleteFile(id: string, options: DeleteFileOptions = {}): Promise<void> {
     try {
       const file = await this.getFile(id);
-      await this.hookRunner.run('beforeDelete', file);
+      await this.hookRunner.runBeforeDelete(file);
       if (options.hard) {
         await this.driver.delete(file.key);
         await this.storageFileModel.deleteOne({ _id: file._id }).exec();
@@ -109,7 +112,7 @@ export class StorageService {
         file.deletedAt = new Date();
         await file.save();
       }
-      await this.hookRunner.run('afterDelete', file);
+      await this.hookRunner.runAfterDelete(file);
       this.logger.log(`${options.hard ? 'Hard-deleted' : 'Soft-deleted'} file ${id}`);
     } catch (error) {
       this.logger.error(`Failed to delete file ${id}`, error instanceof Error ? error.stack : String(error));

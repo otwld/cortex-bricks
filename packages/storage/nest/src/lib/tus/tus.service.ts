@@ -95,7 +95,7 @@ export class TusService {
       throw StorageException.misconfigured(`Initial TUS chunk exceeds declared upload length ${meta.size}`);
     }
 
-    await this.hookRunner.run('beforeUpload', meta);
+    await this.hookRunner.runBeforeUpload(meta);
     const key = this.createStorageKey(meta);
     const uploadId = await this.driver.createMultipartUpload(key, meta);
     const expiresAt = new Date(Date.now() + this.options.uploadStateTtl * 1000);
@@ -186,7 +186,7 @@ export class TusService {
         metadata: upload.metadata,
       });
       file = toStorageFile(record);
-      await this.hookRunner.run('afterUpload', record as never);
+      await this.hookRunner.runAfterUpload(record);
       await this.uploadStateModel.deleteOne({ uploadId }).exec();
       this.logger.log(`Completed TUS upload ${uploadId} for ${upload.key}`);
     }

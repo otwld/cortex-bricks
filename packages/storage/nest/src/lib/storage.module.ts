@@ -58,8 +58,8 @@ function createAsyncOptionsProvider(asyncOptions: ManualStorageModuleAsyncOption
   if (factory) {
     return {
       provide: STORAGE_MODULE_OPTIONS,
-      useFactory: async (...args: never[]) => validateStorageModuleOptions(await factory(...args)),
-      inject: (asyncOptions.inject ?? []) as never[],
+      useFactory: async (...args: unknown[]) => validateStorageModuleOptions(await factory(...args)),
+      inject: asyncOptions.inject ?? [],
     };
   }
 

@@ -55,7 +55,7 @@ describe('StoUploadDirective', () => {
 
   it('stops observing a task after a completed upload emits', () => {
     const controlled = createControllableTask();
-    const storage = { upload: vi.fn().mockReturnValue(controlled.task) } as unknown as StorageService;
+    const storage = { upload: vi.fn().mockReturnValue(controlled.task) } satisfies Pick<StorageService, 'upload'>;
     TestBed.overrideProvider(StorageService, { useValue: storage });
     const fixture = TestBed.createComponent(CompletionHostComponent);
     fixture.detectChanges();

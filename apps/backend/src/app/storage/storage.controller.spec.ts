@@ -6,7 +6,7 @@ import { StorageController } from './storage.controller';
 
 describe(StorageController.name, () => {
   it('returns signed URLs in the shape expected by the Angular storage client', async () => {
-    const signedUrls = { generate: vi.fn().mockResolvedValue('https://signed.example/file') } as unknown as SignedUrlService;
+    const signedUrls = { generate: vi.fn().mockResolvedValue('https://signed.example/file') };
     const controller = new StorageController(signedUrls);
 
     await expect(controller.createSignedUrl({ key: 'uploads/file.txt', expiresIn: 600 })).resolves.toEqual({

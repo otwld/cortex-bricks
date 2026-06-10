@@ -12,7 +12,7 @@ describe('StoSignedUrlPipe', () => {
     TestBed.configureTestingModule({
       providers: [
         provideStorage({ tusEndpoint: '/x', signedUrlEndpoint: '/signed' }),
-        { provide: HttpClient, useValue: { post } as unknown as HttpClient },
+        { provide: HttpClient, useValue: { post } },
       ],
     });
   });

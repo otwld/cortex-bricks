@@ -1,5 +1,4 @@
 import { Controller, Delete, Head, Headers, HttpCode, Inject, Logger, Options, Param, Patch, Post, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
 import { StorageException } from '../exceptions/storage.exception';
 import { bufferFromStream, decodeTusMetadata, TusService } from './tus.service';
 import { TUS_MODULE_OPTIONS, TusModuleOptions } from './tus.tokens';
@@ -8,6 +7,29 @@ const TUS_VERSION = '1.0.0';
 const TUS_EXTENSION = 'creation,creation-with-upload,termination,checksum,expiration';
 const ALLOW_HEADERS = 'Tus-Resumable,Upload-Length,Upload-Offset,Upload-Metadata,Upload-Defer-Length,Upload-Concat,Upload-Checksum,Content-Type';
 const EXPOSE_HEADERS = 'Tus-Resumable,Upload-Offset,Upload-Length,Location,Upload-Expires,Tus-Version,Tus-Extension,Storage-File';
+
+/** TUS service operations required by the HTTP controller. */
+type TusUploadService = Pick<TusService, 'createUpload' | 'getUpload' | 'appendChunk' | 'abortUpload'>;
+
+/** Request surface the TUS controller needs from the active HTTP adapter. */
+export interface TusHttpRequest extends NodeJS.ReadableStream {
+  /** Read one normalized request header. */
+  header(name: string): string | undefined;
+  /** Original request URL, when provided by the adapter. */
+  originalUrl?: string;
+  /** Fallback request URL. */
+  url?: string;
+}
+
+/** Response writer surface the TUS controller needs from the active HTTP adapter. */
+export interface TusHttpResponse {
+  /** Write one response header. */
+  setHeader(name: string, value: number | string | readonly string[]): this;
+  /** Set HTTP status. */
+  status(code: number): this;
+  /** Finish the response. */
+  send(body?: unknown): this;
+}
 
 /** HTTP controller implementing the TUS resumable upload protocol. */
 @Controller('storage/tus')
@@ -21,7 +43,7 @@ export class TusController {
    * @param options - TUS module limits, path, and CORS settings.
    */
   constructor(
-    private readonly tusService: TusService,
+    @Inject(TusService) private readonly tusService: TusUploadService,
     @Inject(TUS_MODULE_OPTIONS) private readonly options: TusModuleOptions,
   ) {}
 
@@ -32,7 +54,7 @@ export class TusController {
    * @throws When the operation cannot be completed.
    */
   @Options()
-  advertise(@Res() response: Response, @Req() request?: Request): void {
+  advertise(@Res() response: TusHttpResponse, @Req() request?: TusHttpRequest): void {
     this.logRequest('OPTIONS', request, '/storage/tus');
     try {
       this.applyTusHeaders(response);
@@ -60,8 +82,8 @@ export class TusController {
     @Headers('upload-length') uploadLength: string | undefined,
     @Headers('upload-metadata') uploadMetadata: string | undefined,
     @Headers('upload-checksum') uploadChecksum: string | undefined,
-    @Req() request: Request,
-    @Res() response: Response,
+    @Req() request: TusHttpRequest,
+    @Res() response: TusHttpResponse,
     @Headers('upload-defer-length') uploadDeferLength: string | undefined,
   ): Promise<void> {
     this.logRequest('POST', request, '/storage/tus');
@@ -102,7 +124,7 @@ export class TusController {
    * @throws When the operation cannot be completed.
    */
   @Head(':id')
-  async head(@Param('id') id: string, @Res() response: Response, @Req() request?: Request): Promise<void> {
+  async head(@Param('id') id: string, @Res() response: TusHttpResponse, @Req() request?: TusHttpRequest): Promise<void> {
     this.logRequest('HEAD', request, `/storage/tus/${id}`);
     try {
       const upload = await this.tusService.getUpload(id);
@@ -131,8 +153,8 @@ export class TusController {
     @Param('id') id: string,
     @Headers('upload-offset') uploadOffset: string,
     @Headers('upload-checksum') uploadChecksum: string | undefined,
-    @Req() request: Request,
-    @Res() response: Response,
+    @Req() request: TusHttpRequest,
+    @Res() response: TusHttpResponse,
   ): Promise<void> {
     this.logRequest('PATCH', request, `/storage/tus/${id}`);
     try {
@@ -159,7 +181,7 @@ export class TusController {
    */
   @Delete(':id')
   @HttpCode(204)
-  async delete(@Param('id') id: string, @Res() response: Response, @Req() request?: Request): Promise<void> {
+  async delete(@Param('id') id: string, @Res() response: TusHttpResponse, @Req() request?: TusHttpRequest): Promise<void> {
     this.logRequest('DELETE', request, `/storage/tus/${id}`);
     try {
       await this.tusService.abortUpload(id);
@@ -171,7 +193,7 @@ export class TusController {
     }
   }
 
-  private applyTusHeaders(response: Response): void {
+  private applyTusHeaders(response: TusHttpResponse): void {
     response.setHeader('Tus-Resumable', TUS_VERSION);
     response.setHeader('Tus-Version', TUS_VERSION);
     response.setHeader('Tus-Extension', TUS_EXTENSION);
@@ -182,7 +204,7 @@ export class TusController {
     response.setHeader('Access-Control-Expose-Headers', EXPOSE_HEADERS);
   }
 
-  private logRequest(method: string, request: Request | undefined, fallbackPath: string): void {
+  private logRequest(method: string, request: TusHttpRequest | undefined, fallbackPath: string): void {
     this.logger.verbose(`${method} ${request?.originalUrl ?? request?.url ?? fallbackPath}`);
   }
 

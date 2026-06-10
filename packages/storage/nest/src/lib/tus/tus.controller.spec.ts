@@ -1,32 +1,67 @@
-import type { Mocked } from 'vitest';
 import { Readable } from 'node:stream';
-import { Response } from 'express';
-import { TusController } from './tus.controller';
+import { TusController, type TusHttpRequest, type TusHttpResponse } from './tus.controller';
 import { TusModuleOptions } from './tus.module';
-import { TusService } from './tus.service';
 
-const fakeRes = (): Mocked<Response> => {
-  const headers: Record<string, string> = {};
-  const response: any = {
-    setHeader: vi.fn((key: string, value: string) => {
-      headers[key] = value;
-    }),
-    status: vi.fn().mockReturnThis(),
-    send: vi.fn(),
-    headers,
-  };
-  return response;
+type TusServiceMock = ConstructorParameters<typeof TusController>[0];
+
+class TusRequestMock extends Readable implements TusHttpRequest {
+  private chunkIndex = 0;
+
+  public readonly header = vi.fn((name: string) =>
+    name.toLowerCase() === 'content-type' ? this.contentType : undefined,
+  );
+
+  public constructor(
+    private readonly chunks: Buffer[] = [],
+    private readonly contentType = 'application/octet-stream',
+  ) {
+    super();
+  }
+
+  public override _read(): void {
+    this.push(this.chunks[this.chunkIndex++] ?? null);
+  }
+}
+
+class TusResponseMock implements TusHttpResponse {
+  public readonly headers: Record<string, string> = {};
+
+  public readonly setHeader = vi.fn((key: string, value: string | number | readonly string[]) => {
+    this.headers[key] = Array.isArray(value) ? value.join(',') : String(value);
+    return this;
+  });
+
+  public readonly status = vi.fn(() => this);
+
+  public readonly send = vi.fn(() => this);
+}
+
+const createTusService = (overrides: Partial<TusServiceMock> = {}): TusServiceMock => ({
+  createUpload: vi.fn(),
+  getUpload: vi.fn(),
+  appendChunk: vi.fn(),
+  abortUpload: vi.fn(),
+  ...overrides,
+});
+
+const fakeReq = (
+  chunks: Buffer[] = [],
+  contentType = 'application/octet-stream',
+): TusRequestMock => {
+  return new TusRequestMock(chunks, contentType);
 };
+
+const fakeRes = (): TusResponseMock => new TusResponseMock();
 
 describe('TusController CORS headers', () => {
   it('echoes configured allowOrigin', () => {
-    const options = {
+    const options: TusModuleOptions = {
       maxSize: 10,
       uploadStateTtl: 86400,
       cleanupIntervalMs: 1000,
       allowOrigin: 'https://app.example',
-    } as unknown as TusModuleOptions;
-    const controller = new TusController({} as TusService, options);
+    };
+    const controller = new TusController(createTusService(), options);
     const response = fakeRes();
 
     controller.advertise(response);
@@ -46,7 +81,7 @@ describe('TusController CORS headers', () => {
   });
 
   it('rejects POST without Upload-Length and without Upload-Defer-Length', async () => {
-    const tus = {
+    const tus = createTusService({
       createUpload: vi
         .fn()
         .mockResolvedValue({
@@ -54,18 +89,17 @@ describe('TusController CORS headers', () => {
           offset: 0,
           expiresAt: new Date(),
         }),
-    } as unknown as TusService;
+    });
     const controller = new TusController(tus, {
       maxSize: 10,
       uploadStateTtl: 86400,
       cleanupIntervalMs: 1000,
     });
     const response = fakeRes();
-    const request = Readable.from([]) as any;
-    request.header = () => 'application/octet-stream';
+    const request = fakeReq();
 
     await expect(
-      (controller.create as any)(
+      controller.create(
         undefined,
         undefined,
         undefined,
@@ -89,7 +123,7 @@ describe('TusController CORS headers', () => {
       createdAt: new Date('2026-05-07T00:00:00.000Z'),
       updatedAt: new Date('2026-05-07T00:00:00.000Z'),
     };
-    const tus = {
+    const tus = createTusService({
       appendChunk: vi.fn().mockResolvedValue({
         uploadId: 'u1',
         offset: 2,
@@ -99,20 +133,20 @@ describe('TusController CORS headers', () => {
       }),
       getUpload: vi.fn().mockResolvedValue({
         uploadId: 'u1',
-        offset: 0,
-        length: 2,
-        expiresAt: new Date(),
-      }),
-    } as unknown as TusService;
+          offset: 0,
+          length: 2,
+          expiresAt: new Date(),
+        }),
+    });
     const controller = new TusController(tus, {
       maxSize: 10,
       uploadStateTtl: 86400,
       cleanupIntervalMs: 1000,
     });
     const response = fakeRes();
-    const request = Readable.from([Buffer.from('ab')]) as any;
+    const request = fakeReq([Buffer.from('ab')]);
 
-    await (controller.patch as any)('u1', '0', undefined, request, response);
+    await controller.patch('u1', '0', undefined, request, response);
 
     expect(response.setHeader).toHaveBeenCalledWith(
       'Storage-File',
@@ -125,7 +159,7 @@ describe('TusController CORS headers', () => {
   });
 
   it('rejects creation-with-upload bodies larger than Upload-Length before creating state', async () => {
-    const tus = {
+    const tus = createTusService({
       createUpload: vi
         .fn()
         .mockResolvedValue({
@@ -133,18 +167,17 @@ describe('TusController CORS headers', () => {
           offset: 4,
           expiresAt: new Date(),
         }),
-    } as unknown as TusService;
+    });
     const controller = new TusController(tus, {
       maxSize: 10,
       uploadStateTtl: 86400,
       cleanupIntervalMs: 1000,
     });
     const response = fakeRes();
-    const request = Readable.from([Buffer.from('abcd')]) as any;
-    request.header = () => 'application/octet-stream';
+    const request = fakeReq([Buffer.from('abcd')]);
 
     await expect(
-      (controller.create as any)(
+      controller.create(
         '3',
         undefined,
         undefined,
@@ -158,7 +191,7 @@ describe('TusController CORS headers', () => {
   });
 
   it('limits PATCH buffering to the remaining upload length', async () => {
-    const tus = {
+    const tus = createTusService({
       getUpload: vi.fn().mockResolvedValue({
         uploadId: 'u1',
         offset: 3,
@@ -167,21 +200,21 @@ describe('TusController CORS headers', () => {
       }),
       appendChunk: vi.fn().mockResolvedValue({
         uploadId: 'u1',
-        offset: 5,
-        length: 4,
-        expiresAt: new Date(),
-      }),
-    } as unknown as TusService;
+          offset: 5,
+          length: 4,
+          expiresAt: new Date(),
+        }),
+    });
     const controller = new TusController(tus, {
       maxSize: 10,
       uploadStateTtl: 86400,
       cleanupIntervalMs: 1000,
     });
     const response = fakeRes();
-    const request = Readable.from([Buffer.from('xy')]) as any;
+    const request = fakeReq([Buffer.from('xy')]);
 
     await expect(
-      (controller.patch as any)('u1', '3', undefined, request, response),
+      controller.patch('u1', '3', undefined, request, response),
     ).rejects.toThrow(/exceeds/);
 
     expect(tus.appendChunk).not.toHaveBeenCalled();

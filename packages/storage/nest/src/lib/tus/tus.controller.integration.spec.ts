@@ -1,7 +1,7 @@
 import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { MongooseModule } from '@nestjs/mongoose';
 import { StorageDriver as StorageDriverKind } from '@otwld/ts-storage';
@@ -38,8 +38,13 @@ describe('TusController (integration)', () => {
     await mongo?.stop();
   });
 
+  function getApp(): INestApplication {
+    if (!app) throw new Error('TUS integration app was not initialized.');
+    return app;
+  }
+
   it('OPTIONS advertises TUS capabilities', async () => {
-    const response = await request(app!.getHttpServer()).options(
+    const response = await request(getApp().getHttpServer()).options(
       '/storage/tus',
     );
     expect(response.status).toBe(204);
@@ -49,7 +54,7 @@ describe('TusController (integration)', () => {
 
   it('full upload lifecycle: POST -> PATCH -> completion', async () => {
     const payload = Buffer.from('the quick brown fox');
-    const create = await request(app!.getHttpServer())
+    const create = await request(getApp().getHttpServer())
       .post('/storage/tus')
       .set('Tus-Resumable', '1.0.0')
       .set('Upload-Length', String(payload.length))
@@ -59,7 +64,7 @@ describe('TusController (integration)', () => {
       );
     expect(create.status).toBe(201);
     const location = create.headers['location'].split('/').pop() ?? '';
-    const patch = await request(app!.getHttpServer())
+    const patch = await request(getApp().getHttpServer())
       .patch(`/storage/tus/${location}`)
       .set('Tus-Resumable', '1.0.0')
       .set('Upload-Offset', '0')
