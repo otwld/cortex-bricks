@@ -92,7 +92,6 @@
     "@nx/web": "22.7.0",
     "@nx/webpack": "22.7.0",
     "@nx/workspace": "22.7.0",
-    "@otwld/bricks": "0.0.10",
     "@oxc-project/runtime": "^0.115.0",
     "@playwright/test": "^1.36.0",
     "@schematics/angular": "~21.2.0",
