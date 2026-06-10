@@ -12,16 +12,12 @@ export interface StorybookNodeSourceLoaderPluginOptions {
  * Convenience helper for Node-based Storybook configs.
  * Keeps callsites short while reusing the shared source-loader plugin.
  */
-export function createStorybookNodeSourceLoaderPlugin(
-  options: StorybookNodeSourceLoaderPluginOptions = {}
-): Plugin {
+export function createStorybookNodeSourceLoaderPlugin(options: StorybookNodeSourceLoaderPluginOptions = {}): Plugin {
   return createStorybookSourceLoaderPlugin({
     importPrefix: options.importPrefix,
     pluginName: options.pluginName,
     resolveSourcePath: (requestedPath, importer) =>
-      importer
-        ? resolve(dirname(importer), requestedPath)
-        : resolve(process.cwd(), requestedPath),
+      importer ? resolve(dirname(importer), requestedPath) : resolve(process.cwd(), requestedPath),
     readSourceFile: (absoluteSourcePath) => readFileSync(absoluteSourcePath, 'utf8'),
   });
 }

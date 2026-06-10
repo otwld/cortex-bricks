@@ -38,7 +38,7 @@
       "@otwld/ng-storage": ["./packages/storage/ng/src/index.ts"],
 
       "@otwld/ts-storybook": ["./packages/storybook/ts/src/index.ts"],
-      "@otwld/ts-storybook/vite": ["./packages/storybook/ts/vite/src/index.ts"],
+      "@otwld/ts-storybook/vite": ["./packages/storybook/ts/src/vite/index.ts"],
       "@otwld/ng-storybook": ["./packages/storybook/ng/src/index.ts"],
 
       "@otwld/ts-users": ["./packages/users/ts/src/index.ts"],

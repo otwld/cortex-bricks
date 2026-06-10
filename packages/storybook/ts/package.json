@@ -13,8 +13,8 @@
       "import": "./src/index.js"
     },
     "./vite": {
-      "types": "./vite/src/index.d.ts",
-      "import": "./vite/src/index.js"
+      "types": "./src/vite/index.d.ts",
+      "import": "./src/vite/index.js"
     }
   },
   "dependencies": {

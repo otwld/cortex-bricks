@@ -11,9 +11,7 @@ export interface StorybookSourceLoaderPluginOptions {
  * Creates a Vite plugin that resolves imports like `source-loader:./file.ts`
  * into virtual modules exporting the file contents as a string.
  */
-export function createStorybookSourceLoaderPlugin(
-  options: StorybookSourceLoaderPluginOptions,
-): Plugin {
+export function createStorybookSourceLoaderPlugin(options: StorybookSourceLoaderPluginOptions): Plugin {
   const importPrefix = options.importPrefix ?? 'source-loader:';
   const pluginName = options.pluginName ?? 'storybook-source-loader';
   const { resolveSourcePath, readSourceFile } = options;
