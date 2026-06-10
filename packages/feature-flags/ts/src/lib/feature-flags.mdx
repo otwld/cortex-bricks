@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Toolkit/TS Feature Flags/References/Feature Flags" name="featureFlags"   />
+
+# Feature Flags Contracts
+
+This module provides framework-agnostic types and helpers used by both `@otwld/ng-feature-flags` and `@otwld/nest-feature-flags`.
+
+## Responsibilities
+
+- Shared DTO contracts for feature flags (admin + evaluation).
+- Condition metadata structures for building admin UIs.
+- Operator and payload field constants for consistent rules.
+
+## Core Types
+
+```ts
+import type {
+  FeatureFlagDto,
+  FeatureFlagUpsertDto,
+  FeatureEvaluationResultDto,
+  FeatureCondition,
+  FeatureScope,
+} from '@otwld/ts-feature-flags';
+```
+
+## Example (Recruitment Domain)
+
+```ts
+const offerVisibilityFlag: FeatureFlagUpsertDto = {
+  name: 'job-offer-visibility',
+  scope: 'app',
+  enabled: true,
+  payload: {
+    audience: 'premium-recruiters',
+  },
+  conditions: [],
+};
+```
+
+## Notes
+
+- `FeatureFlagDto` uses ISO timestamp strings for `createdAt`/`updatedAt` and optional start/end windows.
+- `FeatureCondition` is intentionally generic and relies on `ConditionMetaOperator` to describe which field is required.

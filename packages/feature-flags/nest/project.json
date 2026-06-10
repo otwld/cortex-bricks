@@ -1,0 +1,32 @@
+{
+  "name": "nest-feature-flags",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/feature-flags/nest/src",
+  "projectType": "library",
+  "tags": [
+    "scope:feature-flags",
+    "type:lib",
+    "framework:nest",
+    "type:brick"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/feature-flags/nest",
+        "tsConfig": "packages/feature-flags/nest/tsconfig.lib.json",
+        "packageJson": "packages/feature-flags/nest/package.json",
+        "main": "packages/feature-flags/nest/src/index.ts",
+        "assets": [
+          "packages/feature-flags/nest/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

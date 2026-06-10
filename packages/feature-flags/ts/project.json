@@ -1,0 +1,40 @@
+{
+  "name": "ts-feature-flags",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/feature-flags/ts/src",
+  "projectType": "library",
+  "tags": [
+    "scope:feature-flags",
+    "type:types",
+    "type:brick"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/feature-flags/ts",
+        "main": "packages/feature-flags/ts/src/index.ts",
+        "tsConfig": "packages/feature-flags/ts/tsconfig.lib.json",
+        "format": [
+          "esm"
+        ],
+        "assets": [
+          "packages/feature-flags/ts/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p packages/feature-flags/ts/tsconfig.lib.json --noEmit",
+        "forwardAllArgs": false
+      }
+    }
+  }
+}
