@@ -1,28 +1,33 @@
+import type { Mocked } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { FeatureScope } from '@otwld/ts-feature-flags';
 
 import type { FeatureFlag } from './feature-flag.entity';
 import { FeatureFlagUpsertDto } from './feature-flags.dtos';
-import type { FeatureFlagsRepository } from './feature-flags.repository';
-import { FeatureFlagsService } from './feature-flags.service';
+import { FeatureFlagsService, type FeatureFlagsRepositoryPort } from './feature-flags.service';
 import type { FeatureFlagEvaluator } from './feature-flags.tokens';
 
-type RepositoryMock = {
-  updateEnabled: ReturnType<typeof vi.fn>;
-  upsert: ReturnType<typeof vi.fn>;
-};
+type RepositoryMock = Mocked<FeatureFlagsRepositoryPort>;
 
 function createService(repository: RepositoryMock): FeatureFlagsService {
   const evaluator: FeatureFlagEvaluator = {
     test: vi.fn().mockResolvedValue(true),
   };
 
-  return new FeatureFlagsService(
-    repository as unknown as FeatureFlagsRepository,
-    evaluator,
-    {},
-  );
+  return new FeatureFlagsService(repository, evaluator, {});
+}
+
+function createRepositoryMock(overrides: Partial<RepositoryMock> = {}): RepositoryMock {
+  return {
+    delete: vi.fn(),
+    findAll: vi.fn(),
+    findByName: vi.fn(),
+    findEnabledByScope: vi.fn(),
+    updateEnabled: vi.fn(),
+    upsert: vi.fn(),
+    ...overrides,
+  };
 }
 
 function createFeature(overrides: Partial<FeatureFlag> = {}): FeatureFlag {
@@ -45,10 +50,9 @@ function createFeature(overrides: Partial<FeatureFlag> = {}): FeatureFlag {
 
 describe(FeatureFlagsService.name, () => {
   it('toggles an existing flag without upserting a partial document', async () => {
-    const repository: RepositoryMock = {
+    const repository = createRepositoryMock({
       updateEnabled: vi.fn().mockResolvedValue(createFeature({ enabled: true })),
-      upsert: vi.fn(),
-    };
+    });
     const service = createService(repository);
 
     await expect(service.toggle('Candidate beta', true)).resolves.toMatchObject({
@@ -61,10 +65,9 @@ describe(FeatureFlagsService.name, () => {
   });
 
   it('rejects toggles for missing flags instead of creating incomplete flags', async () => {
-    const repository: RepositoryMock = {
+    const repository = createRepositoryMock({
       updateEnabled: vi.fn().mockResolvedValue(null),
-      upsert: vi.fn(),
-    };
+    });
     const service = createService(repository);
 
     await expect(service.toggle('Missing flag', true)).rejects.toBeInstanceOf(NotFoundException);

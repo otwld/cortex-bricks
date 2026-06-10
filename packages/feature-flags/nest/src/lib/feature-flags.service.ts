@@ -21,13 +21,23 @@ import {
   FeatureFlagEvaluator,
 } from './feature-flags.tokens';
 
+export type FeatureFlagsRepositoryPort = Pick<
+  FeatureFlagsRepository,
+  | 'delete'
+  | 'findAll'
+  | 'findByName'
+  | 'findEnabledByScope'
+  | 'updateEnabled'
+  | 'upsert'
+>;
+
 /**
  * Core service for evaluating and managing feature flags.
  */
 @Injectable()
 export class FeatureFlagsService {
   constructor(
-    private readonly repository: FeatureFlagsRepository,
+    @Inject(FeatureFlagsRepository) private readonly repository: FeatureFlagsRepositoryPort,
     @Inject(FEATURE_FLAGS_EVALUATOR_TOKEN) private readonly evaluator: FeatureFlagEvaluator,
     @Inject(FEATURE_FLAGS_CONDITION_META_MAP_TOKEN) private readonly conditionMetaMap: ConditionMetaMap,
     @Optional() @Inject(FEATURE_FLAGS_CATALOG_TOKEN) private readonly catalog?: FeatureFlagCatalog,

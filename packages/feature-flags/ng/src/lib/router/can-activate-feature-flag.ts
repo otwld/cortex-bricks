@@ -4,9 +4,8 @@ import { filter, firstValueFrom, of, timeout } from 'rxjs';
 
 import { FeatureFlagsService } from '../feature-flags.service';
 import type { FeatureFlagScope } from '../feature-flags.types';
-/** FeatureFlagRouteRequirement. */
 
-
+/** Feature slug and scope that must be enabled before a route can activate. */
 export type FeatureFlagRouteRequirement = { slug: string; scope: FeatureFlagScope };
 
 const FEATURE_FLAG_GUARD_LOAD_TIMEOUT_MS = 5_000;

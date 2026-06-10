@@ -1,19 +1,28 @@
 import { Injector, runInInjectionContext } from '@angular/core';
-import { Router, type CanActivateFn, type UrlTree } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  type CanActivateFn,
+  type GuardResult,
+  type MaybeAsync,
+  type RouterStateSnapshot,
+  type UrlTree,
+} from '@angular/router';
+import { BehaviorSubject, firstValueFrom, isObservable } from 'rxjs';
 
 import { FeatureFlagsService } from '../feature-flags.service';
 import { canActivateFeatureFlag } from './can-activate-feature-flag';
 
 type FeatureFlagsServiceMock = Pick<FeatureFlagsService, 'isEnabled' | 'loadAppFlags' | 'loadUserFlags' | 'loaded'>;
 
+type RouterMock = Pick<Router, 'parseUrl' | 'serializeUrl'>;
 type TestUrlTree = UrlTree & { url: string };
 
-function createHarness(service: FeatureFlagsServiceMock): { injector: Injector; router: Router } {
+function createHarness(service: FeatureFlagsServiceMock): { injector: Injector; router: RouterMock } {
   const router = {
     parseUrl: vi.fn((url: string) => ({ url }) as TestUrlTree),
     serializeUrl: vi.fn((tree: TestUrlTree) => tree.url),
-  } as unknown as Router;
+  } satisfies RouterMock;
   const injector = Injector.create({
     providers: [
       { provide: FeatureFlagsService, useValue: service },
@@ -24,8 +33,29 @@ function createHarness(service: FeatureFlagsServiceMock): { injector: Injector; 
   return { injector, router };
 }
 
-async function runGuard(injector: Injector, guard: CanActivateFn): Promise<boolean | UrlTree> {
-  return runInInjectionContext(injector, () => guard({} as never, {} as never)) as Promise<boolean | UrlTree>;
+function createRouterState(route: ActivatedRouteSnapshot): RouterStateSnapshot {
+  return {
+    url: '/',
+    root: route,
+    toString: () => '/',
+  } satisfies RouterStateSnapshot;
+}
+
+function isTestUrlTree(result: GuardResult | symbol): result is TestUrlTree {
+  return typeof result === 'object' && result !== null && 'url' in result;
+}
+
+async function resolveMaybeAsync<T>(value: MaybeAsync<T>): Promise<T> {
+  if (isObservable(value)) return firstValueFrom(value);
+  return Promise.resolve(value);
+}
+
+async function runGuard(injector: Injector, guard: CanActivateFn): Promise<GuardResult> {
+  const route = new ActivatedRouteSnapshot();
+  const state = createRouterState(route);
+  return resolveMaybeAsync(
+    runInInjectionContext(injector, () => guard(route, state)),
+  );
 }
 
 describe(canActivateFeatureFlag.name, () => {
@@ -89,6 +119,9 @@ describe(canActivateFeatureFlag.name, () => {
     const result = await Promise.race([resultPromise, Promise.resolve(pending)]);
 
     expect(result).not.toBe(pending);
-    expect(router.serializeUrl(result as UrlTree)).toBe('/missing');
+    if (!isTestUrlTree(result)) {
+      throw new Error('Expected feature-flag guard to return a fallback URL tree.');
+    }
+    expect(router.serializeUrl(result)).toBe('/missing');
   });
 });
