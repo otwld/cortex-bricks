@@ -35,7 +35,7 @@ const meta: Meta<RevenueStreamWidget> = {
     options: null,
     series,
     themeKey: null,
-    title: 'Revenue Stream',
+    title: 'dashboard/ng/ecommerce/components/revenue-stream-widget',
   },
   component: RevenueStreamWidget,
   render: (args) => ({
@@ -54,7 +54,7 @@ const meta: Meta<RevenueStreamWidget> = {
       />
     `,
   }),
-  title: 'dashboard/ng/ecommerce/revenue-stream-widget',
+  title: 'dashboard/ng/ecommerce/components/revenue-stream-widget',
 };
 
 export default meta;

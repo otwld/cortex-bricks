@@ -35,7 +35,7 @@ const meta: Meta<BasicInformation> = {
     props: args,
     template: `<app-basic-information></app-basic-information>`,
   }),
-  title: 'dashboard/ng/user-management/steps/basic-information',
+  title: 'dashboard/ng/pages/user-management/steps/basic-information',
 };
 
 export default meta;

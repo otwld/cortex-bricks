@@ -13,7 +13,7 @@ const meta: Meta<FaqPage> = {
     props: args,
     template: `<app-faq-page></app-faq-page>`,
   }),
-  title: 'dashboard/ng/faq',
+  title: 'dashboard/ng/pages/faq',
 };
 
 export default meta;

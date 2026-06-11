@@ -13,7 +13,7 @@ const meta: Meta<ProductOverviewPage> = {
     props: args,
     template: `<app-product-overview-page></app-product-overview-page>`,
   }),
-  title: 'dashboard/ng/ecommerce/product-overview',
+  title: 'dashboard/ng/pages/ecommerce/product-overview',
 };
 
 export default meta;

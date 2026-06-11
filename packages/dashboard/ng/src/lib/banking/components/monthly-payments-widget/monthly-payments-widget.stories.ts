@@ -68,7 +68,7 @@ const meta: Meta<MonthlyPaymentsWidget> = {
     payments,
     rows: 5,
     showPaymentActions: true,
-    title: 'Monthly Payments',
+    title: 'dashboard/ng/banking/components/monthly-payments-widget',
   },
   component: MonthlyPaymentsWidget,
   render: (args) => ({
@@ -87,7 +87,7 @@ const meta: Meta<MonthlyPaymentsWidget> = {
       />
     `,
   }),
-  title: 'dashboard/ng/banking/monthly-payments-widget',
+  title: 'dashboard/ng/banking/components/monthly-payments-widget',
 };
 
 export default meta;

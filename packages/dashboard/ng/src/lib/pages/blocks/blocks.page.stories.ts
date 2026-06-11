@@ -13,7 +13,7 @@ const meta: Meta<BlocksPage> = {
     props: args,
     template: `<app-blocks-page></app-blocks-page>`,
   }),
-  title: 'dashboard/ng/blocks',
+  title: 'dashboard/ng/pages/blocks',
 };
 
 export default meta;

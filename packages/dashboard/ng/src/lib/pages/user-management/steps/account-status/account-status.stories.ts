@@ -67,7 +67,7 @@ const meta: Meta<AccountStatus> = {
     props: args,
     template: `<app-account-status></app-account-status>`,
   }),
-  title: 'dashboard/ng/user-management/steps/account-status',
+  title: 'dashboard/ng/pages/user-management/steps/account-status',
 };
 
 export default meta;

@@ -39,7 +39,7 @@ const meta: Meta<DashboardProfileSidebar> = {
     props: args,
     template: `<dashboard-profile-sidebar></dashboard-profile-sidebar>`,
   }),
-  title: 'dashboard/ng/layout/dashboard-profile-sidebar',
+  title: 'dashboard/ng/layout/components/dashboard-profile-sidebar',
 };
 
 export default meta;

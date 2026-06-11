@@ -51,7 +51,7 @@ const meta: Meta<HeaderWidget> = {
       />
     `,
   }),
-  title: 'dashboard/ng/banking/header-widget',
+  title: 'dashboard/ng/banking/components/header-widget',
 };
 
 export default meta;

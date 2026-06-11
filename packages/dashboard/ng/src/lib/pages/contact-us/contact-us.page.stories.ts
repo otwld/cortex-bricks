@@ -13,7 +13,7 @@ const meta: Meta<ContactUsPage> = {
     props: args,
     template: `<app-contact-us-page></app-contact-us-page>`,
   }),
-  title: 'dashboard/ng/contact-us',
+  title: 'dashboard/ng/pages/contact-us',
 };
 
 export default meta;

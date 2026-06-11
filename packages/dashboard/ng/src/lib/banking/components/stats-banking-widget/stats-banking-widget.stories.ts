@@ -7,7 +7,7 @@ const cardSelected = fn();
 const cards: readonly BankingStatCard[] = [
   {
     id: 'debit-card',
-    title: 'Recruiter Wallet',
+    title: 'dashboard/ng/banking/components/stats-banking-widget',
     label: 'Balance',
     value: '$2,000.00',
     number: '**** **** **** 1412',
@@ -16,14 +16,14 @@ const cards: readonly BankingStatCard[] = [
   },
   {
     id: 'candidate-screening',
-    title: 'Candidate Screening',
+    title: 'dashboard/ng/banking/components/stats-banking-widget',
     value: '$24,345.21',
     icon: 'pi pi-dollar',
     variant: 'summary',
   },
   {
     id: 'interview-budget',
-    title: 'Interview Budget',
+    title: 'dashboard/ng/banking/components/stats-banking-widget',
     value: '$10,416.11',
     icon: 'pi pi-calendar',
     variant: 'summary',
@@ -66,7 +66,7 @@ const meta: Meta<StatsBankingWidget> = {
       </div>
     `,
   }),
-  title: 'dashboard/ng/banking/stats-banking-widget',
+  title: 'dashboard/ng/banking/components/stats-banking-widget',
 };
 
 export default meta;
@@ -88,7 +88,7 @@ export const Default: Story = {
       await userEvent.click(canvas.getByRole('button', { name: /view candidate screening/i }));
 
       await expect(cardSelected).toHaveBeenCalledWith({
-        card: expect.objectContaining({ id: 'candidate-screening', title: 'Candidate Screening' }),
+        card: expect.objectContaining({ id: 'candidate-screening', title: 'dashboard/ng/banking/components/stats-banking-widget' }),
       });
     });
   },

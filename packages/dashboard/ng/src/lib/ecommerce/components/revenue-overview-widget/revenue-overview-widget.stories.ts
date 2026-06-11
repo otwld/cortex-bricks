@@ -84,7 +84,7 @@ const meta: Meta<RevenueOverviewWidget> = {
     selectedPeriodId: null,
     showPeriodSelector: true,
     themeKey: null,
-    title: 'Revenue Overview',
+    title: 'dashboard/ng/ecommerce/components/revenue-overview-widget',
   },
   component: RevenueOverviewWidget,
   render: (args) => ({
@@ -108,7 +108,7 @@ const meta: Meta<RevenueOverviewWidget> = {
       />
     `,
   }),
-  title: 'dashboard/ng/ecommerce/revenue-overview-widget',
+  title: 'dashboard/ng/ecommerce/components/revenue-overview-widget',
 };
 
 export default meta;

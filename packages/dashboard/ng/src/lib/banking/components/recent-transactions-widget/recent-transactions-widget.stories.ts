@@ -66,7 +66,7 @@ const meta: Meta<RecentTransactionsWidget> = {
     emptyMessage: 'No recent transactions to display.',
     maxTransactions: 5,
     showTransactionActions: true,
-    title: 'Recent Transactions',
+    title: 'dashboard/ng/banking/components/recent-transactions-widget',
     transactionSelected,
     transactions,
   },
@@ -87,7 +87,7 @@ const meta: Meta<RecentTransactionsWidget> = {
       />
     `,
   }),
-  title: 'dashboard/ng/banking/recent-transactions-widget',
+  title: 'dashboard/ng/banking/components/recent-transactions-widget',
 };
 
 export default meta;

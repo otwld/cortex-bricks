@@ -31,7 +31,7 @@ const meta: Meta<DashboardTopbar> = {
     props: args,
     template: `<dashboard-topbar></dashboard-topbar>`,
   }),
-  title: 'dashboard/ng/layout/dashboard-topbar',
+  title: 'dashboard/ng/layout/components/dashboard-topbar',
 };
 
 export default meta;

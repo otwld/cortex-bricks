@@ -13,7 +13,7 @@ const meta: Meta<CheckoutFormPage> = {
     props: args,
     template: `<app-checkout-form-page></app-checkout-form-page>`,
   }),
-  title: 'dashboard/ng/ecommerce/checkout-form',
+  title: 'dashboard/ng/pages/ecommerce/checkout-form',
 };
 
 export default meta;

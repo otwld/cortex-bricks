@@ -103,7 +103,7 @@ const meta: Meta<UserListPage> = {
     props: args,
     template: `<app-user-list-page></app-user-list-page>`,
   }),
-  title: 'dashboard/ng/user-management/user-list',
+  title: 'dashboard/ng/pages/user-management/user-list',
 };
 
 export default meta;

@@ -13,7 +13,7 @@ const meta: Meta<DashboardMenu> = {
     props: args,
     template: `<dashboard-menu></dashboard-menu>`,
   }),
-  title: 'dashboard/ng/layout/dashboard-menu',
+  title: 'dashboard/ng/layout/components/dashboard-menu',
 };
 
 export default meta;

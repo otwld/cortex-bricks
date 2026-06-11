@@ -134,7 +134,7 @@ const meta: Meta<RecentSalesWidget> = {
     showSearch: true,
     showViewAction: true,
     tableMinWidth: '44rem',
-    title: 'Recent Sales',
+    title: 'dashboard/ng/ecommerce/components/recent-sales-widget',
     viewHeader: 'View',
   },
   component: RecentSalesWidget,
@@ -164,7 +164,7 @@ const meta: Meta<RecentSalesWidget> = {
       />
     `,
   }),
-  title: 'dashboard/ng/ecommerce/recent-sales-widget',
+  title: 'dashboard/ng/ecommerce/components/recent-sales-widget',
 };
 
 export default meta;

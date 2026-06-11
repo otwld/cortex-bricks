@@ -13,7 +13,7 @@ const meta: Meta<HelpPage> = {
     props: args,
     template: `<app-help-page></app-help-page>`,
   }),
-  title: 'dashboard/ng/help',
+  title: 'dashboard/ng/pages/help',
 };
 
 export default meta;

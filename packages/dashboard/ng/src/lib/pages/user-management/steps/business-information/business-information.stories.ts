@@ -25,7 +25,7 @@ const meta: Meta<BusinessInformation> = {
     props: args,
     template: `<app-business-information></app-business-information>`,
   }),
-  title: 'dashboard/ng/user-management/steps/business-information',
+  title: 'dashboard/ng/pages/user-management/steps/business-information',
 };
 
 export default meta;

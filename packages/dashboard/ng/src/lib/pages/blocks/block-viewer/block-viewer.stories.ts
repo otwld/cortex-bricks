@@ -68,7 +68,7 @@ const meta: Meta<BlockViewer> = {
       </app-block-viewer>
     `,
   }),
-  title: 'dashboard/ng/blocks/block-viewer',
+  title: 'dashboard/ng/pages/blocks/block-viewer',
 };
 
 export default meta;

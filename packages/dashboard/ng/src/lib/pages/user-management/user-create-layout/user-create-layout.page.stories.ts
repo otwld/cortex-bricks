@@ -19,7 +19,7 @@ const meta: Meta<UserCreateLayoutPage> = {
     props: args,
     template: `<app-user-create-layout-page></app-user-create-layout-page>`,
   }),
-  title: 'dashboard/ng/user-management/user-create-layout',
+  title: 'dashboard/ng/pages/user-management/user-create-layout',
 };
 
 export default meta;

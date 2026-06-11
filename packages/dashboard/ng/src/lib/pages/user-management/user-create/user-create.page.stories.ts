@@ -13,7 +13,7 @@ const meta: Meta<UserCreatePage> = {
     props: args,
     template: `<app-user-create-page></app-user-create-page>`,
   }),
-  title: 'dashboard/ng/user-management/user-create',
+  title: 'dashboard/ng/pages/user-management/user-create',
 };
 
 export default meta;

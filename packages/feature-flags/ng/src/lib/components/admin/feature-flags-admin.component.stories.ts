@@ -103,7 +103,7 @@ const meta: Meta<FeatureFlagsAdminComponent> = {
     props: args,
     template: `<feature-flags-admin></feature-flags-admin>`,
   }),
-  title: 'feature-flags/ng/admin/feature-flags-admin',
+  title: 'feature-flags/ng/components/admin/feature-flags-admin',
 };
 
 export default meta;

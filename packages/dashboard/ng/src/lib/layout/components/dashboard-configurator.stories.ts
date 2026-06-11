@@ -34,7 +34,7 @@ const meta: Meta<DashboardConfigurator> = {
     props: args,
     template: `<app-configurator [simple]="simple"></app-configurator>`,
   }),
-  title: 'dashboard/ng/layout/dashboard-configurator',
+  title: 'dashboard/ng/layout/components/dashboard-configurator',
 };
 
 export default meta;

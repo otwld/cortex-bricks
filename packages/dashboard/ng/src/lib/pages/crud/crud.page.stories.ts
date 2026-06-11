@@ -13,7 +13,7 @@ const meta: Meta<CrudPage> = {
     props: args,
     template: `<app-crud-page></app-crud-page>`,
   }),
-  title: 'dashboard/ng/crud',
+  title: 'dashboard/ng/pages/crud',
 };
 
 export default meta;

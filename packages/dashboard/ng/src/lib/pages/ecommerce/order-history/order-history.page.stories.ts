@@ -13,7 +13,7 @@ const meta: Meta<OrderHistoryPage> = {
     props: args,
     template: `<app-order-history-page></app-order-history-page>`,
   }),
-  title: 'dashboard/ng/ecommerce/order-history',
+  title: 'dashboard/ng/pages/ecommerce/order-history',
 };
 
 export default meta;

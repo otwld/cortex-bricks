@@ -13,7 +13,7 @@ const meta: Meta<OrderSummaryPage> = {
     props: args,
     template: `<app-order-summary-page></app-order-summary-page>`,
   }),
-  title: 'dashboard/ng/ecommerce/order-summary',
+  title: 'dashboard/ng/pages/ecommerce/order-summary',
 };
 
 export default meta;

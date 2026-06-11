@@ -86,7 +86,7 @@ const meta: Meta<NotificationsWidget> = {
     emptyMessage: 'No notifications to display.',
     groups,
     notificationSelected,
-    title: 'Notifications',
+    title: 'dashboard/ng/ecommerce/components/notifications-widget',
   },
   component: NotificationsWidget,
   render: (args) => ({
@@ -103,7 +103,7 @@ const meta: Meta<NotificationsWidget> = {
       />
     `,
   }),
-  title: 'dashboard/ng/ecommerce/notifications-widget',
+  title: 'dashboard/ng/ecommerce/components/notifications-widget',
 };
 
 export default meta;

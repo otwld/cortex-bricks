@@ -25,7 +25,7 @@ const meta: Meta<LocationInformation> = {
     props: args,
     template: `<app-location-information></app-location-information>`,
   }),
-  title: 'dashboard/ng/user-management/steps/location-information',
+  title: 'dashboard/ng/pages/user-management/steps/location-information',
 };
 
 export default meta;

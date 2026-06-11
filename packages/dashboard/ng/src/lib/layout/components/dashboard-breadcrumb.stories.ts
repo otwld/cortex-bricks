@@ -13,7 +13,7 @@ const meta: Meta<DashboardBreadcrumb> = {
     props: args,
     template: `<nav dashboard-breadcrumb aria-label="Breadcrumb"></nav>`,
   }),
-  title: 'dashboard/ng/layout/dashboard-breadcrumb',
+  title: 'dashboard/ng/layout/components/dashboard-breadcrumb',
 };
 
 export default meta;

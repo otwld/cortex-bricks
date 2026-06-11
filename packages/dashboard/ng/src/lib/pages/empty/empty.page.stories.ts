@@ -13,7 +13,7 @@ const meta: Meta<EmptyPage> = {
     props: args,
     template: `<app-empty-page></app-empty-page>`,
   }),
-  title: 'dashboard/ng/empty',
+  title: 'dashboard/ng/pages/empty',
 };
 
 export default meta;

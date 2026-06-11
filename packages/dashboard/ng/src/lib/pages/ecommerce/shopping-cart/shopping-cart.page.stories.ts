@@ -13,7 +13,7 @@ const meta: Meta<ShoppingCartPage> = {
     props: args,
     template: `<app-shopping-cart-page></app-shopping-cart-page>`,
   }),
-  title: 'dashboard/ng/ecommerce/shopping-cart',
+  title: 'dashboard/ng/pages/ecommerce/shopping-cart',
 };
 
 export default meta;

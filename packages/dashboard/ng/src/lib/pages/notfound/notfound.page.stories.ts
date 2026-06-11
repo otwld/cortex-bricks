@@ -19,7 +19,7 @@ const meta: Meta<NotFoundPage> = {
     props: args,
     template: `<app-not-found-page></app-not-found-page>`,
   }),
-  title: 'dashboard/ng/notfound',
+  title: 'dashboard/ng/pages/notfound',
 };
 
 export default meta;

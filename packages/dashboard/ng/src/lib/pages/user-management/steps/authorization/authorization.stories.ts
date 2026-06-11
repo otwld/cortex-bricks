@@ -25,7 +25,7 @@ const meta: Meta<Authorization> = {
     props: args,
     template: `<app-authorization></app-authorization>`,
   }),
-  title: 'dashboard/ng/user-management/steps/authorization',
+  title: 'dashboard/ng/pages/user-management/steps/authorization',
 };
 
 export default meta;

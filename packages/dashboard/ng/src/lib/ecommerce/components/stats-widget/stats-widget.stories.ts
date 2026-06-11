@@ -70,7 +70,7 @@ const meta: Meta<StatsWidget> = {
       </div>
     `,
   }),
-  title: 'dashboard/ng/ecommerce/stats-widget',
+  title: 'dashboard/ng/ecommerce/components/stats-widget',
 };
 
 export default meta;

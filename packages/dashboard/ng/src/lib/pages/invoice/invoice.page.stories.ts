@@ -13,7 +13,7 @@ const meta: Meta<InvoicePage> = {
     props: args,
     template: `<app-invoice-page></app-invoice-page>`,
   }),
-  title: 'dashboard/ng/invoice',
+  title: 'dashboard/ng/pages/invoice',
 };
 
 export default meta;
