@@ -1,30 +1,16 @@
-import { Controller, Get, Inject, Param, Res } from '@nestjs/common';
+import { Controller, Get, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { StorageDriver as StorageDriverKind } from '@otwld/ts-storage';
-import { NormalizedStorageModuleOptions, STORAGE_MODULE_OPTIONS, StorageModuleOptions, validateStorageModuleOptions } from '../config/storage-module-options';
-import { StorageDriver } from '../drivers/storage-driver';
-import { StorageException } from '../exceptions/storage.exception';
-import { SignedUrlService } from '../services/signed-url.service';
+import { StorageService } from '../services/storage.service';
 
 /** Serves filesystem-backed files through signed URL tokens. */
 @Controller('storage/files')
 export class FilesystemFileController {
-  private readonly options: NormalizedStorageModuleOptions;
-
   /**
    * Create the filesystem signed-file controller.
    *
-   * @param signedUrl - Service used to verify filesystem URL tokens.
-   * @param driver - Active storage driver used to open file streams.
-   * @param rawOptions - Raw storage module options supplied through Nest DI.
+   * @param storage - Storage service that owns signed-read stream opening.
    */
-  constructor(
-    private readonly signedUrl: SignedUrlService,
-    private readonly driver: StorageDriver,
-    @Inject(STORAGE_MODULE_OPTIONS) private readonly rawOptions: StorageModuleOptions,
-  ) {
-    this.options = validateStorageModuleOptions(rawOptions);
-  }
+  constructor(private readonly storage: StorageService) {}
 
   /** Verify a signed token and pipe the referenced file to the response. */
   /**
@@ -34,11 +20,7 @@ export class FilesystemFileController {
    */
   @Get(':token')
   async serve(@Param('token') token: string, @Res() response: Response): Promise<void> {
-    if (this.options.driver !== StorageDriverKind.Filesystem) {
-      throw StorageException.misconfigured('Filesystem signed URL endpoint requires the filesystem driver');
-    }
-    const { key } = await this.signedUrl.verify(token);
-    const stream = await this.driver.getReadStream(key);
+    const stream = await this.storage.getSignedReadStream(token);
     stream.pipe(response);
   }
 }

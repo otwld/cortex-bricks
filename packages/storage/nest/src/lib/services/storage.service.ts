@@ -121,8 +121,13 @@ export class StorageService {
   }
 
   /** Generate a signed read URL for a storage key. */
-  async getSignedUrl(key: string, expiresIn = 3600): Promise<string> {
+  async getSignedUrl(key: string, expiresIn?: number): Promise<string> {
     return this.driver.getSignedUrl(key, expiresIn);
+  }
+
+  /** Open a stream from a driver-issued signed read token. */
+  async getSignedReadStream(token: string): Promise<Readable> {
+    return this.driver.getSignedReadStream(token);
   }
 
   /** List files matching a filter, excluding soft-deleted rows by default. */

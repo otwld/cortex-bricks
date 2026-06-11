@@ -54,9 +54,9 @@ export class S3StorageDriver extends MultipartStorageDriver {
   }
 
   /** Generate a clamped S3 presigned read URL. */
-  async getSignedUrl(key: string, expiresIn: number): Promise<string> {
+  async getSignedUrl(key: string, expiresIn?: number): Promise<string> {
     const max = this.options.s3?.signedUrlMaxTtl ?? 86_400;
-    const clamped = Math.min(Math.max(1, expiresIn), max);
+    const clamped = Math.min(Math.max(1, expiresIn ?? max), max);
     const s3 = await this.aws();
     const presigner = await this.presigner();
     return presigner.getSignedUrl(this.getClient(), new s3.GetObjectCommand({ Bucket: this.bucket(), Key: key }), {
@@ -70,6 +70,11 @@ export class S3StorageDriver extends MultipartStorageDriver {
     const response = await this.getClient().send(new s3.GetObjectCommand({ Bucket: this.bucket(), Key: key }));
     if (!response.Body) throw StorageException.fileNotFound();
     return response.Body as Readable;
+  }
+
+  /** S3 signed reads are served by S3 presigned URLs, not by the Nest route. */
+  getSignedReadStream(): Promise<Readable> {
+    throw StorageException.misconfigured('S3 signed reads are served by presigned S3 URLs');
   }
 
   /** Return whether an S3 object exists. */

@@ -1,9 +1,14 @@
-import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
+import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
+import {
+  createNestFeatureAsyncOptionsClassProvider,
+  createNestFeatureAsyncOptionsProvider,
+} from '@otwld/nest-sdk';
 import { StorageDriver as StorageDriverKind } from '@otwld/ts-storage';
 import {
   ManualStorageModuleAsyncOptions,
+  NormalizedStorageModuleOptions,
   STORAGE_MODULE_OPTIONS,
   StorageModuleOptions,
   StorageModuleOptionsFactory,
@@ -53,29 +58,6 @@ function createBaseProviders(): Provider[] {
   ];
 }
 
-function createAsyncOptionsProvider(asyncOptions: ManualStorageModuleAsyncOptions): Provider {
-  const factory = asyncOptions.useFactory;
-  if (factory) {
-    return {
-      provide: STORAGE_MODULE_OPTIONS,
-      useFactory: async (...args: unknown[]) => validateStorageModuleOptions(await factory(...args)),
-      inject: asyncOptions.inject ?? [],
-    };
-  }
-
-  const inject = (asyncOptions.useClass ?? asyncOptions.useExisting) as Type<StorageModuleOptionsFactory>;
-  return {
-    provide: STORAGE_MODULE_OPTIONS,
-    useFactory: async (factory: StorageModuleOptionsFactory) => validateStorageModuleOptions(await factory.createStorageOptions()),
-    inject: [inject],
-  };
-}
-
-function createAsyncOptionsClassProvider(asyncOptions: ManualStorageModuleAsyncOptions): Provider[] {
-  if (!asyncOptions.useClass) return [];
-  return [{ provide: asyncOptions.useClass, useClass: asyncOptions.useClass }];
-}
-
 /** Nest module that wires storage drivers, hooks, services, and filesystem file routes. */
 @Module({})
 export class StorageModule {
@@ -99,7 +81,20 @@ export class StorageModule {
       global: true,
       imports: [...(asyncOptions.imports ?? []), MongooseModule.forFeature([{ name: StorageFileRecord.name, schema: StorageFileSchema }])],
       controllers: asyncOptions.exposeFilesystemController ? [FilesystemFileController] : [],
-      providers: [createAsyncOptionsProvider(asyncOptions), ...createAsyncOptionsClassProvider(asyncOptions), ...createBaseProviders()],
+      providers: [
+        createNestFeatureAsyncOptionsProvider<
+          StorageModuleOptions,
+          StorageModuleOptionsFactory,
+          NormalizedStorageModuleOptions
+        >(
+          STORAGE_MODULE_OPTIONS,
+          asyncOptions,
+          'createStorageOptions',
+          validateStorageModuleOptions,
+        ),
+        ...createNestFeatureAsyncOptionsClassProvider(asyncOptions),
+        ...createBaseProviders(),
+      ],
       exports: [STORAGE_MODULE_OPTIONS, StorageDriver, MultipartStorageDriver, HookRunnerService, StorageService, SignedUrlService],
     };
   }

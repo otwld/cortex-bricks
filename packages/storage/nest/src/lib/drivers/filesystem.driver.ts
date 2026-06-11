@@ -8,7 +8,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Part, StorageDriver as StorageDriverKind, UploadMeta } from '@otwld/ts-storage';
 import { NormalizedStorageModuleOptions, STORAGE_MODULE_OPTIONS, StorageModuleOptions, validateStorageModuleOptions } from '../config/storage-module-options';
 import { StorageException } from '../exceptions/storage.exception';
-import { createFilesystemSignedToken } from './filesystem-signed-url';
+import { createFilesystemSignedToken, verifyFilesystemSignedToken } from './filesystem-signed-url';
 import { MultipartStorageDriver } from './multipart-storage-driver';
 
 /** Filesystem-backed storage driver rooted at a configured directory. */
@@ -53,10 +53,10 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
   }
 
   /** Generate a signed filesystem read URL. */
-  async getSignedUrl(key: string, expiresIn: number): Promise<string> {
+  async getSignedUrl(key: string, expiresIn?: number): Promise<string> {
     const filesystem = this.options.filesystem;
     if (!filesystem) throw StorageException.misconfigured('Filesystem storage options are missing');
-    const expiresAt = Math.floor(Date.now() / 1000) + expiresIn;
+    const expiresAt = Math.floor(Date.now() / 1000) + (expiresIn ?? filesystem.signedUrlTtl);
     const token = createFilesystemSignedToken(key, filesystem.signedUrlSecret, expiresAt);
     return `${filesystem.publicPath.replace(/\/$/, '')}/${token}`;
   }
@@ -66,6 +66,14 @@ export class FilesystemStorageDriver extends MultipartStorageDriver {
     const target = this.resolveKey(key);
     if (!(await this.exists(key))) throw StorageException.fileNotFound();
     return createReadStream(target);
+  }
+
+  /** Verify a filesystem signed-read token and open the referenced stream. */
+  async getSignedReadStream(token: string): Promise<Readable> {
+    const filesystem = this.options.filesystem;
+    if (!filesystem) throw StorageException.misconfigured('Filesystem storage options are missing');
+    const { key } = verifyFilesystemSignedToken(token, filesystem.signedUrlSecret);
+    return this.getReadStream(key);
   }
 
   /** Return whether a stored file exists. */

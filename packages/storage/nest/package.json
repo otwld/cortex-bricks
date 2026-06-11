@@ -12,6 +12,7 @@
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/mongoose": "^11.0.4",
+    "@otwld/nest-sdk": "workspace:0.0.1",
     "express": "^4.21.2",
     "mongoose": "^9.6.1",
     "tslib": "^2.3.0",
