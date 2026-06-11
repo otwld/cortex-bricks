@@ -201,7 +201,7 @@ const preview: Preview = {
           signedUrlEndpoint: '/api/storage/signed-url',
           tusEndpoint: '/api/storage/uploads',
         }),
-        provideDarkMode({ initialPreference: 'light', persistence: false }),
+        provideDarkMode({ initialPreference: 'dark', persistence: false, autoSync: true, viewTransitions: false }),
         provideDashboardLayoutConfig(),
         provideDashboardLayoutState(),
         primeNgProvider,
