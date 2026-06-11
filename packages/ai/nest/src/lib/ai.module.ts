@@ -122,27 +122,4 @@ export class AiModule {
     };
   }
 
-  /**
-   * Development smoke helper retained for local module wiring checks.
-   */
-  static test() {
-    console.info('test');
-    console.info('test2');
-    console.info('test3');
-    console.info('test4');
-  }
-
-  /**
-   * Development smoke helper that returns a stable numeric value.
-   */
-  static test2() {
-    return 0;
-  }
-  
-  /**
-   * Development smoke helper that returns a stable numeric value.
-   */
-  static test3() {
-    return 2;
-  }
 }
