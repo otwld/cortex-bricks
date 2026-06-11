@@ -8,6 +8,7 @@ import remarkGfm from 'remark-gfm';
 import { mergeConfig, type UserConfig } from 'vite';
 
 const storybookTsConfig = fileURLToPath(new URL('../tsconfig.storybook.json', import.meta.url));
+const documentationPublicRoot = fileURLToPath(new URL('../public', import.meta.url));
 const workspaceRoot = fileURLToPath(new URL('../../..', import.meta.url));
 const ignoredStorySearchDirectories = new Set(['.git', '.nx', 'coverage', 'dist', 'node_modules', 'tmp']);
 
@@ -79,6 +80,7 @@ const config: StorybookConfig = {
           },
         },
       },
+      publicDir: documentationPublicRoot,
       plugins: [
         createStorybookNodeSourceLoaderPlugin({
           pluginName: 'documentation-source-loader',
