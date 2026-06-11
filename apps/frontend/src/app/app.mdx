@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./app.ts';
 
-<Meta title="frontend/ng/app" name="appsFrontendSrcAppAppSource" />
+<Meta title="frontend/ng/app" name="App Source" />
 
 # App
 
-Source mirror for `apps/frontend/src/app/app.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/app/app.ts`
+Public import: Application-local Angular shell component.
+
+```ts
+import { App } from './app';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

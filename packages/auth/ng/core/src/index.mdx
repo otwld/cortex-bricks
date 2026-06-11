@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="auth/ng/core" name="packagesAuthAngularCoreSrcIndexSource" />
+<Meta title="auth/ng/core" name="Core Public API" />
 
-# Public API
+# Core Public API
 
-Source mirror for `packages/auth/ng/core/src/index.ts`.
+Package: `@otwld/ng-auth/core`
+Source path: `packages/auth/ng/core/src/index.ts`
+Public import: Angular auth core secondary entry point.
+
+```ts
+import { provideAuth } from '@otwld/ng-auth/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

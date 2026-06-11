@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./token.service.ts';
 
-<Meta title="auth/nest/token-service" name="packagesAuthNestSrcLibTokensTokenServiceSource" />
+<Meta title="auth/nest/token-service" name="Token Service Source" />
 
 # Token Service
 
-Source mirror for `packages/auth/nest/src/lib/tokens/token.service.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/tokens/token.service.ts`
+Public import: Internal token service wired by `AuthModule`.
+
+```ts
+import { AuthModule } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

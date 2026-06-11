@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./tus.tokens.ts';
 
-<Meta title="storage/nest/tus/tus-tokens" name="packagesStorageNestSrcLibTUSTUSTokensSource" />
+<Meta title="storage/nest/tus/tus-tokens" name="TUS Tokens Source" />
 
 # TUS Tokens
 
-Source mirror for `packages/storage/nest/src/lib/tus/tus.tokens.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/tus/tus.tokens.ts`
+Public import: Internal TUS module tokens re-exported through `TusModule`.
+
+```ts
+import { TusModule, TusModuleOptions } from '@otwld/nest-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

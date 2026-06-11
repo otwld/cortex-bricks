@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="websocket/nest/vitest-config" name="packagesWebsocketNestVitestConfigSource" />
+<Meta title="websocket/nest/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/websocket/nest/vitest.config.ts`.
+Package: `@otwld/nest-websocket`
+Source path: `packages/websocket/nest/vitest.config.ts`
+Public import: Not exported; loaded by the Nest WebSocket test target.
+
+```bash
+pnpm nx test nest-websocket
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

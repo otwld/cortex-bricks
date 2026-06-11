@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./app.service.ts';
 
-<Meta title="backend/nest/app-service" name="appsBackendSrcAppAppServiceSource" />
+<Meta title="backend/nest/app-service" name="App Service Source" />
 
 # App Service
 
-Source mirror for `apps/backend/src/app/app.service.ts`.
+Package: `backend`
+Source path: `apps/backend/src/app/app.service.ts`
+Public import: Application-local NestJS service.
+
+```ts
+import { AppService } from './app.service';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

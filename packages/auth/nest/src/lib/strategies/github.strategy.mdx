@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./github.strategy.ts';
 
-<Meta title="auth/nest/github-strategy" name="packagesAuthNestSrcLibStrategiesGithubStrategySource" />
+<Meta title="auth/nest/github-strategy" name="Github Strategy Source" />
 
 # Github Strategy
 
-Source mirror for `packages/auth/nest/src/lib/strategies/github.strategy.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/strategies/github.strategy.ts`
+Public import: Internal Passport strategy wired by `AuthModule`.
+
+```ts
+import { AuthModule } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

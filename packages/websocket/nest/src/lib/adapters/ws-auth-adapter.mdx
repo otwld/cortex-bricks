@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ws-auth-adapter.ts';
 
-<Meta title="websocket/nest/ws-auth-adapter" name="packagesWebsocketNestSrcLibAdaptersWebSocketAuthAdapterSource" />
+<Meta title="websocket/nest/ws-auth-adapter" name="WebSocket Auth Adapter Source" />
 
 # WebSocket Auth Adapter
 
-Source mirror for `packages/websocket/nest/src/lib/adapters/ws-auth-adapter.ts`.
+Package: `@otwld/nest-websocket`
+Source path: `packages/websocket/nest/src/lib/adapters/ws-auth-adapter.ts`
+Public import: Root Nest WebSocket package entry point.
+
+```ts
+import { AuthenticatedSocket, WsAuthAdapter } from '@otwld/nest-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

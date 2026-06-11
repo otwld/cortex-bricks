@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./storage-hook.ts';
 
-<Meta title="storage/nest/storage-hook" name="packagesStorageNestSrcLibHooksStorageHookSource" />
+<Meta title="storage/nest/storage-hook" name="Storage Hook Source" />
 
 # Storage Hook
 
-Source mirror for `packages/storage/nest/src/lib/hooks/storage-hook.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/hooks/storage-hook.ts`
+Public import: Root Nest storage package entry point.
+
+```ts
+import { STORAGE_HOOKS, StorageHookFile } from '@otwld/nest-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

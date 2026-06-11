@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./current-user.decorator.ts';
 
-<Meta title="auth/nest/current-user-decorator" name="packagesAuthNestSrcLibDecoratorsCurrentUserDecoratorSource" />
+<Meta title="auth/nest/current-user-decorator" name="Current User Decorator Source" />
 
 # Current User Decorator
 
-Source mirror for `packages/auth/nest/src/lib/decorators/current-user.decorator.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/decorators/current-user.decorator.ts`
+Public import: Root Nest auth package entry point.
+
+```ts
+import { CurrentUser } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./users.policies.ts';
 
-<Meta title="users/nest/users-policies" name="packagesUsersNestSrcLibUsersPoliciesSource" />
+<Meta title="users/nest/users-policies" name="Users Policies Source" />
 
 # Users Policies
 
-Source mirror for `packages/users/nest/src/lib/users.policies.ts`.
+Package: `@otwld/nest-users`
+Source path: `packages/users/nest/src/lib/users.policies.ts`
+Public import: Not exported from the public entry point.
+
+```ts
+import { UsersModule } from '@otwld/nest-users';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

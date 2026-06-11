@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./register.ts';
 
-<Meta title="auth/ng/register" name="packagesAuthAngularSrcLibRegisterRegisterSource" />
+<Meta title="auth/ng/register" name="Register Source" />
 
 # Register
 
-Source mirror for `packages/auth/ng/src/lib/register/register.ts`.
+Package: `@otwld/ng-auth/register`
+Source path: `packages/auth/ng/src/lib/register/register.ts`
+Public import: Register page secondary entry point.
+
+```ts
+import { RegisterPage } from '@otwld/ng-auth/register';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

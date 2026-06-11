@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/apps/cms" name="packagesDashboardAngularSrcLibAppsCmsIndexSource" />
+<Meta title="dashboard/ng/apps/cms" name="CMS Public API" />
 
-# Public API
+# CMS Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/apps/cms/index.ts`.
+Package: `@otwld/ng-dashboard/apps/cms`
+Source path: `packages/dashboard/ng/src/lib/apps/cms/index.ts`
+Public import: Dashboard CMS app secondary entry point.
+
+```ts
+import { cmsRoutes, List } from '@otwld/ng-dashboard/apps/cms';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

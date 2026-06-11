@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="backend/nest/vitest-config" name="appsBackendVitestConfigSource" />
+<Meta title="backend/nest/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `apps/backend/vitest.config.ts`.
+Package: `backend`
+Source path: `apps/backend/vitest.config.ts`
+Public import: Not exported; loaded by the backend test target.
+
+```bash
+pnpm nx test backend
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

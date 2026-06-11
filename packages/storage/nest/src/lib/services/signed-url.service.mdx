@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./signed-url.service.ts';
 
-<Meta title="storage/nest/signed-url-service" name="packagesStorageNestSrcLibServicesSignedURLServiceSource" />
+<Meta title="storage/nest/signed-url-service" name="Signed URL Service Source" />
 
 # Signed URL Service
 
-Source mirror for `packages/storage/nest/src/lib/services/signed-url.service.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/services/signed-url.service.ts`
+Public import: Root Nest storage package entry point.
+
+```ts
+import { SignedUrlOptions, SignedUrlService } from '@otwld/nest-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

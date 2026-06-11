@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="sdk/ng/public-api" name="packagesSDKAngularSrcIndexSource" />
+<Meta title="sdk/ng/public-api" name="Angular Public API" />
 
-# Public API
+# Angular Public API
 
-Source mirror for `packages/sdk/ng/src/index.ts`.
+Package: `@otwld/ng-cdk`
+Source path: `packages/sdk/ng/src/index.ts`
+Public import: `@otwld/ng-cdk`
+
+```ts
+import { provideDarkMode, DarkModeService } from '@otwld/ng-cdk';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

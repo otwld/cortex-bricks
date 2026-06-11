@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/banking" name="packagesDashboardAngularSrcLibBankingIndexSource" />
+<Meta title="dashboard/ng/banking" name="Banking Public API" />
 
-# Public API
+# Banking Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/banking/index.ts`.
+Package: `@otwld/ng-dashboard/banking`
+Source path: `packages/dashboard/ng/src/lib/banking/index.ts`
+Public import: Banking dashboard secondary entry point.
+
+```ts
+import { DashboardBankingPage } from '@otwld/ng-dashboard/banking';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

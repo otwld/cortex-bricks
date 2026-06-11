@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/apps/ai" name="packagesDashboardAngularSrcLibAppsAIIndexSource" />
+<Meta title="dashboard/ng/apps/ai" name="AI Public API" />
 
-# Public API
+# AI Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/apps/ai/index.ts`.
+Package: `@otwld/ng-dashboard/apps/ai`
+Source path: `packages/dashboard/ng/src/lib/apps/ai/index.ts`
+Public import: Dashboard AI apps secondary entry point.
+
+```ts
+import { aiRoutes } from '@otwld/ng-dashboard/apps/ai';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

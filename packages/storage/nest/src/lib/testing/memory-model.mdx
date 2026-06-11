@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./memory-model.ts';
 
-<Meta title="storage/nest/testing/memory-model" name="packagesStorageNestSrcLibTestingMemoryModelSource" />
+<Meta title="storage/nest/testing/memory-model" name="Memory Model Source" />
 
 # Memory Model
 
-Source mirror for `packages/storage/nest/src/lib/testing/memory-model.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/testing/memory-model.ts`
+Public import: Internal storage test helper.
+
+```ts
+import { createMemoryModel } from './memory-model';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

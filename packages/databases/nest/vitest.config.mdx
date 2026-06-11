@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="databases/nest/vitest-config" name="packagesDatabasesNestVitestConfigSource" />
+<Meta title="databases/nest/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/databases/nest/vitest.config.ts`.
+Package: `@otwld/nest-mongoose`
+Source path: `packages/databases/nest/vitest.config.ts`
+Public import: Not exported; loaded by the Nest Mongoose test target.
+
+```bash
+pnpm nx test nest-mongoose
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

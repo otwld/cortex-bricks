@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./app.config.ts';
 
-<Meta title="frontend/ng/app-config" name="appsFrontendSrcAppAppConfigSource" />
+<Meta title="frontend/ng/app-config" name="App Config Source" />
 
 # App Config
 
-Source mirror for `apps/frontend/src/app/app.config.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/app/app.config.ts`
+Public import: Application-local Angular configuration.
+
+```ts
+import { appConfig } from './app.config';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

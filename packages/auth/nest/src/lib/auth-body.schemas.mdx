@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./auth-body.schemas.ts';
 
-<Meta title="auth/nest/auth-body-schemas" name="packagesAuthNestSrcLibAuthBodySchemasSource" />
+<Meta title="auth/nest/auth-body-schemas" name="Auth Body Schemas Source" />
 
 # Auth Body Schemas
 
-Source mirror for `packages/auth/nest/src/lib/auth-body.schemas.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/auth-body.schemas.ts`
+Public import: Internal request schema helpers used by the auth controller.
+
+```ts
+import { registerBodySchema } from './auth-body.schemas';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

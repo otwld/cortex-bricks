@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="chat/ts/public-api" name="packagesChatTSSrcIndexSource" />
+<Meta title="chat/ts/public-api" name="TS Public API" />
 
-# Public API
+# TS Public API
 
-Source mirror for `packages/chat/ts/src/index.ts`.
+Package: `@otwld/ts-chat`
+Source path: `packages/chat/ts/src/index.ts`
+Public import: Root TypeScript chat package entry point.
+
+```ts
+import { ChatContract } from '@otwld/ts-chat';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./zod-payload.pipe.ts';
 
-<Meta title="websocket/nest/zod-payload-pipe" name="packagesWebsocketNestSrcLibPipesZodPayloadPipeSource" />
+<Meta title="websocket/nest/zod-payload-pipe" name="Zod Payload Pipe Source" />
 
 # Zod Payload Pipe
 
-Source mirror for `packages/websocket/nest/src/lib/pipes/zod-payload.pipe.ts`.
+Package: `@otwld/nest-websocket`
+Source path: `packages/websocket/nest/src/lib/pipes/zod-payload.pipe.ts`
+Public import: Internal payload validation pipe used by gateway wiring.
+
+```ts
+import { TypedGateway } from '@otwld/nest-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

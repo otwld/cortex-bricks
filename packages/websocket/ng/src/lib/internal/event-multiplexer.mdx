@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./event-multiplexer.ts';
 
-<Meta title="websocket/ng/event-multiplexer" name="packagesWebsocketAngularSrcLibInternalEventMultiplexerSource" />
+<Meta title="websocket/ng/event-multiplexer" name="Event Multiplexer Source" />
 
 # Event Multiplexer
 
-Source mirror for `packages/websocket/ng/src/lib/internal/event-multiplexer.ts`.
+Package: `@otwld/ng-websocket`
+Source path: `packages/websocket/ng/src/lib/internal/event-multiplexer.ts`
+Public import: Internal event multiplexer used by `WsClient`.
+
+```ts
+import { WsClient } from '@otwld/ng-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./main.ts';
 
-<Meta title="backend/nest/main" name="appsBackendSrcMainSource" />
+<Meta title="backend/nest/main" name="Main Source" />
 
 # Main
 
-Source mirror for `apps/backend/src/main.ts`.
+Package: `backend`
+Source path: `apps/backend/src/main.ts`
+Public import: Not exported; loaded by the backend application target.
+
+```bash
+pnpm nx serve backend
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

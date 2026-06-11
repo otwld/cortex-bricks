@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./user-profile.schema.ts';
 
-<Meta title="users/nest/user-profile-schema" name="packagesUsersNestSrcLibSchemasUserProfileSchemaSource" />
+<Meta title="users/nest/user-profile-schema" name="User Profile Schema Source" />
 
 # User Profile Schema
 
-Source mirror for `packages/users/nest/src/lib/schemas/user-profile.schema.ts`.
+Package: `@otwld/nest-users`
+Source path: `packages/users/nest/src/lib/schemas/user-profile.schema.ts`
+Public import: `@otwld/nest-users`
+
+```ts
+import { UserProfileRecord, UserProfileSchema } from '@otwld/nest-users';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

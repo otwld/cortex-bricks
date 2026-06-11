@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="storage/ts/public-api" name="packagesStorageTSSrcIndexSource" />
+<Meta title="storage/ts/public-api" name="TS Public API" />
 
-# Public API
+# TS Public API
 
-Source mirror for `packages/storage/ts/src/index.ts`.
+Package: `@otwld/ts-storage`
+Source path: `packages/storage/ts/src/index.ts`
+Public import: Root TypeScript storage package entry point.
+
+```ts
+import { StorageDriver, UploadStatus } from '@otwld/ts-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

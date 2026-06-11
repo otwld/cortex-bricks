@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./icon.service.ts';
 
-<Meta title="dashboard/ng/core/icon-service" name="packagesDashboardAngularCoreSrcLibServicesIconServiceSource" />
+<Meta title="dashboard/ng/core/icon-service" name="Icon Service Source" />
 
 # Icon Service
 
-Source mirror for `packages/dashboard/ng/core/src/lib/services/icon.service.ts`.
+Package: `@otwld/ng-dashboard/core`
+Source path: `packages/dashboard/ng/core/src/lib/services/icon.service.ts`
+Public import: Dashboard core secondary entry point.
+
+```ts
+import { IconService } from '@otwld/ng-dashboard/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

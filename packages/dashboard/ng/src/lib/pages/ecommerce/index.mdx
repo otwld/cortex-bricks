@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/ecommerce" name="packagesDashboardAngularSrcLibPagesEcommerceIndexSource" />
+<Meta title="dashboard/ng/ecommerce" name="Pages Ecommerce Public API" />
 
-# Public API
+# Pages Ecommerce Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/pages/ecommerce/index.ts`.
+Package: `@otwld/ng-dashboard/pages/ecommerce`
+Source path: `packages/dashboard/ng/src/lib/pages/ecommerce/index.ts`
+Public import: E-commerce page secondary entry point.
+
+```ts
+import { ecommerceRoutes, ProductListPage } from '@otwld/ng-dashboard/pages/ecommerce';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

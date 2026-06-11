@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./typed-server.token.ts';
 
-<Meta title="websocket/nest/typed-server-token" name="packagesWebsocketNestSrcLibTokensTypedServerTokenSource" />
+<Meta title="websocket/nest/typed-server-token" name="Typed Server Token Source" />
 
 # Typed Server Token
 
-Source mirror for `packages/websocket/nest/src/lib/tokens/typed-server.token.ts`.
+Package: `@otwld/nest-websocket`
+Source path: `packages/websocket/nest/src/lib/tokens/typed-server.token.ts`
+Public import: Root Nest WebSocket package entry point.
+
+```ts
+import { provideTypedServer, TYPED_SERVER } from '@otwld/nest-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

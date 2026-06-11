@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./module-register.utils.ts';
 
-<Meta title="sdk/nest/module-register-utils" name="packagesSDKNestSrcLibModuleRegisterUtilsSource" />
+<Meta title="sdk/nest/module-register-utils" name="Module Register Utils Source" />
 
 # Module Register Utils
 
-Source mirror for `packages/sdk/nest/src/lib/module-register.utils.ts`.
+Package: `@otwld/nest-sdk`
+Source path: `packages/sdk/nest/src/lib/module-register.utils.ts`
+Public import: Root Nest SDK package entry point.
+
+```ts
+import { createNestFeatureOptionsProvider } from '@otwld/nest-sdk';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

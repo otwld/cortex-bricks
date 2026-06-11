@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="storage/ng/exceptions" name="packagesStorageAngularSrcLibExceptionsIndexSource" />
+<Meta title="storage/ng/exceptions" name="Exceptions Public API" />
 
-# Public API
+# Exceptions Public API
 
-Source mirror for `packages/storage/ng/src/lib/exceptions/index.ts`.
+Package: `@otwld/ng-storage`
+Source path: `packages/storage/ng/src/lib/exceptions/index.ts`
+Public import: Root Angular storage package entry point.
+
+```ts
+import { StorageClientError } from '@otwld/ng-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

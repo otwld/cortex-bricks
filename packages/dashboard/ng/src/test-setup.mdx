@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./test-setup.ts';
 
-<Meta title="dashboard/ng/test-setup" name="packagesDashboardAngularSrcTestSetupSource" />
+<Meta title="dashboard/ng/test-setup" name="Test Setup Source" />
 
 # Test Setup
 
-Source mirror for `packages/dashboard/ng/src/test-setup.ts`.
+Package: `@otwld/ng-dashboard`
+Source path: `packages/dashboard/ng/src/test-setup.ts`
+Public import: Not exported; loaded by the dashboard Angular test target.
+
+```bash
+pnpm nx test ng-dashboard
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

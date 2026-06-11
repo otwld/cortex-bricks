@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ws-demo.routes.ts';
 
-<Meta title="frontend/ng/ws-demo/ws-demo-routes" name="appsFrontendSrcAppWebSocketDemoWebSocketDemoRoutesSource" />
+<Meta title="frontend/ng/ws-demo/ws-demo-routes" name="WebSocket Demo Routes Source" />
 
 # WebSocket Demo Routes
 
-Source mirror for `apps/frontend/src/app/ws-demo/ws-demo.routes.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/app/ws-demo/ws-demo.routes.ts`
+Public import: Application-local Angular WebSocket demo routes.
+
+```ts
+import { websocketDemoRoutes } from './ws-demo.routes';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

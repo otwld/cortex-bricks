@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="databases/nest/contracts" name="packagesDatabasesNestSrcContractsDTOsIndexSource" />
+<Meta title="databases/nest/contracts" name="DTOs Public API" />
 
-# Public API
+# DTOs Public API
 
-Source mirror for `packages/databases/nest/src/contracts/dtos/index.ts`.
+Package: `@otwld/nest-mongoose`
+Source path: `packages/databases/nest/src/contracts/dtos/index.ts`
+Public import: Root Nest Mongoose package entry point.
+
+```ts
+import { GeoJsonPolygonDto } from '@otwld/nest-mongoose';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

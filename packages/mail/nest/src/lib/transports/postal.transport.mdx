@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./postal.transport.ts';
 
-<Meta title="mail/nest/transports/postal-transport" name="packagesMailNestSrcLibTransportsPostalTransportSource" />
+<Meta title="mail/nest/transports/postal-transport" name="Postal Transport Source" />
 
 # Postal Transport
 
-Source mirror for `packages/mail/nest/src/lib/transports/postal.transport.ts`.
+Package: `@otwld/nest-mail`
+Source path: `packages/mail/nest/src/lib/transports/postal.transport.ts`
+Public import: Root Nest mail package entry point.
+
+```ts
+import { PostalTransport, PostalTransportOptions } from '@otwld/nest-mail';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

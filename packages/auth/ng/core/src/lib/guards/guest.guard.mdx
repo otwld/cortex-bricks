@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./guest.guard.ts';
 
-<Meta title="auth/ng/core/guest-guard" name="packagesAuthAngularCoreSrcLibGuardsGuestGuardSource" />
+<Meta title="auth/ng/core/guest-guard" name="Guest Guard Source" />
 
 # Guest Guard
 
-Source mirror for `packages/auth/ng/core/src/lib/guards/guest.guard.ts`.
+Package: `@otwld/ng-auth/core`
+Source path: `packages/auth/ng/core/src/lib/guards/guest.guard.ts`
+Public import: Angular auth core secondary entry point.
+
+```ts
+import { guestGuard } from '@otwld/ng-auth/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/user-management" name="packagesDashboardAngularSrcLibPagesUserManagementIndexSource" />
+<Meta title="dashboard/ng/user-management" name="User Management Public API" />
 
-# Public API
+# User Management Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/pages/user-management/index.ts`.
+Package: `@otwld/ng-dashboard/pages/user-management`
+Source path: `packages/dashboard/ng/src/lib/pages/user-management/index.ts`
+Public import: User management page secondary entry point.
+
+```ts
+import { userManagementRoutes, UserListPage } from '@otwld/ng-dashboard/pages/user-management';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

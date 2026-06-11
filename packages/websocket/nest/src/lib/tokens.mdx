@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./tokens.ts';
 
-<Meta title="websocket/nest/tokens" name="packagesWebsocketNestSrcLibTokensSource" />
+<Meta title="websocket/nest/tokens" name="Tokens Source" />
 
 # Tokens
 
-Source mirror for `packages/websocket/nest/src/lib/tokens.ts`.
+Package: `@otwld/nest-websocket`
+Source path: `packages/websocket/nest/src/lib/tokens.ts`
+Public import: Internal module tokens used by `WebsocketModule`.
+
+```ts
+import { WebsocketModule } from '@otwld/nest-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

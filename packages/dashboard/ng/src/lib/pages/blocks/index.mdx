@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/blocks" name="packagesDashboardAngularSrcLibPagesBlocksIndexSource" />
+<Meta title="dashboard/ng/blocks" name="Blocks Public API" />
 
-# Public API
+# Blocks Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/pages/blocks/index.ts`.
+Package: `@otwld/ng-dashboard/pages/blocks`
+Source path: `packages/dashboard/ng/src/lib/pages/blocks/index.ts`
+Public import: Dashboard blocks page secondary entry point.
+
+```ts
+import { blocksRoutes, BlocksPage } from '@otwld/ng-dashboard/pages/blocks';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

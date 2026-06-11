@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./s3.driver.ts';
 
-<Meta title="storage/nest/s3-driver" name="packagesStorageNestSrcLibDriversS3DriverSource" />
+<Meta title="storage/nest/s3-driver" name="S3 Driver Source" />
 
 # S3 Driver
 
-Source mirror for `packages/storage/nest/src/lib/drivers/s3.driver.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/drivers/s3.driver.ts`
+Public import: Root Nest storage package entry point.
+
+```ts
+import { S3StorageDriver } from '@otwld/nest-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

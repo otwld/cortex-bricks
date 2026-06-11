@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./role.schema.ts';
 
-<Meta title="auth/nest/user/role-schema" name="packagesAuthNestSrcLibUserRoleSchemaSource" />
+<Meta title="auth/nest/user/role-schema" name="Role Schema Source" />
 
 # Role Schema
 
-Source mirror for `packages/auth/nest/src/lib/user/role.schema.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/user/role.schema.ts`
+Public import: Internal persistence schema wired by `AuthModule`.
+
+```ts
+import { User } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

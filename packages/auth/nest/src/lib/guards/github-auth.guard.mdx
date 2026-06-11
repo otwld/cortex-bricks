@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./github-auth.guard.ts';
 
-<Meta title="auth/nest/github-auth-guard" name="packagesAuthNestSrcLibGuardsGithubAuthGuardSource" />
+<Meta title="auth/nest/github-auth-guard" name="Github Auth Guard Source" />
 
 # Github Auth Guard
 
-Source mirror for `packages/auth/nest/src/lib/guards/github-auth.guard.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/guards/github-auth.guard.ts`
+Public import: Root Nest auth package entry point.
+
+```ts
+import { GithubAuthGuard } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

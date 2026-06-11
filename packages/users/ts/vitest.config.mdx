@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="users/ts/vitest-config" name="packagesUsersTSVitestConfigSource" />
+<Meta title="users/ts/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/users/ts/vitest.config.ts`.
+Package: `@otwld/ts-users`
+Source path: `packages/users/ts/vitest.config.ts`
+Public import: Not exported; loaded by the package test target.
+
+```bash
+pnpm nx test ts-users
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

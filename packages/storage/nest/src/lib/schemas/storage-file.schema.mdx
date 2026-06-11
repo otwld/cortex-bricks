@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./storage-file.schema.ts';
 
-<Meta title="storage/nest/storage-file-schema" name="packagesStorageNestSrcLibSchemasStorageFileSchemaSource" />
+<Meta title="storage/nest/storage-file-schema" name="Storage File Schema Source" />
 
 # Storage File Schema
 
-Source mirror for `packages/storage/nest/src/lib/schemas/storage-file.schema.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/schemas/storage-file.schema.ts`
+Public import: Root Nest storage package entry point.
+
+```ts
+import { StorageFileRecord, StorageFileSchema } from '@otwld/nest-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

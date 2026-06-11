@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="websocket/ng/public-api" name="packagesWebsocketAngularSrcIndexSource" />
+<Meta title="websocket/ng/public-api" name="Angular Public API" />
 
-# Public API
+# Angular Public API
 
-Source mirror for `packages/websocket/ng/src/index.ts`.
+Package: `@otwld/ng-websocket`
+Source path: `packages/websocket/ng/src/index.ts`
+Public import: Root Angular WebSocket package entry point.
+
+```ts
+import { provideWebsocket, WsClient } from '@otwld/ng-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

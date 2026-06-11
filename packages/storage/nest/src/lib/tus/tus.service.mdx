@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./tus.service.ts';
 
-<Meta title="storage/nest/tus/tus-service" name="packagesStorageNestSrcLibTUSTUSServiceSource" />
+<Meta title="storage/nest/tus/tus-service" name="TUS Service Source" />
 
 # TUS Service
 
-Source mirror for `packages/storage/nest/src/lib/tus/tus.service.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/tus/tus.service.ts`
+Public import: Root Nest storage package entry point.
+
+```ts
+import { TusService, decodeTusMetadata } from '@otwld/nest-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

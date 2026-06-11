@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="ai/nest/vitest-config" name="packagesAINestVitestConfigSource" />
+<Meta title="ai/nest/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/ai/nest/vitest.config.ts`.
+Package: `@otwld/nest-ai`
+Source path: `packages/ai/nest/vitest.config.ts`
+Public import: Not exported; loaded by the Nest AI test target.
+
+```bash
+pnpm nx test nest-ai
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

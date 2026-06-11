@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./main.ts';
 
-<Meta title="frontend/ng/main" name="appsFrontendSrcMainSource" />
+<Meta title="frontend/ng/main" name="Main Source" />
 
 # Main
 
-Source mirror for `apps/frontend/src/main.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/main.ts`
+Public import: Not exported; loaded by the frontend application target.
+
+```bash
+pnpm nx serve frontend
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./lazy.routes.ts';
 
-<Meta title="frontend/ng/lazy-routes" name="appsFrontendSrcAppLazyRoutesSource" />
+<Meta title="frontend/ng/lazy-routes" name="Lazy Routes Source" />
 
 # Lazy Routes
 
-Source mirror for `apps/frontend/src/app/lazy.routes.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/app/lazy.routes.ts`
+Public import: Application-local Angular route groups.
+
+```ts
+import { authPrimeNgRoutes, dashboardPrimeNgRoutes, usersPrimeNgRoutes } from './lazy.routes';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

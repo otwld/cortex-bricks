@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./auth.service.ts';
 
-<Meta title="auth/ng/core/auth-service" name="packagesAuthAngularCoreSrcLibServicesAuthServiceSource" />
+<Meta title="auth/ng/core/auth-service" name="Auth Service Source" />
 
 # Auth Service
 
-Source mirror for `packages/auth/ng/core/src/lib/services/auth.service.ts`.
+Package: `@otwld/ng-auth/core`
+Source path: `packages/auth/ng/core/src/lib/services/auth.service.ts`
+Public import: Angular auth core secondary entry point.
+
+```ts
+import { AuthService, RegisterDto } from '@otwld/ng-auth/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

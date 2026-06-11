@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./s3.driver.in-memory-mock.ts';
 
-<Meta title="storage/nest/s3-driver-in-memory-mock" name="packagesStorageNestSrcLibDriversS3DriverInMemoryMockSource" />
+<Meta title="storage/nest/s3-driver-in-memory-mock" name="S3 Driver In Memory Mock Source" />
 
 # S3 Driver In Memory Mock
 
-Source mirror for `packages/storage/nest/src/lib/drivers/s3.driver.in-memory-mock.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/drivers/s3.driver.in-memory-mock.ts`
+Public import: Internal S3 driver test mock.
+
+```ts
+import { createMockS3 } from './s3.driver.in-memory-mock';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

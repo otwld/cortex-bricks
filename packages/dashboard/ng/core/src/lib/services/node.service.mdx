@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./node.service.ts';
 
-<Meta title="dashboard/ng/core/node-service" name="packagesDashboardAngularCoreSrcLibServicesNodeServiceSource" />
+<Meta title="dashboard/ng/core/node-service" name="Node Service Source" />
 
 # Node Service
 
-Source mirror for `packages/dashboard/ng/core/src/lib/services/node.service.ts`.
+Package: `@otwld/ng-dashboard/core`
+Source path: `packages/dashboard/ng/core/src/lib/services/node.service.ts`
+Public import: Dashboard core secondary entry point.
+
+```ts
+import { NodeService } from '@otwld/ng-dashboard/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./configuration.ts';
 
-<Meta title="backend/nest/configuration" name="appsBackendSrcConfigConfigurationSource" />
+<Meta title="backend/nest/configuration" name="Configuration Source" />
 
 # Configuration
 
-Source mirror for `apps/backend/src/config/configuration.ts`.
+Package: `backend`
+Source path: `apps/backend/src/config/configuration.ts`
+Public import: Application-local configuration factory.
+
+```ts
+import { configuration } from './configuration';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

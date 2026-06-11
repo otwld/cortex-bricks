@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./chat.module.ts';
 
-<Meta title="backend/nest/chat/chat-module" name="appsBackendSrcAppChatChatModuleSource" />
+<Meta title="backend/nest/chat/chat-module" name="Chat Module Source" />
 
 # Chat Module
 
-Source mirror for `apps/backend/src/app/chat/chat.module.ts`.
+Package: `backend`
+Source path: `apps/backend/src/app/chat/chat.module.ts`
+Public import: Application-local NestJS module.
+
+```ts
+import { ChatModule } from './chat.module';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

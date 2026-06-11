@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./users.service.ts';
 
-<Meta title="users/ng/core/users-service" name="packagesUsersAngularCoreSrcLibServicesUsersServiceSource" />
+<Meta title="users/ng/core/users-service" name="Users Service Source" />
 
 # Users Service
 
-Source mirror for `packages/users/ng/core/src/lib/services/users.service.ts`.
+Package: `@otwld/ng-users`
+Source path: `packages/users/ng/core/src/lib/services/users.service.ts`
+Public import: `@otwld/ng-users/core`
+
+```ts
+import { UsersService } from '@otwld/ng-users/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

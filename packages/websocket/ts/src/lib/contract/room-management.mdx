@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./room-management.ts';
 
-<Meta title="websocket/ts/contract/room-management" name="packagesWebsocketTSSrcLibContractRoomManagementSource" />
+<Meta title="websocket/ts/contract/room-management" name="Room Management Source" />
 
 # Room Management
 
-Source mirror for `packages/websocket/ts/src/lib/contract/room-management.ts`.
+Package: `@otwld/ts-websocket`
+Source path: `packages/websocket/ts/src/lib/contract/room-management.ts`
+Public import: Root TypeScript WebSocket package entry point.
+
+```ts
+import { withRoomManagement } from '@otwld/ts-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

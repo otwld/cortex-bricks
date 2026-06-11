@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="mail/nest/public-api" name="packagesMailNestSrcIndexSource" />
+<Meta title="mail/nest/public-api" name="Nest Public API" />
 
-# Public API
+# Nest Public API
 
-Source mirror for `packages/mail/nest/src/index.ts`.
+Package: `@otwld/nest-mail`
+Source path: `packages/mail/nest/src/index.ts`
+Public import: Root Nest mail package entry point.
+
+```ts
+import { MailModule, MailService } from '@otwld/nest-mail';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

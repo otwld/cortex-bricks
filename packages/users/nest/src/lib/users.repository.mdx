@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./users.repository.ts';
 
-<Meta title="users/nest/users-repository" name="packagesUsersNestSrcLibUsersRepositorySource" />
+<Meta title="users/nest/users-repository" name="Users Repository Source" />
 
 # Users Repository
 
-Source mirror for `packages/users/nest/src/lib/users.repository.ts`.
+Package: `@otwld/nest-users`
+Source path: `packages/users/nest/src/lib/users.repository.ts`
+Public import: `@otwld/nest-users`
+
+```ts
+import { UsersRepository } from '@otwld/nest-users';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

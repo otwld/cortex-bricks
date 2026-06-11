@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./auth-account.repository.ts';
 
-<Meta title="users/nest/auth-account-repository" name="packagesUsersNestSrcLibAuthAccountRepositorySource" />
+<Meta title="users/nest/auth-account-repository" name="Auth Account Repository Source" />
 
 # Auth Account Repository
 
-Source mirror for `packages/users/nest/src/lib/auth-account.repository.ts`.
+Package: `@otwld/nest-users`
+Source path: `packages/users/nest/src/lib/auth-account.repository.ts`
+Public import: `@otwld/nest-users`
+
+```ts
+import { AuthAccountRepository, type CreatePendingAuthAccount } from '@otwld/nest-users';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

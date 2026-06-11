@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="feature-flags/ts/public-api" name="packagesFeatureFlagsTSSrcIndexSource" />
+<Meta title="feature-flags/ts/public-api" name="TS Public API" />
 
-# Public API
+# TS Public API
 
-Source mirror for `packages/feature-flags/ts/src/index.ts`.
+Package: `@otwld/ts-feature-flags`
+Source path: `packages/feature-flags/ts/src/index.ts`
+Public import: Root TypeScript feature flags package entry point.
+
+```ts
+import { FeatureFlagDto, FeatureScope } from '@otwld/ts-feature-flags';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

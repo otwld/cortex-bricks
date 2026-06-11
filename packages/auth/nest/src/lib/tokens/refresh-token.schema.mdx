@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./refresh-token.schema.ts';
 
-<Meta title="auth/nest/refresh-token-schema" name="packagesAuthNestSrcLibTokensRefreshTokenSchemaSource" />
+<Meta title="auth/nest/refresh-token-schema" name="Refresh Token Schema Source" />
 
 # Refresh Token Schema
 
-Source mirror for `packages/auth/nest/src/lib/tokens/refresh-token.schema.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/tokens/refresh-token.schema.ts`
+Public import: Internal persistence schema wired by `AuthModule`.
+
+```ts
+import { AuthModule } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

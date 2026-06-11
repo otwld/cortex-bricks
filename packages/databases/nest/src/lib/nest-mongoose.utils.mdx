@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./nest-mongoose.utils.ts';
 
-<Meta title="databases/nest/nest-mongoose-utils" name="packagesDatabasesNestSrcLibNestMongooseUtilsSource" />
+<Meta title="databases/nest/nest-mongoose-utils" name="Nest Mongoose Utils Source" />
 
 # Nest Mongoose Utils
 
-Source mirror for `packages/databases/nest/src/lib/nest-mongoose.utils.ts`.
+Package: `@otwld/nest-mongoose`
+Source path: `packages/databases/nest/src/lib/nest-mongoose.utils.ts`
+Public import: Root Nest Mongoose package entry point.
+
+```ts
+import { buildNestMongooseUri, createNestMongooseModuleOptions } from '@otwld/nest-mongoose';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

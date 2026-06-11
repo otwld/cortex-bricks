@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./websocket.module.ts';
 
-<Meta title="websocket/nest/websocket-module" name="packagesWebsocketNestSrcLibWebsocketModuleSource" />
+<Meta title="websocket/nest/websocket-module" name="Websocket Module Source" />
 
 # Websocket Module
 
-Source mirror for `packages/websocket/nest/src/lib/websocket.module.ts`.
+Package: `@otwld/nest-websocket`
+Source path: `packages/websocket/nest/src/lib/websocket.module.ts`
+Public import: Root Nest WebSocket package entry point.
+
+```ts
+import { WebsocketModule } from '@otwld/nest-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

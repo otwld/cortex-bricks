@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./country.service.ts';
 
-<Meta title="dashboard/ng/core/country-service" name="packagesDashboardAngularCoreSrcLibServicesCountryServiceSource" />
+<Meta title="dashboard/ng/core/country-service" name="Country Service Source" />
 
 # Country Service
 
-Source mirror for `packages/dashboard/ng/core/src/lib/services/country.service.ts`.
+Package: `@otwld/ng-dashboard/core`
+Source path: `packages/dashboard/ng/core/src/lib/services/country.service.ts`
+Public import: Dashboard core secondary entry point.
+
+```ts
+import { CountryService } from '@otwld/ng-dashboard/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

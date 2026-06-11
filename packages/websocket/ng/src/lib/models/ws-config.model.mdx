@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ws-config.model.ts';
 
-<Meta title="websocket/ng/ws-config-model" name="packagesWebsocketAngularSrcLibModelsWebSocketConfigModelSource" />
+<Meta title="websocket/ng/ws-config-model" name="WebSocket Config Model Source" />
 
 # WebSocket Config Model
 
-Source mirror for `packages/websocket/ng/src/lib/models/ws-config.model.ts`.
+Package: `@otwld/ng-websocket`
+Source path: `packages/websocket/ng/src/lib/models/ws-config.model.ts`
+Public import: Root Angular WebSocket package entry point.
+
+```ts
+import { DEFAULT_RECONNECT_STRATEGY, WsConfig } from '@otwld/ng-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

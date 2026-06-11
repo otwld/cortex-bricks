@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="auth/ng/error" name="packagesAuthAngularSrcLibErrorIndexSource" />
+<Meta title="auth/ng/error" name="Error Public API" />
 
-# Public API
+# Error Public API
 
-Source mirror for `packages/auth/ng/src/lib/error/index.ts`.
+Package: `@otwld/ng-auth/error`
+Source path: `packages/auth/ng/src/lib/error/index.ts`
+Public import: Error page secondary entry point.
+
+```ts
+import { ErrorPage } from '@otwld/ng-auth/error';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

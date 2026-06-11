@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="sdk/nest/vitest-config" name="packagesSDKNestVitestConfigSource" />
+<Meta title="sdk/nest/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/sdk/nest/vitest.config.ts`.
+Package: `@otwld/nest-sdk`
+Source path: `packages/sdk/nest/vitest.config.ts`
+Public import: Not exported; loaded by the Nest SDK test target.
+
+```bash
+pnpm nx test nest-sdk
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

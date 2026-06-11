@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./manager.ts';
 
-<Meta title="documentation/storybook/manager" name="appsDocumentationSrcManagerSource" />
+<Meta title="documentation/storybook/manager" name="Manager Source" />
 
 # Manager
 
-Source mirror for `apps/documentation/src/manager.ts`.
+Package: `documentation`
+Source path: `apps/documentation/src/manager.ts`
+Public import: Storybook manager module
+
+```ts
+import { addons } from 'storybook/manager-api';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

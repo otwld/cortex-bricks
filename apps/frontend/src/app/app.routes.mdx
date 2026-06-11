@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./app.routes.ts';
 
-<Meta title="frontend/ng/app-routes" name="appsFrontendSrcAppAppRoutesSource" />
+<Meta title="frontend/ng/app-routes" name="App Routes Source" />
 
 # App Routes
 
-Source mirror for `apps/frontend/src/app/app.routes.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/app/app.routes.ts`
+Public import: Application-local Angular routes.
+
+```ts
+import { appRoutes } from './app.routes';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

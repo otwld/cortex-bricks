@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./policy-handler.ts';
 
-<Meta title="auth/nest/casl/policy-handler" name="packagesAuthNestSrcLibCASLPolicyHandlerSource" />
+<Meta title="auth/nest/casl/policy-handler" name="Policy Handler Source" />
 
 # Policy Handler
 
-Source mirror for `packages/auth/nest/src/lib/casl/policy-handler.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/casl/policy-handler.ts`
+Public import: Root Nest auth package entry point.
+
+```ts
+import { PolicyHandler, PolicyHandlerFn } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

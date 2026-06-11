@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ws-demo.component.ts';
 
-<Meta title="frontend/ng/ws-demo" name="appsFrontendSrcAppWebSocketDemoWebSocketDemoComponentSource" />
+<Meta title="frontend/ng/ws-demo" name="WebSocket Demo Component Source" />
 
 # WebSocket Demo Component
 
-Source mirror for `apps/frontend/src/app/ws-demo/ws-demo.component.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/app/ws-demo/ws-demo.component.ts`
+Public import: Application-local Angular WebSocket demo component.
+
+```ts
+import { WsDemoComponent } from './ws-demo.component';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

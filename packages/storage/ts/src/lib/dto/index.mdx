@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="storage/ts/dto" name="packagesStorageTSSrcLibDTOIndexSource" />
+<Meta title="storage/ts/dto" name="DTO Public API" />
 
-# Public API
+# DTO Public API
 
-Source mirror for `packages/storage/ts/src/lib/dto/index.ts`.
+Package: `@otwld/ts-storage`
+Source path: `packages/storage/ts/src/lib/dto/index.ts`
+Public import: Root TypeScript storage package entry point.
+
+```ts
+import { CompleteUploadDto, CreateUploadDto } from '@otwld/ts-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

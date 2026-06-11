@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./auth.types.ts';
 
-<Meta title="auth/ts/auth-types" name="packagesAuthTSSrcLibAuthTypesSource" />
+<Meta title="auth/ts/auth-types" name="Auth Types Source" />
 
 # Auth Types
 
-Source mirror for `packages/auth/ts/src/lib/auth.types.ts`.
+Package: `@otwld/ts-auth`
+Source path: `packages/auth/ts/src/lib/auth.types.ts`
+Public import: Root TypeScript auth package entry point.
+
+```ts
+import { AuthIdentityProvider, AuthUser } from '@otwld/ts-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

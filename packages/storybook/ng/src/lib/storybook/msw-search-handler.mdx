@@ -1,10 +1,20 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./msw-search-handler.ts';
 
-<Meta title="storybook/ng/storybook/msw-search-handler" name="mswSearchHandler" />
+<Meta title="storybook/ng/storybook/msw-search-handler" name="MSW Search Handler Source" />
 
 # MSW Search Handler
 
-Source mirror for reusable MSW search endpoints backed by deterministic faker-genetics collections.
+Package: `@otwld/ng-storybook`
+Source path: `packages/storybook/ng/src/lib/storybook/msw-search-handler.ts`
+Public import: `@otwld/ng-storybook`
+
+```ts
+import { createMswSearchGetHandler } from '@otwld/ng-storybook';
+```
+
+Reusable MSW search endpoints backed by deterministic faker-genetics collections.
+
+## Source
 
 <Source code={sourceCode} language="ts" />

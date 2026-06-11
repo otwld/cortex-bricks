@@ -1,29 +1,144 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./storybook.ts';
 
-<Meta title="storybook/ng/storybook" name="storybookHelpers" />
+<Meta title="storybook/ng/storybook" name="Storybook Source" />
 
-# Storybook Helpers
+# Storybook
 
-`@otwld/ng-storybook` provides deterministic Storybook infrastructure for:
+Package: `@otwld/ng-storybook`
+Source path: `packages/storybook/ng/src/lib/storybook/storybook.ts`
+Public import: `@otwld/ng-storybook`
 
-- Angular provider wiring
+`@otwld/ng-storybook` centralizes deterministic Storybook infrastructure for Angular source bricks:
+
+- Common Angular application providers
+- Router and Location doubles for focused stories
+- PrimeNG and Tailwind theme mode decorators
+- Viewport mode decorators
 - MSW bootstrap and handler composition
 - Seeded faker genetics data generation
 - Reusable search/list endpoint mocks
 
-This is designed for stable Chromatic visual regression snapshots.
+This package is designed for stable Storybook test-runner and Chromatic visual regression snapshots.
 
-## Angular Providers
+## Preview Providers
+
+Use `provideStorybookAngularApp(...)` for preview-level framework wiring. Story-specific providers can still be passed through the `providers` option.
 
 ```ts
-import { provideRouter } from '@angular/router';
-import { withStorybookProviders } from '@otwld/ng-storybook';
+import type { Preview } from '@storybook/angular';
+import { provideStorybookAngularApp, withStorybookProviders } from '@otwld/ng-storybook';
+
+const preview: Preview = {
+  decorators: [
+    withStorybookProviders([
+      provideStorybookAngularApp({
+        providers: [],
+      }),
+    ]),
+  ],
+};
+
+export default preview;
+```
+
+## Router And Location Doubles
+
+Use the shared doubles when a story needs a focused navigation spy without bootstrapping real routes.
+
+```ts
+import { provideStorybookLocation, provideStorybookRouter, withStorybookProviders } from '@otwld/ng-storybook';
+import { fn } from 'storybook/test';
+
+const navigate = fn();
+const back = fn();
 
 export default {
-  decorators: [withStorybookProviders([provideRouter([])])],
+  decorators: [
+    withStorybookProviders([
+      provideStorybookRouter({ navigate }),
+      provideStorybookLocation({ back }),
+    ]),
+  ],
 };
 ```
+
+## PrimeNG Theme Modes
+
+PrimeNG defaults dark mode to the system media query. Storybook uses the root `.app-dark` class so toolbar-selected `light`, `dark`, and `system` modes apply the same way across PrimeNG and Tailwind.
+
+```ts
+import Aura from '@primeuix/themes/aura';
+import { definePreset } from '@primeuix/themes';
+import type { Preview } from '@storybook/angular';
+import {
+  provideStorybookPrimeNgTheme,
+  storybookPrimeNgThemeGlobalTypes,
+  withStorybookPrimeNgThemeMode,
+  withStorybookProviders,
+} from '@otwld/ng-storybook';
+
+const BlueAura = definePreset(Aura, {});
+
+const preview: Preview = {
+  globalTypes: {
+    ...storybookPrimeNgThemeGlobalTypes,
+  },
+  decorators: [
+    withStorybookPrimeNgThemeMode({ defaultMode: 'dark' }),
+    withStorybookProviders([provideStorybookPrimeNgTheme({ preset: BlueAura })]),
+  ],
+};
+
+export default preview;
+```
+
+## Viewport Modes
+
+Viewport mode is a document-root marker for stories that need viewport-aware styles or selectors.
+
+```ts
+import type { Preview } from '@storybook/angular';
+import { storybookViewportGlobalTypes, withStorybookViewportMode } from '@otwld/ng-storybook';
+
+const preview: Preview = {
+  globalTypes: {
+    ...storybookViewportGlobalTypes,
+  },
+  decorators: [withStorybookViewportMode()],
+};
+
+export default preview;
+```
+
+## Source MDX Convention
+
+Source MDX pages are edited manually. The audit scripts report violations but do not create or rewrite files.
+
+Use this structure for source mirrors:
+
+````mdx
+import { Meta, Source } from '@storybook/addon-docs/blocks';
+import sourceCode from 'source-loader:./accept-invitation.ts';
+
+<Meta title="users/ng/accept-invitation" name="Accept Invitation Source" />
+
+# Accept Invitation
+
+Package: `@otwld/ng-users`
+Source path: `packages/users/ng/src/lib/accept-invitation/accept-invitation.ts`
+Public import: `@otwld/ng-users`
+
+```ts
+import { usersRoutes } from '@otwld/ng-users';
+```
+
+## Source
+
+<Source code={sourceCode} language="ts" />
+````
+
+Keep the `Meta` title in `<feature>/<technology>/<subject...>` form, omit structural path segments such as `packages`, `src`, and `lib`, and use a readable source name instead of filesystem-derived names such as `packagesUsersAngularSrcLibAcceptInvitationAcceptInvitationSource`.
 
 ## MSW Preview Setup
 
@@ -36,7 +151,7 @@ const mswPreview = createStorybookMswPreview(
     candidates: [
       createJsonGetHandler('/api/recruitment/candidates/current', {
         id: 'candidate-current',
-        fullName: 'Ada Lovelace',
+        fullName: 'Morgan Nguyen',
         skills: ['angular', 'typescript'],
       }),
     ],
@@ -132,7 +247,8 @@ export const SearchSuccess = {
    - `id('company', companyKey)`
    - `id('candidate', candidateKey)`
 4. Keep mock handlers composable through `parameters.msw.handlers` groups.
-5. Keep reusable factory/search logic in `@otwld/ng-storybook`; keep scenario payload tweaks in stories.
+5. Prefer accessible roles and scoped `canvas` queries in play functions.
+6. Keep reusable factory/search logic in `@otwld/ng-storybook`; keep scenario payload tweaks in stories.
 
 ## Source
 

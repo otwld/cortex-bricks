@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="feature-flags/ng/public-api" name="packagesFeatureFlagsAngularSrcIndexSource" />
+<Meta title="feature-flags/ng/public-api" name="Angular Public API" />
 
-# Public API
+# Angular Public API
 
-Source mirror for `packages/feature-flags/ng/src/index.ts`.
+Package: `@otwld/ng-feature-flags`
+Source path: `packages/feature-flags/ng/src/index.ts`
+Public import: Root Angular feature flags package entry point.
+
+```ts
+import { provideFeatureFlags } from '@otwld/ng-feature-flags';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

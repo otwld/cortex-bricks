@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ai-request-schemas.ts';
 
-<Meta title="ai/ts/ai-request-schemas" name="packagesAITSSrcLibSchemasAIRequestSchemasSource" />
+<Meta title="ai/ts/ai-request-schemas" name="AI Request Schemas Source" />
 
 # AI Request Schemas
 
-Source mirror for `packages/ai/ts/src/lib/schemas/ai-request-schemas.ts`.
+Package: `@otwld/ts-ai`
+Source path: `packages/ai/ts/src/lib/schemas/ai-request-schemas.ts`
+Public import: Root TypeScript AI package entry point.
+
+```ts
+import { createAiRequestSchemas, normalizeAiRequestLimits } from '@otwld/ts-ai';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

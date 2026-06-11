@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/help" name="packagesDashboardAngularSrcLibPagesHelpIndexSource" />
+<Meta title="dashboard/ng/help" name="Help Public API" />
 
-# Public API
+# Help Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/pages/help/index.ts`.
+Package: `@otwld/ng-dashboard/pages/help`
+Source path: `packages/dashboard/ng/src/lib/pages/help/index.ts`
+Public import: Help page secondary entry point.
+
+```ts
+import { HelpPage } from '@otwld/ng-dashboard/pages/help';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

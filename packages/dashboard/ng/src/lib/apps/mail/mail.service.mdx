@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./mail.service.ts';
 
-<Meta title="dashboard/ng/apps/mail/mail-service" name="packagesDashboardAngularSrcLibAppsMailMailServiceSource" />
+<Meta title="dashboard/ng/apps/mail/mail-service" name="Mail Service Source" />
 
 # Mail Service
 
-Source mirror for `packages/dashboard/ng/src/lib/apps/mail/mail.service.ts`.
+Package: `@otwld/ng-dashboard/apps/mail`
+Source path: `packages/dashboard/ng/src/lib/apps/mail/mail.service.ts`
+Public import: Dashboard mail data service and message models.
+
+```ts
+import { MailService, type Email } from '@otwld/ng-dashboard/apps/mail';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

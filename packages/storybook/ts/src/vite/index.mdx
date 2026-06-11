@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="storybook/ts/vite" name="packagesStorybookTSSrcViteIndexSource" />
+<Meta title="storybook/ts/vite" name="Vite Public API" />
 
-# Public API
+# Vite Public API
 
-Source mirror for `packages/storybook/ts/src/vite/index.ts`.
+Package: `@otwld/ts-storybook`
+Source path: `packages/storybook/ts/src/vite/index.ts`
+Public import: `@otwld/ts-storybook/vite`
+
+```ts
+import { createStorybookNodeSourceLoaderPlugin } from '@otwld/ts-storybook/vite';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

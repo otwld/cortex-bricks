@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./filesystem.driver.ts';
 
-<Meta title="storage/nest/filesystem-driver" name="packagesStorageNestSrcLibDriversFilesystemDriverSource" />
+<Meta title="storage/nest/filesystem-driver" name="Filesystem Driver Source" />
 
 # Filesystem Driver
 
-Source mirror for `packages/storage/nest/src/lib/drivers/filesystem.driver.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/drivers/filesystem.driver.ts`
+Public import: Root Nest storage package entry point.
+
+```ts
+import { FilesystemStorageDriver } from '@otwld/nest-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

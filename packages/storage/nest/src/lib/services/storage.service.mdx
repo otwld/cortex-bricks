@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./storage.service.ts';
 
-<Meta title="storage/nest/storage-service" name="packagesStorageNestSrcLibServicesStorageServiceSource" />
+<Meta title="storage/nest/storage-service" name="Storage Service Source" />
 
 # Storage Service
 
-Source mirror for `packages/storage/nest/src/lib/services/storage.service.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/services/storage.service.ts`
+Public import: Root Nest storage package entry point.
+
+```ts
+import { StorageService } from '@otwld/nest-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

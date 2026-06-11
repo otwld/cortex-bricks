@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ack-registry.ts';
 
-<Meta title="websocket/ng/ack-registry" name="packagesWebsocketAngularSrcLibInternalAckRegistrySource" />
+<Meta title="websocket/ng/ack-registry" name="Ack Registry Source" />
 
 # Ack Registry
 
-Source mirror for `packages/websocket/ng/src/lib/internal/ack-registry.ts`.
+Package: `@otwld/ng-websocket`
+Source path: `packages/websocket/ng/src/lib/internal/ack-registry.ts`
+Public import: Internal acknowledgement registry used by `WsClient`.
+
+```ts
+import { WsClient } from '@otwld/ng-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

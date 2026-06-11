@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./app.module.ts';
 
-<Meta title="backend/nest/app-module" name="appsBackendSrcAppAppModuleSource" />
+<Meta title="backend/nest/app-module" name="App Module Source" />
 
 # App Module
 
-Source mirror for `apps/backend/src/app/app.module.ts`.
+Package: `backend`
+Source path: `apps/backend/src/app/app.module.ts`
+Public import: Application-local NestJS module.
+
+```ts
+import { AppModule } from './app.module';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./chat.gateway.ts';
 
-<Meta title="backend/nest/chat/chat-gateway" name="appsBackendSrcAppChatChatGatewaySource" />
+<Meta title="backend/nest/chat/chat-gateway" name="Chat Gateway Source" />
 
 # Chat Gateway
 
-Source mirror for `apps/backend/src/app/chat/chat.gateway.ts`.
+Package: `backend`
+Source path: `apps/backend/src/app/chat/chat.gateway.ts`
+Public import: Application-local WebSocket gateway.
+
+```ts
+import { ChatGateway } from './chat.gateway';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./server.ts';
 
-<Meta title="frontend/ng/server" name="appsFrontendSrcServerSource" />
+<Meta title="frontend/ng/server" name="Server Source" />
 
 # Server
 
-Source mirror for `apps/frontend/src/server.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/server.ts`
+Public import: Application-local server request handler.
+
+```ts
+import { reqHandler } from './server';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

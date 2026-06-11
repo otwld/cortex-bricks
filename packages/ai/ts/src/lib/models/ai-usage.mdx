@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ai-usage.ts';
 
-<Meta title="ai/ts/ai-usage" name="packagesAITSSrcLibModelsAIUsageSource" />
+<Meta title="ai/ts/ai-usage" name="AI Usage Source" />
 
 # AI Usage
 
-Source mirror for `packages/ai/ts/src/lib/models/ai-usage.ts`.
+Package: `@otwld/ts-ai`
+Source path: `packages/ai/ts/src/lib/models/ai-usage.ts`
+Public import: Root TypeScript AI package entry point.
+
+```ts
+import { AiSource, AiUsage } from '@otwld/ts-ai';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

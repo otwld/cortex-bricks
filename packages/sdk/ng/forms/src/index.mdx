@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="sdk/ng/forms" name="packagesSDKAngularFormsSrcIndexSource" />
+<Meta title="sdk/ng/forms" name="Forms Public API" />
 
-# Public API
+# Forms Public API
 
-Source mirror for `packages/sdk/ng/forms/src/index.ts`.
+Package: `@otwld/ng-cdk/forms`
+Source path: `packages/sdk/ng/forms/src/index.ts`
+Public import: Angular CDK forms secondary entry point.
+
+```ts
+import { markControlTreeTouchedDirtyAndUpdateValidity } from '@otwld/ng-cdk/forms';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

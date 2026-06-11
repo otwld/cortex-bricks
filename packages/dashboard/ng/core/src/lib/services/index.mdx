@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/core" name="packagesDashboardAngularCoreSrcLibServicesIndexSource" />
+<Meta title="dashboard/ng/core" name="Services Public API" />
 
-# Public API
+# Services Public API
 
-Source mirror for `packages/dashboard/ng/core/src/lib/services/index.ts`.
+Package: `@otwld/ng-dashboard/core`
+Source path: `packages/dashboard/ng/core/src/lib/services/index.ts`
+Public import: Dashboard core secondary entry point.
+
+```ts
+import { CustomerService, ProductService } from '@otwld/ng-dashboard/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

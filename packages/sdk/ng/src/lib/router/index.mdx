@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="sdk/ng/router" name="packagesSDKAngularSrcLibRouterIndexSource" />
+<Meta title="sdk/ng/router" name="Router Public API" />
 
-# Public API
+# Router Public API
 
-Source mirror for `packages/sdk/ng/src/lib/router/index.ts`.
+Package: `@otwld/ng-cdk`
+Source path: `packages/sdk/ng/src/lib/router/index.ts`
+Public import: Root Angular CDK package entry point.
+
+```ts
+import { injectRecursiveRouteQueryParams } from '@otwld/ng-cdk';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

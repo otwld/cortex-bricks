@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./landing.page.ts';
 
-<Meta title="frontend/ng/landing" name="appsFrontendSrcAppLandingPageSource" />
+<Meta title="frontend/ng/landing" name="Landing Page Source" />
 
 # Landing Page
 
-Source mirror for `apps/frontend/src/app/landing.page.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/app/landing.page.ts`
+Public import: Application-local Angular page component.
+
+```ts
+import { LandingPage } from './landing.page';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

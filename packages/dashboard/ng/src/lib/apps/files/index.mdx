@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/apps/files" name="packagesDashboardAngularSrcLibAppsFilesIndexSource" />
+<Meta title="dashboard/ng/apps/files" name="Files Public API" />
 
-# Public API
+# Files Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/apps/files/index.ts`.
+Package: `@otwld/ng-dashboard/apps/files`
+Source path: `packages/dashboard/ng/src/lib/apps/files/index.ts`
+Public import: Dashboard files app secondary entry point.
+
+```ts
+import { FilesPage } from '@otwld/ng-dashboard/apps/files';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

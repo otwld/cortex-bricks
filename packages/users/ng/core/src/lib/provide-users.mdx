@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./provide-users.ts';
 
-<Meta title="users/ng/core/provide-users" name="packagesUsersAngularCoreSrcLibProvideUsersSource" />
+<Meta title="users/ng/core/provide-users" name="Provide Users Source" />
 
 # Provide Users
 
-Source mirror for `packages/users/ng/core/src/lib/provide-users.ts`.
+Package: `@otwld/ng-users`
+Source path: `packages/users/ng/core/src/lib/provide-users.ts`
+Public import: `@otwld/ng-users/core`
+
+```ts
+import { provideUsers } from '@otwld/ng-users/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

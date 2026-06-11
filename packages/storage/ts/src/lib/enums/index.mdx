@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="storage/ts/enums" name="packagesStorageTSSrcLibEnumsIndexSource" />
+<Meta title="storage/ts/enums" name="Enums Public API" />
 
-# Public API
+# Enums Public API
 
-Source mirror for `packages/storage/ts/src/lib/enums/index.ts`.
+Package: `@otwld/ts-storage`
+Source path: `packages/storage/ts/src/lib/enums/index.ts`
+Public import: Root TypeScript storage package entry point.
+
+```ts
+import { StorageDriver, UploadStatus } from '@otwld/ts-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

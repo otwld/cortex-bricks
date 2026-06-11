@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="storage/nest/vitest-config" name="packagesStorageNestVitestConfigSource" />
+<Meta title="storage/nest/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/storage/nest/vitest.config.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/vitest.config.ts`
+Public import: Not exported; loaded by the Nest storage test target.
+
+```bash
+pnpm nx test nest-storage
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

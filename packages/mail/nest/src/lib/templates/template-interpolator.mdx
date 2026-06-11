@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./template-interpolator.ts';
 
-<Meta title="mail/nest/template-interpolator" name="packagesMailNestSrcLibTemplatesTemplateInterpolatorSource" />
+<Meta title="mail/nest/template-interpolator" name="Template Interpolator Source" />
 
 # Template Interpolator
 
-Source mirror for `packages/mail/nest/src/lib/templates/template-interpolator.ts`.
+Package: `@otwld/nest-mail`
+Source path: `packages/mail/nest/src/lib/templates/template-interpolator.ts`
+Public import: Internal template rendering helper used by `MailService`.
+
+```ts
+import { MailService } from '@otwld/nest-mail';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

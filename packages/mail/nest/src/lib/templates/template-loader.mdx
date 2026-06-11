@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./template-loader.ts';
 
-<Meta title="mail/nest/template-loader" name="packagesMailNestSrcLibTemplatesTemplateLoaderSource" />
+<Meta title="mail/nest/template-loader" name="Template Loader Source" />
 
 # Template Loader
 
-Source mirror for `packages/mail/nest/src/lib/templates/template-loader.ts`.
+Package: `@otwld/nest-mail`
+Source path: `packages/mail/nest/src/lib/templates/template-loader.ts`
+Public import: Internal template loading helper used by `MailService`.
+
+```ts
+import { MailService } from '@otwld/nest-mail';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

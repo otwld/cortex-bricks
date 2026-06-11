@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ai.module-definition.ts';
 
-<Meta title="ai/nest/ai-module-definition" name="packagesAINestSrcLibConfigAIModuleDefinitionSource" />
+<Meta title="ai/nest/ai-module-definition" name="AI Module Definition Source" />
 
 # AI Module Definition
 
-Source mirror for `packages/ai/nest/src/lib/config/ai.module-definition.ts`.
+Package: `@otwld/nest-ai`
+Source path: `packages/ai/nest/src/lib/config/ai.module-definition.ts`
+Public import: Internal configurable module artifacts re-exported through option aliases.
+
+```ts
+import { AiModuleAsyncOptions, AiModuleSyncOptions } from '@otwld/nest-ai';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./app.controller.ts';
 
-<Meta title="backend/nest/app-controller" name="appsBackendSrcAppAppControllerSource" />
+<Meta title="backend/nest/app-controller" name="App Controller Source" />
 
 # App Controller
 
-Source mirror for `apps/backend/src/app/app.controller.ts`.
+Package: `backend`
+Source path: `apps/backend/src/app/app.controller.ts`
+Public import: Application-local NestJS controller.
+
+```ts
+import { AppController } from './app.controller';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

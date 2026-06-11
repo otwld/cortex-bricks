@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./storage.controller.ts';
 
-<Meta title="backend/nest/storage/storage-controller" name="appsBackendSrcAppStorageStorageControllerSource" />
+<Meta title="backend/nest/storage/storage-controller" name="Storage Controller Source" />
 
 # Storage Controller
 
-Source mirror for `apps/backend/src/app/storage/storage.controller.ts`.
+Package: `backend`
+Source path: `apps/backend/src/app/storage/storage.controller.ts`
+Public import: Application-local NestJS controller.
+
+```ts
+import { StorageController } from './storage.controller';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

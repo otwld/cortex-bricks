@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./jwt-auth.guard.ts';
 
-<Meta title="auth/nest/jwt-auth-guard" name="packagesAuthNestSrcLibGuardsJWTAuthGuardSource" />
+<Meta title="auth/nest/jwt-auth-guard" name="JWT Auth Guard Source" />
 
 # JWT Auth Guard
 
-Source mirror for `packages/auth/nest/src/lib/guards/jwt-auth.guard.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/guards/jwt-auth.guard.ts`
+Public import: Root Nest auth package entry point.
+
+```ts
+import { JwtAuthGuard } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

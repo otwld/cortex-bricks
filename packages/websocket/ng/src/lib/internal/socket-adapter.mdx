@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./socket-adapter.ts';
 
-<Meta title="websocket/ng/socket-adapter" name="packagesWebsocketAngularSrcLibInternalSocketAdapterSource" />
+<Meta title="websocket/ng/socket-adapter" name="Socket Adapter Source" />
 
 # Socket Adapter
 
-Source mirror for `packages/websocket/ng/src/lib/internal/socket-adapter.ts`.
+Package: `@otwld/ng-websocket`
+Source path: `packages/websocket/ng/src/lib/internal/socket-adapter.ts`
+Public import: Internal Socket.IO adapter used by `WsClient`.
+
+```ts
+import { WsClient } from '@otwld/ng-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

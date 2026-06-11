@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="storage/ng/models" name="packagesStorageAngularSrcLibModelsIndexSource" />
+<Meta title="storage/ng/models" name="Models Public API" />
 
-# Public API
+# Models Public API
 
-Source mirror for `packages/storage/ng/src/lib/models/index.ts`.
+Package: `@otwld/ng-storage`
+Source path: `packages/storage/ng/src/lib/models/index.ts`
+Public import: Root Angular storage package entry point.
+
+```ts
+import { UploadGroup, UploadTask } from '@otwld/ng-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

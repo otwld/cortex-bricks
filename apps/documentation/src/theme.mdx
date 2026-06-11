@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./theme.ts';
 
-<Meta title="documentation/storybook/theme" name="appsDocumentationSrcThemeSource" />
+<Meta title="documentation/storybook/theme" name="Theme Source" />
 
 # Theme
 
-Source mirror for `apps/documentation/src/theme.ts`.
+Package: `documentation`
+Source path: `apps/documentation/src/theme.ts`
+Public import: Storybook manager theme module
+
+```ts
+import theme from './theme';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

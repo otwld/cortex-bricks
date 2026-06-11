@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./preview.ts';
 
-<Meta title="documentation/storybook/preview" name="appsDocumentationSrcPreviewSource" />
+<Meta title="documentation/storybook/preview" name="Preview Source" />
 
 # Preview
 
-Source mirror for `apps/documentation/src/preview.ts`.
+Package: `documentation`
+Source path: `apps/documentation/src/preview.ts`
+Public import: Storybook preview module
+
+```ts
+import { provideStorybookAngularApp, withStorybookPrimeNgThemeMode } from '@otwld/ng-storybook';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

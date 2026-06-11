@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./form.ts';
 
-<Meta title="sdk/ng/forms/form" name="packagesSDKAngularFormsSrcLibFormSource" />
+<Meta title="sdk/ng/forms/form" name="Form Source" />
 
 # Form
 
-Source mirror for `packages/sdk/ng/forms/src/lib/form.ts`.
+Package: `@otwld/ng-cdk/forms`
+Source path: `packages/sdk/ng/forms/src/lib/form.ts`
+Public import: Angular CDK forms secondary entry point.
+
+```ts
+import { pickControls, type FormGroupOf } from '@otwld/ng-cdk/forms';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

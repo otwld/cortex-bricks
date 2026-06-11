@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="users/ng/core" name="packagesUsersAngularCoreSrcIndexSource" />
+<Meta title="users/ng/core" name="Core Public API" />
 
-# Public API
+# Core Public API
 
-Source mirror for `packages/users/ng/core/src/index.ts`.
+Package: `@otwld/ng-users`
+Source path: `packages/users/ng/core/src/index.ts`
+Public import: `@otwld/ng-users/core`
+
+```ts
+import { provideUsers, UsersService } from '@otwld/ng-users/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

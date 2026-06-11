@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./invoice.page.ts';
 
-<Meta title="dashboard/ng/invoice" name="packagesDashboardAngularSrcLibPagesInvoiceInvoicePageSource" />
+<Meta title="dashboard/ng/invoice" name="Invoice Page Source" />
 
 # Invoice Page
 
-Source mirror for `packages/dashboard/ng/src/lib/pages/invoice/invoice.page.ts`.
+Package: `@otwld/ng-dashboard/pages/invoice`
+Source path: `packages/dashboard/ng/src/lib/pages/invoice/invoice.page.ts`
+Public import: Invoice page component.
+
+```ts
+import { InvoicePage } from '@otwld/ng-dashboard/pages/invoice';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

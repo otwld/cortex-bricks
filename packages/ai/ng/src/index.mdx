@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="ai/ng/public-api" name="packagesAIAngularSrcIndexSource" />
+<Meta title="ai/ng/public-api" name="Angular Public API" />
 
-# Public API
+# Angular Public API
 
-Source mirror for `packages/ai/ng/src/index.ts`.
+Package: `@otwld/ng-ai`
+Source path: `packages/ai/ng/src/index.ts`
+Public import: Root Angular AI package entry point.
+
+```ts
+import { provideAi } from '@otwld/ng-ai';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

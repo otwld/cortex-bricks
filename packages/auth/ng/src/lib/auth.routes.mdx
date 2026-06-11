@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./auth.routes.ts';
 
-<Meta title="auth/ng/auth-routes" name="packagesAuthAngularSrcLibAuthRoutesSource" />
+<Meta title="auth/ng/auth-routes" name="Auth Routes Source" />
 
 # Auth Routes
 
-Source mirror for `packages/auth/ng/src/lib/auth.routes.ts`.
+Package: `@otwld/ng-auth`
+Source path: `packages/auth/ng/src/lib/auth.routes.ts`
+Public import: Root Angular auth package entry point.
+
+```ts
+import { authRoutes } from '@otwld/ng-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

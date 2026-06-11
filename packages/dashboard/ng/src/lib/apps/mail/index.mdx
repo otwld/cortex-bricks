@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/apps/mail" name="packagesDashboardAngularSrcLibAppsMailIndexSource" />
+<Meta title="dashboard/ng/apps/mail" name="Mail Public API" />
 
-# Public API
+# Mail Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/apps/mail/index.ts`.
+Package: `@otwld/ng-dashboard/apps/mail`
+Source path: `packages/dashboard/ng/src/lib/apps/mail/index.ts`
+Public import: Dashboard mail app secondary entry point.
+
+```ts
+import { mailRoutes, MailService } from '@otwld/ng-dashboard/apps/mail';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

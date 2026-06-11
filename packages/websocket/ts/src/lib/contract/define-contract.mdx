@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./define-contract.ts';
 
-<Meta title="websocket/ts/contract/define-contract" name="packagesWebsocketTSSrcLibContractDefineContractSource" />
+<Meta title="websocket/ts/contract/define-contract" name="Define Contract Source" />
 
 # Define Contract
 
-Source mirror for `packages/websocket/ts/src/lib/contract/define-contract.ts`.
+Package: `@otwld/ts-websocket`
+Source path: `packages/websocket/ts/src/lib/contract/define-contract.ts`
+Public import: Root TypeScript WebSocket package entry point.
+
+```ts
+import { defineContract } from '@otwld/ts-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./local-auth.guard.ts';
 
-<Meta title="auth/nest/local-auth-guard" name="packagesAuthNestSrcLibGuardsLocalAuthGuardSource" />
+<Meta title="auth/nest/local-auth-guard" name="Local Auth Guard Source" />
 
 # Local Auth Guard
 
-Source mirror for `packages/auth/nest/src/lib/guards/local-auth.guard.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/guards/local-auth.guard.ts`
+Public import: Root Nest auth package entry point.
+
+```ts
+import { LocalAuthGuard } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

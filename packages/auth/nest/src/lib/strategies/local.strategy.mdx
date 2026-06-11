@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./local.strategy.ts';
 
-<Meta title="auth/nest/local-strategy" name="packagesAuthNestSrcLibStrategiesLocalStrategySource" />
+<Meta title="auth/nest/local-strategy" name="Local Strategy Source" />
 
 # Local Strategy
 
-Source mirror for `packages/auth/nest/src/lib/strategies/local.strategy.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/strategies/local.strategy.ts`
+Public import: Internal Passport strategy wired by `AuthModule`.
+
+```ts
+import { AuthModule } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

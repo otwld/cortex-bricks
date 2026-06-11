@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="users/ts/public-api" name="packagesUsersTSSrcIndexSource" />
+<Meta title="users/ts/public-api" name="TS Public API" />
 
-# Public API
+# TS Public API
 
-Source mirror for `packages/users/ts/src/index.ts`.
+Package: `@otwld/ts-users`
+Source path: `packages/users/ts/src/index.ts`
+Public import: `@otwld/ts-users`
+
+```ts
+import { UserInvitationStatus, type UserProfile } from '@otwld/ts-users';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

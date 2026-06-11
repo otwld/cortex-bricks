@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./auth.controller.ts';
 
-<Meta title="auth/nest/auth-controller" name="packagesAuthNestSrcLibAuthControllerSource" />
+<Meta title="auth/nest/auth-controller" name="Auth Controller Source" />
 
 # Auth Controller
 
-Source mirror for `packages/auth/nest/src/lib/auth.controller.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/auth.controller.ts`
+Public import: Internal Nest controller wired by `AuthModule`.
+
+```ts
+import { AuthModule } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

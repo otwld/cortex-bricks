@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ws-error.ts';
 
-<Meta title="websocket/ts/ws-error" name="packagesWebsocketTSSrcLibErrorsWebSocketErrorSource" />
+<Meta title="websocket/ts/ws-error" name="WebSocket Error Source" />
 
 # WebSocket Error
 
-Source mirror for `packages/websocket/ts/src/lib/errors/ws-error.ts`.
+Package: `@otwld/ts-websocket`
+Source path: `packages/websocket/ts/src/lib/errors/ws-error.ts`
+Public import: Root TypeScript WebSocket package entry point.
+
+```ts
+import { WsError } from '@otwld/ts-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

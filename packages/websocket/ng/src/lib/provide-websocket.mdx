@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./provide-websocket.ts';
 
-<Meta title="websocket/ng/provide-websocket" name="packagesWebsocketAngularSrcLibProvideWebsocketSource" />
+<Meta title="websocket/ng/provide-websocket" name="Provide Websocket Source" />
 
 # Provide Websocket
 
-Source mirror for `packages/websocket/ng/src/lib/provide-websocket.ts`.
+Package: `@otwld/ng-websocket`
+Source path: `packages/websocket/ng/src/lib/provide-websocket.ts`
+Public import: Root Angular WebSocket package entry point.
+
+```ts
+import { provideWebsocket } from '@otwld/ng-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

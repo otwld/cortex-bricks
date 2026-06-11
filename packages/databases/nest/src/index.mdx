@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="databases/nest/public-api" name="packagesDatabasesNestSrcIndexSource" />
+<Meta title="databases/nest/public-api" name="Nest Public API" />
 
-# Public API
+# Nest Public API
 
-Source mirror for `packages/databases/nest/src/index.ts`.
+Package: `@otwld/nest-mongoose`
+Source path: `packages/databases/nest/src/index.ts`
+Public import: Root Nest Mongoose package entry point.
+
+```ts
+import { NestMongooseModule } from '@otwld/nest-mongoose';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

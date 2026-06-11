@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ws-client.token.ts';
 
-<Meta title="websocket/ng/ws-client-token" name="packagesWebsocketAngularSrcLibTokensWebSocketClientTokenSource" />
+<Meta title="websocket/ng/ws-client-token" name="WebSocket Client Token Source" />
 
 # WebSocket Client Token
 
-Source mirror for `packages/websocket/ng/src/lib/tokens/ws-client.token.ts`.
+Package: `@otwld/ng-websocket`
+Source path: `packages/websocket/ng/src/lib/tokens/ws-client.token.ts`
+Public import: Root Angular WebSocket package entry point.
+
+```ts
+import { WS_CLIENT } from '@otwld/ng-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

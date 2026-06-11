@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ai-usage.service.ts';
 
-<Meta title="ai/ng/ai-usage-service" name="packagesAIAngularSrcLibServicesAIUsageServiceSource" />
+<Meta title="ai/ng/ai-usage-service" name="AI Usage Service Source" />
 
 # AI Usage Service
 
-Source mirror for `packages/ai/ng/src/lib/services/ai-usage.service.ts`.
+Package: `@otwld/ng-ai`
+Source path: `packages/ai/ng/src/lib/services/ai-usage.service.ts`
+Public import: Root Angular AI package entry point.
+
+```ts
+import { AiUsageService } from '@otwld/ng-ai';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

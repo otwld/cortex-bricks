@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ai-error.ts';
 
-<Meta title="ai/ts/ai-error" name="packagesAITSSrcLibErrorsAIErrorSource" />
+<Meta title="ai/ts/ai-error" name="AI Error Source" />
 
 # AI Error
 
-Source mirror for `packages/ai/ts/src/lib/errors/ai-error.ts`.
+Package: `@otwld/ts-ai`
+Source path: `packages/ai/ts/src/lib/errors/ai-error.ts`
+Public import: Root TypeScript AI package entry point.
+
+```ts
+import { AiErrorCode, AiErrorResponse } from '@otwld/ts-ai';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

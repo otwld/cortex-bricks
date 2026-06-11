@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="websocket/ts/public-api" name="packagesWebsocketTSSrcIndexSource" />
+<Meta title="websocket/ts/public-api" name="TS Public API" />
 
-# Public API
+# TS Public API
 
-Source mirror for `packages/websocket/ts/src/index.ts`.
+Package: `@otwld/ts-websocket`
+Source path: `packages/websocket/ts/src/index.ts`
+Public import: Root TypeScript WebSocket package entry point.
+
+```ts
+import { defineContract, WsError } from '@otwld/ts-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./presence-tracker.ts';
 
-<Meta title="websocket/ng/presence-tracker" name="packagesWebsocketAngularSrcLibInternalPresenceTrackerSource" />
+<Meta title="websocket/ng/presence-tracker" name="Presence Tracker Source" />
 
 # Presence Tracker
 
-Source mirror for `packages/websocket/ng/src/lib/internal/presence-tracker.ts`.
+Package: `@otwld/ng-websocket`
+Source path: `packages/websocket/ng/src/lib/internal/presence-tracker.ts`
+Public import: Internal presence tracker used by `PresenceService`.
+
+```ts
+import { PresenceService } from '@otwld/ng-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

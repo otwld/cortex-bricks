@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="mail/nest/vitest-config" name="packagesMailNestVitestConfigSource" />
+<Meta title="mail/nest/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/mail/nest/vitest.config.ts`.
+Package: `@otwld/nest-mail`
+Source path: `packages/mail/nest/vitest.config.ts`
+Public import: Not exported; loaded by the Nest mail test target.
+
+```bash
+pnpm nx test nest-mail
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./jwt-ws-auth.adapter.ts';
 
-<Meta title="backend/nest/chat/jwt-ws-auth-adapter" name="appsBackendSrcAppChatJWTWebSocketAuthAdapterSource" />
+<Meta title="backend/nest/chat/jwt-ws-auth-adapter" name="JWT WebSocket Auth Adapter Source" />
 
 # JWT WebSocket Auth Adapter
 
-Source mirror for `apps/backend/src/app/chat/jwt-ws-auth.adapter.ts`.
+Package: `backend`
+Source path: `apps/backend/src/app/chat/jwt-ws-auth.adapter.ts`
+Public import: Application-local WebSocket authentication adapter.
+
+```ts
+import { JwtWsAuthAdapter } from './jwt-ws-auth.adapter';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

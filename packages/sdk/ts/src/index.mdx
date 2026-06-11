@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="sdk/ts/public-api" name="packagesSDKTSSrcIndexSource" />
+<Meta title="sdk/ts/public-api" name="TS Public API" />
 
-# Public API
+# TS Public API
 
-Source mirror for `packages/sdk/ts/src/index.ts`.
+Package: `@otwld/ts-sdk`
+Source path: `packages/sdk/ts/src/index.ts`
+Public import: Root TypeScript SDK package entry point.
+
+```ts
+import { MessageType } from '@otwld/ts-sdk';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

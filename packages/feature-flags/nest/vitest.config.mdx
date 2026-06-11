@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="feature-flags/nest/vitest-config" name="packagesFeatureFlagsNestVitestConfigSource" />
+<Meta title="feature-flags/nest/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/feature-flags/nest/vitest.config.ts`.
+Package: `@otwld/nest-feature-flags`
+Source path: `packages/feature-flags/nest/vitest.config.ts`
+Public import: Not exported; loaded by the Nest feature flags test target.
+
+```bash
+pnpm nx test nest-feature-flags
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

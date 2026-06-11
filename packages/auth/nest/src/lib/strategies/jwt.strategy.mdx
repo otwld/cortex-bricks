@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./jwt.strategy.ts';
 
-<Meta title="auth/nest/jwt-strategy" name="packagesAuthNestSrcLibStrategiesJWTStrategySource" />
+<Meta title="auth/nest/jwt-strategy" name="JWT Strategy Source" />
 
 # JWT Strategy
 
-Source mirror for `packages/auth/nest/src/lib/strategies/jwt.strategy.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/strategies/jwt.strategy.ts`
+Public import: Internal Passport strategy wired by `AuthModule`.
+
+```ts
+import { AuthModule } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

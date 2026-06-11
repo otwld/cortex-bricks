@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/apps" name="packagesDashboardAngularSrcLibAppsIndexSource" />
+<Meta title="dashboard/ng/apps" name="Apps Public API" />
 
-# Public API
+# Apps Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/apps/index.ts`.
+Package: `@otwld/ng-dashboard/apps`
+Source path: `packages/dashboard/ng/src/lib/apps/index.ts`
+Public import: Dashboard apps secondary entry point.
+
+```ts
+import { dashboardAppsRoutes } from '@otwld/ng-dashboard/apps';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

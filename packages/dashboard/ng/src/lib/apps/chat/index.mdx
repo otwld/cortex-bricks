@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/apps/chat" name="packagesDashboardAngularSrcLibAppsChatIndexSource" />
+<Meta title="dashboard/ng/apps/chat" name="Chat Public API" />
 
-# Public API
+# Chat Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/apps/chat/index.ts`.
+Package: `@otwld/ng-dashboard/apps/chat`
+Source path: `packages/dashboard/ng/src/lib/apps/chat/index.ts`
+Public import: Dashboard chat app secondary entry point.
+
+```ts
+import { ChatPage, ChatSidebar } from '@otwld/ng-dashboard/apps/chat';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

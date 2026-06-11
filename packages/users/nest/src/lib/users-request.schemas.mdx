@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./users-request.schemas.ts';
 
-<Meta title="users/nest/users-request-schemas" name="packagesUsersNestSrcLibUsersRequestSchemasSource" />
+<Meta title="users/nest/users-request-schemas" name="Users Request Schemas Source" />
 
 # Users Request Schemas
 
-Source mirror for `packages/users/nest/src/lib/users-request.schemas.ts`.
+Package: `@otwld/nest-users`
+Source path: `packages/users/nest/src/lib/users-request.schemas.ts`
+Public import: Not exported from the public entry point.
+
+```ts
+import { UsersController } from '@otwld/nest-users';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

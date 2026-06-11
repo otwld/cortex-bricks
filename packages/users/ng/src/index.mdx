@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="users/ng/public-api" name="packagesUsersAngularSrcIndexSource" />
+<Meta title="users/ng/public-api" name="Angular Public API" />
 
-# Public API
+# Angular Public API
 
-Source mirror for `packages/users/ng/src/index.ts`.
+Package: `@otwld/ng-users`
+Source path: `packages/users/ng/src/index.ts`
+Public import: `@otwld/ng-users`
+
+```ts
+import { usersRoutes } from '@otwld/ng-users';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

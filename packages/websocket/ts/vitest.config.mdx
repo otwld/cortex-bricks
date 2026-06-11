@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="websocket/ts/vitest-config" name="packagesWebsocketTSVitestConfigSource" />
+<Meta title="websocket/ts/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/websocket/ts/vitest.config.ts`.
+Package: `@otwld/ts-websocket`
+Source path: `packages/websocket/ts/vitest.config.ts`
+Public import: Not exported; loaded by the TypeScript WebSocket test target.
+
+```bash
+pnpm nx test ts-websocket
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="feature-flags/ts/vitest-config" name="packagesFeatureFlagsTSVitestConfigSource" />
+<Meta title="feature-flags/ts/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/feature-flags/ts/vitest.config.ts`.
+Package: `@otwld/ts-feature-flags`
+Source path: `packages/feature-flags/ts/vitest.config.ts`
+Public import: Not exported; loaded by the TypeScript feature flags test target.
+
+```bash
+pnpm nx test ts-feature-flags
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

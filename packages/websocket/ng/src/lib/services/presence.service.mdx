@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./presence.service.ts';
 
-<Meta title="websocket/ng/presence-service" name="packagesWebsocketAngularSrcLibServicesPresenceServiceSource" />
+<Meta title="websocket/ng/presence-service" name="Presence Service Source" />
 
 # Presence Service
 
-Source mirror for `packages/websocket/ng/src/lib/services/presence.service.ts`.
+Package: `@otwld/ng-websocket`
+Source path: `packages/websocket/ng/src/lib/services/presence.service.ts`
+Public import: Root Angular WebSocket package entry point.
+
+```ts
+import { PresenceService } from '@otwld/ng-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./policies.guard.ts';
 
-<Meta title="auth/nest/policies-guard" name="packagesAuthNestSrcLibGuardsPoliciesGuardSource" />
+<Meta title="auth/nest/policies-guard" name="Policies Guard Source" />
 
 # Policies Guard
 
-Source mirror for `packages/auth/nest/src/lib/guards/policies.guard.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/guards/policies.guard.ts`
+Public import: Root Nest auth package entry point.
+
+```ts
+import { PoliciesGuard } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

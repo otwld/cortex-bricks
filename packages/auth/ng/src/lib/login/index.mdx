@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="auth/ng/login" name="packagesAuthAngularSrcLibLoginIndexSource" />
+<Meta title="auth/ng/login" name="Login Public API" />
 
-# Public API
+# Login Public API
 
-Source mirror for `packages/auth/ng/src/lib/login/index.ts`.
+Package: `@otwld/ng-auth/login`
+Source path: `packages/auth/ng/src/lib/login/index.ts`
+Public import: Login page secondary entry point.
+
+```ts
+import { LoginPage } from '@otwld/ng-auth/login';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

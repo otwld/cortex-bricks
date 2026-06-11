@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./infer-socket-types.ts';
 
-<Meta title="websocket/ts/contract/infer-socket-types" name="packagesWebsocketTSSrcLibContractInferSocketTypesSource" />
+<Meta title="websocket/ts/contract/infer-socket-types" name="Infer Socket Types Source" />
 
 # Infer Socket Types
 
-Source mirror for `packages/websocket/ts/src/lib/contract/infer-socket-types.ts`.
+Package: `@otwld/ts-websocket`
+Source path: `packages/websocket/ts/src/lib/contract/infer-socket-types.ts`
+Public import: Root TypeScript WebSocket package entry point.
+
+```ts
+import { InferClientToServer, InferServerToClient } from '@otwld/ts-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

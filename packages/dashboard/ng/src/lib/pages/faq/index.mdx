@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/faq" name="packagesDashboardAngularSrcLibPagesFaqIndexSource" />
+<Meta title="dashboard/ng/faq" name="Faq Public API" />
 
-# Public API
+# Faq Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/pages/faq/index.ts`.
+Package: `@otwld/ng-dashboard/pages/faq`
+Source path: `packages/dashboard/ng/src/lib/pages/faq/index.ts`
+Public import: FAQ page secondary entry point.
+
+```ts
+import { FaqPage } from '@otwld/ng-dashboard/pages/faq';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

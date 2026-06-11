@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./email-verified.guard.ts';
 
-<Meta title="auth/ng/core/email-verified-guard" name="packagesAuthAngularCoreSrcLibGuardsEmailVerifiedGuardSource" />
+<Meta title="auth/ng/core/email-verified-guard" name="Email Verified Guard Source" />
 
 # Email Verified Guard
 
-Source mirror for `packages/auth/ng/core/src/lib/guards/email-verified.guard.ts`.
+Package: `@otwld/ng-auth/core`
+Source path: `packages/auth/ng/core/src/lib/guards/email-verified.guard.ts`
+Public import: Angular auth core secondary entry point.
+
+```ts
+import { emailVerifiedGuard } from '@otwld/ng-auth/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

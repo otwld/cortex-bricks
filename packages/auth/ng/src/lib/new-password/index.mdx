@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="auth/ng/new-password" name="packagesAuthAngularSrcLibNewPasswordIndexSource" />
+<Meta title="auth/ng/new-password" name="New Password Public API" />
 
-# Public API
+# New Password Public API
 
-Source mirror for `packages/auth/ng/src/lib/new-password/index.ts`.
+Package: `@otwld/ng-auth/new-password`
+Source path: `packages/auth/ng/src/lib/new-password/index.ts`
+Public import: New password page secondary entry point.
+
+```ts
+import { NewPasswordPage } from '@otwld/ng-auth/new-password';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

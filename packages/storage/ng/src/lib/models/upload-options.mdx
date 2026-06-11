@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./upload-options.ts';
 
-<Meta title="storage/ng/upload-options" name="packagesStorageAngularSrcLibModelsUploadOptionsSource" />
+<Meta title="storage/ng/upload-options" name="Upload Options Source" />
 
 # Upload Options
 
-Source mirror for `packages/storage/ng/src/lib/models/upload-options.ts`.
+Package: `@otwld/ng-storage`
+Source path: `packages/storage/ng/src/lib/models/upload-options.ts`
+Public import: Root Angular storage package entry point.
+
+```ts
+import { DropZoneOptions, UploadOptions } from '@otwld/ng-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

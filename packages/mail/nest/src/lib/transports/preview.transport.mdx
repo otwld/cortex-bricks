@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./preview.transport.ts';
 
-<Meta title="mail/nest/transports/preview-transport" name="packagesMailNestSrcLibTransportsPreviewTransportSource" />
+<Meta title="mail/nest/transports/preview-transport" name="Preview Transport Source" />
 
 # Preview Transport
 
-Source mirror for `packages/mail/nest/src/lib/transports/preview.transport.ts`.
+Package: `@otwld/nest-mail`
+Source path: `packages/mail/nest/src/lib/transports/preview.transport.ts`
+Public import: Root Nest mail package entry point.
+
+```ts
+import { PreviewTransport, PreviewTransportOptions } from '@otwld/nest-mail';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

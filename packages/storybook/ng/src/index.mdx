@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="storybook/ng/public-api" name="packagesStorybookAngularSrcIndexSource" />
+<Meta title="storybook/ng/public-api" name="Angular Public API" />
 
-# Public API
+# Angular Storybook Public API
 
-Source mirror for `packages/storybook/ng/src/index.ts`.
+Package: `@otwld/ng-storybook`
+Source path: `packages/storybook/ng/src/index.ts`
+Public import: `@otwld/ng-storybook`
+
+```ts
+import { provideStorybookAngularApp, withStorybookPrimeNgThemeMode } from '@otwld/ng-storybook';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

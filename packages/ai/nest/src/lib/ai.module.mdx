@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./ai.module.ts';
 
-<Meta title="ai/nest/ai-module" name="packagesAINestSrcLibAIModuleSource" />
+<Meta title="ai/nest/ai-module" name="AI Module Source" />
 
 # AI Module
 
-Source mirror for `packages/ai/nest/src/lib/ai.module.ts`.
+Package: `@otwld/nest-ai`
+Source path: `packages/ai/nest/src/lib/ai.module.ts`
+Public import: Root Nest AI package entry point.
+
+```ts
+import { AiModule } from '@otwld/nest-ai';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

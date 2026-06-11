@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./feature-flags.types.ts';
 
-<Meta title="feature-flags/ng/feature-flags-types" name="packagesFeatureFlagsAngularSrcLibFeatureFlagsTypesSource" />
+<Meta title="feature-flags/ng/feature-flags-types" name="Feature Flags Types Source" />
 
 # Feature Flags Types
 
-Source mirror for `packages/feature-flags/ng/src/lib/feature-flags.types.ts`.
+Package: `@otwld/ng-feature-flags`
+Source path: `packages/feature-flags/ng/src/lib/feature-flags.types.ts`
+Public import: Root Angular feature flags package entry point.
+
+```ts
+import { FeatureFlagScope, FeatureFlagState } from '@otwld/ng-feature-flags';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./auth-config.token.ts';
 
-<Meta title="auth/ng/core/auth-config-token" name="packagesAuthAngularCoreSrcLibTokensAuthConfigTokenSource" />
+<Meta title="auth/ng/core/auth-config-token" name="Auth Config Token Source" />
 
 # Auth Config Token
 
-Source mirror for `packages/auth/ng/core/src/lib/tokens/auth-config.token.ts`.
+Package: `@otwld/ng-auth/core`
+Source path: `packages/auth/ng/core/src/lib/tokens/auth-config.token.ts`
+Public import: Angular auth core secondary entry point.
+
+```ts
+import { AUTH_CONFIG, AuthConfig } from '@otwld/ng-auth/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

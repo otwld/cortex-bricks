@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./users-config.token.ts';
 
-<Meta title="users/ng/core/users-config-token" name="packagesUsersAngularCoreSrcLibTokensUsersConfigTokenSource" />
+<Meta title="users/ng/core/users-config-token" name="Users Config Token Source" />
 
 # Users Config Token
 
-Source mirror for `packages/users/ng/core/src/lib/tokens/users-config.token.ts`.
+Package: `@otwld/ng-users`
+Source path: `packages/users/ng/core/src/lib/tokens/users-config.token.ts`
+Public import: `@otwld/ng-users/core`
+
+```ts
+import { USERS_CONFIG, type UsersConfig } from '@otwld/ng-users/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

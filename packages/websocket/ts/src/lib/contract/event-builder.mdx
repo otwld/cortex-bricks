@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./event-builder.ts';
 
-<Meta title="websocket/ts/contract/event-builder" name="packagesWebsocketTSSrcLibContractEventBuilderSource" />
+<Meta title="websocket/ts/contract/event-builder" name="Event Builder Source" />
 
 # Event Builder
 
-Source mirror for `packages/websocket/ts/src/lib/contract/event-builder.ts`.
+Package: `@otwld/ts-websocket`
+Source path: `packages/websocket/ts/src/lib/contract/event-builder.ts`
+Public import: Root TypeScript WebSocket package entry point.
+
+```ts
+import { clientEvent, serverEvent } from '@otwld/ts-websocket';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

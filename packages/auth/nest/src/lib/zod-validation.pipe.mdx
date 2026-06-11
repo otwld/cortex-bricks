@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./zod-validation.pipe.ts';
 
-<Meta title="auth/nest/zod-validation-pipe" name="packagesAuthNestSrcLibZodValidationPipeSource" />
+<Meta title="auth/nest/zod-validation-pipe" name="Zod Validation Pipe Source" />
 
 # Zod Validation Pipe
 
-Source mirror for `packages/auth/nest/src/lib/zod-validation.pipe.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/zod-validation.pipe.ts`
+Public import: Internal validation pipe used by the auth controller.
+
+```ts
+import { AuthModule } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

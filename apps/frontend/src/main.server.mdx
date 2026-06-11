@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./main.server.ts';
 
-<Meta title="frontend/ng/main-server" name="appsFrontendSrcMainServerSource" />
+<Meta title="frontend/ng/main-server" name="Main Server Source" />
 
 # Main Server
 
-Source mirror for `apps/frontend/src/main.server.ts`.
+Package: `frontend`
+Source path: `apps/frontend/src/main.server.ts`
+Public import: Application-local Angular server bootstrap.
+
+```ts
+import bootstrap from './main.server';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

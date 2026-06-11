@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./google.strategy.ts';
 
-<Meta title="auth/nest/google-strategy" name="packagesAuthNestSrcLibStrategiesGoogleStrategySource" />
+<Meta title="auth/nest/google-strategy" name="Google Strategy Source" />
 
 # Google Strategy
 
-Source mirror for `packages/auth/nest/src/lib/strategies/google.strategy.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/src/lib/strategies/google.strategy.ts`
+Public import: Internal Passport strategy wired by `AuthModule`.
+
+```ts
+import { AuthModule } from '@otwld/nest-auth';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

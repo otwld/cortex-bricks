@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="dashboard/ng/empty" name="packagesDashboardAngularSrcLibPagesEmptyIndexSource" />
+<Meta title="dashboard/ng/empty" name="Empty Public API" />
 
-# Public API
+# Empty Public API
 
-Source mirror for `packages/dashboard/ng/src/lib/pages/empty/index.ts`.
+Package: `@otwld/ng-dashboard/pages/empty`
+Source path: `packages/dashboard/ng/src/lib/pages/empty/index.ts`
+Public import: Empty page secondary entry point.
+
+```ts
+import { EmptyPage } from '@otwld/ng-dashboard/pages/empty';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./vitest.config.ts';
 
-<Meta title="auth/nest/vitest-config" name="packagesAuthNestVitestConfigSource" />
+<Meta title="auth/nest/vitest-config" name="Vitest Config Source" />
 
 # Vitest Config
 
-Source mirror for `packages/auth/nest/vitest.config.ts`.
+Package: `@otwld/nest-auth`
+Source path: `packages/auth/nest/vitest.config.ts`
+Public import: Not exported; loaded by the Nest auth test target.
+
+```bash
+pnpm nx test nest-auth
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./storage.exception.ts';
 
-<Meta title="storage/nest/storage-exception" name="packagesStorageNestSrcLibExceptionsStorageExceptionSource" />
+<Meta title="storage/nest/storage-exception" name="Storage Exception Source" />
 
 # Storage Exception
 
-Source mirror for `packages/storage/nest/src/lib/exceptions/storage.exception.ts`.
+Package: `@otwld/nest-storage`
+Source path: `packages/storage/nest/src/lib/exceptions/storage.exception.ts`
+Public import: Root Nest storage package entry point.
+
+```ts
+import { StorageException, StorageExceptionCode } from '@otwld/nest-storage';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

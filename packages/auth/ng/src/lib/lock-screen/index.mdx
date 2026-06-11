@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./index.ts';
 
-<Meta title="auth/ng/lock-screen" name="packagesAuthAngularSrcLibLockScreenIndexSource" />
+<Meta title="auth/ng/lock-screen" name="Lock Screen Public API" />
 
-# Public API
+# Lock Screen Public API
 
-Source mirror for `packages/auth/ng/src/lib/lock-screen/index.ts`.
+Package: `@otwld/ng-auth/lock-screen`
+Source path: `packages/auth/ng/src/lib/lock-screen/index.ts`
+Public import: Lock screen page secondary entry point.
+
+```ts
+import { LockScreenPage } from '@otwld/ng-auth/lock-screen';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />

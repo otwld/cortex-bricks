@@ -1,10 +1,18 @@
 import { Meta, Source } from '@storybook/addon-docs/blocks';
 import sourceCode from 'source-loader:./auth.interceptor.ts';
 
-<Meta title="auth/ng/core/auth-interceptor" name="packagesAuthAngularCoreSrcLibInterceptorsAuthInterceptorSource" />
+<Meta title="auth/ng/core/auth-interceptor" name="Auth Interceptor Source" />
 
 # Auth Interceptor
 
-Source mirror for `packages/auth/ng/core/src/lib/interceptors/auth.interceptor.ts`.
+Package: `@otwld/ng-auth/core`
+Source path: `packages/auth/ng/core/src/lib/interceptors/auth.interceptor.ts`
+Public import: Angular auth core secondary entry point.
+
+```ts
+import { authInterceptor } from '@otwld/ng-auth/core';
+```
+
+## Source
 
 <Source code={sourceCode} language="ts" />
