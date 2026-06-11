@@ -1,6 +1,7 @@
-import { Meta } from '@storybook/addon-docs/blocks';
+import { Meta, Source } from '@storybook/addon-docs/blocks';
+import sourceCode from 'source-loader:./storybook.ts';
 
-<Meta title="storybook/ng" name="storybook"   />
+<Meta title="Toolkit/Angular Storybook/References/Storybook Helpers" name="storybookHelpers" />
 
 # Storybook Helpers
 
@@ -38,8 +39,12 @@ import {
 
 const mswPreview = createStorybookMswPreview(
   defineStorybookMswHandlers({
-    auth: [
-      createJsonGetHandler('/api/auth/session', { authenticated: true }),
+    candidates: [
+      createJsonGetHandler('/api/recruitment/candidates/current', {
+        id: 'candidate-current',
+        fullName: 'Ada Lovelace',
+        skills: ['angular', 'typescript'],
+      }),
     ],
   })
 );
@@ -62,8 +67,8 @@ import { createJsonGetHandler, withStoryMswHandlers } from '@otwld/ng-storybook'
 export const ErrorState = {
   parameters: {
     ...withStoryMswHandlers({
-      candidate: createJsonGetHandler(
-        '/api/candidates/candidate-1',
+      candidateDetails: createJsonGetHandler(
+        '/api/recruitment/candidates/candidate-1',
         { message: 'Forbidden' },
         { status: 403 }
       ),
@@ -107,12 +112,12 @@ import {
 
 const genetics = createFakerGenetics({ seed: 1337 });
 const companies = genetics.many(24, (index) =>
-  ({ id: genetics.createId('company', index), name: `Company ${index}` })
+  ({ id: genetics.createId('company', index), name: `Recruiting Company ${index}` })
 );
 
 const companySearchHandler = createMswSearchGetHandler(
   genetics,
-  '/api/companies/search',
+  '/api/recruitment/companies/search',
   companies,
   {
     search: {
@@ -142,3 +147,7 @@ export const SearchSuccess = {
    - `id('candidate', candidateKey)`
 4. Keep mock handlers composable through `parameters.msw.handlers` groups.
 5. Keep reusable factory/search logic in `@otwld/ng-storybook`; keep scenario payload tweaks in stories.
+
+## Source
+
+<Source code={sourceCode} language="ts" />

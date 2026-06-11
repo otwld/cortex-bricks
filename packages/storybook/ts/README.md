@@ -9,3 +9,7 @@ plugin.
 ## Build
 
 Run `nx build ts-storybook`.
+
+## Public API
+
+- `@otwld/ts-storybook/vite` exports source-loader Vite helpers for MDX source mirrors.

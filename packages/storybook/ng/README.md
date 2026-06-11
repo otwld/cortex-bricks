@@ -4,9 +4,11 @@ Shared Angular Storybook infrastructure for source-brick stories.
 
 ## Public API
 
-- Angular provider decorators.
-- MSW preview setup and handler composition.
-- Deterministic Faker-backed search mocks.
+- Angular provider decorators that accept standalone `Provider` and `EnvironmentProviders` values.
+- MSW preview setup and story-level handler composition.
+- Static JSON and GraphQL handler factories.
+- Deterministic faker-genetics entity factories.
+- Reusable MSW search handlers for list/search stories.
 
 ## Build
 
