@@ -1,9 +1,13 @@
-import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import type { JwtSignOptions } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
+import {
+  createNestFeatureAsyncOptionsClassProvider,
+  createNestFeatureAsyncOptionsProvider,
+} from '@otwld/nest-sdk';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { CaslAbilityFactory } from './casl/casl-ability.factory';
@@ -11,7 +15,6 @@ import {
   AUTH_MODULE_OPTIONS,
   AuthModuleAsyncOptions,
   AuthModuleOptions,
-  AuthModuleOptionsFactory,
 } from './config/auth-module-options';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { PoliciesGuard } from './guards/policies.guard';
@@ -22,9 +25,9 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { RefreshTokenRepository } from './tokens/refresh-token.repository';
 import { RefreshToken, RefreshTokenSchema } from './tokens/refresh-token.schema';
 import { ACCESS_JWT_SERVICE, REFRESH_JWT_SERVICE, TokenService } from './tokens/token.service';
-import { UserRepository } from './user/user.repository';
-import { User, UserSchema } from './user/user.schema';
-import { UserService } from './user/user.service';
+import { AuthAccountRepository } from './auth-account/auth-account.repository';
+import { AuthAccount, AuthAccountSchema } from './auth-account/auth-account.schema';
+import { AuthAccountService } from './auth-account/auth-account.service';
 
 /**
  * Creates JWT sign options while preserving the library-supported TTL type.
@@ -36,35 +39,16 @@ function createJwtSignOptions(expiresIn: JwtSignOptions['expiresIn']): JwtSignOp
   return { expiresIn };
 }
 
-function createAsyncOptionsProvider(asyncOptions: AuthModuleAsyncOptions): Provider {
-  if (asyncOptions.useFactory) {
-    return {
-      provide: AUTH_MODULE_OPTIONS,
-      useFactory: asyncOptions.useFactory,
-      inject: asyncOptions.inject ?? [],
-    };
-  }
-
-  const inject = (asyncOptions.useClass ?? asyncOptions.useExisting) as Type<AuthModuleOptionsFactory>;
-  return {
-    provide: AUTH_MODULE_OPTIONS,
-    useFactory: (factory: AuthModuleOptionsFactory) => factory.createAuthOptions(),
-    inject: [inject],
-  };
-}
-
-function createAsyncOptionsClassProvider(asyncOptions: AuthModuleAsyncOptions): Provider[] {
-  if (!asyncOptions.useClass) return [];
-  return [{ provide: asyncOptions.useClass, useClass: asyncOptions.useClass }];
-}
-
 @Module({})
 class AuthOptionsModule {
   static registerAsync(asyncOptions: AuthModuleAsyncOptions): DynamicModule {
     return {
       module: AuthOptionsModule,
       imports: asyncOptions.imports ?? [],
-      providers: [createAsyncOptionsProvider(asyncOptions), ...createAsyncOptionsClassProvider(asyncOptions)],
+      providers: [
+        createNestFeatureAsyncOptionsProvider(AUTH_MODULE_OPTIONS, asyncOptions, 'createAuthOptions'),
+        ...createNestFeatureAsyncOptionsClassProvider(asyncOptions),
+      ],
       exports: [AUTH_MODULE_OPTIONS],
     };
   }
@@ -91,7 +75,7 @@ export class AuthModule {
    * ```
    */
   static forRoot(options: AuthModuleOptions): DynamicModule {
-    const userSchema = options.userSchema ?? UserSchema;
+    const authAccountSchema = options.authAccountSchema ?? AuthAccountSchema;
     const accessTtl = options.accessTokenTtl ?? '15m';
     const refreshTtl = options.refreshTokenTtl ?? '7d';
 
@@ -110,7 +94,7 @@ export class AuthModule {
       imports: [
         PassportModule,
         MongooseModule.forFeature([
-          { name: User.name, schema: userSchema },
+          { name: AuthAccount.name, schema: authAccountSchema },
           { name: RefreshToken.name, schema: RefreshTokenSchema },
         ]),
         JwtModule.register({ secret: options.jwtSecret, signOptions: createJwtSignOptions(accessTtl) }),
@@ -129,8 +113,8 @@ export class AuthModule {
             new JwtService({ secret: options.jwtRefreshSecret, signOptions: createJwtSignOptions(refreshTtl) }),
         },
         TokenService,
-        UserRepository,
-        UserService,
+        AuthAccountRepository,
+        AuthAccountService,
         RefreshTokenRepository,
         AuthService,
         { provide: CaslAbilityFactory, useClass: options.abilityFactory },
@@ -138,7 +122,7 @@ export class AuthModule {
         PoliciesGuard,
         ...strategyProviders,
       ],
-      exports: [UserService, CaslAbilityFactory, JwtAuthGuard, PoliciesGuard, TokenService],
+      exports: [AuthAccountRepository, AuthAccountService, CaslAbilityFactory, JwtAuthGuard, PoliciesGuard, TokenService],
     };
   }
 
@@ -160,9 +144,9 @@ export class AuthModule {
         PassportModule,
         MongooseModule.forFeatureAsync([
           {
-            name: User.name,
+            name: AuthAccount.name,
             imports: [optionsModule],
-            useFactory: (options: AuthModuleOptions) => options.userSchema ?? UserSchema,
+            useFactory: (options: AuthModuleOptions) => options.authAccountSchema ?? AuthAccountSchema,
             inject: [AUTH_MODULE_OPTIONS],
           },
           { name: RefreshToken.name, useFactory: () => RefreshTokenSchema },
@@ -189,8 +173,8 @@ export class AuthModule {
           inject: [AUTH_MODULE_OPTIONS],
         },
         TokenService,
-        UserRepository,
-        UserService,
+        AuthAccountRepository,
+        AuthAccountService,
         RefreshTokenRepository,
         AuthService,
         {
@@ -204,24 +188,24 @@ export class AuthModule {
         JwtStrategy,
         {
           provide: GoogleStrategy,
-          useFactory: (options: AuthModuleOptions, userService: UserService) => {
+          useFactory: (options: AuthModuleOptions, userService: AuthAccountService) => {
             const strategies = options.strategies ?? ['local', 'jwt', 'google', 'github'];
             if (!strategies.includes('google') || !options.google) return undefined;
             return new GoogleStrategy(options, userService);
           },
-          inject: [AUTH_MODULE_OPTIONS, UserService],
+          inject: [AUTH_MODULE_OPTIONS, AuthAccountService],
         },
         {
           provide: GithubStrategy,
-          useFactory: (options: AuthModuleOptions, userService: UserService) => {
+          useFactory: (options: AuthModuleOptions, userService: AuthAccountService) => {
             const strategies = options.strategies ?? ['local', 'jwt', 'google', 'github'];
             if (!strategies.includes('github') || !options.github) return undefined;
             return new GithubStrategy(options, userService);
           },
-          inject: [AUTH_MODULE_OPTIONS, UserService],
+          inject: [AUTH_MODULE_OPTIONS, AuthAccountService],
         },
       ],
-      exports: [UserService, CaslAbilityFactory, JwtAuthGuard, PoliciesGuard, TokenService],
+      exports: [AuthAccountRepository, AuthAccountService, CaslAbilityFactory, JwtAuthGuard, PoliciesGuard, TokenService],
     };
   }
 }

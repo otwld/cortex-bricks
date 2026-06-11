@@ -1,6 +1,4 @@
-import { Type } from '@nestjs/common';
-import type { FactoryProvider } from '@nestjs/common';
-import { ModuleMetadata } from '@nestjs/common/interfaces';
+import type { NestFeatureModuleClassAsyncOptions } from '@otwld/nest-sdk';
 
 /** Parameters passed when a user-management password reset token is generated. */
 export interface UsersMailPasswordResetRequestedParams {
@@ -58,16 +56,10 @@ export interface UsersModuleOptionsFactory {
 }
 
 /** Async configuration shape for UsersModule. */
-export interface UsersModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
-  /** Existing provider that implements the options factory. */
-  useExisting?: Type<UsersModuleOptionsFactory>;
-  /** Class provider that implements the options factory. */
-  useClass?: Type<UsersModuleOptionsFactory>;
-  /** Factory function for users module options. */
-  useFactory?: (...args: unknown[]) => Promise<UsersModuleOptions> | UsersModuleOptions;
-  /** Tokens injected into the factory function. */
-  inject?: FactoryProvider['inject'];
-}
+export type UsersModuleAsyncOptions = NestFeatureModuleClassAsyncOptions<
+  UsersModuleOptions,
+  UsersModuleOptionsFactory
+>;
 
 /** Injection token for users module options. */
 export const USERS_MODULE_OPTIONS = Symbol('USERS_MODULE_OPTIONS');

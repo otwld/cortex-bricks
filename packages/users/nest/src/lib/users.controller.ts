@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { CheckPolicies, CurrentUser, JwtAuthGuard, PoliciesGuard, Public, UserDocument } from '@otwld/nest-auth';
+import { CheckPolicies, CurrentUser, JwtAuthGuard, PoliciesGuard, Public, AuthAccountDocument } from '@otwld/nest-auth';
 import {
   AcceptInvitationCredentialsRequest,
   ChangeUserPasswordRequest,
@@ -51,7 +51,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Post('me/password')
   @HttpCode(HttpStatus.OK)
-  changePassword(@CurrentUser() user: UserDocument, @Body(new ZodValidationPipe(changeUserPasswordRequestSchema)) body: ChangeUserPasswordRequest) {
+  changePassword(@CurrentUser() user: AuthAccountDocument, @Body(new ZodValidationPipe(changeUserPasswordRequestSchema)) body: ChangeUserPasswordRequest) {
     return this.users.changePassword(String(user._id), body);
   }
 
@@ -101,7 +101,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Post('invitations/oauth/complete')
   @HttpCode(HttpStatus.OK)
-  completeOAuthState(@Body(new ZodValidationPipe(completeInvitationOAuthRequestSchema)) body: CompleteInvitationOAuthRequest, @CurrentUser() user: UserDocument) {
+  completeOAuthState(@Body(new ZodValidationPipe(completeInvitationOAuthRequestSchema)) body: CompleteInvitationOAuthRequest, @CurrentUser() user: AuthAccountDocument) {
     return this.users.completeOAuthState(body, String(user._id));
   }
 
@@ -109,7 +109,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Post('invitations/:token/oauth/complete')
   @HttpCode(HttpStatus.OK)
-  completeOAuth(@Param('token') token: string, @CurrentUser() user: UserDocument) {
+  completeOAuth(@Param('token') token: string, @CurrentUser() user: AuthAccountDocument) {
     return this.users.completeOAuth(token, String(user._id));
   }
 

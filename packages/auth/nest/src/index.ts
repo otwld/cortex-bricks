@@ -20,5 +20,6 @@ export { GoogleAuthGuard } from './lib/guards/google-auth.guard';
 export { JwtAuthGuard } from './lib/guards/jwt-auth.guard';
 export { LocalAuthGuard } from './lib/guards/local-auth.guard';
 export { PoliciesGuard } from './lib/guards/policies.guard';
-export { User, UserDocument, UserSchema } from './lib/user/user.schema';
-export { UserService } from './lib/user/user.service';
+export { AuthAccount, AuthAccountDocument, AuthAccountSchema } from './lib/auth-account/auth-account.schema';
+export { AuthAccountRepository } from './lib/auth-account/auth-account.repository';
+export { AuthAccountService, type CreatePendingAuthAccount } from './lib/auth-account/auth-account.service';

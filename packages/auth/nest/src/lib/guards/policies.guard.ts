@@ -4,7 +4,7 @@ import { Request } from 'express';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 import { CHECK_POLICIES_KEY } from '../casl/check-policies.decorator';
 import { AnyPolicyHandler, PolicyHandler } from '../casl/policy-handler';
-import { User } from '../user/user.schema';
+import { AuthAccount } from '../auth-account/auth-account.schema';
 
 /**
  * Authorization guard that evaluates CASL policy handlers attached to a route.
@@ -46,7 +46,7 @@ export class PoliciesGuard implements CanActivate {
     if (!handlers.length) return true;
 
     const request = context.switchToHttp().getRequest<Request>();
-    const user = request.user as User;
+    const user = request.user as AuthAccount;
     const ability = this.abilityFactory.createForUser(user);
 
     return handlers.every((handler) => (typeof handler === 'function' ? handler(ability) : (handler as PolicyHandler).handle(ability)));

@@ -73,7 +73,7 @@ export class RefreshTokenRepository {
   /**
    * Marks all active refresh tokens for a user as revoked.
    *
-   * @param userId - User document identifier.
+   * @param userId - AuthAccount document identifier.
    * @returns MongoDB update result for the revoked token set.
    * @example
    * ```ts

@@ -13,6 +13,7 @@
     "@nestjs/jwt": "^11.0.2",
     "@nestjs/mongoose": "^11.0.4",
     "@nestjs/passport": "^11.0.5",
+    "@otwld/nest-sdk": "workspace:0.0.1",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",

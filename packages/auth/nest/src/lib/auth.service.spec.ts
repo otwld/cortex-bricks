@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 import { CaslAbilityFactory } from './casl/casl-ability.factory';
 import { AuthModuleOptions } from './config/auth-module-options';
 import type { AuthRedirectResponse } from './tokens/token.service';
-import { UserDocument } from './user/user.schema';
+import { AuthAccountDocument } from './auth-account/auth-account.schema';
 
 class TestAbilityFactory extends CaslAbilityFactory {
   createForUser() {
@@ -38,7 +38,7 @@ describe(AuthService.name, () => {
     vi.restoreAllMocks();
   });
 
-  function createUser(overrides: Partial<UserDocument> = {}) {
+  function createUser(overrides: Partial<AuthAccountDocument> = {}) {
     return {
       _id: new Types.ObjectId(USER_ID),
       email: 'dev@example.com',
@@ -46,7 +46,7 @@ describe(AuthService.name, () => {
       roles: [],
       permissions: ['*'],
       ...overrides,
-    } as UserDocument;
+    } as AuthAccountDocument;
   }
 
   function createResponse(): AuthResponseMock {
@@ -391,7 +391,7 @@ describe(AuthService.name, () => {
     );
   });
 
-  it('resets passwords through UserService without reading repository internals', async () => {
+  it('resets passwords through AuthAccountService without reading repository internals', async () => {
     const { service, userService, tokenService } = createService({
       mail: { onPasswordReset: vi.fn().mockResolvedValue(undefined) },
     });

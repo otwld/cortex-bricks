@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-google-oauth20';
 import { AUTH_MODULE_OPTIONS, AuthModuleOptions } from '../config/auth-module-options';
-import { UserService } from '../user/user.service';
+import { AuthAccountService } from '../auth-account/auth-account.service';
 
 /**
  * Resolves Google OAuth options or fails before Passport strategy setup.
@@ -31,7 +31,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
    * Creates a Google OAuth strategy from module options.
    *
    * @param options - Auth module options containing Google OAuth settings.
-   * @param userService - User service used to find, link, or create accounts.
+   * @param userService - AuthAccount service used to find, link, or create accounts.
    * @example
    * ```ts
    * const strategy = new GoogleStrategy(options, userService);
@@ -39,7 +39,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
    */
   constructor(
     @Inject(AUTH_MODULE_OPTIONS) options: AuthModuleOptions,
-    private readonly userService: UserService,
+    private readonly userService: AuthAccountService,
   ) {
     const google = requireGoogleOptions(options);
     super({
@@ -70,7 +70,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     if (!user) {
       user = await this.userService.findByEmail(email);
       if (user) {
-        await this.userService['userRepository'].updateById(String(user._id), { googleId: profile.id, emailVerified: true });
+        await this.userService.updateAssignments(String(user._id), { googleId: profile.id, emailVerified: true });
         return this.userService.findById(String(user._id));
       }
       user = await this.userService.create({

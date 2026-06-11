@@ -7,22 +7,22 @@ import { Role, RoleSchema } from './role.schema';
  *
  * @example
  * ```ts
- * const document: UserDocument = await user.save();
+ * const document: AuthAccountDocument = await user.save();
  * ```
  */
-export type UserDocument = HydratedDocument<User>;
+export type AuthAccountDocument = HydratedDocument<AuthAccount>;
 
 /**
  * Mongoose schema model for local and OAuth user accounts.
  *
  * @example
  * ```ts
- * const user = new User();
+ * const user = new AuthAccount();
  * user.email = 'user@example.com';
  * ```
  */
 @Schema({ timestamps: true })
-export class User {
+export class AuthAccount {
   /**
    * Unique lower-cased email address for login and lookup.
    *
@@ -201,11 +201,11 @@ export class User {
 }
 
 /**
- * Mongoose schema generated from the User class.
+ * Mongoose schema generated from the AuthAccount class.
  *
  * @example
  * ```ts
- * MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]);
+ * MongooseModule.forFeature([{ name: AuthAccount.name, schema: AuthAccountSchema }]);
  * ```
  */
-export const UserSchema = SchemaFactory.createForClass(User);
+export const AuthAccountSchema = SchemaFactory.createForClass(AuthAccount);

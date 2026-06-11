@@ -8,7 +8,7 @@ import {
   AUTH_MODULE_OPTIONS,
   AuthModuleOptions,
 } from './config/auth-module-options';
-import { User } from './user/user.schema';
+import { AuthAccount } from './auth-account/auth-account.schema';
 
 class TestAbilityFactory extends CaslAbilityFactory {
   createForUser() {
@@ -37,14 +37,14 @@ describe(AuthModule.name, () => {
     ).toBe(true);
   });
 
-  it('uses userSchema from async options for the User mongoose model', async () => {
+  it('uses authAccountSchema from async options for the AuthAccount mongoose model', async () => {
     const customSchema = new Schema({ customField: String });
     const dynamicModule = AuthModule.forRootAsync({
       useFactory: (): AuthModuleOptions => ({
         jwtSecret: 'access',
         jwtRefreshSecret: 'refresh',
         abilityFactory: TestAbilityFactory,
-        userSchema: customSchema,
+        authAccountSchema: customSchema,
       }),
     });
 
@@ -54,13 +54,13 @@ describe(AuthModule.name, () => {
         imported.providers?.some(
           (provider) =>
             (provider as Provider & { provide?: string }).provide ===
-            `${User.name}Model`,
+            `${AuthAccount.name}Model`,
         ),
     );
     const userModelProvider = mongooseFeature?.providers?.find(
       (provider) =>
         (provider as Provider & { provide?: string }).provide ===
-        `${User.name}Model`,
+        `${AuthAccount.name}Model`,
     ) as Provider & {
       inject: unknown[];
       useFactory: (...args: unknown[]) => Promise<unknown>;
@@ -73,7 +73,7 @@ describe(AuthModule.name, () => {
       model: vi.fn((_name: string, schema: Schema) => ({ schema })),
     };
     const model = (await userModelProvider.useFactory(fakeConnection, {
-      userSchema: customSchema,
+      authAccountSchema: customSchema,
     })) as { schema: Schema };
 
     expect(model.schema).toBe(customSchema);

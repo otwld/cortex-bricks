@@ -1,6 +1,6 @@
-import { ModuleMetadata, Type } from '@nestjs/common';
-import type { FactoryProvider } from '@nestjs/common';
+import { Type } from '@nestjs/common';
 import type { JwtSignOptions } from '@nestjs/jwt';
+import type { NestFeatureModuleClassAsyncOptions } from '@otwld/nest-sdk';
 import { Schema } from 'mongoose';
 import { CaslAbilityFactory } from '../casl/casl-ability.factory';
 
@@ -18,7 +18,7 @@ export const AUTH_MODULE_OPTIONS = Symbol('AUTH_MODULE_OPTIONS');
 export interface AuthMailRegisteredParams {
   /** Recipient email address. */
   email: string;
-  /** User's first name, or email if no name is set. */
+  /** AuthAccount's first name, or email if no name is set. */
   name: string;
   /** Raw email verification token. */
   verificationToken: string;
@@ -28,7 +28,7 @@ export interface AuthMailRegisteredParams {
 export interface AuthMailForgotPasswordParams {
   /** Recipient email address. */
   email: string;
-  /** User's first name, or email if no name is set. */
+  /** AuthAccount's first name, or email if no name is set. */
   name: string;
   /** Raw password reset token. */
   resetToken: string;
@@ -38,7 +38,7 @@ export interface AuthMailForgotPasswordParams {
 export interface AuthMailPasswordResetParams {
   /** Recipient email address. */
   email: string;
-  /** User's first name, or email if no name is set. */
+  /** AuthAccount's first name, or email if no name is set. */
   name: string;
 }
 
@@ -46,7 +46,7 @@ export interface AuthMailPasswordResetParams {
 export interface AuthMailVerificationResentParams {
   /** Recipient email address. */
   email: string;
-  /** User's first name, or email if no name is set. */
+  /** AuthAccount's first name, or email if no name is set. */
   name: string;
   /** Fresh raw email verification token. */
   verificationToken: string;
@@ -184,14 +184,14 @@ export interface AuthModuleOptions {
   };
 
   /**
-   * Optional user schema override registered in the auth module.
+   * Optional auth account schema override registered in the auth module.
    *
    * @example
    * ```ts
-   * options.userSchema = customUserSchema;
+   * options.authAccountSchema = customAuthAccountSchema;
    * ```
    */
-  userSchema?: Schema;
+  authAccountSchema?: Schema;
 
   /**
    * Enabled Passport strategies.
@@ -288,9 +288,7 @@ export interface AuthModuleOptionsFactory {
 }
 
 /** Options accepted by `AuthModule.forRootAsync`. */
-export interface AuthModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
-  useFactory?: (...args: unknown[]) => Promise<AuthModuleOptions> | AuthModuleOptions;
-  inject?: FactoryProvider['inject'];
-  useClass?: Type<AuthModuleOptionsFactory>;
-  useExisting?: Type<AuthModuleOptionsFactory>;
-}
+export type AuthModuleAsyncOptions = NestFeatureModuleClassAsyncOptions<
+  AuthModuleOptions,
+  AuthModuleOptionsFactory
+>;

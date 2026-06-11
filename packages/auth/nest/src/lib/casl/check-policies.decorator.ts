@@ -18,7 +18,7 @@ export const CHECK_POLICIES_KEY = 'check_policy';
  * @returns Nest metadata decorator for the supplied policy handlers.
  * @example
  * ```ts
- * @CheckPolicies((ability) => ability.can('read', 'User'))
+ * @CheckPolicies((ability) => ability.can('read', 'AuthAccount'))
  * ```
  */
 export const CheckPolicies = (...handlers: AnyPolicyHandler[]) => SetMetadata(CHECK_POLICIES_KEY, handlers);

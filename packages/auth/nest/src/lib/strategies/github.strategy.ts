@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-github2';
 import { AUTH_MODULE_OPTIONS, AuthModuleOptions } from '../config/auth-module-options';
-import { UserService } from '../user/user.service';
+import { AuthAccountService } from '../auth-account/auth-account.service';
 
 /**
  * Resolves GitHub OAuth options or fails before Passport strategy setup.
@@ -31,7 +31,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
    * Creates a GitHub OAuth strategy from module options.
    *
    * @param options - Auth module options containing GitHub OAuth settings.
-   * @param userService - User service used to find, link, or create accounts.
+   * @param userService - AuthAccount service used to find, link, or create accounts.
    * @example
    * ```ts
    * const strategy = new GithubStrategy(options, userService);
@@ -39,7 +39,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
    */
   constructor(
     @Inject(AUTH_MODULE_OPTIONS) options: AuthModuleOptions,
-    private readonly userService: UserService,
+    private readonly userService: AuthAccountService,
   ) {
     const github = requireGithubOptions(options);
     super({
@@ -84,7 +84,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     if (!user) {
       user = await this.userService.findByEmail(email);
       if (user) {
-        await this.userService['userRepository'].updateById(String(user._id), { githubId: profile.id });
+        await this.userService.updateAssignments(String(user._id), { githubId: profile.id });
         return this.userService.findById(String(user._id));
       }
       user = await this.userService.create({

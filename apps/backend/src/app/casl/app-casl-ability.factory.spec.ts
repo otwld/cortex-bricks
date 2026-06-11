@@ -1,14 +1,14 @@
 import { AppCaslAbilityFactory } from './app-casl-ability.factory';
-import { User } from '@otwld/nest-auth';
+import { AuthAccount } from '@otwld/nest-auth';
 
-function makeUser(overrides: Partial<User> = {}): User {
+function makeUser(overrides: Partial<AuthAccount> = {}): AuthAccount {
   return {
     email: 'test@example.com',
     emailVerified: false,
     roles: [],
     permissions: [],
     ...overrides,
-  } as User;
+  } as AuthAccount;
 }
 
 describe('AppCaslAbilityFactory', () => {

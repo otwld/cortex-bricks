@@ -8,6 +8,7 @@
   "types": "./src/index.d.ts",
   "dependencies": {
     "@otwld/nest-auth": "workspace:0.0.1",
+    "@otwld/nest-sdk": "workspace:0.0.1",
     "@otwld/ts-users": "workspace:0.0.1",
     "@nestjs/common": "^11.0.0",
     "@nestjs/mongoose": "^11.0.4",

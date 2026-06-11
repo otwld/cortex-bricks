@@ -23,14 +23,14 @@ export type RefreshTokenDocument = HydratedDocument<RefreshToken>;
 @Schema({ timestamps: true })
 export class RefreshToken {
   /**
-   * User document that owns the refresh token.
+   * AuthAccount document that owns the refresh token.
    *
    * @example
    * ```ts
    * refreshToken.userId = new mongoose.Types.ObjectId(userId);
    * ```
    */
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'AuthAccount' })
   userId!: mongoose.Types.ObjectId;
 
   /**

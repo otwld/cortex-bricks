@@ -15,8 +15,8 @@ import {
   UserOAuthProvider,
   UserProfile,
 } from '@otwld/ts-users';
+import { AuthAccountService } from '@otwld/nest-auth';
 import type { ClientSession } from 'mongoose';
-import { AuthAccountRepository } from './auth-account.repository';
 import { USERS_MODULE_OPTIONS, UsersModuleOptions } from './config/users-module-options';
 import { UserInvitationDocument } from './schemas/user-invitation.schema';
 import { UserInvitationRepository } from './user-invitations.repository';
@@ -48,16 +48,16 @@ type UsersInvitationRepository = {
   accept(invitationId: string, session?: UsersTransactionSession): ReturnType<UserInvitationRepository['accept']>;
   revokeByRawToken(rawToken: string): ReturnType<UserInvitationRepository['revokeByRawToken']>;
 };
-/** Auth-account repository operations required by the users service. */
-type UsersAuthAccountRepository = {
-  findByEmail(email: string): ReturnType<AuthAccountRepository['findByEmail']>;
-  createPendingAccount(dto: Parameters<AuthAccountRepository['createPendingAccount']>[0], session?: UsersTransactionSession): ReturnType<AuthAccountRepository['createPendingAccount']>;
-  updateAssignments(authUserId: string, update: Parameters<AuthAccountRepository['updateAssignments']>[1], session?: UsersTransactionSession): ReturnType<AuthAccountRepository['updateAssignments']>;
-  setLocalCredentials(authUserId: string, password: string, username?: string, session?: UsersTransactionSession): ReturnType<AuthAccountRepository['setLocalCredentials']>;
-  changePassword(authUserId: string, currentPassword: string, nextPassword: string): ReturnType<AuthAccountRepository['changePassword']>;
-  disableAccount(authUserId: string, session?: UsersTransactionSession): ReturnType<AuthAccountRepository['disableAccount']>;
-  requestPasswordReset(email: string): ReturnType<AuthAccountRepository['requestPasswordReset']>;
-  resetPassword(rawToken: string, nextPassword: string): ReturnType<AuthAccountRepository['resetPassword']>;
+/** Auth account operations required by the users service. */
+type UsersAuthAccountService = {
+  findByEmail(email: string): ReturnType<AuthAccountService['findByEmail']>;
+  createPendingAccount(dto: Parameters<AuthAccountService['createPendingAccount']>[0], session?: UsersTransactionSession): ReturnType<AuthAccountService['createPendingAccount']>;
+  updateAssignments(authUserId: string, update: Parameters<AuthAccountService['updateAssignments']>[1], session?: UsersTransactionSession): ReturnType<AuthAccountService['updateAssignments']>;
+  setLocalCredentials(authUserId: string, password: string, username?: string, session?: UsersTransactionSession): ReturnType<AuthAccountService['setLocalCredentials']>;
+  changePassword(authUserId: string, currentPassword: string, nextPassword: string): ReturnType<AuthAccountService['changePassword']>;
+  disableAccount(authUserId: string, session?: UsersTransactionSession): ReturnType<AuthAccountService['disableAccount']>;
+  requestPasswordReset(email: string): ReturnType<AuthAccountService['requestPasswordReset']>;
+  resetPassword(rawToken: string, nextPassword: string): ReturnType<AuthAccountService['resetPassword']>;
 };
 
 /** Business service for dashboard-managed users and invitations. */
@@ -77,7 +77,7 @@ export class UsersService {
   constructor(
     @Inject(UsersRepository) private readonly users: UsersProfileRepository,
     @Inject(UserInvitationRepository) private readonly invitations: UsersInvitationRepository,
-    @Inject(AuthAccountRepository) private readonly authAccounts: UsersAuthAccountRepository,
+    @Inject(AuthAccountService) private readonly authAccounts: UsersAuthAccountService,
     @Optional() @Inject(USERS_MODULE_OPTIONS) private readonly options: UsersModuleOptions = {},
     @Optional() @InjectConnection() private readonly connection?: UsersTransactionConnection,
   ) {}

@@ -5,7 +5,7 @@ import { Strategy } from 'passport-jwt';
 import { AUTH_MODULE_OPTIONS } from '../config/auth-module-options';
 import { AuthModuleOptions } from '../config/auth-module-options';
 import { JwtPayload } from '../tokens/token.service';
-import { UserService } from '../user/user.service';
+import { AuthAccountService } from '../auth-account/auth-account.service';
 
 /**
  * Passport JWT strategy that authenticates requests from the access token cookie.
@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
    * Creates a JWT strategy with the configured access-token secret.
    *
    * @param options - Auth module options containing the access JWT secret.
-   * @param userService - User service used to resolve the token subject.
+   * @param userService - AuthAccount service used to resolve the token subject.
    * @example
    * ```ts
    * const strategy = new JwtStrategy(options, userService);
@@ -29,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
    */
   constructor(
     @Inject(AUTH_MODULE_OPTIONS) options: AuthModuleOptions,
-    private readonly userService: UserService,
+    private readonly userService: AuthAccountService,
   ) {
     super({
       jwtFromRequest: (req: Request) => req?.cookies?.['access_token'] ?? null,

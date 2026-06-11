@@ -19,7 +19,7 @@ import { GithubAuthGuard } from './guards/github-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { UserDocument } from './user/user.schema';
+import { AuthAccountDocument } from './auth-account/auth-account.schema';
 import { ZodValidationPipe } from './zod-validation.pipe';
 
 /**
@@ -76,7 +76,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@CurrentUser() user: UserDocument, @Res({ passthrough: true }) res: Response, @Req() req: Request) {
+  login(@CurrentUser() user: AuthAccountDocument, @Res({ passthrough: true }) res: Response, @Req() req: Request) {
     return this.authService.login(user, res, req.headers['user-agent'], req.ip);
   }
 
@@ -118,7 +118,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  logout(@CurrentUser() user: UserDocument, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  logout(@CurrentUser() user: AuthAccountDocument, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
     return this.authService.logout(String(user._id), req.cookies?.['refresh_token'], res);
   }
 
@@ -155,7 +155,7 @@ export class AuthController {
    */
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  getMe(@CurrentUser() user: UserDocument) {
+  getMe(@CurrentUser() user: AuthAccountDocument) {
     return this.authService.getMe(String(user._id));
   }
 
@@ -190,7 +190,7 @@ export class AuthController {
   @Public()
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
-  googleCallback(@CurrentUser() user: UserDocument, @Req() req: Request, @Res() res: Response) {
+  googleCallback(@CurrentUser() user: AuthAccountDocument, @Req() req: Request, @Res() res: Response) {
     const state = String(req.query['state'] ?? '') || undefined;
     return this.authService.oauthCallback(user, res, req.headers['user-agent'], req.ip, state);
   }
@@ -226,7 +226,7 @@ export class AuthController {
   @Public()
   @UseGuards(GithubAuthGuard)
   @Get('github/callback')
-  githubCallback(@CurrentUser() user: UserDocument, @Req() req: Request, @Res() res: Response) {
+  githubCallback(@CurrentUser() user: AuthAccountDocument, @Req() req: Request, @Res() res: Response) {
     const state = String(req.query['state'] ?? '') || undefined;
     return this.authService.oauthCallback(user, res, req.headers['user-agent'], req.ip, state);
   }
@@ -283,7 +283,7 @@ export class AuthController {
   @Post('verify-email')
   @HttpCode(HttpStatus.OK)
   verifyEmail(
-    @CurrentUser() user: UserDocument,
+    @CurrentUser() user: AuthAccountDocument,
     @Body(new ZodValidationPipe(verifyEmailBodySchema)) body: VerifyEmailBody,
   ) {
     return this.authService.verifyEmail(String(user._id), body.otp);
@@ -302,7 +302,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('resend-verification')
   @HttpCode(HttpStatus.OK)
-  resendVerification(@CurrentUser() user: UserDocument) {
+  resendVerification(@CurrentUser() user: AuthAccountDocument) {
     return this.authService.resendVerification(String(user._id));
   }
 }

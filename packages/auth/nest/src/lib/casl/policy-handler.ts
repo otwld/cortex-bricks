@@ -5,7 +5,7 @@ import { AnyAbility } from '@casl/ability';
  *
  * @example
  * ```ts
- * const handler: PolicyHandler = { handle: (ability) => ability.can('read', 'User') };
+ * const handler: PolicyHandler = { handle: (ability) => ability.can('read', 'AuthAccount') };
  * ```
  */
 export interface PolicyHandler {
@@ -29,7 +29,7 @@ export interface PolicyHandler {
  * @returns True when the request should be authorized.
  * @example
  * ```ts
- * const canReadUsers: PolicyHandlerFn = (ability) => ability.can('read', 'User');
+ * const canReadUsers: PolicyHandlerFn = (ability) => ability.can('read', 'AuthAccount');
  * ```
  */
 export type PolicyHandlerFn = (ability: AnyAbility) => boolean;

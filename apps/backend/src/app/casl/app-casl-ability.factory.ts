@@ -1,7 +1,7 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AbilityBuilder, AnyAbility, createMongoAbility } from '@casl/ability';
-import { CaslAbilityFactory, User } from '@otwld/nest-auth';
+import { CaslAbilityFactory, AuthAccount } from '@otwld/nest-auth';
 
 /**
  * Application-level CASL ability factory that translates user roles and
@@ -30,7 +30,7 @@ export class AppCaslAbilityFactory extends CaslAbilityFactory {
    * @param user - Authenticated user whose roles and permissions are evaluated.
    * @returns A CASL ability instance reflecting all granted actions.
    */
-  createForUser(user: User): AnyAbility {
+  createForUser(user: AuthAccount): AnyAbility {
     const { can, build } = new AbilityBuilder(createMongoAbility);
 
     if (this.isBootstrapAdmin(user.email)) {

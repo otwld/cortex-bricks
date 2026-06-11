@@ -4,12 +4,12 @@ import { randomBytes, randomInt } from 'crypto';
 import { AUTH_MODULE_OPTIONS, AuthModuleOptions } from './config/auth-module-options';
 import { RefreshTokenRepository } from './tokens/refresh-token.repository';
 import { AuthCookieResponse, AuthRedirectResponse, TokenService } from './tokens/token.service';
-import { UserDocument } from './user/user.schema';
-import { UserService } from './user/user.service';
+import { AuthAccountDocument } from './auth-account/auth-account.schema';
+import { AuthAccountService } from './auth-account/auth-account.service';
 
-/** User operations required by auth workflows. */
+/** AuthAccount operations required by auth workflows. */
 type AuthUserService = Pick<
-  UserService,
+  AuthAccountService,
   | 'findByEmail'
   | 'create'
   | 'setLastLogin'
@@ -155,7 +155,7 @@ export class AuthService {
   /**
    * Creates an auth service with user, token, refresh-token, and module-option dependencies.
    *
-   * @param userService - User account facade used by auth flows.
+   * @param userService - AuthAccount account facade used by auth flows.
    * @param tokenService - Access and refresh token helper.
    * @param refreshTokenRepository - Persistence gateway for refresh token records.
    * @param options - Runtime configuration supplied by AuthModule.forRoot.
@@ -165,7 +165,7 @@ export class AuthService {
    * ```
    */
   constructor(
-    @Inject(UserService) private readonly userService: AuthUserService,
+    @Inject(AuthAccountService) private readonly userService: AuthUserService,
     @Inject(TokenService) private readonly tokenService: AuthTokenService,
     @Inject(RefreshTokenRepository) private readonly refreshTokenRepository: AuthRefreshTokenRepository,
     @Inject(AUTH_MODULE_OPTIONS) private readonly options: AuthModuleOptions,
@@ -222,7 +222,7 @@ export class AuthService {
    * const user = await authService.login(currentUser, response, request.headers['user-agent'], request.ip);
    * ```
    */
-  async login(user: UserDocument, res: AuthCookieResponse, userAgent?: string, ip?: string) {
+  async login(user: AuthAccountDocument, res: AuthCookieResponse, userAgent?: string, ip?: string) {
     await this.userService.setLastLogin(String(user._id));
 
     const payload = { sub: String(user._id), email: user.email };
@@ -358,7 +358,7 @@ export class AuthService {
   /**
    * Resolves the current user's profile by id.
    *
-   * @param userId - User document identifier.
+   * @param userId - AuthAccount document identifier.
    * @returns The matching user document, or null when none exists.
    * @example
    * ```ts
@@ -383,7 +383,7 @@ export class AuthService {
    * await authService.oauthCallback(user, response, request.headers['user-agent'], request.ip);
    * ```
    */
-  async oauthCallback(user: UserDocument, res: AuthRedirectResponse, userAgent?: string, ip?: string, invitationState?: string) {
+  async oauthCallback(user: AuthAccountDocument, res: AuthRedirectResponse, userAgent?: string, ip?: string, invitationState?: string) {
     await this.login(user, res, userAgent, ip);
 
     if (invitationState) {
@@ -454,7 +454,7 @@ export class AuthService {
   /**
    * Marks a user's email address verified when the submitted code matches.
    *
-   * @param userId - User document identifier.
+   * @param userId - AuthAccount document identifier.
    * @param otp - Email verification code to compare with the stored token.
    * @returns Resolves after verification succeeds or when the user is already verified.
    * @throws UnauthorizedException When the user cannot be found.
@@ -480,7 +480,7 @@ export class AuthService {
   /**
    * Generates a replacement email verification code for a user.
    *
-   * @param userId - User document identifier.
+   * @param userId - AuthAccount document identifier.
    * @returns Resolves after the new code and expiry are persisted.
    * @example
    * ```ts

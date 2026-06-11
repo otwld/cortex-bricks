@@ -9,7 +9,7 @@ import { Request } from 'express';
  * @returns The current request user.
  * @example
  * ```ts
- * getMe(@CurrentUser() user: UserDocument) {
+ * getMe(@CurrentUser() user: AuthAccountDocument) {
  *   return user;
  * }
  * ```

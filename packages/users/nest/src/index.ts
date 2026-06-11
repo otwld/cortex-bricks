@@ -1,4 +1,3 @@
-export { AuthAccountRepository, type CreatePendingAuthAccount } from './lib/auth-account.repository';
 export {
   USERS_MODULE_OPTIONS,
   type UsersMailInvitationParams,
