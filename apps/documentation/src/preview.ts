@@ -1,10 +1,6 @@
-import { provideHttpClient } from '@angular/common/http';
-import { inject, provideEnvironmentInitializer } from '@angular/core';
-import { provideRouter } from '@angular/router';
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 import type { Preview } from '@storybook/angular';
-import { applicationConfig } from '@storybook/angular';
 import { provideAi } from '@otwld/ng-ai';
 import { provideAuth } from '@otwld/ng-auth/core';
 import { FEATURE_FLAGS_API_TOKEN, FEATURE_FLAGS_CONTEXT_TOKEN, type FeatureFlagsApi } from '@otwld/ng-feature-flags';
@@ -15,11 +11,20 @@ import {
   provideDashboardLayoutState,
 } from '@otwld/ng-dashboard/core';
 import { provideStorage } from '@otwld/ng-storage';
-import { createStorybookMswPreview, defineStorybookMswHandlers } from '@otwld/ng-storybook';
+import {
+  createStorybookMswPreview,
+  defineStorybookMswHandlers,
+  provideStorybookAngularApp,
+  provideStorybookPrimeNgTheme,
+  storybookPrimeNgThemeGlobalTypes,
+  storybookViewportGlobalTypes,
+  withStorybookPrimeNgThemeMode,
+  withStorybookProviders,
+  withStorybookViewportMode,
+} from '@otwld/ng-storybook';
 import { provideUsers } from '@otwld/ng-users/core';
 import type { FeatureFlagDto } from '@otwld/ts-feature-flags';
 import { of } from 'rxjs';
-import { PrimeNG } from 'primeng/config';
 
 const now = '2026-06-11T00:00:00.000Z';
 const featureFlags: FeatureFlagDto[] = [
@@ -154,20 +159,7 @@ const BlueAura = definePreset(Aura, {
   },
 });
 
-const primeNgProvider = provideEnvironmentInitializer(() => {
-  inject(PrimeNG).setConfig({
-    theme: {
-      preset: BlueAura,
-      options: {
-        darkModeSelector: '.app-dark',
-        cssLayer: {
-          name: 'primeng',
-          order: 'theme, base, primeng',
-        },
-      },
-    },
-  });
-});
+const primeNgProvider = provideStorybookPrimeNgTheme({ preset: BlueAura });
 
 const mswPreview = createStorybookMswPreview(
   defineStorybookMswHandlers({
@@ -184,46 +176,91 @@ const preview: Preview = {
       sort: 'requiredFirst', // for docs
     },
   },
+  globalTypes: {
+    ...storybookPrimeNgThemeGlobalTypes,
+    ...storybookViewportGlobalTypes,
+  },
   decorators: [
-    applicationConfig({
-      providers: [
-        provideHttpClient(),
-        provideRouter([]),
-        provideAuth({
-          afterLoginRoute: '/dashboard',
-          afterLogoutRoute: '/auth/login',
-          apiUrl: '/api/auth',
-          devLoginEnabled: true,
-        }),
-        provideUsers({ apiUrl: '/api/users' }),
-        provideAi({ apiBaseUrl: '/api/ai' }),
-        provideStorage({
-          signedUrlEndpoint: '/api/storage/signed-url',
-          tusEndpoint: '/api/storage/uploads',
-        }),
-        provideDarkMode({ initialPreference: 'dark', persistence: false, autoSync: true, viewTransitions: false }),
-        provideDashboardLayoutConfig(),
-        provideDashboardLayoutState(),
-        primeNgProvider,
-        DashboardLayoutService,
-        {
-          provide: FEATURE_FLAGS_API_TOKEN,
-          useValue: featureFlagsApi,
-        },
-        {
-          provide: FEATURE_FLAGS_CONTEXT_TOKEN,
-          useValue: {
-            getAppContext: async () => ({ version: 'storybook-2026.06' }),
-            getUserContext: async () => ({ userId: 'recruiter-ada' }),
+    withStorybookPrimeNgThemeMode({ defaultMode: 'dark' }),
+    withStorybookViewportMode(),
+    withStorybookProviders([
+      provideStorybookAngularApp({
+        providers: [
+          provideAuth({
+            afterLoginRoute: '/dashboard',
+            afterLogoutRoute: '/auth/login',
+            apiUrl: '/api/auth',
+            devLoginEnabled: true,
+          }),
+          provideUsers({ apiUrl: '/api/users' }),
+          provideAi({ apiBaseUrl: '/api/ai' }),
+          provideStorage({
+            signedUrlEndpoint: '/api/storage/signed-url',
+            tusEndpoint: '/api/storage/uploads',
+          }),
+          provideDarkMode({ initialPreference: 'dark', persistence: false, autoSync: true, viewTransitions: false }),
+          provideDashboardLayoutConfig(),
+          provideDashboardLayoutState(),
+          primeNgProvider,
+          DashboardLayoutService,
+          {
+            provide: FEATURE_FLAGS_API_TOKEN,
+            useValue: featureFlagsApi,
           },
-        },
-      ],
-    }),
+          {
+            provide: FEATURE_FLAGS_CONTEXT_TOKEN,
+            useValue: {
+              getAppContext: async () => ({ version: 'storybook-2026.06' }),
+              getUserContext: async () => ({ userId: 'recruiter-ada' }),
+            },
+          },
+        ],
+      }),
+    ]),
   ],
   loaders: [...(Array.isArray(mswPreview.loaders) ? mswPreview.loaders : [])],
   parameters: {
     docs: {
       codePanel: true,
+    },
+    options: {
+      storySort: {
+        order: [
+          'documentation',
+          ['storybook', ['introduction', 'main', 'preview', 'manager', 'theme']],
+          'sdk',
+          ['ts', 'ng', ['public-api', 'forms', 'testing', 'dark-mode', 'dialog', 'router'], 'nest'],
+          'storybook',
+          ['ng', 'ts'],
+          'ui',
+          'dashboard',
+          ['ng', ['public-api', 'core', 'layout', 'banking', 'ecommerce', 'apps', 'uikit']],
+          'auth',
+          ['ts', 'ng', 'nest'],
+          'users',
+          ['ts', 'ng', 'nest'],
+          'storage',
+          ['ts', 'ng', 'nest'],
+          'ai',
+          ['ts', 'ng', 'nest'],
+          'feature-flags',
+          ['ts', 'ng', 'nest'],
+          'websocket',
+          ['ts', 'ng', 'nest'],
+          'databases',
+          ['nest'],
+          'mail',
+          ['nest'],
+          'tanstack',
+          ['ng'],
+          'chat',
+          ['ts'],
+          'backend',
+          'frontend',
+          'vitest',
+          '*',
+        ],
+      },
     },
     ...(mswPreview.parameters ?? {}),
   },

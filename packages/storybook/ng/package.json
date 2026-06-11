@@ -4,10 +4,12 @@
   "peerDependencies": {
     "@angular/common": "~21.2.0",
     "@angular/core": "~21.2.0",
+    "@angular/router": "~21.2.0",
     "@faker-js/faker": "^10.4.0",
     "@storybook/angular": "10.4.1",
     "msw": "^2.14.6",
     "msw-storybook-addon": "^2.0.7",
+    "primeng": "^21.1.6",
     "rxjs": "~7.8.0"
   },
   "devDependencies": {
