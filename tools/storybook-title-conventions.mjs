@@ -1,13 +1,18 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import ts from 'typescript';
 
 import { storybookTitle } from './storybook-title-utils.mjs';
 
 const ROOTS = ['apps', 'packages', 'tools'];
 const IGNORED_DIRECTORIES = new Set(['.git', '.nx', 'coverage', 'dist', 'node_modules', 'tmp']);
 const STORY_FILE_PATTERN = /\.stories\.(?:ts|tsx|js|jsx)$/;
-const shouldWrite = process.argv.includes('--write');
+
+/**
+ * Read-only Storybook identity audit. Title and name fixes are made manually so
+ * docs metadata stays meaningful instead of filesystem-derived.
+ */
 
 function walkFiles(directory, files = []) {
   for (const child of readdirSync(directory)) {
@@ -36,17 +41,88 @@ function storybookFiles() {
     .sort();
 }
 
-function storyMetadata(content) {
-  const match = content.match(/\btitle:\s*(['"])(.*?)\1/);
+function unwrapExpression(expression) {
+  let current = expression;
 
-  return match
-    ? {
-        end: match.index + match[0].length,
-        quote: match[1],
-        start: match.index,
-        title: match[2],
+  while (
+    current &&
+    (ts.isAsExpression(current) ||
+      ts.isParenthesizedExpression(current) ||
+      ts.isSatisfiesExpression(current) ||
+      ts.isTypeAssertionExpression(current))
+  ) {
+    current = current.expression;
+  }
+
+  return current;
+}
+
+function propertyNameText(name) {
+  if (ts.isIdentifier(name) || ts.isStringLiteral(name) || ts.isNumericLiteral(name)) {
+    return name.text;
+  }
+
+  return undefined;
+}
+
+function objectLiteralTitle(objectLiteral) {
+  for (const property of objectLiteral.properties) {
+    if (!ts.isPropertyAssignment(property) || propertyNameText(property.name) !== 'title') {
+      continue;
+    }
+
+    const initializer = unwrapExpression(property.initializer);
+
+    if (initializer && ts.isStringLiteralLike(initializer)) {
+      return initializer.text;
+    }
+  }
+
+  return undefined;
+}
+
+function storyMetadata(path, content) {
+  const sourceFile = ts.createSourceFile(path, content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const objectLiteralsByName = new Map();
+
+  for (const statement of sourceFile.statements) {
+    if (!ts.isVariableStatement(statement)) {
+      continue;
+    }
+
+    for (const declaration of statement.declarationList.declarations) {
+      if (!ts.isIdentifier(declaration.name) || !declaration.initializer) {
+        continue;
       }
-    : undefined;
+
+      const initializer = unwrapExpression(declaration.initializer);
+
+      if (initializer && ts.isObjectLiteralExpression(initializer)) {
+        objectLiteralsByName.set(declaration.name.text, initializer);
+      }
+    }
+  }
+
+  for (const statement of sourceFile.statements) {
+    if (!ts.isExportAssignment(statement)) {
+      continue;
+    }
+
+    const expression = unwrapExpression(statement.expression);
+    const objectLiteral = ts.isIdentifier(expression)
+      ? objectLiteralsByName.get(expression.text)
+      : expression && ts.isObjectLiteralExpression(expression)
+        ? expression
+        : undefined;
+    const title = objectLiteral ? objectLiteralTitle(objectLiteral) : undefined;
+
+    return title ? { title } : undefined;
+  }
+
+  const metaObject = objectLiteralsByName.get('meta');
+  const title = metaObject ? objectLiteralTitle(metaObject) : undefined;
+
+  return title ? { title } : undefined;
 }
 
 function mdxMetadata(content) {
@@ -70,26 +146,6 @@ function mdxMetadata(content) {
     titleQuote: titleMatch?.[1],
     titleStart: titleMatch ? metaMatch.index + titleMatch.index : undefined,
   };
-}
-
-function replaceStoryTitle(content, metadata, expectedTitle) {
-  const quote = metadata.quote;
-
-  return `${content.slice(0, metadata.start)}title: ${quote}${expectedTitle}${quote}${content.slice(metadata.end)}`;
-}
-
-function replaceMdxTitle(content, metadata, expectedTitle) {
-  if (metadata.titleStart !== undefined && metadata.titleEnd !== undefined) {
-    const quote = metadata.titleQuote ?? '"';
-
-    return `${content.slice(0, metadata.titleStart)}title=${quote}${expectedTitle}${quote}${content.slice(
-      metadata.titleEnd,
-    )}`;
-  }
-
-  const insertAt = metadata.metaStart + '<Meta'.length;
-
-  return `${content.slice(0, insertAt)} title="${expectedTitle}"${content.slice(insertAt)}`;
 }
 
 function storyExportNames(content) {
@@ -121,35 +177,22 @@ const mismatches = [];
 const missingMetadata = [];
 const storyIds = new Map();
 const duplicateStories = [];
-let updated = 0;
 
 for (const path of files) {
   const content = readFileSync(path, 'utf8');
   const expectedTitle = storybookTitle(path);
   const isStory = STORY_FILE_PATTERN.test(path);
-  const metadata = isStory ? storyMetadata(content) : mdxMetadata(content);
+  const metadata = isStory ? storyMetadata(path, content) : mdxMetadata(content);
 
   if (!metadata || !metadata.title) {
     missingMetadata.push(relative(process.cwd(), path));
-
-    if (!shouldWrite || !metadata) {
-      continue;
-    }
+    continue;
   }
 
   if (metadata?.title !== expectedTitle) {
     mismatches.push(
       `${relative(process.cwd(), path)}\n  expected: ${expectedTitle}\n  actual:   ${metadata?.title ?? '<missing>'}`,
     );
-  }
-
-  if (shouldWrite && metadata && metadata.title !== expectedTitle) {
-    const nextContent = isStory
-      ? replaceStoryTitle(content, metadata, expectedTitle)
-      : replaceMdxTitle(content, metadata, expectedTitle);
-
-    writeFileSync(path, nextContent);
-    updated += 1;
   }
 
   if (!isStory || !metadata?.title) {
@@ -169,11 +212,7 @@ for (const path of files) {
   }
 }
 
-if (shouldWrite) {
-  console.log(`Updated ${updated} Storybook title metadata value(s).`);
-}
-
-const failed = !shouldWrite && (missingMetadata.length > 0 || mismatches.length > 0 || duplicateStories.length > 0);
+const failed = missingMetadata.length > 0 || mismatches.length > 0 || duplicateStories.length > 0;
 
 if (failed) {
   reportFailures('Missing Storybook title metadata', missingMetadata);

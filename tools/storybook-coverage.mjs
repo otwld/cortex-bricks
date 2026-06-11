@@ -1,50 +1,18 @@
 #!/usr/bin/env node
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
-import { basename, dirname, join, relative } from 'node:path';
-
-import { storybookTitle } from './storybook-title-utils.mjs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { basename, join } from 'node:path';
 
 /**
  * Storybook coverage for source files means every non-test TypeScript file in
  * the repository-owned app, package, and tool roots has either a colocated
  * source-mirror MDX page or a colocated story.
+ *
+ * This audit is intentionally read-only; source MDX pages are maintained
+ * manually so naming, package labels, import examples, and notes stay reviewed.
  */
 const ROOTS = ['apps', 'packages', 'tools'];
 const IGNORED_DIRECTORIES = new Set(['.git', '.nx', 'coverage', 'dist', 'node_modules', 'tmp']);
 const STORY_EXTENSIONS = ['.stories.ts', '.stories.tsx', '.stories.js', '.stories.jsx'];
-const ACRONYMS = new Map([
-  ['ai', 'AI'],
-  ['api', 'API'],
-  ['casl', 'CASL'],
-  ['cdk', 'CDK'],
-  ['css', 'CSS'],
-  ['dto', 'DTO'],
-  ['dtos', 'DTOs'],
-  ['gfm', 'GFM'],
-  ['graphql', 'GraphQL'],
-  ['html', 'HTML'],
-  ['http', 'HTTP'],
-  ['id', 'ID'],
-  ['io', 'IO'],
-  ['json', 'JSON'],
-  ['jwt', 'JWT'],
-  ['mdx', 'MDX'],
-  ['msw', 'MSW'],
-  ['ng', 'Angular'],
-  ['nx', 'Nx'],
-  ['oauth', 'OAuth'],
-  ['oidc', 'OIDC'],
-  ['sdk', 'SDK'],
-  ['smtp', 'SMTP'],
-  ['ts', 'TS'],
-  ['tus', 'TUS'],
-  ['ui', 'UI'],
-  ['url', 'URL'],
-  ['ws', 'WebSocket'],
-]);
-
-const shouldWrite = process.argv.includes('--write');
-
 function walkFiles(directory, files = []) {
   for (const child of readdirSync(directory)) {
     if (IGNORED_DIRECTORIES.has(child)) {
@@ -89,84 +57,6 @@ function storybookArtifactPaths(sourcePath) {
 
 function hasStorybookArtifact(sourcePath) {
   return storybookArtifactPaths(sourcePath).some((artifactPath) => existsSync(artifactPath));
-}
-
-function splitIdentifier(value) {
-  return value
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    .split(/[^A-Za-z0-9]+/)
-    .filter(Boolean);
-}
-
-function formatWord(word) {
-  const lower = word.toLowerCase();
-  const acronym = ACRONYMS.get(lower);
-
-  if (acronym) {
-    return acronym;
-  }
-
-  return `${lower.slice(0, 1).toUpperCase()}${lower.slice(1)}`;
-}
-
-function formatLabel(value) {
-  const words = splitIdentifier(value);
-
-  if (words.length === 0) {
-    return value;
-  }
-
-  return words.map(formatWord).join(' ');
-}
-
-function camelCase(value) {
-  const words = splitIdentifier(value);
-
-  return words
-    .map((word, index) => {
-      const formatted = formatWord(word).replace(/[^A-Za-z0-9]/g, '');
-
-      if (index === 0) {
-        return `${formatted.slice(0, 1).toLowerCase()}${formatted.slice(1)}`;
-      }
-
-      return formatted;
-    })
-    .join('');
-}
-
-function sourceBaseName(sourcePath) {
-  return basename(sourcePath, '.ts');
-}
-
-function sourceHeading(sourcePath) {
-  const baseName = sourceBaseName(sourcePath);
-
-  return baseName === 'index' ? 'Public API' : formatLabel(baseName);
-}
-
-function mdxName(sourcePath) {
-  return `${camelCase(sourcePath.replace(/\.ts$/, ''))}Source`;
-}
-
-function createMdxContent(sourcePath) {
-  const sourceFileName = basename(sourcePath);
-  const title = storybookTitle(sourcePath);
-  const heading = sourceHeading(sourcePath);
-  const name = mdxName(sourcePath);
-  const repoPath = relative(process.cwd(), sourcePath);
-
-  return `import { Meta, Source } from '@storybook/addon-docs/blocks';
-import sourceCode from 'source-loader:./${sourceFileName}';
-
-<Meta title="${title}" name="${name}" />
-
-# ${heading}
-
-Source mirror for \`${repoPath}\`.
-
-<Source code={sourceCode} language="ts" />
-`;
 }
 
 function eligibleSources() {
@@ -248,26 +138,14 @@ function validateMdxMetadata() {
 const sources = eligibleSources();
 const missingSources = sources.filter((sourcePath) => !hasStorybookArtifact(sourcePath));
 
-if (shouldWrite) {
-  for (const sourcePath of missingSources) {
-    const mdxPath = sourcePath.replace(/\.ts$/, '.mdx');
-    mkdirSync(dirname(mdxPath), { recursive: true });
-    writeFileSync(mdxPath, createMdxContent(sourcePath));
-  }
-
-  console.log(`Generated ${missingSources.length} Storybook source mirror page(s).`);
-}
-
-const missingAfterWrite = sources.filter((sourcePath) => !hasStorybookArtifact(sourcePath));
-
-if (missingAfterWrite.length > 0) {
+if (missingSources.length > 0) {
   console.error(
-    `Missing Storybook coverage for ${missingAfterWrite.length} of ${sources.length} eligible TypeScript source file(s):`,
+    `Missing Storybook coverage for ${missingSources.length} of ${sources.length} eligible TypeScript source file(s):`,
   );
-  console.error(missingAfterWrite.slice(0, 200).join('\n'));
+  console.error(missingSources.slice(0, 200).join('\n'));
 
-  if (missingAfterWrite.length > 200) {
-    console.error(`...and ${missingAfterWrite.length - 200} more.`);
+  if (missingSources.length > 200) {
+    console.error(`...and ${missingSources.length - 200} more.`);
   }
 
   process.exit(1);
