@@ -15,10 +15,20 @@
     "src/**/*.stories.mdx",
     "src/*.js",
     "src/*.ts",
+    "../../apps/**/*.stories.ts",
+    "../../apps/**/*.stories.js",
+    "../../apps/**/*.stories.jsx",
+    "../../apps/**/*.stories.tsx",
+    "../../apps/**/*.stories.mdx",
     "../../packages/**/*.stories.ts",
     "../../packages/**/*.stories.js",
     "../../packages/**/*.stories.jsx",
     "../../packages/**/*.stories.tsx",
-    "../../packages/**/*.stories.mdx"
+    "../../packages/**/*.stories.mdx",
+    "../../tools/**/*.stories.ts",
+    "../../tools/**/*.stories.js",
+    "../../tools/**/*.stories.jsx",
+    "../../tools/**/*.stories.tsx",
+    "../../tools/**/*.stories.mdx"
   ]
 }

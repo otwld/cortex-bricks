@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "audit": "pnpm run audit:brick-manifests",
+    "audit": "pnpm run audit:brick-manifests && pnpm run audit:storybook-coverage",
     "audit:brick-manifests": "node tools/audit-brick-manifests.mjs",
+    "audit:storybook-coverage": "node tools/storybook-coverage.mjs",
     "build": "nx run-many -t build --all",
     "ci": "pnpm run audit && pnpm run sync:check && pnpm run lint && pnpm run test && pnpm run typecheck && pnpm run build",
     "lint": "nx run-many -t lint --all",
