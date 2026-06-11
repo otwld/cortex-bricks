@@ -3,10 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, inject, input, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-/**
- * Internal contract for Candidate Search Item.
- */
-export interface CandidateSearchItem {
+/** Candidate row returned by the Storybook recruitment search API mock. */
+export interface CandidateSearchRow {
   id: string;
   fullName: string;
   email: string;
@@ -16,11 +14,9 @@ export interface CandidateSearchItem {
   skills: string[];
 }
 
-/**
- * Internal contract for Candidate Search Response.
- */
+/** Paginated candidate search response consumed by the example component. */
 export interface CandidateSearchResponse {
-  items: CandidateSearchItem[];
+  items: CandidateSearchRow[];
   total: number;
   page: number;
   pageSize: number;
@@ -29,7 +25,8 @@ export interface CandidateSearchResponse {
 }
 
 /**
- * Internal class for Http Client Search Example Component.
+ * Standalone Angular example that demonstrates HttpClient-backed Storybook
+ * stories with deterministic MSW search responses.
  */
 @Component({
   selector: 'lib-http-client-search-example',
@@ -54,7 +51,7 @@ export class HttpClientSearchExampleComponent implements OnInit {
   readonly isLoading = signal(false);
 
   /**
-   * User-facing error message from the latest failed search.
+   * Visible error message from the latest failed search.
    */
   readonly error = signal<string | null>(null);
 

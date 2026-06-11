@@ -1,13 +1,14 @@
 import { provideHttpClient } from '@angular/common/http';
-import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
+import { type Meta, type StoryObj } from '@storybook/angular';
 
 import {
   createFakerGenetics,
   createJsonGetHandler,
   createMswSearchGetHandler,
+  withStorybookProviders,
   withStoryMswHandlers,
 } from '../storybook/storybook';
-import { HttpClientSearchExampleComponent, type CandidateSearchItem } from './http-client-search-example.component';
+import { HttpClientSearchExampleComponent, type CandidateSearchRow } from './http-client-search-example.component';
 
 interface Company {
   id: string;
@@ -24,7 +25,7 @@ const buildCompany = genetics.defineEntityFactory<void, Company>('company', ({ f
   name: faker.company.name(),
 }));
 
-const buildCandidate = genetics.defineEntityFactory<{ companyKey: number }, CandidateSearchItem>(
+const buildCandidate = genetics.defineEntityFactory<{ companyKey: number }, CandidateSearchRow>(
   'candidate',
   ({ faker, id, key, oneOf }, input) => {
     const company = buildCompany(input.companyKey, undefined);
@@ -74,9 +75,7 @@ const meta: Meta<HttpClientSearchExampleComponent> = {
   component: HttpClientSearchExampleComponent,
   title: 'storybook/ng/http-client-search-example',
   decorators: [
-    applicationConfig({
-      providers: [provideHttpClient()],
-    }),
+    withStorybookProviders([provideHttpClient()]),
   ],
   args: {
     initialQuery: 'engineer',

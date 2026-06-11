@@ -10,12 +10,14 @@ import {
 type HttpResponseInit = Parameters<typeof HttpResponse.json>[1];
 
 /**
- * Msw Search Get Handler Options definition used across Cortex libraries.
- * For example, search candidates by skill and paginate results for recruiter dashboards.
+ * Options for a reusable MSW GET handler backed by faker-genetics search.
  */
 export interface MswSearchGetHandlerOptions<TEntity> {
+  /** Search, filter, and sorting rules passed to the genetics runtime. */
   search?: GeneticsSearchOptions<TEntity>;
+  /** Custom parser for APIs whose query parameter names differ from the default contract. */
   parseRequest?: (url: URL) => GeneticsSearchRequest;
+  /** Response options passed to `HttpResponse.json`. */
   responseInit?: HttpResponseInit;
 }
 
@@ -30,10 +32,6 @@ export interface MswMappedSearchGetHandlerOptions<TEntity, TResponse extends Jso
   ) => TResponse;
 }
 
-/**
- * parse Positive Int operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 function parsePositiveInt(value: string | null, fallback: number): number {
   if (!value) {
     return fallback;
@@ -48,10 +46,6 @@ function parsePositiveInt(value: string | null, fallback: number): number {
   return numeric;
 }
 
-/**
- * default Parse Search Request operation used across Cortex libraries.
- * For example, search candidates by skill and paginate results for recruiter dashboards.
- */
 function defaultParseSearchRequest(url: URL): GeneticsSearchRequest {
   const queryParam = url.searchParams.get('query') ?? url.searchParams.get('q') ?? undefined;
   const sortDirectionRaw = url.searchParams.get('sortDirection');

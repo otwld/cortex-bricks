@@ -1,4 +1,4 @@
-import { Provider } from '@angular/core';
+import { type EnvironmentProviders, type Provider } from '@angular/core';
 import type { Decorator, Preview } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
 import {
@@ -12,31 +12,26 @@ import {
 import { initialize, mswLoader } from 'msw-storybook-addon';
 
 /**
- * Returns a Storybook Angular decorator that registers the given providers
- * at the application level (for standalone stories).
+ * Returns a Storybook Angular decorator that registers application-level
+ * providers for standalone stories.
  */
-export function withStorybookProviders(providers: Provider[]): Decorator {
+export function withStorybookProviders(providers: Array<Provider | EnvironmentProviders>): Decorator {
   return applicationConfig({ providers });
 }
 
 /**
- * Named MSW handler groups accepted by Storybook preview and story helpers.
+ * Named MSW handler groups consumed by `msw-storybook-addon`.
+ *
+ * Group names keep preview-level handlers and story-specific overrides
+ * composable without forcing every story to rebuild the full handler list.
  */
 export type StorybookMswHandlerGroups = Record<
   string,
   RequestHandler | RequestHandler[] | null
 >;
 
-/**
- * is Msw Initialized definition used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 let isMswInitialized = false;
 
-/**
- * ensure Msw Initialized operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 function ensureMswInitialized(): void {
   if (isMswInitialized) {
     return;
@@ -87,70 +82,74 @@ export function withStoryMswHandlers(
 }
 
 type HttpResponseInit = Parameters<typeof HttpResponse.json>[1];
+type JsonRequestFactory = typeof http.get;
+
+function createStaticJsonHandler<TResponse extends JsonBodyType>(
+  requestFactory: JsonRequestFactory,
+  path: Parameters<JsonRequestFactory>[0],
+  body: TResponse,
+  init?: HttpResponseInit
+): RequestHandler {
+  return requestFactory(path, () => HttpResponse.json(body, init));
+}
 
 /**
- * create Json Get Handler operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
+ * Creates a GET handler that always returns the provided JSON body.
  */
 export function createJsonGetHandler<TResponse extends JsonBodyType>(
   path: Parameters<typeof http.get>[0],
   body: TResponse,
   init?: HttpResponseInit
 ): RequestHandler {
-  return http.get(path, () => HttpResponse.json(body, init));
+  return createStaticJsonHandler(http.get, path, body, init);
 }
 
 /**
- * create Json Post Handler operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
+ * Creates a POST handler that always returns the provided JSON body.
  */
 export function createJsonPostHandler<TResponse extends JsonBodyType>(
   path: Parameters<typeof http.post>[0],
   body: TResponse,
   init?: HttpResponseInit
 ): RequestHandler {
-  return http.post(path, () => HttpResponse.json(body, init));
+  return createStaticJsonHandler(http.post, path, body, init);
 }
 
 /**
- * create Json Put Handler operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
+ * Creates a PUT handler that always returns the provided JSON body.
  */
 export function createJsonPutHandler<TResponse extends JsonBodyType>(
   path: Parameters<typeof http.put>[0],
   body: TResponse,
   init?: HttpResponseInit
 ): RequestHandler {
-  return http.put(path, () => HttpResponse.json(body, init));
+  return createStaticJsonHandler(http.put, path, body, init);
 }
 
 /**
- * create Json Patch Handler operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
+ * Creates a PATCH handler that always returns the provided JSON body.
  */
 export function createJsonPatchHandler<TResponse extends JsonBodyType>(
   path: Parameters<typeof http.patch>[0],
   body: TResponse,
   init?: HttpResponseInit
 ): RequestHandler {
-  return http.patch(path, () => HttpResponse.json(body, init));
+  return createStaticJsonHandler(http.patch, path, body, init);
 }
 
 /**
- * create Json Delete Handler operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
+ * Creates a DELETE handler that always returns the provided JSON body.
  */
 export function createJsonDeleteHandler<TResponse extends JsonBodyType>(
   path: Parameters<typeof http.delete>[0],
   body: TResponse,
   init?: HttpResponseInit
 ): RequestHandler {
-  return http.delete(path, () => HttpResponse.json(body, init));
+  return createStaticJsonHandler(http.delete, path, body, init);
 }
 
 /**
- * create Graphql Query Handler operation used across Cortex libraries.
- * For example, search candidates by skill and paginate results for recruiter dashboards.
+ * Creates a GraphQL query handler that returns a stable `data` envelope.
  */
 export function createGraphqlQueryHandler<
   TData extends GraphQLQuery,
@@ -166,8 +165,7 @@ export function createGraphqlQueryHandler<
 }
 
 /**
- * create Graphql Mutation Handler operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
+ * Creates a GraphQL mutation handler that returns a stable `data` envelope.
  */
 export function createGraphqlMutationHandler<
   TData extends GraphQLQuery,

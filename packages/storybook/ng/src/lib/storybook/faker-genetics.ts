@@ -17,26 +17,34 @@ export type FakerEntityKey = string | number;
 type GeneticsComparable = string | number | boolean | Date | null | undefined;
 
 /**
- * Faker Genetics Options definition used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
+ * Options for a deterministic faker runtime used by Storybook stories.
  */
 export interface FakerGeneticsOptions {
+  /** Seed used to make generated entities stable across Storybook builds. */
   seed: FakerSeed;
+  /** Reference date passed to faker date helpers when supported by the faker version. */
   refDate?: Date | string;
+  /** Faker locale or locale chain used while generating story data. */
   locale?: LocaleDefinition | LocaleDefinition[];
 }
 
 /**
- * Faker Entity Context definition used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
+ * Builder utilities passed to deterministic entity factories.
  */
 export interface FakerEntityContext {
+  /** Faker instance scoped to the current entity key. */
   faker: Faker;
+  /** Numeric seed derived from the runtime seed and entity key. */
   seed: number;
+  /** Entity namespace passed to `defineEntityFactory`. */
   entity: string;
+  /** Normalized key for the current generated entity. */
   key: string;
+  /** Creates stable IDs for related entities. */
   id: (namespace: string, key?: FakerEntityKey) => string;
+  /** Returns true according to a deterministic probability check. */
   maybe: (probability?: number) => boolean;
+  /** Picks one value from a non-empty array using the scoped faker seed. */
   oneOf: <TValue>(values: readonly TValue[]) => TValue;
 }
 
@@ -57,8 +65,7 @@ export type FakerEntityFactory<TInput, TEntity> = (
 ) => TEntity;
 
 /**
- * Genetics Search Request definition used across Cortex libraries.
- * For example, search candidates by skill and paginate results for recruiter dashboards.
+ * Query, sorting, and pagination parameters accepted by deterministic search helpers.
  */
 export interface GeneticsSearchRequest {
   query?: string;
@@ -69,8 +76,7 @@ export interface GeneticsSearchRequest {
 }
 
 /**
- * Genetics Search Result definition used across Cortex libraries.
- * For example, search candidates by skill and paginate results for recruiter dashboards.
+ * Paginated result returned by deterministic Storybook search handlers.
  */
 export interface GeneticsSearchResult<TEntity> {
   items: TEntity[];
@@ -82,8 +88,7 @@ export interface GeneticsSearchResult<TEntity> {
 }
 
 /**
- * Genetics Search Options definition used across Cortex libraries.
- * For example, search candidates by skill and paginate results for recruiter dashboards.
+ * Field selectors, filters, and sorters used by deterministic search helpers.
  */
 export interface GeneticsSearchOptions<TEntity> {
   searchBy?: Array<keyof TEntity | ((item: TEntity) => GeneticsComparable)>;
@@ -93,20 +98,24 @@ export interface GeneticsSearchOptions<TEntity> {
 }
 
 /**
- * Faker Genetics Runtime definition used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
+ * Runtime API for deterministic entity generation and search in stories.
  */
 export interface FakerGeneticsRuntime {
+  /** Normalized numeric seed used by this runtime. */
   seed: number;
+  /** Defines a cached factory for one generated entity namespace. */
   defineEntityFactory: <TInput, TEntity>(
     entityName: string,
     builder: FakerEntityBuilder<TInput, TEntity>
   ) => FakerEntityFactory<TInput, TEntity>;
+  /** Creates a deterministic array by invoking a factory for each index. */
   many: <TEntity>(
     count: number,
     factory: (index: number) => TEntity
   ) => TEntity[];
+  /** Creates a stable ID for an entity namespace and key. */
   createId: (namespace: string, key?: FakerEntityKey) => string;
+  /** Filters, sorts, and paginates a deterministic in-memory collection. */
   search: <TEntity>(
     items: readonly TEntity[],
     request?: GeneticsSearchRequest,
@@ -114,31 +123,11 @@ export interface FakerGeneticsRuntime {
   ) => GeneticsSearchResult<TEntity>;
 }
 
-/**
- * DEFAULT PAGE definition used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 const DEFAULT_PAGE = 1;
-/**
- * DEFAULT PAGE SIZE definition used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 const DEFAULT_PAGE_SIZE = 25;
-/**
- * DEFAULT PROBABILITY definition used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 const DEFAULT_PROBABILITY = 0.5;
-/**
- * MAX PAGE SIZE definition used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 const MAX_PAGE_SIZE = 500;
 
-/**
- * normalize Seed operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 function normalizeSeed(seed: FakerSeed): number {
   if (typeof seed === 'number' && Number.isFinite(seed)) {
     return Math.abs(Math.trunc(seed)) || 1;
@@ -155,10 +144,6 @@ function normalizeSeed(seed: FakerSeed): number {
   return Math.abs(hash) || 1;
 }
 
-/**
- * normalize Key operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 function normalizeKey(key: FakerEntityKey | undefined): string {
   if (key === undefined) {
     return 'default';
@@ -167,18 +152,10 @@ function normalizeKey(key: FakerEntityKey | undefined): string {
   return String(key);
 }
 
-/**
- * create Scoped Seed operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 function createScopedSeed(baseSeed: number, scope: string): number {
   return normalizeSeed(`${baseSeed}:${scope}`);
 }
 
-/**
- * create Faker operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 function createFaker(seed: number, locale?: LocaleDefinition | LocaleDefinition[]): Faker {
   const randomizer = generateMersenne53Randomizer(seed);
 
@@ -188,10 +165,6 @@ function createFaker(seed: number, locale?: LocaleDefinition | LocaleDefinition[
   });
 }
 
-/**
- * compare Json Values operation used across Cortex libraries.
- * For example, support recruiter and candidate workflows in the job-board universe.
- */
 function compareJsonValues(a: GeneticsComparable, b: GeneticsComparable): number {
   if (a === b) {
     return 0;
@@ -211,10 +184,6 @@ function compareJsonValues(a: GeneticsComparable, b: GeneticsComparable): number
   return String(left).localeCompare(String(right));
 }
 
-/**
- * value As Searchable Text operation used across Cortex libraries.
- * For example, search candidates by skill and paginate results for recruiter dashboards.
- */
 function valueAsSearchableText(value: GeneticsComparable): string {
   if (value === null || value === undefined) {
     return '';
@@ -227,10 +196,6 @@ function valueAsSearchableText(value: GeneticsComparable): string {
   return String(value).toLowerCase();
 }
 
-/**
- * apply Search operation used across Cortex libraries.
- * For example, search candidates by skill and paginate results for recruiter dashboards.
- */
 function applySearch<TEntity>(
   items: readonly TEntity[],
   request: GeneticsSearchRequest = {},
