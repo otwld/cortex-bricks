@@ -246,6 +246,7 @@
             [rounded]="true"
             [plain]="true"
             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            [ariaLabel]="expanded ? 'Collapse orders for ' + product.name : 'Expand orders for ' + product.name"
           />
         </td>
         <td>{{ product.name }}</td>
@@ -298,7 +299,7 @@
                     <p-tag [value]="order.status" [severity]="getSeverity(order.status)" />
                   </td>
                   <td>
-                    <p-button type="button" icon="pi pi-search" />
+                    <p-button type="button" icon="pi pi-search" ariaLabel="Inspect order" />
                   </td>
                 </tr>
               </ng-template>

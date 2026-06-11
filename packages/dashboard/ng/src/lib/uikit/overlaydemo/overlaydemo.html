@@ -94,11 +94,11 @@
           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </p>
       </p-drawer>
-      <p-button icon="pi pi-arrow-right" (click)="visibleLeft = true" [style]="{ marginRight: '0.25em' }" />
-      <p-button icon="pi pi-arrow-left" (click)="visibleRight = true" [style]="{ marginRight: '0.25em' }" />
-      <p-button icon="pi pi-arrow-down" (click)="visibleTop = true" [style]="{ marginRight: '0.25em' }" />
-      <p-button icon="pi pi-arrow-up" (click)="visibleBottom = true" [style]="{ marginRight: '0.25em' }" />
-      <p-button icon="pi pi-external-link" (click)="visibleFull = true" />
+      <p-button icon="pi pi-arrow-right" ariaLabel="Open left drawer" (click)="visibleLeft = true" [style]="{ marginRight: '0.25em' }" />
+      <p-button icon="pi pi-arrow-left" ariaLabel="Open right drawer" (click)="visibleRight = true" [style]="{ marginRight: '0.25em' }" />
+      <p-button icon="pi pi-arrow-down" ariaLabel="Open top drawer" (click)="visibleTop = true" [style]="{ marginRight: '0.25em' }" />
+      <p-button icon="pi pi-arrow-up" ariaLabel="Open bottom drawer" (click)="visibleBottom = true" [style]="{ marginRight: '0.25em' }" />
+      <p-button icon="pi pi-external-link" ariaLabel="Open full drawer" (click)="visibleFull = true" />
     </div>
     <div class="card">
       <div class="font-semibold text-xl mb-4">ConfirmPopup</div>

@@ -27,7 +27,7 @@
     <div class="card flex-1">
       <p-accordion>
         @for (question of items[activeIndex].questions; track question; let i = $index) {
-          <p-accordion-panel [value]="items[i].value">
+          <p-accordion-panel [value]="items[activeIndex].value + '-' + i">
             <p-accordion-header>{{ question }}</p-accordion-header>
             <p-accordion-content>
               <p class="leading-normal m-0 p-0">

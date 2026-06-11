@@ -13,6 +13,7 @@
                     'pi-table': option === 'grid',
                   }"
               ></i>
+              <span class="sr-only">{{ option }}</span>
             </ng-template>
           </p-select-button>
         </div>
@@ -56,7 +57,7 @@
               <div class="flex flex-col md:items-end gap-8">
                 <span class="text-xl font-semibold">$ {{ item.price }}</span>
                 <div class="flex flex-row-reverse md:flex-row gap-2">
-                  <p-button icon="pi pi-heart" styleClass="h-full" [outlined]="true"></p-button>
+                  <p-button icon="pi pi-heart" styleClass="h-full" [outlined]="true" [ariaLabel]="'Save ' + item.name"></p-button>
                   <p-button
                     icon="pi pi-shopping-cart"
                     label="Buy Now"
@@ -118,7 +119,7 @@
                       class="flex-auto whitespace-nowrap"
                       styleClass="w-full"
                     ></p-button>
-                    <p-button icon="pi pi-heart" styleClass="h-full" [outlined]="true"></p-button>
+                    <p-button icon="pi pi-heart" styleClass="h-full" [outlined]="true" [ariaLabel]="'Save ' + item.name"></p-button>
                   </div>
                 </div>
               </div>

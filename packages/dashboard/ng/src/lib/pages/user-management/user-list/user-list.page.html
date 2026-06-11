@@ -123,7 +123,7 @@
           <td class="text-sm text-surface-500 dark:text-surface-400">{{ roleLabel(user) }}</td>
           <td class="text-sm text-surface-500 dark:text-surface-400">{{ user.lastLoginAt || 'Never' }}</td>
           <td>
-            <p-button (onClick)="toggleMenu($event, user.id)" [rounded]="true" [text]="true" icon="pi pi-ellipsis-h" size="small" severity="secondary" class="cursor-pointer" />
+            <p-button (onClick)="toggleMenu($event, user.id)" [ariaLabel]="'Open actions for ' + user.displayName" [rounded]="true" [text]="true" icon="pi pi-ellipsis-h" size="small" severity="secondary" class="cursor-pointer" />
           </td>
         </tr>
       </ng-template>

@@ -35,6 +35,7 @@
               <!-- Animated Copy Button -->
               <div class="flex items-center gap-2 grow lg:grow-0 justify-end lg:justify-start">
                 <button
+                  aria-label="Copy block code"
                   (click)="copyCode($event)"
                   [disabled]="codeCopyLoading()"
                   class="relative w-10 h-10 border border-surface-200 dark:border-surface-700 rounded-full hover:bg-surface-100 dark:hover:bg-surface-800 transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-0 dark:focus-visible:ring-offset-surface-900 cursor-pointer disabled:cursor-wait"
