@@ -106,7 +106,7 @@ function auditProject(projectFile) {
 
   for (const file of walk(projectRoot)) {
     if (file === manifestPath || file === projectFile) continue;
-    if (isScript(file)) {
+    if (isScript(file) && !isStoryFile(file)) {
       for (const specifier of importedSpecifiers(file)) {
         const category = isRuntimeSource(file) ? 'runtime' : 'dev';
         const dependencies = category === 'runtime' ? runtime : all;
@@ -200,9 +200,14 @@ function isRuntimeSource(file) {
   return (
     file.includes('/src/') &&
     !file.match(/\.(?:spec|test)\.[cm]?[jt]s$/) &&
+    !isStoryFile(file) &&
     !file.endsWith('.test-d.ts') &&
     !file.endsWith('/test-setup.ts')
   );
+}
+
+function isStoryFile(file) {
+  return file.match(/\.stories\.[cm]?[jt]s$/) !== null;
 }
 
 function isScript(file) {

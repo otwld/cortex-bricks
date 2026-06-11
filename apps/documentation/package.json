@@ -3,18 +3,32 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@nx/vite": "22.7.5",
+    "@angular/common": "~21.2.0",
+    "@angular/router": "~21.2.0",
     "@analogjs/storybook-angular": "^2.5.3",
+    "@nx/vite": "22.7.5",
+    "@otwld/ng-ai": "workspace:0.0.1",
+    "@otwld/ng-auth": "workspace:0.0.1",
+    "@otwld/ng-cdk": "workspace:0.0.1",
+    "@otwld/ng-dashboard": "workspace:0.0.1",
+    "@otwld/ng-feature-flags": "workspace:0.0.1",
+    "@otwld/ng-storage": "workspace:0.0.1",
+    "@otwld/ng-storybook": "workspace:0.0.1",
+    "@otwld/ng-users": "workspace:0.0.1",
+    "@otwld/ts-feature-flags": "workspace:0.0.1",
     "@otwld/ts-storybook": "workspace:0.0.1",
+    "@storybook/angular": "10.4.1",
     "remark-gfm": "^4.0.1",
-    "vite": "^7.0.0",
+    "rxjs": "~7.8.0",
     "storybook": "10.4.1",
     "storybook-addon-tag-badges": "^3.1.0",
-    "@angular/router": "~21.2.0",
-    "@storybook/angular": "10.4.1",
-    "@otwld/ng-storybook": "workspace:0.0.1"
+    "vite": "^7.0.0"
   },
   "devDependencies": {
-    "@storybook/addon-docs": "10.4.1"
+    "@storybook/addon-docs": "10.4.1",
+    "@tailwindcss/postcss": "^4.3.0",
+    "primeicons": "^7.0.0",
+    "tailwindcss": "^4.3.0",
+    "tailwindcss-primeui": "^0.6.1"
   }
 }

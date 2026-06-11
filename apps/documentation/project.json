@@ -18,7 +18,8 @@
           "sass": {
             "silenceDeprecations": ["mixed-decls", "color-functions", "global-builtin", "import"]
           }
-        }
+        },
+        "styles": ["apps/documentation/src/styles.css"]
       },
       "configurations": {
         "ci": {
@@ -39,7 +40,8 @@
           "sass": {
             "silenceDeprecations": ["mixed-decls", "color-functions", "global-builtin", "import"]
           }
-        }
+        },
+        "styles": ["apps/documentation/src/styles.css"]
       },
       "configurations": {
         "ci": {

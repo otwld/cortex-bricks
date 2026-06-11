@@ -13,6 +13,7 @@ export default [
         {
           ignoredFiles: [
             '{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}',
+            '{projectRoot}/src/**/*.stories.ts',
             '{projectRoot}/src/**/*.spec.ts',
           ],
         },

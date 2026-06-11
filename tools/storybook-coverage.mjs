@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
-import { basename, dirname, join, relative, sep } from 'node:path';
+import { basename, dirname, join, relative } from 'node:path';
+
+import { storybookTitle } from './storybook-title-utils.mjs';
 
 /**
  * Storybook coverage for source files means every non-test TypeScript file in
@@ -8,14 +10,7 @@ import { basename, dirname, join, relative, sep } from 'node:path';
  * source-mirror MDX page or a colocated story.
  */
 const ROOTS = ['apps', 'packages', 'tools'];
-const IGNORED_DIRECTORIES = new Set([
-  '.git',
-  '.nx',
-  'coverage',
-  'dist',
-  'node_modules',
-  'tmp',
-]);
+const IGNORED_DIRECTORIES = new Set(['.git', '.nx', 'coverage', 'dist', 'node_modules', 'tmp']);
 const STORY_EXTENSIONS = ['.stories.ts', '.stories.tsx', '.stories.js', '.stories.jsx'];
 const ACRONYMS = new Map([
   ['ai', 'AI'],
@@ -46,27 +41,6 @@ const ACRONYMS = new Map([
   ['ui', 'UI'],
   ['url', 'URL'],
   ['ws', 'WebSocket'],
-]);
-const PACKAGE_LABELS = new Map([
-  ['ai', 'AI'],
-  ['auth', 'Auth'],
-  ['chat', 'Chat'],
-  ['dashboard', 'Dashboard'],
-  ['databases', 'Databases'],
-  ['feature-flags', 'Feature Flags'],
-  ['mail', 'Mail'],
-  ['sdk', 'SDK'],
-  ['storage', 'Storage'],
-  ['storybook', 'Storybook'],
-  ['tanstack', 'TanStack'],
-  ['ui', 'UI'],
-  ['users', 'Users'],
-  ['websocket', 'WebSocket'],
-]);
-const RUNTIME_LABELS = new Map([
-  ['nest', 'NestJS'],
-  ['ng', 'Angular'],
-  ['ts', 'TS'],
 ]);
 
 const shouldWrite = process.argv.includes('--write');
@@ -110,10 +84,7 @@ function isEligibleSource(path) {
 function storybookArtifactPaths(sourcePath) {
   const withoutExtension = sourcePath.replace(/\.ts$/, '');
 
-  return [
-    `${withoutExtension}.mdx`,
-    ...STORY_EXTENSIONS.map((extension) => `${withoutExtension}${extension}`),
-  ];
+  return [`${withoutExtension}.mdx`, ...STORY_EXTENSIONS.map((extension) => `${withoutExtension}${extension}`)];
 }
 
 function hasStorybookArtifact(sourcePath) {
@@ -174,88 +145,6 @@ function sourceHeading(sourcePath) {
   return baseName === 'index' ? 'Public API' : formatLabel(baseName);
 }
 
-function packageTitleParts(parts) {
-  const [, packageName, runtimeName, ...rest] = parts;
-  const packageLabel = PACKAGE_LABELS.get(packageName) ?? formatLabel(packageName);
-  const runtimeLabel = RUNTIME_LABELS.get(runtimeName) ?? formatLabel(runtimeName);
-  const srcIndex = rest.indexOf('src');
-  const entrypointParts = srcIndex > 0 ? rest.slice(0, srcIndex) : [];
-  const afterSrc = srcIndex >= 0 ? rest.slice(srcIndex + 1) : rest;
-  const fileName = afterSrc.at(-1) ?? parts.at(-1);
-  const directories = afterSrc.slice(0, -1).filter((segment) => segment !== 'lib');
-  const titleParts = ['Toolkit', `${runtimeLabel} ${packageLabel}`];
-
-  titleParts.push(...entrypointParts.map(formatLabel));
-
-  if (srcIndex === -1) {
-    titleParts.push('Tooling');
-  } else if (fileName === 'index.ts' && afterSrc.length === 1) {
-    titleParts.push('Package Entry');
-  } else if (fileName === 'index.ts' && afterSrc.length === 2 && afterSrc[0] === 'lib') {
-    titleParts.push('Library Entry');
-  } else if (directories.length > 0) {
-    titleParts.push(...directories.map(formatLabel));
-  } else {
-    titleParts.push('References');
-  }
-
-  titleParts.push(sourceHeading(fileName));
-
-  return titleParts;
-}
-
-function appTitleParts(parts) {
-  const [, appName, ...rest] = parts;
-  const srcIndex = rest.indexOf('src');
-  const afterSrc = srcIndex >= 0 ? rest.slice(srcIndex + 1) : rest;
-  const fileName = afterSrc.at(-1) ?? parts.at(-1);
-  const directories = afterSrc.slice(0, -1);
-  const titleParts = ['Applications', formatLabel(appName)];
-
-  if (srcIndex === -1) {
-    titleParts.push('Tooling');
-  } else if (directories.length > 0) {
-    titleParts.push(...directories.map(formatLabel));
-  } else {
-    titleParts.push('Runtime');
-  }
-
-  titleParts.push(sourceHeading(fileName));
-
-  return titleParts;
-}
-
-function toolTitleParts(parts) {
-  const [, toolArea, ...rest] = parts;
-  const fileName = rest.at(-1) ?? parts.at(-1);
-  const directories = rest.slice(0, -1);
-  const titleParts = ['Tooling', formatLabel(toolArea)];
-
-  if (directories.length > 0) {
-    titleParts.push(...directories.map(formatLabel));
-  } else {
-    titleParts.push('References');
-  }
-
-  titleParts.push(sourceHeading(fileName));
-
-  return titleParts;
-}
-
-function storybookTitle(sourcePath) {
-  const parts = sourcePath.split(sep);
-
-  if (parts[0] === 'packages') {
-    return packageTitleParts(parts).join('/');
-  }
-
-  if (parts[0] === 'tools') {
-    return toolTitleParts(parts).join('/');
-  }
-
-  return appTitleParts(parts).join('/');
-}
-
 function mdxName(sourcePath) {
   return `${camelCase(sourcePath.replace(/\.ts$/, ''))}Source`;
 }
@@ -281,16 +170,14 @@ Source mirror for \`${repoPath}\`.
 }
 
 function eligibleSources() {
-  return ROOTS
-    .filter((root) => existsSync(root))
+  return ROOTS.filter((root) => existsSync(root))
     .flatMap((root) => walkFiles(root))
     .filter(isEligibleSource)
     .sort();
 }
 
 function mdxFiles() {
-  return ROOTS
-    .filter((root) => existsSync(root))
+  return ROOTS.filter((root) => existsSync(root))
     .flatMap((root) => walkFiles(root))
     .filter((path) => path.endsWith('.mdx'))
     .sort();
@@ -346,7 +233,7 @@ function validateMdxMetadata() {
         duplicateIdentities
           .slice(0, 50)
           .map((paths) => paths.join('\n'))
-          .join('\n\n')
+          .join('\n\n'),
       );
 
       if (duplicateIdentities.length > 50) {
@@ -375,7 +262,7 @@ const missingAfterWrite = sources.filter((sourcePath) => !hasStorybookArtifact(s
 
 if (missingAfterWrite.length > 0) {
   console.error(
-    `Missing Storybook coverage for ${missingAfterWrite.length} of ${sources.length} eligible TypeScript source file(s):`
+    `Missing Storybook coverage for ${missingAfterWrite.length} of ${sources.length} eligible TypeScript source file(s):`,
   );
   console.error(missingAfterWrite.slice(0, 200).join('\n'));
 

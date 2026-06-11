@@ -1,0 +1,22 @@
+@import 'tailwindcss' source(none);
+@import 'tailwindcss-primeui';
+@import 'primeicons/primeicons.css';
+
+@custom-variant dark (&:where(.app-dark, .app-dark *));
+
+@source "../../../apps";
+@source "../../../packages";
+@source "../../../tools";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+}

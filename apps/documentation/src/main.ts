@@ -9,14 +9,7 @@ import { mergeConfig, type UserConfig } from 'vite';
 
 const storybookTsConfig = fileURLToPath(new URL('../tsconfig.storybook.json', import.meta.url));
 const workspaceRoot = fileURLToPath(new URL('../../..', import.meta.url));
-const ignoredStorySearchDirectories = new Set([
-  '.git',
-  '.nx',
-  'coverage',
-  'dist',
-  'node_modules',
-  'tmp',
-]);
+const ignoredStorySearchDirectories = new Set(['.git', '.nx', 'coverage', 'dist', 'node_modules', 'tmp']);
 
 function hasStoryFiles(directory: string): boolean {
   const absoluteDirectory = join(workspaceRoot, directory);
@@ -43,9 +36,7 @@ function hasStoryFiles(directory: string): boolean {
 }
 
 function optionalStoryGlob(directory: string): string[] {
-  return hasStoryFiles(directory)
-    ? [`../../../${directory}/**/*.stories.@(js|jsx|ts|tsx)`]
-    : [];
+  return hasStoryFiles(directory) ? [`../../../${directory}/**/*.stories.@(js|jsx|ts|tsx)`] : [];
 }
 
 const config: StorybookConfig = {
@@ -76,9 +67,18 @@ const config: StorybookConfig = {
       tsconfig: storybookTsConfig,
     },
   },
-  staticDirs: ['../public'],
+  staticDirs: ['../public', '../../frontend/public'],
   async viteFinal(config: UserConfig) {
     return mergeConfig(config, {
+      build: {
+        rollupOptions: {
+          output: {
+            assetFileNames: 'assets/asset-[hash][extname]',
+            chunkFileNames: 'assets/chunk-[hash].js',
+            entryFileNames: 'assets/entry-[hash].js',
+          },
+        },
+      },
       plugins: [
         createStorybookNodeSourceLoaderPlugin({
           pluginName: 'documentation-source-loader',
