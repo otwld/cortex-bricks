@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { provideStorybookRouter } from '@otwld/ng-storybook';
 import { SignedUrlCacheService } from '@otwld/ng-storage';
 import { UsersService } from '@otwld/ng-users/core';
 import { UserAccountStatus, UserInvitationStatus, type UserListItem, type UserProfileResponse } from '@otwld/ts-users';
@@ -79,10 +79,7 @@ const meta: Meta<UserListPage> = {
   decorators: [
     applicationConfig({
       providers: [
-        {
-          provide: Router,
-          useValue: { navigate },
-        },
+        provideStorybookRouter({ navigate }),
         {
           provide: UsersService,
           useValue: {

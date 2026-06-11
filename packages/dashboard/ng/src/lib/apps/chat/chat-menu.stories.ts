@@ -142,7 +142,7 @@ export const Default: Story = {
     await step('render searchable chat groups and archive tab', async () => {
       await expect(canvas.getByText('Online')).toBeVisible();
       await expect(canvas.getByText('Pinned')).toBeVisible();
-      await expect(canvas.getByText('Design Team')).toBeVisible();
+      await expect(canvas.getAllByText('Design Team')[0]).toBeVisible();
       await expect(canvas.getByRole('button', { name: /archived/i })).toBeVisible();
     });
 
@@ -150,7 +150,7 @@ export const Default: Story = {
       await userEvent.type(canvas.getByPlaceholderText('Search'), 'Recruiting');
 
       await expect(canvas.getByText('Recruiting Ops')).toBeVisible();
-      await expect(canvas.queryByText('Design Team')).not.toBeInTheDocument();
+      await expect(canvas.queryAllByText('Design Team')).toHaveLength(0);
     });
 
     await step('emit the selected chat id', async () => {

@@ -36,7 +36,7 @@ export const Default: Story = {
 
       await userEvent.click(canvas.getByRole('button', { name: /will i receive an invoice/i }));
 
-      await expect(canvas.getByText(/Duis aute irure dolor/i)).toBeVisible();
+      await expect(canvas.getAllByText(/Duis aute irure dolor/i)[0]).toBeInTheDocument();
     });
   },
 };

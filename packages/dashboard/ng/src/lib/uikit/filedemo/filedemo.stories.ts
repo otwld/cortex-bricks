@@ -27,11 +27,11 @@ export const Default: Story = {
       await expect(canvas.getByText('Advanced')).toBeVisible();
       await expect(canvas.getByText('Basic')).toBeVisible();
       await expect(canvas.getByText('Drag and drop files to here to upload.')).toBeVisible();
-      await expect(canvas.getByRole('button', { name: /choose/i })).toBeVisible();
+      await expect(canvas.getAllByRole('button', { name: /choose/i })[0]).toBeVisible();
     });
 
     await step('exercise the empty basic upload command', async () => {
-      const uploadButton = canvas.getByRole('button', { name: /upload/i });
+      const uploadButton = canvas.getAllByRole('button', { name: /upload/i })[0];
 
       await userEvent.click(uploadButton);
 

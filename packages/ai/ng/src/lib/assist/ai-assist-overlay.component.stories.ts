@@ -71,7 +71,9 @@ type Story = StoryObj<AiAssistOverlay>;
 export const Default: Story = {
   play: async ({ canvas, step }) => {
     await step('keep the assist trigger hidden until a host requests it', async () => {
-      await expect(canvas.queryByRole('button', { name: /improve candidate notes/i })).not.toBeInTheDocument();
+      await expect(canvas.getByRole('button', { name: /improve candidate notes/i, hidden: true })).toHaveClass(
+        'ai-assist-trigger-hidden',
+      );
     });
   },
 };

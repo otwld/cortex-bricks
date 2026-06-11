@@ -24,7 +24,7 @@ type Story = StoryObj<TreeDemo>;
 export const Default: Story = {
   play: async ({ canvas, step, userEvent }) => {
     await step('render tree fixtures', async () => {
-      await expect(await canvas.findByText('Documents')).toBeVisible();
+      await expect((await canvas.findAllByText('Documents'))[0]).toBeVisible();
       await expect(canvas.getByText('TreeTable')).toBeVisible();
       await expect(await canvas.findByText('Applications')).toBeVisible();
     });

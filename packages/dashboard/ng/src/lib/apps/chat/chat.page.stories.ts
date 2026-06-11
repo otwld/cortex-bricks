@@ -106,7 +106,7 @@ export const Default: Story = {
   },
   play: async ({ canvas, step, userEvent }) => {
     await step('render loaded chat conversations', async () => {
-      await expect(await canvas.findByText('Design Team')).toBeVisible();
+      await expect((await canvas.findAllByText('Design Team'))[0]).toBeVisible();
       await expect(canvas.getByText('Recruiting Ops')).toBeVisible();
       await expect(canvas.getByText('Can we schedule a review session tomorrow?')).toBeVisible();
     });

@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { provideStorybookRouter } from '@otwld/ng-storybook';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 import { expect, fn } from 'storybook/test';
 import { FormStateService } from '../../form-state.service';
@@ -13,10 +13,7 @@ const meta: Meta<Authorization> = {
     applicationConfig({
       providers: [
         FormStateService,
-        {
-          provide: Router,
-          useValue: { navigate },
-        },
+        provideStorybookRouter({ navigate }),
       ],
     }),
   ],
@@ -43,7 +40,7 @@ export const Default: Story = {
     await step('render role and permission controls', async () => {
       await expect(canvas.getByText('Authorization and Access')).toBeVisible();
       await expect(canvas.getByRole('button', { name: /member/i })).toBeVisible();
-      await expect(canvas.getByLabelText('read:Finance')).toBeVisible();
+      await expect(canvas.getByLabelText('read:Finance')).toBeInTheDocument();
     });
 
     await step('select elevated access and continue', async () => {

@@ -1,5 +1,5 @@
 import { type Meta, type StoryObj } from '@storybook/angular';
-import { expect, fn, within } from 'storybook/test';
+import { expect, fn, waitFor, within } from 'storybook/test';
 import { ComposeDialog } from './compose-dialog';
 
 const closed = fn();
@@ -71,10 +71,11 @@ export const Default: Story = {
     const body = within(canvasElement.ownerDocument.body);
 
     await step('render initial compose data', async () => {
-      await expect(await body.findByText('Compose')).toBeVisible();
-      await expect(body.getByLabelText('To:')).toHaveValue('recruiter.ada@example.com');
-      await expect(body.getByLabelText('Subject:')).toHaveValue('Candidate profile summary');
-      await expect(body.getByPlaceholderText('Compose your message...')).toHaveValue(
+      const dialog = within(await body.findByRole('dialog', { name: /compose/i }));
+
+      await expect(dialog.getByLabelText('To:')).toHaveValue('recruiter.ada@example.com');
+      await expect(dialog.getByLabelText('Subject:')).toHaveValue('Candidate profile summary');
+      await expect(dialog.getByPlaceholderText('Compose your message...')).toHaveValue(
         'Sharing the candidate profile summary for review.',
       );
     });
@@ -84,12 +85,17 @@ export const Default: Story = {
       closed.mockClear();
       visibleChange.mockClear();
 
-      await userEvent.clear(body.getByPlaceholderText('Compose your message...'));
-      await userEvent.type(body.getByPlaceholderText('Compose your message...'), 'Please review the attached profile.');
-      await userEvent.click(body.getByRole('button', { name: /send/i }));
+      const dialog = within(await body.findByRole('dialog', { name: /compose/i }));
+      const messageInput = dialog.getByPlaceholderText('Compose your message...');
+      const editedMessage = 'Candidate profile approved.';
+
+      await userEvent.clear(messageInput);
+      await userEvent.type(messageInput, editedMessage);
+      await waitFor(() => expect(messageInput).toHaveValue(editedMessage));
+      await userEvent.click(dialog.getByRole('button', { name: /send/i }));
 
       await expect(send).toHaveBeenCalledWith({
-        message: 'Please review the attached profile.',
+        message: editedMessage,
         subject: 'Candidate profile summary',
         to: 'recruiter.ada@example.com',
       });

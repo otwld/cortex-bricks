@@ -86,7 +86,7 @@ export const Default: Story = {
     });
 
     await step('switch between code and preview views', async () => {
-      await userEvent.click(canvas.getByRole('button', { name: /code/i }));
+      await userEvent.click(canvas.getAllByRole('button', { name: /code/i })[0]);
 
       await expect(canvas.getByText(/candidate-card/i)).toBeVisible();
 

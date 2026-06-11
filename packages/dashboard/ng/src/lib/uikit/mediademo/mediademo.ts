@@ -1,5 +1,5 @@
 import { NgStyle } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel';
 import { GalleriaModule } from 'primeng/galleria';
@@ -8,7 +8,7 @@ import { TagModule } from 'primeng/tag';
 import { CarouselResponsiveOptions } from 'primeng/types/carousel';
 import { GalleriaResponsiveOptions } from 'primeng/types/galleria';
 import { ImageCompareModule } from 'primeng/imagecompare';
-import { Photo, PhotoService, Product, ProductService } from '@otwld/ng-dashboard/core';
+import { PhotoService, ProductService, type Photo, type Product } from '@otwld/ng-dashboard/core';
 
 /**
  * Demonstrates PrimeNG media components including carousel, image, image compare, and galleria.
@@ -20,9 +20,9 @@ import { Photo, PhotoService, Product, ProductService } from '@otwld/ng-dashboar
   providers: [ProductService, PhotoService],
 })
 export class MediaDemo implements OnInit {
-  protected products: Product[] = [];
+  protected readonly products = signal<Product[]>([]);
 
-  protected images: Photo[] = [];
+  protected readonly images = signal<Photo[]>([]);
 
   protected readonly galleriaResponsiveOptions: GalleriaResponsiveOptions[] = [
     {
@@ -70,11 +70,11 @@ export class MediaDemo implements OnInit {
    */
   ngOnInit(): void {
     this.productService.getProductsSmall().then((products) => {
-      this.products = products;
+      this.products.set(products);
     });
 
     this.photoService.getImages().then((images) => {
-      this.images = images;
+      this.images.set(images);
     });
   }
 

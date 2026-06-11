@@ -28,7 +28,7 @@ export const Default: Story = {
       await expect(canvas.getByText('SplitButton')).toBeVisible();
       await expect(canvas.getByText('Loading')).toBeVisible();
       await expect(canvas.getByRole('button', { name: /disabled/i })).toBeDisabled();
-      await expect(canvas.getByRole('button', { name: /primeng logo/i })).toBeVisible();
+      await expect(canvas.getAllByRole('button', { name: /primeng logo/i })[0]).toBeVisible();
     });
 
     await step('exercise a loading button', async () => {

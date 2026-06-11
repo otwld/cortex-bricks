@@ -44,7 +44,7 @@ const meta: Meta<ConfirmDialogComponent> = {
     cancelLabel: 'Keep candidate',
     confirm,
     confirmLabel: 'Remove candidate',
-  title: 'ui/ng/confirm/confirm-dialog',
+    title: 'Remove candidate',
   },
   component: ConfirmDialogComponent,
   render: (args) => ({

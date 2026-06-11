@@ -57,7 +57,7 @@ export const Default: Story = {
       });
       window.dispatchEvent(new Event('scroll'));
 
-      await expect(host).toHaveStyle('transform: scale(1.15)');
+      await expect(host.style.transform).toBe('scale(1.15)');
 
       Object.defineProperty(window, 'scrollY', {
         configurable: true,

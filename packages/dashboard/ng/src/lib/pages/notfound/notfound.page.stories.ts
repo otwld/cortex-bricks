@@ -1,4 +1,4 @@
-import { provideRouter } from '@angular/router';
+import { provideStorybookAngularApp } from '@otwld/ng-storybook';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 import { expect } from 'storybook/test';
 import { NotFoundPage } from './notfound.page';
@@ -8,7 +8,7 @@ const meta: Meta<NotFoundPage> = {
   component: NotFoundPage,
   decorators: [
     applicationConfig({
-      providers: [provideRouter([])],
+      providers: [provideStorybookAngularApp({ includeHttpClient: false })],
     }),
   ],
   parameters: {

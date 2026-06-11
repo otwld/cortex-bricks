@@ -30,10 +30,10 @@ export const Default: Story = {
     });
 
     await step('filter completed orders and search for one product', async () => {
-      await userEvent.click(canvas.getByRole('button', { name: /completed/i }));
+      await userEvent.click(canvas.getAllByRole('button', { name: /completed/i })[0]);
       await userEvent.type(canvas.getByPlaceholderText('Search'), 'AeroShield');
 
-      await expect(canvas.getByText('Order completed')).toBeVisible();
+      await expect(canvas.getByText('AeroShield™ Storm Jacket')).toBeVisible();
       await expect(canvas.getByText('124812478')).toBeVisible();
     });
 

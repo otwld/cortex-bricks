@@ -1,6 +1,6 @@
 <div class="card">
   <div class="font-semibold text-xl mb-6">Carousel</div>
-  <p-carousel [value]="products" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="carouselResponsiveOptions">
+  <p-carousel [value]="products()" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="carouselResponsiveOptions">
     <ng-template let-product #item>
       <div class="border border-surface rounded-border m-2 p-6">
         <div class="mb-6">
@@ -40,7 +40,7 @@
 </div>
 <div class="card">
   <div class="font-semibold text-xl mb-6">Galleria</div>
-  <p-galleria [value]="images" [responsiveOptions]="galleriaResponsiveOptions" [containerStyle]="{ 'max-width': '640px' }" [numVisible]="5">
+  <p-galleria [value]="images()" [responsiveOptions]="galleriaResponsiveOptions" [containerStyle]="{ 'max-width': '640px' }" [numVisible]="5">
     <ng-template #item let-item>
       <img [src]="item.itemImageSrc" [alt]="item.alt" style="width: 100%" />
     </ng-template>

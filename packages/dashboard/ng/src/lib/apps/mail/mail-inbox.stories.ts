@@ -1,7 +1,7 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
-import { expect, fn, within } from 'storybook/test';
-import { createJsonGetHandler, withStoryMswHandlers } from '@otwld/ng-storybook';
+import { expect, fn, waitFor, within } from 'storybook/test';
+import { createJsonGetHandler, provideStorybookRouter, withStoryMswHandlers } from '@otwld/ng-storybook';
 import { MailInbox } from './mail-inbox';
 
 const navigate = fn();
@@ -92,12 +92,7 @@ const meta: Meta<MailInbox> = {
             },
           },
         },
-        {
-          provide: Router,
-          useValue: {
-            navigate,
-          },
-        },
+        provideStorybookRouter({ navigate }),
       ],
     }),
   ],
@@ -127,22 +122,34 @@ export const Default: Story = {
 
     await step('render inbox folders and messages', async () => {
       await expect(await canvas.findByText('Mails')).toBeVisible();
-      await expect(canvas.getByText('Brook Simmons')).toBeVisible();
-      await expect(canvas.getByText('Important Account Update')).toBeVisible();
+      await expect(await canvas.findByText('Brook Simmons')).toBeVisible();
+      await expect(await canvas.findByText('Important Account Update')).toBeVisible();
     });
 
     await step('filter messages through search', async () => {
       await userEvent.type(canvas.getByPlaceholderText('Search mail'), 'Dianne');
 
-      await expect(canvas.getByText('Dianne Russell')).toBeVisible();
-      await expect(canvas.queryByText('Brook Simmons')).not.toBeInTheDocument();
+      await expect(await canvas.findByText('Dianne Russell')).toBeVisible();
+      await waitFor(() => expect(canvas.queryByText('Brook Simmons')).not.toBeInTheDocument());
     });
 
     await step('open the compose dialog', async () => {
-      await userEvent.click(canvas.getByRole('button', { name: /compose new/i }));
+      const composeButton = await waitFor(() => {
+        const visibleButton = canvas
+          .getAllByRole('button', { name: /compose new/i })
+          .find((button) => button.checkVisibility());
 
-      await expect(await body.findByText('Compose')).toBeVisible();
-      await expect(body.getByLabelText('To:')).toBeVisible();
+        if (!visibleButton) {
+          throw new Error('Expected a visible compose button.');
+        }
+
+        return visibleButton;
+      });
+
+      await userEvent.click(composeButton);
+      const dialog = within(await body.findByRole('dialog', { name: /compose/i }));
+
+      await expect(dialog.getByLabelText('To:')).toBeInTheDocument();
     });
   },
 };

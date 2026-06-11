@@ -24,7 +24,7 @@ type Story = StoryObj<TableDemo>;
 export const Default: Story = {
   play: async ({ canvas, step, userEvent }) => {
     await step('render fixture-backed tables', async () => {
-      await expect(await canvas.findByText('James Butt')).toBeVisible();
+      await expect((await canvas.findAllByText('James Butt'))[0]).toBeVisible();
       await expect(canvas.getByText('Frozen Columns')).toBeVisible();
       await expect(canvas.getByText('Row Expansion')).toBeVisible();
       await expect(canvas.getByText('Grouping')).toBeVisible();

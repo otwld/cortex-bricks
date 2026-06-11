@@ -68,7 +68,7 @@ const meta: Meta<TopProductsWidget> = {
     maxProducts: 6,
     productSelected,
     products,
-  title: 'dashboard/ng/ecommerce/top-products-widget',
+    title: 'Top Products',
   },
   component: TopProductsWidget,
   render: (args) => ({

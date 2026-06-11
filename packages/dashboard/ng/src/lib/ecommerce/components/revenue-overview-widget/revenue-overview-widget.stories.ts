@@ -84,7 +84,7 @@ const meta: Meta<RevenueOverviewWidget> = {
     selectedPeriodId: null,
     showPeriodSelector: true,
     themeKey: null,
-  title: 'dashboard/ng/ecommerce/revenue-overview-widget',
+    title: 'Revenue Overview',
   },
   component: RevenueOverviewWidget,
   render: (args) => ({

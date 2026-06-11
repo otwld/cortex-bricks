@@ -54,16 +54,18 @@ const candidateMutation = {
 /** Button host that submits a candidate status mutation. */
 export const Default: Story = {
   args: {
-    mutation: candidateMutation,
     mutationVariables: {
       candidateId: 'candidate-001',
     },
   },
   render: (args) => ({
-    props: args,
+    props: {
+      candidateMutation,
+      mutationVariables: args.mutationVariables,
+    },
     template: `<button
       type="button"
-      [tanstackMutation]="mutation"
+      [tanstackMutation]="candidateMutation"
       [mutationVariables]="mutationVariables"
     >
       Move candidate to interview

@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { provideStorybookRouter } from '@otwld/ng-storybook';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 import { expect, fn } from 'storybook/test';
 import { FormStateService } from '../../form-state.service';
@@ -13,10 +13,7 @@ const meta: Meta<LocationInformation> = {
     applicationConfig({
       providers: [
         FormStateService,
-        {
-          provide: Router,
-          useValue: { navigate },
-        },
+        provideStorybookRouter({ navigate }),
       ],
     }),
   ],

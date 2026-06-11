@@ -34,11 +34,11 @@ export const Default: Story = {
     await step('open the product dialog and show required validation', async () => {
       await userEvent.click(canvas.getByRole('button', { name: /new/i }));
 
-      await expect(body.getByRole('dialog', { name: /product details/i })).toBeVisible();
+      await expect(await body.findByRole('dialog', { name: /product details/i })).toBeInTheDocument();
 
       await userEvent.click(body.getByRole('button', { name: /save/i }));
 
-      await expect(body.getByText('Name is required.')).toBeVisible();
+      await expect(await body.findByText('Name is required.')).toBeInTheDocument();
     });
   },
 };

@@ -32,7 +32,7 @@ const meta: Meta<SalesByCategoryWidget> = {
     emptyMessage: 'No category sales to display.',
     options: null,
     themeKey: null,
-  title: 'dashboard/ng/ecommerce/sales-by-category-widget',
+    title: 'Sales by Category',
   },
   component: SalesByCategoryWidget,
   render: (args) => ({

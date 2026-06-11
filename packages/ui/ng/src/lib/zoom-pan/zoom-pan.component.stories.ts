@@ -92,15 +92,15 @@ type Story = StoryObj<ZoomPanComponent>;
 export const Default: Story = {
   play: async ({ canvas, canvasElement, step, userEvent }) => {
     await step('render projected zoomable content', async () => {
+      const content = canvasElement.querySelector<HTMLElement>('.zoom-content');
+
       await expect(canvas.getByText('Candidate pipeline canvas')).toBeVisible();
-      await expect(canvasElement.querySelector('.zoom-content')).toHaveStyle(
-        'transform: translate(-24px, -16px) scale(1.25)',
-      );
+      await expect(content?.style.transform).toBe('translate(-24px, -16px) scale(1.25)');
     });
 
     await step('reset pan and zoom on double click', async () => {
       const wrapper = canvasElement.querySelector('.zoom-wrapper');
-      const content = canvasElement.querySelector('.zoom-content');
+      const content = canvasElement.querySelector<HTMLElement>('.zoom-content');
 
       zoomChange.mockClear();
       panXChange.mockClear();
@@ -111,7 +111,7 @@ export const Default: Story = {
       await expect(zoomChange).toHaveBeenCalledWith(1);
       await expect(panXChange).toHaveBeenCalledWith(0);
       await expect(panYChange).toHaveBeenCalledWith(0);
-      await expect(content).toHaveStyle('transform: translate(0px, 0px) scale(1)');
+      await expect(content?.style.transform).toBe('translate(0px, 0px) scale(1)');
     });
   },
 };

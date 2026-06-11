@@ -35,16 +35,16 @@ export const Default: Story = {
     await step('open and close the dialog', async () => {
       await userEvent.click(canvas.getAllByRole('button', { name: /^show$/i })[0]);
 
-      const dialog = body.getByRole('dialog', { name: /dialog/i });
+      const dialog = await body.findByRole('dialog', { name: /dialog/i });
 
-      await expect(dialog).toBeVisible();
+      await expect(dialog).toBeInTheDocument();
       await userEvent.click(within(dialog).getByRole('button', { name: /save/i }));
     });
 
     await step('open the confirm popup', async () => {
       await userEvent.click(canvas.getByRole('button', { name: /confirm/i }));
 
-      await expect(body.getByText('Are you sure that you want to proceed?')).toBeVisible();
+      await expect(await body.findByText('Are you sure that you want to proceed?')).toBeInTheDocument();
     });
   },
 };

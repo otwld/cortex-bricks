@@ -101,7 +101,7 @@ const meta: Meta<RecentTransactionsTwoWidget> = {
     recipientSelected,
     selectedRecipientId: 'jane-watson',
     sendButtonLabel: 'Send',
-  title: 'dashboard/ng/banking/recent-transactions-two-widget',
+    title: 'Recent Transactions',
   },
   component: RecentTransactionsTwoWidget,
   render: (args) => ({

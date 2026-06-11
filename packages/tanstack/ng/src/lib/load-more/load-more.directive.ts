@@ -26,7 +26,7 @@ export interface LoadMoreQuery {
   standalone: true,
   host: {
     '(click)': 'triggerLoad()',
-    '(keyup.enter)': 'triggerLoad()',
+    '(keydown.enter)': 'triggerKeyboardLoad($event)',
 
     // Apply visual state based on loading status
     '[class.is-loading]': 'query().isFetching()',
@@ -61,5 +61,14 @@ export class LoadMoreDirective<T extends LoadMoreQuery> {
     return this.direction() === 'next'
       ? q.fetchNextPage({ cancelRefetch: false })
       : q.fetchPreviousPage({ cancelRefetch: false });
+  }
+
+  /**
+   * Triggers pagination from keyboard activation without allowing native
+   * button Enter handling to dispatch a second click.
+   */
+  triggerKeyboardLoad(event: Event) {
+    event.preventDefault();
+    return this.triggerLoad();
   }
 }

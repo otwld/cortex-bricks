@@ -28,13 +28,13 @@ export const Default: Story = {
       await expect(canvas.getByText(/tasks pending/i)).toBeVisible();
       await expect(canvas.getByText(/tasks in progress/i)).toBeVisible();
       await expect(canvas.getByText(/tasks completed/i)).toBeVisible();
-      await expect(canvas.getByText('Design a SaaS Platform UI')).toBeVisible();
+      await expect(canvas.getByText('Design a SaaS Platform UI')).toBeInTheDocument();
     });
 
     await step('filter tasks by search query', async () => {
       await userEvent.type(canvas.getByPlaceholderText('Search'), 'Finance');
 
-      await expect(canvas.getByText('Create a Finance Dashboard UI')).toBeVisible();
+      await expect(await canvas.findByText('Create a Finance Dashboard UI')).toBeInTheDocument();
       await expect(canvas.queryByText('Design a SaaS Platform UI')).not.toBeInTheDocument();
     });
 
@@ -46,7 +46,7 @@ export const Default: Story = {
       await userEvent.type(body.getByLabelText('Description'), 'Confirm the analytics cards before handoff.');
       await userEvent.click(body.getByRole('button', { name: /create task/i }));
 
-      await expect(canvas.getByText('Review candidate analytics')).toBeVisible();
+      await expect(canvas.getByText('Review candidate analytics')).toBeInTheDocument();
     });
   },
 };

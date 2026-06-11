@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { provideStorybookRouter } from '@otwld/ng-storybook';
 import { UsersService } from '@otwld/ng-users/core';
 import { UserAccountStatus, UserInvitationStatus, type UserProfileResponse } from '@otwld/ts-users';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
@@ -51,10 +51,7 @@ const meta: Meta<AccountStatus> = {
           provide: FormStateService,
           useFactory: createSeededFormStateService,
         },
-        {
-          provide: Router,
-          useValue: { navigate },
-        },
+        provideStorybookRouter({ navigate }),
         {
           provide: UsersService,
           useValue: { create: createUser },
@@ -84,7 +81,7 @@ export const Default: Story = {
     createUser.mockClear();
 
     await step('render final account settings', async () => {
-      await expect(canvas.getByText('Account Status')).toBeVisible();
+      await expect(canvas.getAllByText('Account Status')[0]).toBeVisible();
       await expect(canvas.getByLabelText('Create invitation')).toBeChecked();
       await expect(canvas.getByRole('button', { name: /save/i })).toBeVisible();
     });

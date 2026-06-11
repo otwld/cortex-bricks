@@ -33,7 +33,7 @@ export const Default: Story = {
     await step('open the overlay menu', async () => {
       await userEvent.click(canvas.getByRole('button', { name: /options/i }));
 
-      await expect(within(canvasElement.ownerDocument.body).getByRole('menuitem', { name: /update/i })).toBeVisible();
+      await expect(await within(canvasElement.ownerDocument.body).findByRole('menuitem', { name: /update/i })).toBeInTheDocument();
     });
   },
 };

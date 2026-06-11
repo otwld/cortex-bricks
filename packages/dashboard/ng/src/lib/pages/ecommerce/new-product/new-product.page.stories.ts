@@ -24,7 +24,7 @@ type Story = StoryObj<NewProductPage>;
 export const Default: Story = {
   play: async ({ canvas, step, userEvent }) => {
     await step('render the product editor', async () => {
-      await expect(canvas.getByText('Add Product')).toBeVisible();
+      await expect(canvas.getAllByText('Add Product')[0]).toBeVisible();
       await expect(canvas.getByText('Product Preview')).toBeVisible();
       await expect(canvas.getByText('Drop or select a cover image')).toBeVisible();
     });

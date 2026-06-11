@@ -134,7 +134,7 @@ const meta: Meta<RecentSalesWidget> = {
     showSearch: true,
     showViewAction: true,
     tableMinWidth: '44rem',
-  title: 'dashboard/ng/ecommerce/recent-sales-widget',
+    title: 'Recent Sales',
     viewHeader: 'View',
   },
   component: RecentSalesWidget,

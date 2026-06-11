@@ -1,6 +1,6 @@
 import { signal } from '@angular/core';
 import { type Meta, moduleMetadata, type StoryObj } from '@storybook/angular';
-import { expect, fn } from 'storybook/test';
+import { expect, fn, waitFor } from 'storybook/test';
 import { UploadStatus } from '@otwld/ts-storage';
 import type { DropZoneOptions } from '../models/upload-options';
 import type { UploadTask } from '../models/upload-task';
@@ -98,7 +98,7 @@ export const Default: Story = {
           dataTransfer,
         }),
       );
-      await expect(dropZone).toHaveClass('sto-dragover');
+      await waitFor(() => expect(dropZone).toHaveClass('sto-dragover'));
 
       dropZone.dispatchEvent(
         new DragEvent('drop', {
@@ -116,7 +116,7 @@ export const Default: Story = {
         },
         multiple: true,
       });
-      await expect(dropZone).not.toHaveClass('sto-dragover');
+      await waitFor(() => expect(dropZone).not.toHaveClass('sto-dragover'));
     });
   },
 };

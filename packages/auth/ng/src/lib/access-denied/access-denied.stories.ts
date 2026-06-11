@@ -1,6 +1,6 @@
-import { Location } from '@angular/common';
 import { type Meta, type StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
+import { provideStorybookLocation } from '@otwld/ng-storybook';
 import { expect, fn } from 'storybook/test';
 import { AccessDeniedPage } from './access-denied';
 
@@ -12,12 +12,7 @@ const meta: Meta<AccessDeniedPage> = {
   decorators: [
     applicationConfig({
       providers: [
-        {
-          provide: Location,
-          useValue: {
-            back: goBack,
-          },
-        },
+        provideStorybookLocation({ back: goBack }),
       ],
     }),
   ],

@@ -55,7 +55,7 @@ const meta: Meta<OverviewWidget> = {
     options: null,
     series,
     themeKey: null,
-  title: 'dashboard/ng/banking/overview-widget',
+    title: 'Overview',
   },
   component: OverviewWidget,
   render: (args) => ({

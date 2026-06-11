@@ -22,7 +22,7 @@ type Story = StoryObj<InputDemo>;
 
 /** Default Input Demo state. */
 export const Default: Story = {
-  play: async ({ canvas, step, userEvent }) => {
+  play: async ({ canvas, canvasElement, step, userEvent }) => {
     await step('render the input groups', async () => {
       await expect(canvas.getByText('InputText')).toBeVisible();
       await expect(canvas.getByText('AutoComplete')).toBeVisible();
@@ -32,10 +32,11 @@ export const Default: Story = {
 
     await step('update basic controls', async () => {
       const defaultInput = canvas.getByPlaceholderText('Default');
-      const radioOption = canvas.getAllByLabelText('Chicago')[0];
+      const radioOption = canvasElement.querySelector<HTMLInputElement>('p-radiobutton#option1 input[type="radio"]');
 
       await userEvent.type(defaultInput, 'Candidate search');
-      await userEvent.click(radioOption);
+      await expect(radioOption).toBeInTheDocument();
+      await userEvent.click(radioOption!);
 
       await expect(defaultInput).toHaveValue('Candidate search');
       await expect(radioOption).toBeChecked();

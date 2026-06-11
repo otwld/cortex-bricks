@@ -45,7 +45,7 @@ const usage: AiQuotaUsageSnapshot = {
 const summary = {
   bullets: ['The upload flow is faster.', 'Progress labels need clearer status copy.'],
   sentiment: 'positive',
-  title: 'dashboard/ng/apps/ai/object/ai-object',
+  title: 'Upload flow feedback',
 };
 
 const listModels = fn(async () => models);

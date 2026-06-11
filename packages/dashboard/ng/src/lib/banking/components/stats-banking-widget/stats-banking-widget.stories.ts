@@ -7,7 +7,7 @@ const cardSelected = fn();
 const cards: readonly BankingStatCard[] = [
   {
     id: 'debit-card',
-  title: 'dashboard/ng/banking/stats-banking-widget',
+    title: 'Recruiter Wallet',
     label: 'Balance',
     value: '$2,000.00',
     number: '**** **** **** 1412',

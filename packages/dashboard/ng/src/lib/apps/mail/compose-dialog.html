@@ -1,5 +1,6 @@
         <p-dialog
             [(visible)]="visible"
+            header="Compose"
             [modal]="false"
             [closable]="false"
             [draggable]="false"
@@ -8,7 +9,7 @@
             (onHide)="onHide()"
             [pt]="{
                 root: { class: 'rounded-lg fixed! bottom-4! right-4! transform-none! m-0! shadow-lg' },
-                header: { class: 'hidden!' },
+                header: { class: 'sr-only!' },
                 content: { class: 'p-0!' }
             }"
         >

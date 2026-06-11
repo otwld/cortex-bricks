@@ -1,5 +1,5 @@
-import { Router } from '@angular/router';
 import { SignedUrlCacheService, StorageService } from '@otwld/ng-storage';
+import { provideStorybookRouter } from '@otwld/ng-storybook';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 import { of } from 'rxjs';
 import { expect, fn } from 'storybook/test';
@@ -15,10 +15,7 @@ const meta: Meta<BasicInformation> = {
     applicationConfig({
       providers: [
         FormStateService,
-        {
-          provide: Router,
-          useValue: { navigate },
-        },
+        provideStorybookRouter({ navigate }),
         {
           provide: StorageService,
           useValue: { upload: fn() },

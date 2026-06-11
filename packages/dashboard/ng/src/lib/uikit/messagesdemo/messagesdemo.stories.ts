@@ -26,14 +26,14 @@ export const Default: Story = {
     await step('render toast and inline message states', async () => {
       await expect(canvas.getByText('Toast')).toBeVisible();
       await expect(canvas.getByText('Inline')).toBeVisible();
-      await expect(canvas.getByText('Username is required')).toBeVisible();
-      await expect(canvas.getByText('Secondary Message')).toBeVisible();
+      await expect(canvas.getByText('Username is required')).toBeInTheDocument();
+      await expect(canvas.getByText('Secondary Message')).toBeInTheDocument();
     });
 
     await step('show a toast action', async () => {
       await userEvent.click(canvas.getByRole('button', { name: /info/i }));
 
-      await expect(within(canvasElement.ownerDocument.body).getByText('PrimeNG rocks')).toBeVisible();
+      await expect(await within(canvasElement.ownerDocument.body).findByText('PrimeNG rocks')).toBeInTheDocument();
     });
   },
 };

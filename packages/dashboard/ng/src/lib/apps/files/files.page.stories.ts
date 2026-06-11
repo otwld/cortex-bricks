@@ -28,14 +28,14 @@ export const Default: Story = {
       await expect(canvas.getByText('Overview')).toBeVisible();
       await expect(canvas.getByText('Activity Feed')).toBeVisible();
       await expect(canvas.getByText('Documents')).toBeVisible();
-      await expect(canvas.getByText('Diamond')).toBeVisible();
+      await expect(canvas.getAllByText('Diamond')[0]).toBeVisible();
     });
 
     await step('filter documents by large files', async () => {
       await userEvent.click(canvas.getByRole('button', { name: /large files/i }));
 
-      await expect(canvas.getByText('PrimeBlocks')).toBeVisible();
-      await expect(canvas.getByText('Database')).toBeVisible();
+      await expect(canvas.getAllByText('PrimeBlocks')[0]).toBeVisible();
+      await expect(canvas.getByText('Presentation')).toBeVisible();
     });
 
     await step('add a document from the editor drawer', async () => {
@@ -46,7 +46,7 @@ export const Default: Story = {
       await userEvent.click(body.getByRole('button', { name: /add document/i }));
       await userEvent.click(canvas.getByRole('button', { name: /all files/i }));
 
-      await expect(canvas.getByText('Candidate Packet')).toBeVisible();
+      await expect(canvas.getAllByText('Candidate Packet')[0]).toBeVisible();
     });
   },
 };

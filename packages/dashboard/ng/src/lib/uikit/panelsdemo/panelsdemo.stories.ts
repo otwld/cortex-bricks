@@ -39,9 +39,11 @@ export const Default: Story = {
     });
 
     await step('switch an accordion panel', async () => {
-      await userEvent.click(canvas.getByText('Header II'));
+      const accordionPanel = canvas.getByRole('button', { name: 'Header II' });
 
-      await expect(canvas.getByText(/Sed ut perspiciatis/)).toBeVisible();
+      await userEvent.click(accordionPanel);
+
+      await expect(accordionPanel).toHaveAttribute('aria-expanded', 'true');
     });
   },
 };

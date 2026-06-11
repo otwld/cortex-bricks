@@ -42,7 +42,7 @@ const meta: Meta<BestSellingWidget> = {
     actionSelected,
     actions,
     products,
-  title: 'dashboard/ng/ecommerce/best-selling-widget',
+    title: 'Best Selling Products',
   },
   component: BestSellingWidget,
   render: (args) => ({

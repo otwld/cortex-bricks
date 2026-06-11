@@ -43,11 +43,18 @@ type Story = StoryObj<ResetPasswordPage>;
 
 /** Default Reset Password Page state. */
 export const Default: Story = {
-  play: async ({ canvas, step, userEvent }) => {
+  play: async ({ canvas, canvasElement, step, userEvent }) => {
     await step('enter matching replacement passwords', async () => {
+      const passwordInput = canvasElement.querySelector<HTMLInputElement>('input[placeholder="Password"]');
+      const repeatPasswordInput = canvasElement.querySelector<HTMLInputElement>(
+        'input[placeholder="Repeat Password"]',
+      );
+
       await expect(canvas.getByText(/enter your new password/i)).toBeVisible();
-      await userEvent.type(canvas.getByPlaceholderText('Password'), 'candidate-match-2026');
-      await userEvent.type(canvas.getByPlaceholderText('Repeat Password'), 'candidate-match-2026');
+      await expect(passwordInput).toBeVisible();
+      await expect(repeatPasswordInput).toBeVisible();
+      await userEvent.type(passwordInput!, 'candidate-match-2026');
+      await userEvent.type(repeatPasswordInput!, 'candidate-match-2026');
     });
 
     await step('submit the token-backed password reset', async () => {

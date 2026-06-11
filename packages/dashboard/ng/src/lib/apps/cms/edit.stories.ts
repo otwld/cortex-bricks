@@ -26,7 +26,7 @@ export const Default: Story = {
       await expect(canvas.getByRole('heading', { name: /create a new post/i })).toBeVisible();
       await expect(canvas.getByLabelText('Title')).toHaveValue('The Smartest Ways to Earn Airline Miles');
       await expect(canvas.getByRole('button', { name: /save draft/i })).toBeVisible();
-      await expect(canvas.getByRole('button', { name: /publish/i })).toBeVisible();
+      await expect(canvas.getAllByRole('button', { name: /publish/i })[0]).toBeVisible();
     });
 
     await step('edit the article title', async () => {

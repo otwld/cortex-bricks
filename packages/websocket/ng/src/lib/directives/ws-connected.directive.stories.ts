@@ -46,9 +46,9 @@ export const Default: Story = {
   },
   render: (args) => ({
     props: args,
-    template: `<section *wsConnected="wsConnected; wsConnectedClient: wsConnectedClient">
-      Live candidate updates connected.
-    </section>`,
+    template: `<ng-template [wsConnected]="wsConnected" [wsConnectedClient]="wsConnectedClient">
+      <section>Live candidate updates connected.</section>
+    </ng-template>`,
   }),
   play: async ({ canvas, step }) => {
     await step('render content when the websocket state matches', async () => {

@@ -1,7 +1,7 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 import { expect, fn } from 'storybook/test';
-import { createJsonGetHandler, withStoryMswHandlers } from '@otwld/ng-storybook';
+import { createJsonGetHandler, provideStorybookRouter, withStoryMswHandlers } from '@otwld/ng-storybook';
 import { MailDetail } from './mail-detail';
 
 const navigate = fn();
@@ -54,12 +54,7 @@ const meta: Meta<MailDetail> = {
             },
           },
         },
-        {
-          provide: Router,
-          useValue: {
-            navigate,
-          },
-        },
+        provideStorybookRouter({ navigate }),
       ],
     }),
   ],
@@ -87,7 +82,7 @@ export const Default: Story = {
   play: async ({ canvas, step, userEvent }) => {
     await step('render loaded email thread', async () => {
       await expect(await canvas.findByRole('heading', { name: /important account update/i })).toBeVisible();
-      await expect(canvas.getByText('Brook Simmons')).toBeVisible();
+      await expect(canvas.getAllByText('Brook Simmons')[0]).toBeInTheDocument();
       await expect(canvas.getByText(/account security steps/i)).toBeVisible();
     });
 

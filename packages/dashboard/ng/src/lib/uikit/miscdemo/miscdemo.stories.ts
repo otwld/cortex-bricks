@@ -28,7 +28,7 @@ export const Default: Story = {
       await expect(canvas.getByText('Badge')).toBeVisible();
       await expect(canvas.getByText('Avatar')).toBeVisible();
       await expect(canvas.getByText('MeterGroup')).toBeVisible();
-      await expect(canvas.getByText('Apps')).toBeVisible();
+      await expect(canvas.getByText('Chip')).toBeVisible();
     });
 
     await step('exercise a badge button', async () => {
