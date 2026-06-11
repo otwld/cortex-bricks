@@ -31,47 +31,18 @@ An AI agent should look here when a task mentions dashboard navigation, sidebars
 ```ts
 import { DashboardLayout } from '@otwld/ng-dashboard/layout';
 import { DashboardLayoutService } from '@otwld/ng-dashboard/core';
+import { dashboardChildRoutes } from '@otwld/ng-dashboard/routes';
 ```
 
 Dashboard features are exposed through explicit secondary entry points instead
-of source-shaped deep imports. Supported entry points currently include:
+of source-shaped deep imports. Dashboard apps, pages, dashboards, and UI kit
+demo pages sit behind the route catalog instead of one public entry point per
+page. Supported entry points currently include:
 
 - `@otwld/ng-dashboard/core`
 - `@otwld/ng-dashboard/layout`
-- `@otwld/ng-dashboard/banking`
-- `@otwld/ng-dashboard/ecommerce`
-- `@otwld/ng-dashboard/apps`
-- `@otwld/ng-dashboard/apps/ai`
-- `@otwld/ng-dashboard/apps/chat`
-- `@otwld/ng-dashboard/apps/cms`
-- `@otwld/ng-dashboard/apps/files`
-- `@otwld/ng-dashboard/apps/mail`
-- `@otwld/ng-dashboard/apps/tasklist`
-- `@otwld/ng-dashboard/pages/blocks`
-- `@otwld/ng-dashboard/pages/contact-us`
-- `@otwld/ng-dashboard/pages/crud`
-- `@otwld/ng-dashboard/pages/ecommerce`
-- `@otwld/ng-dashboard/pages/empty`
-- `@otwld/ng-dashboard/pages/faq`
-- `@otwld/ng-dashboard/pages/help`
-- `@otwld/ng-dashboard/pages/invoice`
-- `@otwld/ng-dashboard/pages/notfound`
-- `@otwld/ng-dashboard/pages/user-management`
-- `@otwld/ng-dashboard/uikit/buttons`
-- `@otwld/ng-dashboard/uikit/chartdemo`
-- `@otwld/ng-dashboard/uikit/filedemo`
-- `@otwld/ng-dashboard/uikit/formlayoutdemo`
-- `@otwld/ng-dashboard/uikit/inputdemo`
-- `@otwld/ng-dashboard/uikit/listdemo`
-- `@otwld/ng-dashboard/uikit/mediademo`
-- `@otwld/ng-dashboard/uikit/menudemo`
-- `@otwld/ng-dashboard/uikit/messagesdemo`
-- `@otwld/ng-dashboard/uikit/miscdemo`
-- `@otwld/ng-dashboard/uikit/overlaydemo`
-- `@otwld/ng-dashboard/uikit/panelsdemo`
-- `@otwld/ng-dashboard/uikit/tabledemo`
-- `@otwld/ng-dashboard/uikit/timelinedemo`
-- `@otwld/ng-dashboard/uikit/treedemo`
+- `@otwld/ng-dashboard/pages`
+- `@otwld/ng-dashboard/routes`
 
 ## Development
 

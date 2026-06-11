@@ -15,6 +15,7 @@
 @source "../../../packages/sdk/ts";
 @source "../../../packages/storage/ng";
 @source "../../../packages/storage/ts";
+@source "../../../packages/storybook/ng";
 @source "../../../packages/users/ng";
 @source "../../../packages/users/ts";
 @source "../../../packages/websocket/ng";

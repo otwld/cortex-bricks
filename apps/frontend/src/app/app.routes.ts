@@ -23,7 +23,7 @@ export const appRoutes: Routes = [
   ...websocketDemoRoutes,
   {
     path: 'notfound',
-    loadComponent: () => import('@otwld/ng-dashboard/pages/notfound').then((m) => m.NotFoundPage),
+    loadComponent: () => import('@otwld/ng-dashboard/pages').then((m) => m.NotFoundPage),
   },
   //  { path: '**', redirectTo: '/notfound' },
   //   component: DashboardLayout,

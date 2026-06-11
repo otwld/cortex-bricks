@@ -1,4 +1,36 @@
 @import 'tailwindcss' source(none);
+
+/* nx-tailwind-sources:start */
+@source "../../../packages/ai/nest";
+@source "../../../packages/ai/ng";
+@source "../../../packages/ai/ts";
+@source "../../../packages/auth/nest";
+@source "../../../packages/auth/ng";
+@source "../../../packages/auth/ts";
+@source "../../../packages/chat/ts";
+@source "../../../packages/dashboard/ng";
+@source "../../../packages/databases/nest";
+@source "../../../packages/feature-flags/nest";
+@source "../../../packages/feature-flags/ng";
+@source "../../../packages/feature-flags/ts";
+@source "../../../packages/mail/nest";
+@source "../../../packages/sdk/nest";
+@source "../../../packages/sdk/ng";
+@source "../../../packages/sdk/ts";
+@source "../../../packages/storage/nest";
+@source "../../../packages/storage/ng";
+@source "../../../packages/storage/ts";
+@source "../../../packages/storybook/ng";
+@source "../../../packages/storybook/ts";
+@source "../../../packages/tanstack/ng";
+@source "../../../packages/ui/ng";
+@source "../../../packages/users/nest";
+@source "../../../packages/users/ng";
+@source "../../../packages/users/ts";
+@source "../../../packages/websocket/nest";
+@source "../../../packages/websocket/ng";
+@source "../../../packages/websocket/ts";
+/* nx-tailwind-sources:end */
 @import 'tailwindcss-primeui';
 @import 'primeicons/primeicons.css';
 
