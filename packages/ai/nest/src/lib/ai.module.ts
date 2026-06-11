@@ -2,15 +2,19 @@ import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
+  createNestFeatureAsyncOptionsClassProvider,
+  createNestFeatureAsyncOptionsProvider,
+} from '@otwld/nest-sdk';
+import {
   AI_ENDPOINT_OPTIONS,
   AI_MODULE_OPTIONS,
-  AiModuleOptionsFactory,
   ManualAiModuleAsyncOptions,
   NormalizedAiEndpointOptions,
+  NormalizedAiModuleOptions,
   normalizeAiEndpointOptions,
   validateAiModuleOptions,
 } from './config/ai-module-options';
-import { AiModuleOptions } from './config/ai-module-options';
+import { AiModuleOptions, AiModuleOptionsFactory } from './config/ai-module-options';
 import { AiController } from './controllers/ai.controller';
 import { AiEndpointGuard } from './guards/ai-endpoint.guard';
 import { AiProviderRegistryService } from './providers/ai-provider-registry.service';
@@ -23,35 +27,6 @@ import { AiService } from './services/ai.service';
 import { AiToolRegistry } from './tools/ai-tool.registry';
 
 const AI_PROVIDERS = [AiProviderRegistryService, AiObjectSchemaRegistry, AiToolRegistry, AiService, AiEndpointGuard, AiQuotaService];
-
-function createAsyncOptionsProvider(asyncOptions: ManualAiModuleAsyncOptions, endpoints: NormalizedAiEndpointOptions): Provider {
-  const factory = asyncOptions.useFactory;
-  if (factory) {
-    return {
-      provide: AI_MODULE_OPTIONS,
-      useFactory: async (...args: unknown[]) => ({
-        ...validateAiModuleOptions(await factory(...args)),
-        endpoints,
-      }),
-      inject: asyncOptions.inject ?? [],
-    };
-  }
-
-  const inject = (asyncOptions.useClass ?? asyncOptions.useExisting) as Type<AiModuleOptionsFactory>;
-  return {
-    provide: AI_MODULE_OPTIONS,
-    useFactory: async (factoryInstance: AiModuleOptionsFactory) => ({
-      ...validateAiModuleOptions(await factoryInstance.createAiOptions()),
-      endpoints,
-    }),
-    inject: [inject],
-  };
-}
-
-function createAsyncOptionsClassProvider(asyncOptions: ManualAiModuleAsyncOptions): Provider[] {
-  if (!asyncOptions.useClass) return [];
-  return [{ provide: asyncOptions.useClass, useClass: asyncOptions.useClass }];
-}
 
 function createEndpointOptionsProvider(endpoints: NormalizedAiEndpointOptions): Provider {
   return { provide: AI_ENDPOINT_OPTIONS, useValue: endpoints };
@@ -112,14 +87,21 @@ export class AiModule {
       imports: [...(asyncOptions.imports ?? []), ...createEndpointImports(endpoints), ...createQuotaImports(endpoints)],
       controllers: endpoints.controller ? [AiController] : [],
       providers: [
-        createAsyncOptionsProvider(asyncOptions, endpoints),
+        createNestFeatureAsyncOptionsProvider<AiModuleOptions, AiModuleOptionsFactory, NormalizedAiModuleOptions>(
+          AI_MODULE_OPTIONS,
+          asyncOptions,
+          'createAiOptions',
+          async (options) => ({
+            ...validateAiModuleOptions(options),
+            endpoints,
+          }),
+        ),
         createEndpointOptionsProvider(endpoints),
-        ...createAsyncOptionsClassProvider(asyncOptions),
+        ...createNestFeatureAsyncOptionsClassProvider(asyncOptions),
         ...AI_PROVIDERS,
         ...createQuotaProviders(endpoints),
       ],
       exports: [AI_MODULE_OPTIONS, AI_ENDPOINT_OPTIONS, ...AI_PROVIDERS, ...createQuotaExports(endpoints)],
     };
   }
-
 }

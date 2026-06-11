@@ -24,6 +24,7 @@
     "zod": "^3.24.0"
   },
   "dependencies": {
+    "@otwld/nest-sdk": "workspace:0.0.1",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

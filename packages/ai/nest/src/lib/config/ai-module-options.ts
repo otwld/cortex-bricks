@@ -1,5 +1,5 @@
-import { CanActivate, ModuleMetadata, Type } from '@nestjs/common';
-import type { FactoryProvider } from '@nestjs/common';
+import { CanActivate, Type } from '@nestjs/common';
+import type { NestFeatureModuleClassAsyncOptions } from '@otwld/nest-sdk';
 import { z } from 'zod';
 import {
   AiModelCapability,
@@ -145,12 +145,9 @@ export interface AiModuleOptionsFactory {
 /**
  * Manual async configuration shape accepted by `AiModule.forRootAsync`.
  */
-export interface ManualAiModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+export interface ManualAiModuleAsyncOptions
+  extends NestFeatureModuleClassAsyncOptions<AiModuleOptions, AiModuleOptionsFactory> {
   endpoints?: AiEndpointOptions;
-  useFactory?: (...args: unknown[]) => Promise<AiModuleOptions> | AiModuleOptions;
-  inject?: FactoryProvider['inject'];
-  useClass?: Type<AiModuleOptionsFactory>;
-  useExisting?: Type<AiModuleOptionsFactory>;
 }
 
 const providerModelSchema = z.string().regex(/^[a-z][a-z0-9-]*:.+$/, 'model references must use provider:model format');

@@ -2,6 +2,8 @@ import { DynamicModule, Module } from '@nestjs/common';
 
 import {
   collectNestFeatureModuleImports,
+  createNestFeatureAsyncOptionsClassProvider,
+  createNestFeatureAsyncOptionsProvider,
   createNestFeatureOptionsProvider,
   createNestFeatureProvider,
   createNestFeatureValueProvider,
@@ -11,6 +13,12 @@ const FEATURE_OPTIONS = Symbol('FEATURE_OPTIONS');
 
 @Module({})
 class TestModule {}
+
+class TestOptionsFactory {
+  createFeatureOptions(): { enabled: boolean } {
+    return { enabled: true };
+  }
+}
 
 describe('Nest feature module registration helpers', () => {
   it('creates async factory providers', async () => {
@@ -49,6 +57,39 @@ describe('Nest feature module registration helpers', () => {
       provide: FEATURE_OPTIONS,
       inject: [],
     });
+  });
+
+  it('creates class-backed async options providers', async () => {
+    const provider = createNestFeatureAsyncOptionsProvider(
+      FEATURE_OPTIONS,
+      { useClass: TestOptionsFactory },
+      'createFeatureOptions',
+      (options) => ({ ...options, source: 'class' }),
+    );
+
+    expect(provider).toMatchObject({
+      provide: FEATURE_OPTIONS,
+      inject: [TestOptionsFactory],
+    });
+
+    expect(
+      await (provider as { useFactory: (factory: TestOptionsFactory) => unknown }).useFactory(
+        new TestOptionsFactory(),
+      ),
+    ).toEqual({ enabled: true, source: 'class' });
+  });
+
+  it('creates useClass provider registrations', () => {
+    expect(
+      createNestFeatureAsyncOptionsClassProvider({
+        useClass: TestOptionsFactory,
+      }),
+    ).toEqual([
+      {
+        provide: TestOptionsFactory,
+        useClass: TestOptionsFactory,
+      },
+    ]);
   });
 
   it('collects unique module imports in source order', () => {

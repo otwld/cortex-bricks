@@ -45,6 +45,32 @@ export interface NestFeatureModuleAsyncOptions<T>
 }
 
 /**
+ * Method names on an options factory that create feature-module options.
+ */
+export type NestFeatureModuleOptionsFactoryMethod<TFactory, TOptions> = Extract<
+  {
+    [TKey in keyof TFactory]: TFactory[TKey] extends () =>
+      | Promise<TOptions>
+      | TOptions
+      ? TKey
+      : never;
+  }[keyof TFactory],
+  string
+>;
+
+/**
+ * Async options shape for modules that accept `useFactory`, `useClass`, or
+ * `useExisting` options factories.
+ */
+export interface NestFeatureModuleClassAsyncOptions<TOptions, TFactory>
+  extends Pick<ModuleMetadata, 'imports'> {
+  useFactory?: (...args: unknown[]) => Promise<TOptions> | TOptions;
+  inject?: NestFeatureModuleInject;
+  useClass?: Type<TFactory>;
+  useExisting?: Type<TFactory>;
+}
+
+/**
  * Input shape accepted when collecting imports from arrays and module metadata.
  */
 export type NestFeatureModuleImportsSource =
