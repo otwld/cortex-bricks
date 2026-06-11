@@ -28,19 +28,14 @@ const genetics = createFakerGenetics({
   refDate: '2026-01-01T00:00:00.000Z',
 });
 
-const searchHandler = createMswSearchGetHandler(
-  genetics,
-  '/api/recruitment/candidates/search',
-  candidates,
-  {
-    search: {
-      searchBy: ['fullName', 'email', 'companyName', (item) => item.skills.join(' ')],
-      sorters: {
-        fullName: (item) => item.fullName,
-      },
+const searchHandler = createMswSearchGetHandler(genetics, '/api/recruitment/candidates/search', candidates, {
+  search: {
+    searchBy: ['fullName', 'email', 'companyName', (item) => item.skills.join(' ')],
+    sorters: {
+      fullName: (item) => item.fullName,
     },
-  }
-);
+  },
+});
 ```
 
 `createMswSearchGetHandler` parses request URL query params and runs `genetics.search(...)`.

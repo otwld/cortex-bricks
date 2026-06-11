@@ -5,14 +5,17 @@ import { Meta } from '@storybook/addon-docs/blocks';
 # @otwld/ng-storybook
 
 ## Goal
+
 Shared Angular Storybook glue for consistent DI/provider setup in source-brick stories.
 
 ## Current Focus
+
 - Provide generic story decorators rather than feature-specific mocks.
 - Keep Storybook wiring consistent across Angular library stories.
 - Reduce repeated provider bootstrapping in story files.
 
 ## Public API Snapshot
+
 - Angular provider decorator helpers.
 - MSW preview and story-level handler composition helpers.
 - Static JSON and GraphQL handler factories.
@@ -20,6 +23,7 @@ Shared Angular Storybook glue for consistent DI/provider setup in source-brick s
 - Reusable search handler factories for list/search stories.
 
 ## Boundaries
+
 - No business-domain fixtures in the shared helper library.
 - Story infrastructure only.
 - Keep helper API small and framework-focused.
