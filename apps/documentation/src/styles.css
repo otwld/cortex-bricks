@@ -1,4 +1,6 @@
 @import 'tailwindcss' source(none);
+@import 'tailwindcss-primeui';
+@import 'primeicons/primeicons.css';
 
 /* nx-tailwind-sources:start */
 @source "../../../packages/ai/nest";
@@ -31,8 +33,6 @@
 @source "../../../packages/websocket/ng";
 @source "../../../packages/websocket/ts";
 /* nx-tailwind-sources:end */
-@import 'tailwindcss-primeui';
-@import 'primeicons/primeicons.css';
 
 @custom-variant dark (&:where(.app-dark, .app-dark *));
 
