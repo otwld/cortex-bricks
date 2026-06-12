@@ -42,13 +42,32 @@ type Story = StoryObj<ScrollScaleDirective>;
 export const Default: Story = {
   render: (args) => ({
     props: args,
-    template: `<div kitScrollScale [scaleFactor]="scaleFactor" [minScale]="minScale" [maxScale]="maxScale" style="padding: 1rem;">
-      Candidate application activity
-    </div>`,
+    template: `<section style="min-height: 160vh; padding: 2rem; background: linear-gradient(180deg, #f8fafc 0%, #fef3c7 50%, #f0fdfa 100%); color: #0f172a;">
+      <div style="max-width: 42rem; margin: 0 auto 20rem;">
+        <p style="margin: 0 0 0.5rem; color: #b45309; font-size: 0.875rem; font-weight: 700; text-transform: uppercase;">Recruiter dashboard focus</p>
+        <h2 style="margin: 0; font-size: 1.75rem; line-height: 1.2;">Candidate application activity</h2>
+        <p style="margin: 0.75rem 0 0; color: #475569; font-size: 1rem;">The application card scales from the configured scroll factor, minimum scale, and maximum scale values.</p>
+      </div>
+
+      <div style="max-width: 42rem; margin: 0 auto 44rem; padding: 1.5rem; border: 1px dashed #f59e0b; border-radius: 0.5rem; background: rgba(255, 255, 255, 0.72);">
+        <article
+          data-testid="scroll-scale-target"
+          kitScrollScale
+          [scaleFactor]="scaleFactor"
+          [minScale]="minScale"
+          [maxScale]="maxScale"
+          style="max-width: 34rem; margin: 0 auto; padding: 1.25rem; border: 1px solid #fbbf24; border-radius: 0.5rem; background: #ffffff; box-shadow: 0 1.25rem 3rem rgba(146, 64, 14, 0.16); transform-origin: center;"
+        >
+          <p style="margin: 0 0 0.5rem; color: #d97706; font-size: 0.8125rem; font-weight: 700;">Candidate profile</p>
+          <h3 style="margin: 0; font-size: 1.25rem; line-height: 1.25;">Ari Patel - Platform Engineer</h3>
+          <p style="margin: 0.75rem 0 0; color: #475569;">Application momentum increases as the recruiter scrolls through the review surface.</p>
+        </article>
+      </div>
+    </section>`,
   }),
   play: async ({ canvas, step }) => {
     await step('scale the host when the window scrolls', async () => {
-      const host = canvas.getByText('Candidate application activity');
+      const host = canvas.getByTestId('scroll-scale-target');
       const originalScrollY = window.scrollY;
 
       Object.defineProperty(window, 'scrollY', {
