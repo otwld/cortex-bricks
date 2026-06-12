@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { Card } from 'primeng/card';
 
 interface OrderItem {
     id: number;
@@ -30,7 +31,7 @@ interface ShippingAddress {
 /** Order summary confirmation page. */
 @Component({
     selector: 'app-order-summary-page',
-    imports: [ButtonModule],
+    imports: [ButtonModule, Card],
     templateUrl: './order-summary.page.html',
 })
 export class OrderSummaryPage {

@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { Card } from 'primeng/card';
 
 interface CartItem {
     id: number;
@@ -28,7 +29,7 @@ interface RecommendedProduct {
 /** Shopping cart page with totals and recommendations. */
 @Component({
     selector: 'app-shopping-cart-page',
-    imports: [FormsModule, ButtonModule, DividerModule, InputNumberModule, InputTextModule],
+    imports: [FormsModule, ButtonModule, DividerModule, InputNumberModule, InputTextModule, Card],
     templateUrl: './shopping-cart.page.html',
 })
 export class ShoppingCartPage {

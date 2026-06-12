@@ -4,6 +4,7 @@ import type { ChartData, ChartDataset, ChartOptions } from 'chart.js';
 import { $dt } from '@primeuix/themes';
 import { ChartModule } from 'primeng/chart';
 import { Subject } from 'rxjs';
+import { Card } from 'primeng/card';
 
 /**
  * Semantic color tone for revenue stream chart series.
@@ -99,7 +100,7 @@ const CONTENT_BORDER_COLOR_TOKEN: RevenueStreamThemeToken = { tokenPath: 'conten
 @Component({
   standalone: true,
   selector: 'app-revenue-stream-widget',
-  imports: [ChartModule],
+  imports: [ChartModule, Card],
   templateUrl: './revenue-stream-widget.html',
 })
 export class RevenueStreamWidget {

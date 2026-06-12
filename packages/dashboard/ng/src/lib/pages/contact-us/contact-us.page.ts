@@ -7,11 +7,12 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
+import { Card } from 'primeng/card';
 
 /** Contact us page with map placeholder and email form. */
 @Component({
   selector: 'app-contact-us-page',
-  imports: [NgStyle, FormsModule, InputTextModule, TextareaModule, ButtonModule, IconField, InputIcon],
+  imports: [NgStyle, FormsModule, InputTextModule, TextareaModule, ButtonModule, IconField, InputIcon, Card],
   templateUrl: './contact-us.page.html',
 })
 export class ContactUsPage {

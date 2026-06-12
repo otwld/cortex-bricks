@@ -5,6 +5,7 @@ import { AiChatService, AiModelsService, AiUsageCardComponent } from '@otwld/ng-
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
+import { Card } from 'primeng/card';
 
 interface AiChatDisplayPart {
   type: string;
@@ -25,7 +26,7 @@ interface AiChatDisplayMessage {
  */
 @Component({
   selector: 'app-ai-chat-page',
-  imports: [AiUsageCardComponent, ButtonModule, FormsModule, SelectModule, TextareaModule],
+  imports: [AiUsageCardComponent, ButtonModule, FormsModule, SelectModule, TextareaModule, Card],
   templateUrl: './ai-chat.page.html',
 })
 export class AiChatPage implements OnInit {

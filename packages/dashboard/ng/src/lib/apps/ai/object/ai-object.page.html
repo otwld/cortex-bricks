@@ -15,7 +15,7 @@
   <ai-usage-card />
 
   <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-    <section class="card flex flex-col gap-3">
+    <p-card class="flex flex-col gap-3">
       <label class="font-medium" for="ai-object-prompt">Prompt</label>
       <textarea id="ai-object-prompt" pTextarea rows="4" [ngModel]="prompt()" (ngModelChange)="prompt.set($event)" class="w-full"></textarea>
 
@@ -23,15 +23,15 @@
       <textarea id="ai-object-input" pTextarea rows="8" [ngModel]="input()" (ngModelChange)="input.set($event)" class="w-full"></textarea>
 
       <p-button label="Generate Object" icon="pi pi-code" [loading]="loading()" (onClick)="submit()" />
-    </section>
+    </p-card>
 
-    <section class="card">
+    <p-card>
       <h2 class="mb-3 text-lg font-semibold">Structured Result</h2>
       @if (error()) {
         <p class="text-red-500">{{ error() }}</p>
       } @else {
         <pre class="min-h-72 whitespace-pre-wrap text-sm leading-6">{{ result() | json }}</pre>
       }
-    </section>
+    </p-card>
   </div>
 </div>

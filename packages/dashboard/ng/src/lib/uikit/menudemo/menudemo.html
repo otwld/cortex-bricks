@@ -1,4 +1,4 @@
-<div class="card">
+<p-card>
   <div class="font-semibold text-xl mb-4">Menubar</div>
   <p-menubar [model]="nestedMenuItems">
     <ng-template #end>
@@ -8,14 +8,14 @@
       </p-iconfield>
     </ng-template>
   </p-menubar>
-</div>
-<div class="card">
+</p-card>
+<p-card class="mt-8">
   <div class="font-semibold text-xl mb-4">Breadcrumb</div>
   <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome"></p-breadcrumb>
-</div>
-<div class="flex flex-col md:flex-row gap-8">
+</p-card>
+<div class="flex flex-col md:flex-row gap-8 mt-8">
   <div class="md:w-1/2">
-    <div class="card">
+    <p-card>
       <div class="font-semibold text-xl mb-4">Steps</div>
       <p-stepper [value]="1">
         <p-step-list>
@@ -24,10 +24,10 @@
           <p-step [value]="3">Header III</p-step>
         </p-step-list>
       </p-stepper>
-    </div>
+    </p-card>
   </div>
   <div class="md:w-1/2">
-    <div class="card">
+    <p-card>
       <div class="font-semibold text-xl mb-4">TabMenu</div>
       <p-tabs [value]="0">
         <p-tablist>
@@ -36,48 +36,50 @@
           <p-tab [value]="2">Header III</p-tab>
         </p-tablist>
       </p-tabs>
-    </div>
+    </p-card>
   </div>
 </div>
 <div class="flex flex-col md:flex-row gap-8 mt-8">
   <div class="md:w-1/3">
-    <div class="card">
+    <p-card>
       <div class="font-semibold text-xl mb-4">Tiered Menu</div>
       <p-tieredmenu [model]="tieredMenuItems"></p-tieredmenu>
-    </div>
+    </p-card>
   </div>
   <div class="md:w-1/3">
-    <div class="card">
+    <p-card>
       <div class="font-semibold text-xl mb-4">Plain Menu</div>
       <p-menu [model]="menuItems"></p-menu>
-    </div>
+    </p-card>
   </div>
   <div class="md:w-1/3">
-    <div class="card">
+    <p-card>
       <div class="font-semibold text-xl mb-4">Overlay Menu</div>
       <p-menu #menu [popup]="true" [model]="overlayMenuItems"></p-menu>
       <p-button type="button" icon="pi pi-chevron-down" label="Options" styleClass="w-auto" (onClick)="menu.toggle($event)" />
-    </div>
-    <div class="card" #anchor>
-      <div class="font-semibold text-xl mb-4">Context Menu</div>
-      Right click to display.
-      <p-contextmenu [target]="anchor" [model]="contextMenuItems"></p-contextmenu>
+    </p-card>
+    <div #anchor class="mt-8">
+      <p-card>
+        <div class="font-semibold text-xl mb-4">Context Menu</div>
+        Right click to display.
+        <p-contextmenu [target]="anchor" [model]="contextMenuItems"></p-contextmenu>
+      </p-card>
     </div>
   </div>
 </div>
 <div class="flex flex-col md:flex-row gap-8 mt-8">
   <div class="md:w-1/2">
-    <div class="card">
+    <p-card>
       <div class="font-semibold text-xl mb-4">MegaMenu | Horizontal</div>
       <p-megamenu [model]="megaMenuItems" />
       <div class="font-semibold text-xl mb-4 mt-8">MegaMenu | Vertical</div>
       <p-megamenu [model]="megaMenuItems" orientation="vertical" />
-    </div>
+    </p-card>
   </div>
   <div class="md:w-1/2">
-    <div class="card">
+    <p-card>
       <div class="font-semibold text-xl mb-4">PanelMenu</div>
       <p-panelmenu [model]="panelMenuItems" />
-    </div>
+    </p-card>
   </div>
 </div>

@@ -4,6 +4,7 @@ import type { ChartData, ChartDataset, ChartOptions } from 'chart.js';
 import { $dt } from '@primeuix/themes';
 import { ChartModule } from 'primeng/chart';
 import { Subject } from 'rxjs';
+import { Card } from 'primeng/card';
 
 /**
  * Semantic color tone for sales-by-category chart slices.
@@ -76,7 +77,7 @@ const TEXT_COLOR_TOKEN: SalesByCategoryThemeToken = { tokenPath: 'text.color', f
  */
 @Component({
   selector: 'app-sales-by-category-widget',
-  imports: [ChartModule],
+  imports: [ChartModule, Card],
   templateUrl: './sales-by-category-widget.html',
 })
 export class SalesByCategoryWidget {
@@ -165,9 +166,13 @@ export class SalesByCategoryWidget {
   private toChartDataset(categories: readonly SalesByCategoryItem[]): ChartDataset<'pie'> {
     return {
       data: categories.map((category) => this.normalizeDataPoint(category.value)),
-      backgroundColor: categories.map((category, index) => category.backgroundColor ?? this.resolveToneColor(category.tone ?? this.defaultTone(index))),
+      backgroundColor: categories.map(
+        (category, index) =>
+          category.backgroundColor ?? this.resolveToneColor(category.tone ?? this.defaultTone(index)),
+      ),
       hoverBackgroundColor: categories.map(
-        (category, index) => category.hoverBackgroundColor ?? this.resolveHoverToneColor(category.tone ?? this.defaultTone(index)),
+        (category, index) =>
+          category.hoverBackgroundColor ?? this.resolveHoverToneColor(category.tone ?? this.defaultTone(index)),
       ),
     };
   }

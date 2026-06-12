@@ -14,7 +14,7 @@
 
   <ai-usage-card />
 
-  <section class="card flex min-h-[32rem] flex-col gap-4">
+  <p-card class="flex min-h-[32rem] flex-col gap-4">
     <div class="flex-1 overflow-auto rounded-md border border-surface-200 p-4 dark:border-surface-700">
       @for (message of visibleMessages(); track message.id) {
         <div class="mb-4">
@@ -44,5 +44,5 @@
         <p-button label="Stop" icon="pi pi-stop" severity="secondary" [outlined]="true" (onClick)="stop()" />
       </div>
     </div>
-  </section>
+  </p-card>
 </div>

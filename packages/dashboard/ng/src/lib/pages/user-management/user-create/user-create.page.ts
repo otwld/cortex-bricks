@@ -8,6 +8,7 @@ import { SelectModule } from 'primeng/select';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { Card } from 'primeng/card';
 
 interface Country {
     name: string;
@@ -17,7 +18,7 @@ interface Country {
 /** Simple single-page user creation form. */
 @Component({
     selector: 'app-user-create-page',
-    imports: [FormsModule, ButtonModule, InputTextModule, TextareaModule, SelectModule, FileUploadModule, InputGroupModule, InputGroupAddonModule],
+    imports: [FormsModule, ButtonModule, InputTextModule, TextareaModule, SelectModule, FileUploadModule, InputGroupModule, InputGroupAddonModule, Card],
     templateUrl: './user-create.page.html',
 })
 export class UserCreatePage {

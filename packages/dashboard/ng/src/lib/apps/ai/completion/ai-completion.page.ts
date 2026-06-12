@@ -5,13 +5,14 @@ import { AiCompletionService, AiModelsService, AiUsageCardComponent } from '@otw
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
+import { Card } from 'primeng/card';
 
 /**
  * Demonstrates one-shot AI text completion with model selection and cancellation.
  */
 @Component({
   selector: 'app-ai-completion-page',
-  imports: [AiUsageCardComponent, ButtonModule, FormsModule, SelectModule, TextareaModule],
+  imports: [AiUsageCardComponent, ButtonModule, FormsModule, SelectModule, TextareaModule, Card],
   templateUrl: './ai-completion.page.html',
 })
 export class AiCompletionPage implements OnInit {

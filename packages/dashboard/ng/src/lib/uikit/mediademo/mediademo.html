@@ -1,4 +1,4 @@
-<div class="card">
+<p-card>
   <div class="font-semibold text-xl mb-6">Carousel</div>
   <p-carousel [value]="products()" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="carouselResponsiveOptions">
     <ng-template let-product #item>
@@ -22,12 +22,12 @@
       </div>
     </ng-template>
   </p-carousel>
-</div>
-<div class="card">
+</p-card>
+<p-card>
   <div class="font-semibold text-xl mb-6">Image</div>
   <p-image src="/demo/images/galleria/galleria10.jpg" alt="Image" width="250" preview />
-</div>
-<div class="card flex flex-col">
+</p-card>
+<p-card class="flex flex-col">
   <div class="font-semibold text-xl mb-6">Image Compare</div>
   <p-imagecompare class="sm:w-96! shadow-lg rounded-2xl">
     <ng-template #left>
@@ -37,8 +37,8 @@
       <img src="https://primefaces.org/cdn/primevue/images/compare/island2.jpg" alt="Island after comparison" />
     </ng-template>
   </p-imagecompare>
-</div>
-<div class="card">
+</p-card>
+<p-card>
   <div class="font-semibold text-xl mb-6">Galleria</div>
   <p-galleria [value]="images()" [responsiveOptions]="galleriaResponsiveOptions" [containerStyle]="{ 'max-width': '640px' }" [numVisible]="5">
     <ng-template #item let-item>
@@ -48,4 +48,4 @@
       <img [src]="item.thumbnailImageSrc" [alt]="item.title" />
     </ng-template>
   </p-galleria>
-</div>
+</p-card>

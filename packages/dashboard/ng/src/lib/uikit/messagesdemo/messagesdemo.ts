@@ -5,13 +5,14 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
+import { Card } from 'primeng/card';
 
 /**
  * Demonstrates PrimeNG toast notifications and inline message states.
  */
 @Component({
   selector: 'app-messages-demo',
-  imports: [ToastModule, ButtonModule, InputTextModule, MessageModule, FormsModule],
+  imports: [ToastModule, ButtonModule, InputTextModule, MessageModule, FormsModule, Card],
   templateUrl: './messagesdemo.html',
   providers: [MessageService],
 })

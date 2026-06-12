@@ -11,6 +11,7 @@ import { ScrollTopModule } from 'primeng/scrolltop';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TagModule } from 'primeng/tag';
 import { MeterGroupModule } from 'primeng/metergroup';
+import { Card } from 'primeng/card';
 
 interface MeterGroupItem {
   label: string;
@@ -36,6 +37,7 @@ interface MeterGroupItem {
     ScrollTopModule,
     OverlayBadgeModule,
     MeterGroupModule,
+    Card,
   ],
   templateUrl: './miscdemo.html',
 })

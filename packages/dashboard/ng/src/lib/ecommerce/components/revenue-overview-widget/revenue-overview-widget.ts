@@ -6,6 +6,7 @@ import { $dt } from '@primeuix/themes';
 import { ChartModule } from 'primeng/chart';
 import { SelectModule } from 'primeng/select';
 import { Subject } from 'rxjs';
+import { Card } from 'primeng/card';
 
 /**
  * Semantic color tone for revenue overview chart series.
@@ -107,7 +108,7 @@ const CONTENT_BORDER_COLOR_TOKEN: RevenueOverviewThemeToken = { tokenPath: 'cont
  */
 @Component({
   selector: 'app-revenue-overview-widget',
-  imports: [ChartModule, FormsModule, SelectModule],
+  imports: [ChartModule, FormsModule, SelectModule, Card],
   templateUrl: './revenue-overview-widget.html',
 })
 export class RevenueOverviewWidget {

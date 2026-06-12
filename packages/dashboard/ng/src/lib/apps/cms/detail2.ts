@@ -2,6 +2,7 @@ import { NgClass } from '@angular/common';
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import { Card } from 'primeng/card';
 
 interface Section {
     id: string;
@@ -11,7 +12,7 @@ interface Section {
 /** Alternative CMS article detail page. */
 @Component({
     selector: 'app-detail2',
-    imports: [NgClass, ButtonModule, TagModule],
+    imports: [NgClass, ButtonModule, TagModule, Card],
     templateUrl: './detail2.html',
     styles: `
         h1,

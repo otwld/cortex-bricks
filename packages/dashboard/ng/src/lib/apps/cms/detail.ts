@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
+import { Card } from 'primeng/card';
 
 interface Comment {
     image: string;
@@ -12,7 +13,7 @@ interface Comment {
 /** CMS article detail page. */
 @Component({
     selector: 'app-detail',
-    imports: [ButtonModule, DividerModule, TagModule],
+    imports: [ButtonModule, DividerModule, TagModule, Card],
     templateUrl: './detail.html',
     styles: `
         h1,

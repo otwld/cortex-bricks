@@ -1,6 +1,6 @@
 @for (card of cardViewModels(); track card.id) {
 <div [class]="card.wrapperClass">
-  <div class="card relative h-full overflow-hidden">
+  <p-card class="relative h-full overflow-hidden">
     @if (card.variant === 'debit') {
     <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" class="absolute left-0 top-0 h-full w-full" preserveAspectRatio="none" aria-hidden="true">
       <rect x="0" y="0" width="900" height="600" class="fill-primary-600"></rect>
@@ -44,6 +44,6 @@
       </div>
     </div>
     } }
-  </div>
+  </p-card>
 </div>
 }

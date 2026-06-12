@@ -4,6 +4,7 @@ import { Component, DestroyRef, computed, inject, input, output } from '@angular
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { Card } from 'primeng/card';
 import { Subject } from 'rxjs';
 
 /**
@@ -55,7 +56,7 @@ const DEFAULT_PAYMENTS: readonly MonthlyPayment[] = [
 @Component({
   standalone: true,
   selector: 'app-monthly-payments-widget',
-  imports: [ButtonModule, CurrencyPipe, TableModule, TagModule],
+  imports: [ButtonModule, CurrencyPipe, TableModule, TagModule, Card],
   templateUrl: './monthly-payments-widget.html',
 })
 export class MonthlyPaymentsWidget {

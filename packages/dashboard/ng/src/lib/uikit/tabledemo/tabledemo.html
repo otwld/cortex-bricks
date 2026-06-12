@@ -1,4 +1,4 @@
-<div class="card">
+<p-card>
   <div class="font-semibold text-xl mb-4">Filtering</div>
   <p-table
     #dt1
@@ -172,8 +172,8 @@
       </tr>
     </ng-template>
   </p-table>
-</div>
-<div class="card">
+</p-card>
+<p-card>
   <div class="font-semibold text-xl mb-4">Frozen Columns</div>
   <p-togglebutton [(ngModel)]="balanceFrozen" [onIcon]="'pi pi-lock'" offIcon="pi pi-lock-open" [onLabel]="'Balance'" offLabel="Balance" />
   <p-table [value]="customers2" [scrollable]="true" scrollHeight="400px" styleClass="mt-4">
@@ -204,8 +204,8 @@
       </tr>
     </ng-template>
   </p-table>
-</div>
-<div class="card">
+</p-card>
+<p-card>
   <div class="font-semibold text-xl mb-4">Row Expansion</div>
   <p-table [value]="products" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows">
     <ng-template #caption>
@@ -314,8 +314,8 @@
       </tr>
     </ng-template>
   </p-table>
-</div>
-<div class="card">
+</p-card>
+<p-card>
   <div class="font-semibold text-xl mb-4">Grouping</div>
   <p-table
     [value]="customers3"
@@ -373,4 +373,4 @@
       </tr>
     </ng-template>
   </p-table>
-</div>
+</p-card>

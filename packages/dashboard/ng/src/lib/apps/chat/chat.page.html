@@ -1,4 +1,4 @@
-        <div class="flex card overflow-hidden p-0!" style="height: 70vh; min-height: 500px; max-height: 800px">
+        <p-card class="flex overflow-hidden p-0!" style="height: 70vh; min-height: 500px; max-height: 800px">
             <div [ngClass]="{ 'hidden md:block': showChatView, 'block w-full md:w-auto': !showChatView }" class="md:block h-full overflow-hidden">
                 <app-chat-menu [chatRooms]="chatRooms()" [activeChatId]="activeChatId()" (selectChatEvent)="selectChat($event)" (newChatEvent)="createNewChat($event)" />
             </div>
@@ -60,4 +60,4 @@
             </div>
 
             <p-confirmdialog />
-        </div>
+        </p-card>

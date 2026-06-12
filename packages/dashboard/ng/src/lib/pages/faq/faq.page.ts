@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { AccordionModule } from 'primeng/accordion';
 import { Ripple } from 'primeng/ripple';
+import { Card } from 'primeng/card';
 
 /** FAQ page with category sidebar and accordion Q&A panels. */
 @Component({
   selector: 'app-faq-page',
-  imports: [AccordionModule, NgClass, Ripple],
+  imports: [AccordionModule, NgClass, Ripple, Card],
   templateUrl: './faq.page.html'
 })
 export class FaqPage implements OnInit {

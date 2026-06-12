@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 
 import { Router, RouterOutlet } from '@angular/router';
 import { FormStateService } from '../form-state.service';
+import { Card } from 'primeng/card';
 
 interface MenuItem {
     label: string;
@@ -13,7 +14,7 @@ interface MenuItem {
 /** Multi-step user creation wizard layout. */
 @Component({
     selector: 'app-user-create-layout-page',
-    imports: [RouterOutlet],
+    imports: [RouterOutlet, Card],
     providers: [FormStateService],
     templateUrl: './user-create-layout.page.html',
 })

@@ -6,6 +6,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
+import { Card } from 'primeng/card';
 
 interface DeliveryAddress {
     title: string;
@@ -41,7 +42,7 @@ interface Order {
 /** Order history page with filters and expandable details. */
 @Component({
     selector: 'app-order-history-page',
-    imports: [NgClass, FormsModule, ButtonModule, IconFieldModule, InputIconModule, InputTextModule, TagModule],
+    imports: [NgClass, FormsModule, ButtonModule, IconFieldModule, InputIconModule, InputTextModule, TagModule, Card],
     templateUrl: './order-history.page.html',
 })
 export class OrderHistoryPage {

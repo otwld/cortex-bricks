@@ -10,6 +10,7 @@ import { Table, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { Card } from 'primeng/card';
 
 /**
  * Supported table cell renderer type for recent sales columns.
@@ -106,7 +107,17 @@ const DEFAULT_COLUMNS: readonly RecentSaleColumn[] = [
  */
 @Component({
   selector: 'app-recent-sales-widget',
-  imports: [ButtonModule, CurrencyPipe, IconFieldModule, InputIconModule, InputTextModule, TableModule, TagModule, TooltipModule],
+  imports: [
+    ButtonModule,
+    CurrencyPipe,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    TableModule,
+    TagModule,
+    TooltipModule,
+    Card,
+  ],
   templateUrl: './recent-sales-widget.html',
 })
 export class RecentSalesWidget {
@@ -215,21 +226,29 @@ export class RecentSalesWidget {
    */
   readonly events$ = this.eventsSubject.asObservable();
 
-  protected readonly columnViewModels = computed<RecentSaleColumnViewModel[]>(() => this.columns().map((column) => this.toColumnViewModel(column)));
+  protected readonly columnViewModels = computed<RecentSaleColumnViewModel[]>(() =>
+    this.columns().map((column) => this.toColumnViewModel(column)),
+  );
 
-  public readonly saleViewModels = computed<RecentSaleViewModel[]>(() => this.sales().map((sale) => this.toSaleViewModel(sale)));
+  public readonly saleViewModels = computed<RecentSaleViewModel[]>(() =>
+    this.sales().map((sale) => this.toSaleViewModel(sale)),
+  );
 
-  protected readonly emptyStateColumnSpan = computed(() => this.columnViewModels().length + (this.showViewAction() ? 1 : 0));
+  protected readonly emptyStateColumnSpan = computed(
+    () => this.columnViewModels().length + (this.showViewAction() ? 1 : 0),
+  );
 
   protected readonly tableGlobalFilterFields = computed(() => [...this.globalFilterFields()]);
 
   protected readonly tableStyle = computed(() => ({ 'min-width': this.tableMinWidth() }));
 
   constructor() {
-    this.filterRequests.pipe(debounceTime(120), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef)).subscribe((query) => {
-      this.salesTable()?.filterGlobal(query, 'contains');
-      this.eventsSubject.next({ type: 'search', query });
-    });
+    this.filterRequests
+      .pipe(debounceTime(120), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe((query) => {
+        this.salesTable()?.filterGlobal(query, 'contains');
+        this.eventsSubject.next({ type: 'search', query });
+      });
 
     this.destroyRef.onDestroy(() => this.eventsSubject.complete());
   }

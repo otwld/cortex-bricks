@@ -12,6 +12,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectModule } from 'primeng/select';
 import { Menu } from 'primeng/menu';
+import { Card } from 'primeng/card';
 import { NgClass } from '@angular/common';
 
 interface Product {
@@ -49,7 +50,7 @@ interface ColorOption {
 /** E-commerce new product editor page. */
 @Component({
     selector: 'app-new-product-page',
-    imports: [NgClass, FormsModule, ButtonModule, DividerModule, IconFieldModule, InputGroupModule, InputGroupAddonModule, InputIconModule, InputTextModule, MenuModule, MultiSelectModule, RadioButtonModule, SelectModule],
+    imports: [NgClass, FormsModule, ButtonModule, DividerModule, IconFieldModule, InputGroupModule, InputGroupAddonModule, InputIconModule, InputTextModule, MenuModule, MultiSelectModule, RadioButtonModule, SelectModule, Card],
     templateUrl: './new-product.page.html',
 })
 export class NewProductPage {

@@ -8,6 +8,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { FileUploadHandlerEvent } from 'primeng/types/fileupload';
+import { Card } from 'primeng/card';
 
 type FileUploadMode = 'advanced' | 'basic';
 
@@ -16,7 +17,7 @@ type FileUploadMode = 'advanced' | 'basic';
  */
 @Component({
   selector: 'app-file-demo',
-  imports: [FileUploadModule, ToastModule, ButtonModule, ProgressBarModule, TagModule, StoBytesPipe],
+  imports: [FileUploadModule, ToastModule, ButtonModule, ProgressBarModule, TagModule, StoBytesPipe, Card],
   templateUrl: './filedemo.html',
   providers: [MessageService],
 })

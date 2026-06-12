@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
+import { Card } from 'primeng/card';
 
 interface CartItem {
     id: number;
@@ -23,7 +24,7 @@ interface Country {
 /** Checkout form page for shipping, payment, and order totals. */
 @Component({
     selector: 'app-checkout-form-page',
-    imports: [ButtonModule, SelectModule, InputTextModule, InputMaskModule, FormsModule],
+    imports: [ButtonModule, SelectModule, InputTextModule, InputMaskModule, FormsModule, Card],
     templateUrl: './checkout-form.page.html',
 })
 export class CheckoutFormPage {

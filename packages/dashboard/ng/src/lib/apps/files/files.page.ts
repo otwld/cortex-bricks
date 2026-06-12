@@ -10,6 +10,7 @@ import { TagModule } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MenuItem } from 'primeng/api';
+import { Card } from 'primeng/card';
 
 interface ActivityFeed {
     id: number;
@@ -62,7 +63,7 @@ interface Document {
 /** Files application page with storage summary, document table, and editor drawer. */
 @Component({
     selector: 'app-files',
-    imports: [CommonModule, FormsModule, ButtonModule, TableModule, DrawerModule, InputTextModule, MenuModule, TagModule, TextareaModule, ConfirmDialogModule],
+    imports: [CommonModule, FormsModule, ButtonModule, TableModule, DrawerModule, InputTextModule, MenuModule, TagModule, TextareaModule, ConfirmDialogModule, Card],
     providers: [ConfirmationService],
     templateUrl: './files.page.html',
 })

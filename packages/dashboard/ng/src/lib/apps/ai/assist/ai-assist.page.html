@@ -21,7 +21,7 @@
 
   <div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_20rem]">
     <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-      <section class="card flex flex-col gap-4">
+      <p-card class="flex flex-col gap-4">
         <div class="flex items-start justify-between gap-3">
           <div>
             <h2 class="text-lg font-semibold text-surface-900 dark:text-surface-0">Support Reply</h2>
@@ -57,9 +57,9 @@
             class="w-full"
           ></textarea>
         </div>
-      </section>
+      </p-card>
 
-      <section class="card flex flex-col gap-4">
+      <p-card class="flex flex-col gap-4">
         <div class="flex items-start justify-between gap-3">
           <div>
             <h2 class="text-lg font-semibold text-surface-900 dark:text-surface-0">Product Copy</h2>
@@ -97,9 +97,9 @@
             class="w-full"
           ></textarea>
         </div>
-      </section>
+      </p-card>
 
-      <section class="card flex flex-col gap-4 lg:col-span-2">
+      <p-card class="flex flex-col gap-4 lg:col-span-2">
         <div class="flex items-start justify-between gap-3">
           <div>
             <h2 class="text-lg font-semibold text-surface-900 dark:text-surface-0">Profile Bio</h2>
@@ -139,10 +139,10 @@
             ></textarea>
           </div>
         </div>
-      </section>
+      </p-card>
     </div>
 
-    <aside class="card flex h-fit flex-col gap-4">
+    <p-card class="flex h-fit flex-col gap-4">
       <h2 class="text-lg font-semibold text-surface-900 dark:text-surface-0">Activity</h2>
 
       @for (item of activity(); track $index) {
@@ -156,6 +156,6 @@
       } @empty {
         <p class="text-sm leading-6 text-surface-500 dark:text-surface-400">No activity yet.</p>
       }
-    </aside>
+    </p-card>
   </div>
 </div>

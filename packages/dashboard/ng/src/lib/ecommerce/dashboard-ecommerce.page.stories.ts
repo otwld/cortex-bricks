@@ -9,10 +9,6 @@ const meta: Meta<DashboardEcommercePage> = {
     actions: { disable: true },
     controls: { disable: true },
   },
-  render: (args) => ({
-    props: args,
-    template: `<dashboard-ecommerce></dashboard-ecommerce>`,
-  }),
   title: 'dashboard/ng/ecommerce/dashboard-ecommerce',
 };
 

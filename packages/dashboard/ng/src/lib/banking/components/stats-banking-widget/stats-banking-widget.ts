@@ -1,6 +1,7 @@
 import { Component, DestroyRef, computed, inject, input, output } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
+import { Card } from 'primeng/card';
 import { Subject } from 'rxjs';
 
 /**
@@ -87,7 +88,7 @@ const DEFAULT_CARDS: readonly BankingStatCard[] = [
 @Component({
   standalone: true,
   selector: 'app-stats-banking-widget',
-  imports: [ButtonModule],
+  imports: [ButtonModule, Card],
   templateUrl: './stats-banking-widget.html',
   host: {
     '[style.display]': '"contents"',

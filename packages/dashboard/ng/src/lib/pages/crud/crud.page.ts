@@ -18,6 +18,7 @@ import { TagModule } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { Card } from 'primeng/card';
 
 /** Column definition for the products table. */
 interface Column {
@@ -53,6 +54,7 @@ interface ExportColumn {
     InputIconModule,
     IconFieldModule,
     ConfirmDialogModule,
+    Card,
   ],
   providers: [MessageService, ProductService, ConfirmationService],
   templateUrl: './crud.page.html',

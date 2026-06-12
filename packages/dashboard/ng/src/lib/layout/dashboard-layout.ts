@@ -22,7 +22,7 @@ export class DashboardLayout {
   /**
    * Shared layout service that drives menu state and theme classes.
    */
-  layoutService = inject(DashboardLayoutService);
+  protected readonly layoutService = inject(DashboardLayoutService);
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 

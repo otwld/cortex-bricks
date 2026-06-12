@@ -2,6 +2,7 @@ import { Component, effect, inject, signal, WritableSignal } from '@angular/core
 import { ChartData, ChartOptions } from 'chart.js';
 import { ChartModule } from 'primeng/chart';
 import { FluidModule } from 'primeng/fluid';
+import { Card } from 'primeng/card';
 import { DashboardLayoutService } from '@otwld/ng-dashboard/core';
 
 /**
@@ -9,7 +10,7 @@ import { DashboardLayoutService } from '@otwld/ng-dashboard/core';
  */
 @Component({
   selector: 'app-chart-demo',
-  imports: [ChartModule, FluidModule],
+  imports: [ChartModule, FluidModule, Card],
   templateUrl: './chartdemo.html',
 })
 export class ChartDemo {

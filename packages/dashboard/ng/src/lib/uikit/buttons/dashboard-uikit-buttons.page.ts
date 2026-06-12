@@ -4,6 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ButtonGroupModule } from 'primeng/buttongroup';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { Card } from 'primeng/card';
 
 const SPLIT_BUTTON_ITEMS: MenuItem[] = [
   { label: 'Update', icon: 'pi pi-refresh' },
@@ -22,7 +23,7 @@ const SPLIT_BUTTON_ITEMS: MenuItem[] = [
  */
 @Component({
   selector: 'dashboard-uikit-buttons-page',
-  imports: [ButtonModule, ButtonGroupModule, SplitButtonModule],
+  imports: [ButtonModule, ButtonGroupModule, SplitButtonModule, Card],
   templateUrl: './dashboard-uikit-buttons.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

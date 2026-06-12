@@ -1,5 +1,6 @@
 import { NgClass } from '@angular/common';
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Card } from 'primeng/card';
 
 interface Author {
     name: string;
@@ -29,7 +30,7 @@ interface BlogPost {
 /** CMS article listing page. */
 @Component({
     selector: 'app-list',
-    imports: [NgClass],
+    imports: [NgClass, Card],
     templateUrl: './list.html',
 })
 export class List implements OnInit, OnDestroy {

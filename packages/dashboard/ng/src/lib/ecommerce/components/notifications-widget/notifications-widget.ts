@@ -4,6 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { Subject } from 'rxjs';
+import { Card } from 'primeng/card';
 
 /**
  * Visual tone used by notification icon badges.
@@ -179,7 +180,7 @@ const TEXT_CLASSES: Record<NotificationTextVariant, string> = {
  */
 @Component({
   selector: 'app-notifications-widget',
-  imports: [ButtonModule, MenuModule],
+  imports: [ButtonModule, MenuModule, Card],
   templateUrl: './notifications-widget.html',
 })
 export class NotificationsWidget {

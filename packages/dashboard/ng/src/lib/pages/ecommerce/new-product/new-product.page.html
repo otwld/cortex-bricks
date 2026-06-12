@@ -1,4 +1,4 @@
-        <div class="flex flex-col xl:flex-row card">
+        <p-card class="flex flex-col xl:flex-row">
             <div class="w-full xl:w-[65%] flex flex-col overflow-hidden">
                 <div class="px-6 py-4 flex justify-start items-start gap-4">
                     <div class="text-surface-950 dark:text-surface-0 text-xl font-medium leading-7">Add Product</div>
@@ -258,7 +258,7 @@
             <input #image1Input type="file" accept="image/*" class="hidden" (change)="handleImageUpload($event, 0)" />
             <input #image2Input type="file" accept="image/*" class="hidden" (change)="handleImageUpload($event, 1)" />
             <input #image3Input type="file" accept="image/*" class="hidden" (change)="handleImageUpload($event, 2)" />
-        </div>
+        </p-card>
 
         <div class="p-6">
             <div class="flex justify-end">

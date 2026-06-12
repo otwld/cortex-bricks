@@ -5,6 +5,7 @@ import { MenuModule } from 'primeng/menu';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
+import { Card } from 'primeng/card';
 import { ChatMenu } from './chat-menu';
 import { ChatBox } from './chatbox';
 import { ChatSidebar } from './chatsidebar';
@@ -77,7 +78,7 @@ interface Contact {
 /** Chat application shell with conversation list, message pane, and contact sidebar. */
 @Component({
     selector: 'app-chat',
-    imports: [CommonModule, ButtonModule, MenuModule, ConfirmDialogModule, ChatMenu, ChatBox, ChatSidebar],
+    imports: [CommonModule, ButtonModule, MenuModule, ConfirmDialogModule, ChatMenu, ChatBox, ChatSidebar, Card],
     providers: [ConfirmationService],
     templateUrl: './chat.page.html',
 })

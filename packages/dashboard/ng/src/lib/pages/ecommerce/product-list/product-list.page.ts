@@ -5,6 +5,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
+import { Card } from 'primeng/card';
 
 interface Product {
     id: number;
@@ -25,7 +26,7 @@ interface SelectOption {
 /** E-commerce product listing page with filters and sorting. */
 @Component({
     selector: 'app-product-list-page',
-    imports: [FormsModule, IconFieldModule, InputIconModule, InputTextModule, SelectModule, TagModule],
+    imports: [FormsModule, IconFieldModule, InputIconModule, InputTextModule, SelectModule, TagModule, Card],
     templateUrl: './product-list.page.html',
 })
 export class ProductListPage {

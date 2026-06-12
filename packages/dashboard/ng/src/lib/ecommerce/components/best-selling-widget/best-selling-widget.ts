@@ -4,6 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { Card } from 'primeng/card';
 
 /**
  * Visual tone used by best-selling product progress rows.
@@ -73,7 +74,7 @@ const TONE_CLASSES: Record<BestSellingTone, Pick<BestSellingProductViewModel, 'p
  */
 @Component({
   selector: 'app-best-selling-widget',
-  imports: [ButtonModule, MenuModule, ProgressBarModule],
+  imports: [ButtonModule, MenuModule, ProgressBarModule, Card],
   templateUrl: './best-selling-widget.html',
 })
 export class BestSellingWidget {
@@ -97,7 +98,9 @@ export class BestSellingWidget {
    */
   readonly actionSelected = output<BestSellingActionEvent>();
 
-  public readonly productViewModels = computed(() => this.products().map((product) => this.toProductViewModel(product)));
+  public readonly productViewModels = computed(() =>
+    this.products().map((product) => this.toProductViewModel(product)),
+  );
 
   public readonly menuItems = computed<MenuItem[]>(() =>
     this.actions().map((action) => ({

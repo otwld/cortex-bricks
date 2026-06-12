@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
+import { Card } from 'primeng/card';
 
 interface FormLayoutOption {
   name: string;
@@ -16,7 +17,7 @@ interface FormLayoutOption {
  */
 @Component({
   selector: 'app-formlayout-demo',
-  imports: [InputTextModule, FluidModule, ButtonModule, SelectModule, FormsModule, TextareaModule],
+  imports: [InputTextModule, FluidModule, ButtonModule, SelectModule, FormsModule, TextareaModule, Card],
   templateUrl: './formlayoutdemo.html',
 })
 export class FormLayoutDemo {

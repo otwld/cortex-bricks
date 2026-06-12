@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { RatingModule } from 'primeng/rating';
 import { Subject } from 'rxjs';
+import { Card } from 'primeng/card';
 
 /**
  * Product summary rendered by the top products widget.
@@ -52,7 +53,7 @@ const DEFAULT_PRODUCTS: readonly TopProduct[] = [
 @Component({
   standalone: true,
   selector: 'app-top-products-widget',
-  imports: [ButtonModule, CurrencyPipe, FormsModule, RatingModule],
+  imports: [ButtonModule, CurrencyPipe, FormsModule, RatingModule, Card],
   templateUrl: './top-products-widget.html',
 })
 export class TopProductsWidget {

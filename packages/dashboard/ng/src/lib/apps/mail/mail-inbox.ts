@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { MenuItem } from 'primeng/api';
+import { Card } from 'primeng/card';
 import { ComposeDialog } from './compose-dialog';
 import { MailService, Email } from './mail.service';
 
@@ -26,7 +27,7 @@ interface MenuItemData {
 /** Mail inbox with folder filters, pagination, and compose dialog. */
 @Component({
     selector: 'app-mail-inbox',
-    imports: [CommonModule, FormsModule, ButtonModule, TableModule, AvatarModule, TagModule, MenuModule, PaginatorModule, DrawerModule, InputTextModule, IconFieldModule, InputIconModule, ComposeDialog],
+    imports: [CommonModule, FormsModule, ButtonModule, TableModule, AvatarModule, TagModule, MenuModule, PaginatorModule, DrawerModule, InputTextModule, IconFieldModule, InputIconModule, ComposeDialog, Card],
     templateUrl: './mail-inbox.html',
 })
 export class MailInbox implements OnInit {

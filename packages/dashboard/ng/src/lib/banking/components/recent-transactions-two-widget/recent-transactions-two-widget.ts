@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { Card } from 'primeng/card';
 import { Subject } from 'rxjs';
 
 /**
@@ -65,7 +66,7 @@ const DEFAULT_RECIPIENTS: readonly BankingRecipient[] = [
 @Component({
   standalone: true,
   selector: 'app-recent-transactions-two-widget',
-  imports: [FormsModule, InputNumberModule, ButtonModule],
+  imports: [FormsModule, InputNumberModule, ButtonModule, Card],
   templateUrl: './recent-transactions-two-widget.html',
 })
 export class RecentTransactionsTwoWidget {

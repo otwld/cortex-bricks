@@ -3,6 +3,7 @@ import { TreeNode } from 'primeng/api';
 import { TreeModule } from 'primeng/tree';
 import { FormsModule } from '@angular/forms';
 import { TreeTableModule } from 'primeng/treetable';
+import { Card } from 'primeng/card';
 import { NodeService } from '@otwld/ng-dashboard/core';
 
 interface TreeTableColumn {
@@ -20,7 +21,7 @@ interface TreeTableSelectionState {
  */
 @Component({
   selector: 'app-tree-demo',
-  imports: [FormsModule, TreeModule, TreeTableModule],
+  imports: [FormsModule, TreeModule, TreeTableModule, Card],
   templateUrl: './treedemo.html',
   providers: [NodeService],
 })

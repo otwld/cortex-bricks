@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { TooltipModule } from 'primeng/tooltip';
 import { TableModule } from 'primeng/table';
 import { TableRowSelectEvent } from 'primeng/types/table';
+import { Card } from 'primeng/card';
 import { Product, ProductService } from '@otwld/ng-dashboard/core';
 
 /**
@@ -30,6 +31,7 @@ import { Product, ProductService } from '@otwld/ng-dashboard/core';
     TooltipModule,
     TableModule,
     ToastModule,
+    Card,
   ],
   templateUrl: './overlaydemo.html',
   providers: [ConfirmationService, MessageService, ProductService],

@@ -7,6 +7,7 @@ import { OrderListModule } from 'primeng/orderlist';
 import { PickListModule } from 'primeng/picklist';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
+import { Card } from 'primeng/card';
 import { Product, ProductService } from '@otwld/ng-dashboard/core';
 
 interface CityOption {
@@ -19,7 +20,7 @@ interface CityOption {
  */
 @Component({
   selector: 'app-list-demo',
-  imports: [NgClass, DataViewModule, FormsModule, SelectButtonModule, PickListModule, OrderListModule, TagModule, ButtonModule],
+  imports: [NgClass, DataViewModule, FormsModule, SelectButtonModule, PickListModule, OrderListModule, TagModule, ButtonModule, Card],
   templateUrl: './listdemo.html',
   styles: `
     ::ng-deep {

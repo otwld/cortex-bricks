@@ -1,4 +1,4 @@
-<div class="card">
+<p-card>
   <div class="font-semibold text-xl mb-4">ProgressBar</div>
   <div class="flex flex-col md:flex-row gap-4">
     <div class="md:w-1/2">
@@ -8,10 +8,10 @@
       <p-progressbar [value]="50" [showValue]="false"></p-progressbar>
     </div>
   </div>
-</div>
+</p-card>
 <div class="flex flex-col md:flex-row gap-8">
   <div class="md:w-1/2">
-    <div class="card">
+    <p-card>
       <div class="font-semibold text-xl mb-4">Badge</div>
       <div class="flex gap-2">
         <p-badge value="2"></p-badge>
@@ -43,8 +43,8 @@
         <p-badge [value]="4" badgeSize="large" severity="warn"></p-badge>
         <p-badge [value]="6" badgeSize="xlarge" severity="success"></p-badge>
       </div>
-    </div>
-    <div class="card">
+    </p-card>
+    <p-card>
       <div class="font-semibold text-xl mb-4">Avatar</div>
       <div class="font-semibold mb-4">Group</div>
       <p-avatar-group class="mb-4">
@@ -88,8 +88,8 @@
       <p-overlaybadge value="4" severity="danger" class="inline-flex">
         <p-avatar label="U" size="xlarge" />
       </p-overlaybadge>
-    </div>
-    <div class="card">
+    </p-card>
+    <p-card>
       <div class="font-semibold text-xl mb-4">ScrollTop</div>
       <div style="height: 200px; overflow: auto">
         <p>
@@ -110,14 +110,14 @@
         </p>
         <p-scrolltop target="parent" [threshold]="100" icon="pi pi-arrow-up" [buttonProps]="{ severity: 'contrast', raised: true, rounded: true }" />
       </div>
-    </div>
-    <div class="card">
+    </p-card>
+    <p-card>
       <div class="font-semibold text-xl mb-4">MeterGroup</div>
       <p-metergroup [value]="meterGroupValue" />
-    </div>
+    </p-card>
   </div>
   <div class="md:w-1/2">
-    <div class="card">
+    <p-card>
       <div class="font-semibold text-xl mb-4">Tag</div>
       <div class="font-semibold mb-4">Default</div>
       <div class="flex gap-2">
@@ -143,8 +143,8 @@
         <p-tag icon="pi pi-exclamation-triangle" severity="warn" value="Warning"></p-tag>
         <p-tag icon="pi pi-times" severity="danger" value="Danger"></p-tag>
       </div>
-    </div>
-    <div class="card">
+    </p-card>
+    <p-card>
       <div class="font-semibold text-xl mb-4">Chip</div>
       <div class="font-semibold mb-4">Basic</div>
       <div class="flex items-center flex-col sm:flex-row gap-2">
@@ -175,8 +175,8 @@
           <img src="/demo/images/avatar/xuxuefeng.png" class="w-8 h-8" alt="avatar" />
         </p-chip>
       </div>
-    </div>
-    <div class="card">
+    </p-card>
+    <p-card>
       <div class="font-semibold text-xl mb-4">Skeleton</div>
       <div class="rounded-border border border-surface p-12">
         <div class="flex mb-4">
@@ -193,6 +193,6 @@
           <p-skeleton width="4rem" height="2rem"></p-skeleton>
         </div>
       </div>
-    </div>
+    </p-card>
   </div>
 </div>

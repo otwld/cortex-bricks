@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectModule } from 'primeng/select';
+import { Card } from 'primeng/card';
 
 interface Author {
     name: string;
@@ -25,7 +26,7 @@ interface StatusOption {
 /** CMS article editor page. */
 @Component({
     selector: 'app-edit',
-    imports: [FormsModule, AccordionModule, ButtonModule, CheckboxModule, ChipModule, DatePickerModule, DrawerModule, EditorModule, InputTextModule, MultiSelectModule, RadioButtonModule, SelectModule],
+    imports: [FormsModule, AccordionModule, ButtonModule, CheckboxModule, ChipModule, DatePickerModule, DrawerModule, EditorModule, InputTextModule, MultiSelectModule, RadioButtonModule, SelectModule, Card],
     templateUrl: './edit.html',
 })
 export class Edit {

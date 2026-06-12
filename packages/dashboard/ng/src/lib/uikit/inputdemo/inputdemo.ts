@@ -29,6 +29,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TreeNode } from 'primeng/api';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputOtpModule } from 'primeng/inputotp';
+import { Card } from 'primeng/card';
 import { Country, CountryService, NodeService } from '@otwld/ng-dashboard/core';
 
 interface CityOption {
@@ -74,6 +75,7 @@ interface SelectButtonOption {
     TextareaModule,
     IftaLabelModule,
     InputOtpModule,
+    Card,
   ],
   templateUrl: './inputdemo.html',
   providers: [CountryService, NodeService],

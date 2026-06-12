@@ -1,6 +1,6 @@
 @for (metric of metricViewModels(); track metric.id) {
 <div class="col-span-12 md:col-span-6 xl:col-span-3">
-  <div class="card h-full">
+  <p-card class="h-full">
     <div class="flex items-start justify-between gap-3">
       <span class="text-lg font-semibold">{{ metric.label }}</span>
 
@@ -45,6 +45,6 @@
         } }
       </div>
     </div>
-  </div>
+  </p-card>
 </div>
 }

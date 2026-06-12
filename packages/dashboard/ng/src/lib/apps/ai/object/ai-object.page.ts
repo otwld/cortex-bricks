@@ -6,6 +6,7 @@ import { AiModelsService, AiObjectService, AiUsageCardComponent } from '@otwld/n
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
+import { Card } from 'primeng/card';
 
 interface SummaryObject {
   title: string;
@@ -18,7 +19,7 @@ interface SummaryObject {
  */
 @Component({
   selector: 'app-ai-object-page',
-  imports: [AiUsageCardComponent, ButtonModule, FormsModule, JsonPipe, SelectModule, TextareaModule],
+  imports: [AiUsageCardComponent, ButtonModule, FormsModule, JsonPipe, SelectModule, TextareaModule, Card],
   templateUrl: './ai-object.page.html',
 })
 export class AiObjectPage implements OnInit {

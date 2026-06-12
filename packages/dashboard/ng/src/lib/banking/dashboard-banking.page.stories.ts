@@ -9,10 +9,6 @@ const meta: Meta<DashboardBankingPage> = {
     actions: { disable: true },
     controls: { disable: true },
   },
-  render: (args) => ({
-    props: args,
-    template: `<app-banking-dashboard></app-banking-dashboard>`,
-  }),
   title: 'dashboard/ng/banking/dashboard-banking',
 };
 

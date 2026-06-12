@@ -2,6 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, DestroyRef, computed, inject, input, output } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
+import { Card } from 'primeng/card';
 import { Subject } from 'rxjs';
 
 /**
@@ -49,7 +50,7 @@ const DEFAULT_TRANSACTIONS: readonly BankingTransaction[] = [
 @Component({
   standalone: true,
   selector: 'app-recent-transactions-widget',
-  imports: [ButtonModule, CurrencyPipe],
+  imports: [ButtonModule, CurrencyPipe, Card],
   templateUrl: './recent-transactions-widget.html',
 })
 export class RecentTransactionsWidget {

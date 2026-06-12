@@ -3,6 +3,7 @@ import type { ChartData, ChartDataset, ChartOptions, TooltipItem } from 'chart.j
 
 import { $dt } from '@primeuix/themes';
 import { ChartModule } from 'primeng/chart';
+import { Card } from 'primeng/card';
 import { Subject } from 'rxjs';
 
 /**
@@ -81,7 +82,7 @@ const CONTENT_BORDER_COLOR_TOKEN: BankingOverviewThemeToken = { tokenPath: 'cont
 @Component({
   standalone: true,
   selector: 'app-overview-widget',
-  imports: [ChartModule],
+  imports: [ChartModule, Card],
   templateUrl: './overview-widget.html',
 })
 export class OverviewWidget {

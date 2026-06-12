@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { KnobModule } from 'primeng/knob';
 import { Subject } from 'rxjs';
+import { Card } from 'primeng/card';
 
 /**
  * Direction used by metric change indicators.
@@ -161,7 +162,7 @@ const CHANGE_ICONS: Record<StatsChangeDirection, string> = {
 @Component({
   standalone: true,
   selector: 'app-stats-widget',
-  imports: [ButtonModule, KnobModule, FormsModule],
+  imports: [ButtonModule, KnobModule, FormsModule, Card],
   templateUrl: './stats-widget.html',
   host: {
     '[style.display]': '"contents"',
@@ -206,14 +207,18 @@ export class StatsWidget {
 
   private toMetricViewModel(metric: StatsMetric): StatsMetricViewModel {
     const changeTone = metric.changeTone ?? (metric.changeDirection === 'down' ? 'pink' : 'green');
-    const sparklineClass = metric.visual.type === 'sparkline' ? SPARKLINE_STROKE_CLASSES[metric.visual.tone ?? 'primary'] : undefined;
+    const sparklineClass =
+      metric.visual.type === 'sparkline' ? SPARKLINE_STROKE_CLASSES[metric.visual.tone ?? 'primary'] : undefined;
 
     return {
       ...metric,
       changeClass: TONE_TEXT_CLASSES[changeTone],
       changeIcon: CHANGE_ICONS[metric.changeDirection],
       sparklineClass,
-      knobValue: metric.visual.type === 'knob' ? this.clampNumber(metric.visual.value, metric.visual.min ?? 0, metric.visual.max ?? 100) : undefined,
+      knobValue:
+        metric.visual.type === 'knob'
+          ? this.clampNumber(metric.visual.value, metric.visual.min ?? 0, metric.visual.max ?? 100)
+          : undefined,
       knobValueTemplate: metric.visual.type === 'knob' ? (metric.visual.valueTemplate ?? '{value}%') : undefined,
       knobSize: metric.visual.type === 'knob' ? (metric.visual.size ?? 90) : undefined,
       knobStrokeWidth: metric.visual.type === 'knob' ? (metric.visual.strokeWidth ?? 2) : undefined,

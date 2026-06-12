@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { MenuModule, Menu } from 'primeng/menu';
 import { TabsModule } from 'primeng/tabs';
 import { TagModule } from 'primeng/tag';
+import { Card } from 'primeng/card';
 
 interface QAItem {
     question: string;
@@ -36,7 +37,7 @@ interface Size {
 /** Product overview page with gallery, recommendations, reviews, and Q&A. */
 @Component({
     selector: 'app-product-overview-page',
-    imports: [NgClass, FormsModule, ButtonModule, TabsModule, TagModule, MenuModule],
+    imports: [NgClass, FormsModule, ButtonModule, TabsModule, TagModule, MenuModule, Card],
     templateUrl: './product-overview.page.html',
 })
 export class ProductOverviewPage {

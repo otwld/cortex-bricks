@@ -1,6 +1,6 @@
 <p-fluid class="flex flex-col md:flex-row gap-8">
   <div class="md:w-1/2">
-    <div class="card flex flex-col gap-4">
+    <p-card class="flex flex-col gap-4">
       <div class="font-semibold text-xl">InputText</div>
       <div class="flex flex-col md:flex-row gap-4">
         <input pInputText type="text" placeholder="Default" />
@@ -40,8 +40,8 @@
       <p-datepicker [showButtonBar]="true" [(ngModel)]="calendarValue"></p-datepicker>
       <div class="font-semibold text-xl">InputNumber</div>
       <p-inputnumber [(ngModel)]="inputNumberValue" showButtons mode="decimal"></p-inputnumber>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="font-semibold text-xl">Slider</div>
       <input pInputText [(ngModel)]="sliderValue" type="number" />
       <p-slider [(ngModel)]="sliderValue" />
@@ -57,10 +57,10 @@
       </div>
       <div class="font-semibold text-xl">Knob</div>
       <p-knob [(ngModel)]="knobValue" [step]="10" [min]="-50" [max]="50" valueTemplate="{value}%" />
-    </div>
+    </p-card>
   </div>
   <div class="md:w-1/2">
-    <div class="card flex flex-col gap-4">
+    <p-card class="flex flex-col gap-4">
       <div class="font-semibold text-xl">RadioButton</div>
       <div class="flex flex-col md:flex-row gap-4">
         <div class="flex items-center">
@@ -93,8 +93,8 @@
       </div>
       <div class="font-semibold text-xl">ToggleSwitch</div>
       <p-toggleswitch [(ngModel)]="switchValue" />
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="font-semibold text-xl">Listbox</div>
       <p-listbox [(ngModel)]="listboxValue" [options]="listboxValues" optionLabel="name" [filter]="true" />
       <div class="font-semibold text-xl">Select</div>
@@ -125,21 +125,21 @@
       </p-multiselect>
       <div class="font-semibold text-xl">TreeSelect</div>
       <p-treeselect [(ngModel)]="selectedNode" [options]="treeSelectNodes" placeholder="Select Item"></p-treeselect>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="font-semibold text-xl">ToggleButton</div>
       <p-togglebutton [(ngModel)]="toggleValue" onLabel="Yes" offLabel="No" styleClass="w-40" />
       <div class="font-semibold text-xl">SelectButton</div>
       <p-selectbutton [(ngModel)]="selectButtonValue" [options]="selectButtonValues" optionLabel="name" />
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="font-semibold text-xl">InputOtp</div>
       <p-inputotp [(ngModel)]="inputOtpValue" styleClass="h-12" />
-    </div>
+    </p-card>
   </div>
 </p-fluid>
 <p-fluid class="flex mt-8">
-  <div class="card flex flex-col gap-4 w-full">
+  <p-card class="flex flex-col gap-4 w-full">
     <div class="font-semibold text-xl">InputGroup</div>
     <div class="flex flex-col md:flex-row gap-4">
       <p-inputgroup>
@@ -172,5 +172,5 @@
         <input pInputText placeholder="Confirm" />
       </p-inputgroup>
     </div>
-  </div>
+  </p-card>
 </p-fluid>

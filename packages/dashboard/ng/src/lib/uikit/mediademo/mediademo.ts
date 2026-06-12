@@ -8,6 +8,7 @@ import { TagModule } from 'primeng/tag';
 import { CarouselResponsiveOptions } from 'primeng/types/carousel';
 import { GalleriaResponsiveOptions } from 'primeng/types/galleria';
 import { ImageCompareModule } from 'primeng/imagecompare';
+import { Card } from 'primeng/card';
 import { PhotoService, ProductService, type Photo, type Product } from '@otwld/ng-dashboard/core';
 
 /**
@@ -15,7 +16,7 @@ import { PhotoService, ProductService, type Photo, type Product } from '@otwld/n
  */
 @Component({
   selector: 'app-media-demo',
-  imports: [NgStyle, CarouselModule, ButtonModule, GalleriaModule, ImageModule, TagModule, ImageCompareModule],
+  imports: [NgStyle, CarouselModule, ButtonModule, GalleriaModule, ImageModule, TagModule, ImageCompareModule, Card],
   templateUrl: './mediademo.html',
   providers: [ProductService, PhotoService],
 })

@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { StepperModule } from 'primeng/stepper';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { Card } from 'primeng/card';
 
 /**
  * Demonstrates PrimeNG navigation menu, breadcrumb, stepper, tabs, and contextual menu components.
@@ -35,6 +36,7 @@ import { InputIconModule } from 'primeng/inputicon';
     InputTextModule,
     TabsModule,
     StepperModule,
+    Card,
   ],
   templateUrl: './menudemo.html',
 })

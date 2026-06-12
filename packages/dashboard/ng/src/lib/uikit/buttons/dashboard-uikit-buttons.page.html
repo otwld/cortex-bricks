@@ -1,14 +1,14 @@
 <div class="flex flex-col gap-8 md:flex-row">
   <div class="md:w-1/2">
-    <div class="card flex flex-col gap-4">
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Default</div>
       <div class="flex flex-wrap gap-2">
         <p-button label="Submit" />
         <p-button label="Disabled" [disabled]="true" />
         <p-button label="Link" link />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Severities</div>
       <div class="flex flex-wrap gap-2">
         <p-button label="Primary" />
@@ -20,8 +20,8 @@
         <p-button label="Danger" severity="danger" />
         <p-button label="Contrast" severity="contrast" />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Text</div>
       <div class="flex flex-wrap gap-2">
         <p-button label="Primary" variant="text" />
@@ -33,8 +33,8 @@
         <p-button label="Danger" severity="danger" variant="text" />
         <p-button label="Plain" variant="text" />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Outlined</div>
       <div class="flex flex-wrap gap-2">
         <p-button label="Primary" variant="outlined" />
@@ -46,8 +46,8 @@
         <p-button label="Danger" severity="danger" variant="outlined" />
         <p-button label="Contrast" severity="contrast" variant="outlined" />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Group</div>
       <div class="flex flex-wrap gap-2">
         <p-buttongroup>
@@ -56,8 +56,8 @@
           <p-button label="Cancel" icon="pi pi-times" />
         </p-buttongroup>
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">SplitButton</div>
       <div class="flex flex-wrap gap-2">
         <p-splitbutton label="Save" [model]="splitButtonItems" />
@@ -69,8 +69,8 @@
         <p-splitbutton label="Save" [model]="splitButtonItems" severity="danger" />
         <p-splitbutton label="Save" [model]="splitButtonItems" severity="contrast" />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Templating</div>
       <div class="flex flex-wrap gap-2">
         <p-button type="button" ariaLabel="PrimeNG logo">
@@ -81,18 +81,18 @@
           <span class="font-bold">PrimeNG</span>
         </p-button>
       </div>
-    </div>
+    </p-card>
   </div>
   <div class="md:w-1/2">
-    <div class="card flex flex-col gap-4">
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Icons</div>
       <div class="flex flex-wrap gap-2">
         <p-button icon="pi pi-star-fill" ariaLabel="Favorite" />
         <p-button label="Bookmark" icon="pi pi-bookmark" />
         <p-button label="Bookmark" icon="pi pi-bookmark" iconPos="right" />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Raised</div>
       <div class="flex flex-wrap gap-2">
         <p-button label="Primary" raised />
@@ -104,8 +104,8 @@
         <p-button label="Danger" severity="danger" raised />
         <p-button label="Contrast" severity="contrast" raised />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Rounded</div>
       <div class="flex flex-wrap gap-2">
         <p-button label="Primary" rounded />
@@ -117,8 +117,8 @@
         <p-button label="Danger" severity="danger" rounded />
         <p-button label="Contrast" severity="contrast" rounded />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Rounded Icons</div>
       <div class="flex flex-wrap gap-2">
         <p-button icon="pi pi-check" rounded ariaLabel="Confirm" />
@@ -129,8 +129,8 @@
         <p-button icon="pi pi-heart" severity="help" rounded ariaLabel="Favorite" />
         <p-button icon="pi pi-times" severity="danger" rounded ariaLabel="Cancel" />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Rounded Text</div>
       <div class="flex flex-wrap gap-2">
         <p-button icon="pi pi-check" variant="text" raised rounded ariaLabel="Confirm" />
@@ -141,8 +141,8 @@
         <p-button icon="pi pi-heart" severity="help" variant="text" raised rounded ariaLabel="Favorite" />
         <p-button icon="pi pi-times" severity="danger" variant="text" raised rounded ariaLabel="Cancel" />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Rounded Outlined</div>
       <div class="flex flex-wrap gap-2">
         <p-button icon="pi pi-check" rounded variant="outlined" ariaLabel="Confirm" />
@@ -153,8 +153,8 @@
         <p-button icon="pi pi-heart" severity="help" rounded variant="outlined" ariaLabel="Favorite" />
         <p-button icon="pi pi-times" severity="danger" rounded variant="outlined" ariaLabel="Cancel" />
       </div>
-    </div>
-    <div class="card flex flex-col gap-4">
+    </p-card>
+    <p-card class="flex flex-col gap-4">
       <div class="text-xl font-semibold">Loading</div>
       <div class="flex flex-wrap gap-2">
         <p-button type="button" label="Search" icon="pi pi-search" [loading]="loading()[0]" (onClick)="load(0)" />
@@ -162,6 +162,6 @@
         <p-button type="button" icon="pi pi-search" [loading]="loading()[2]" ariaLabel="Search" (onClick)="load(2)" />
         <p-button type="button" label="Search" [loading]="loading()[3]" (onClick)="load(3)" />
       </div>
-    </div>
+    </p-card>
   </div>
 </div>

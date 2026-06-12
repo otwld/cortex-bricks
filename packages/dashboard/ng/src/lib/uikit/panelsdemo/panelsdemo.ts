@@ -15,6 +15,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { SplitterModule } from 'primeng/splitter';
 import { TabsModule } from 'primeng/tabs';
 import { ToolbarModule } from 'primeng/toolbar';
+import { Card } from 'primeng/card';
 
 /**
  * Demonstrates PrimeNG panel, toolbar, accordion, tabs, divider, and splitter components.
@@ -37,6 +38,7 @@ import { ToolbarModule } from 'primeng/toolbar';
     TabsModule,
     IconFieldModule,
     InputIconModule,
+    Card,
   ],
   templateUrl: './panelsdemo.html',
 })

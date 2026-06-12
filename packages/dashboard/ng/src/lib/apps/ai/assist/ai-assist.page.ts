@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
+import { Card } from 'primeng/card';
 
 interface AssistActivity {
   type: 'accepted' | 'error';
@@ -17,7 +18,7 @@ interface AssistActivity {
 /** Demo page for applying AI assist prompts to editable form fields. */
 @Component({
   selector: 'app-ai-assist-page',
-  imports: [AiAssistDirective, ButtonModule, FormsModule, InputTextModule, SelectModule, TagModule, TextareaModule],
+  imports: [AiAssistDirective, ButtonModule, FormsModule, InputTextModule, SelectModule, TagModule, TextareaModule, Card],
   templateUrl: './ai-assist.page.html',
 })
 export class AiAssistPage implements OnInit {

@@ -9,10 +9,6 @@ const meta: Meta<MenuDemo> = {
     actions: { disable: true },
     controls: { disable: true },
   },
-  render: (args) => ({
-    props: args,
-    template: `<app-menu-demo></app-menu-demo>`,
-  }),
   title: 'dashboard/ng/uikit/menudemo',
 };
 

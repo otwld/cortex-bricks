@@ -16,6 +16,7 @@ import { RippleModule } from 'primeng/ripple';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { TagModule } from 'primeng/tag';
+import { Card } from 'primeng/card';
 import { Customer, CustomerService, Product, ProductService, Representative } from '@otwld/ng-dashboard/core';
 
 interface ExpandedRows {
@@ -56,6 +57,7 @@ interface RowGroupMetadata {
     RatingModule,
     RippleModule,
     IconFieldModule,
+    Card,
   ],
   templateUrl: './tabledemo.html',
   styles: `

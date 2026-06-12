@@ -13,6 +13,7 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 import { AccordionModule } from 'primeng/accordion';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { Card } from 'primeng/card';
 import { TaskDrawer } from './task-drawer';
 
 interface Member {
@@ -36,7 +37,7 @@ type TaskSaveData = Omit<Task, 'id'> & { id: number | null };
 /** Task list application with filters, grouped task sections, and editor drawer. */
 @Component({
     selector: 'app-tasklist',
-    imports: [CommonModule, FormsModule, ButtonModule, CheckboxModule, InputTextModule, IconFieldModule, InputIconModule, TagModule, DividerModule, AvatarModule, AvatarGroupModule, AccordionModule, ConfirmDialogModule, TaskDrawer],
+    imports: [CommonModule, FormsModule, ButtonModule, CheckboxModule, InputTextModule, IconFieldModule, InputIconModule, TagModule, DividerModule, AvatarModule, AvatarGroupModule, AccordionModule, ConfirmDialogModule, TaskDrawer, Card],
     providers: [ConfirmationService],
     templateUrl: './tasklist.page.html',
 })
