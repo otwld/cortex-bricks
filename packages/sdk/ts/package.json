@@ -23,7 +23,7 @@
     "@types/node": "20.19.9",
     "eslint": "^9.8.0",
     "jsonc-eslint-parser": "^2.1.0",
-    "nx": "22.7.5",
+    "nx": "22.7.7",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   },
